@@ -1,0 +1,219 @@
+<?xml version='1.0'?>
+
+<mavlink>
+
+      <include>common.xml</include>
+      <version>3</version>
+
+      <enums>
+           <enum name="MSP_CMD">
+              <description>MSP Companion commands</description>
+              <entry value="99" name="MSP_CMD_RESTART">
+                  <description>Reboot the MSP companion</description>
+              </entry>
+              <entry value="70" name="MSP_CMD_OFFBOARD">
+                  <description>Control offboard updater</description>
+                  <param index="1">component command</param>
+              </entry>
+              <entry value="71" name="MSP_CMD_VISION">
+                  <description>EControl vision system</description>
+                  <param index="1">component command</param>
+              </entry>
+               <entry value="72" name="MSP_CMD_COMBINEDFILESTREAM">
+                  <description>Control filestream updater</description>
+                  <param index="1">component command</param>
+              </entry>
+              <entry value="73" name="MSP_CMD_OFFBOARD_SETLOCALPOS">
+                  <description>Set offboard position via MSP</description>
+                  <param index="1">LocalNED.X (set to NAN to ignore)</param>
+                  <param index="2">LocalNED.Y (set to NAN to ignore)</param>
+                  <param index="3">LocalNED.Z (set to NAN to ignore)</param>
+                  <param index="4">Yaw (deg)  (set to NAN to ignore)</param>
+              </entry>
+              <entry value="74" name="MSP_TRANSFER_MICROSLAM">
+                  <description>Invalidate MICROSLAM transfer</description>
+              </entry>
+              <entry value="75" name="MSP_CMD_MICROSLAM">
+                  <description>Control microslam system</description>
+                  <param index="1">component command</param>
+              </entry>
+              <entry value="76" name="MSP_CMD_AUTOMODE">
+                  <description>Set Autopilot mode</description>
+                  <param index="1">component command</param>
+                  <param index="2">autopilot mode</param>
+                  <param index="3">mode parameter</param>
+              </entry>
+              <entry value="77" name="MSP_CMD_SET_HOMEPOS">
+                  <description>Sets home position and enables GPOS</description>
+                  <param index="1">latitude</param>
+                  <param index="2">longitude</param>
+                  <param index="3">altitude</param>
+              </entry>
+               <entry value="78" name="MSP_CMD_OFFBOARD_SETLOCALVEL">
+                  <description>Set offboard velocities via MSP in vehicle frame</description>
+                  <param index="1">Enable speed control (MSP_COMPONENT_CTRL)</param>
+                  <param index="2">Vel.X   (set to NAN to ignore)</param>
+                  <param index="3">Vel.X   (set to NAN to ignore)</param>
+                  <param index="4">Vel.Z   (set to NAN to ignore)</param>
+                  <param index="5">Vel Yaw (set to NAN to ignore)</param>
+              </entry>
+              <entry value="79" name="SET_OPTICAL_TARGET">
+                  <description>Sets video target (default is center) as LPOS targer</description>
+                  <param index="1">X Pos in video (optional)</param>
+                  <param index="2">Y-Pos in video (optional)</param>
+              </entry>
+            </enum>
+
+            <enum name="MSP_COMPONENT_CTRL">
+              <description>Component control</description>
+              <entry value="0" name="DISABLE">
+                  <description>Disable component</description>
+              </entry>
+              <entry value="1" name="ENABLE">
+                  <description>Enable component</description>
+              </entry>
+              <entry value="2" name="RESET">
+                  <description>reset component</description>
+              </entry>
+               <entry value="3" name="CLEAR">
+                  <description>clear component data</description>
+              </entry>
+           </enum>
+
+           <enum name="MSP_AUTOCONTROL_MODE">
+              <description>Auto-Control modes (Bit 0-15)</description>
+               <entry value="0" name="ABORT">
+                  <description>Abort request: Terminates any autopilot action and returns to POSHOLD</description>
+              </entry>
+              <entry value="1" name="OBSTACLE_STOP">
+                  <description>JumpBack mode</description>
+              </entry>
+              <entry value="2" name="OBSTACLE_AVOIDANCE">
+                  <description>JumpBack mode</description>
+              </entry>
+              <entry value="3" name="COLLISION_PREVENTION">
+                  <description>JumpBack mode</description>
+              </entry>
+              <entry value="9" name="INTERACTIVE">
+                  <description>Interactive mode (by mouse)</description>
+              </entry>
+           </enum>
+
+           <enum name="MSP_AUTOCONTROL_ACTION">
+              <description>Auto-Control action (Bit 16-31)</description>
+              <entry value="16" name="RTL">
+                  <description>Returns to local home position and lands device</description>
+              </entry>
+              <entry value="17" name="WAYPOINT_MODE">
+                  <description>Executes a list of waypoints defined in MSP (param3)</description>
+              </entry>
+               <entry value="18" name="AUTO_MISSION">
+                  <description>Execute a MSP mission (param3)</description>
+              </entry>
+               <entry value="19" name="DEBUG_MODE1">
+                  <description>Execute a DEBUG1 sequence for testing </description>
+              </entry>
+               <entry value="20" name="DEBUG_MODE2">
+                  <description>Execute a DEBUG2 sequence for testing </description>
+              </entry>
+              <entry value="21" name="SAVE_MAP2D">
+                  <description>Saves a map corresponding to the global position</description>
+              </entry>
+              <entry value="23" name="LOAD_MAP2D">
+                  <description>Load a map corresponding to the global position</description>
+              </entry>
+              <entry value="30" name="APPLY_MAP_FILTER">
+                  <description>Applies a map filter to the current map </description>
+              </entry>
+               <entry value="31" name="OFFBOARD_UPDATER">
+                  <description>Controls offboard updater</description>
+              </entry>
+           </enum>
+            <enum name="MSP_GRID_STATUS">
+              <entry value="0" name="GRID_2D">
+                  <description>Grid has a 2D map stored</description>
+              </entry>
+               <entry value="1" name="GRID_3D">
+                  <description>Grid has a 3D map stored</description>
+              </entry>
+            </enum>
+      </enums>
+
+
+      <messages>
+           <message id="180" name="MSP_STATUS">
+               <description>MSP Status message.</description>
+               <field type="uint8_t"       name="load">CPU load of the companion</field>
+               <field type="uint8_t"       name="memory">Memory usage of the companion</field>
+               <field type="uint8_t"       name="threads">Threads</field>
+               <field type="uint8_t"       name="wifi_quality">Quality of Wifi connection in %</field>
+               <field type="uint8_t"       name="cpu_temp">CPU Temperature</field>
+               <field type="uint64_t"      name="uptime_ms">Boot time ms</field>
+               <field type="uint32_t"      name="com_error">AMA0 communication errors</field>
+               <field type="uint32_t"      name="status">MSP Statusflags</field>
+               <field type="uint32_t"      name="autopilot_mode">Autopilot mode</field>
+               <field type="char[16]"      name="version">MSP software build</field>
+               <field type="char[10]"      name="arch">Companion architecture</field>
+               <field type="uint64_t"      name="unix_time_us">Unix time us</field>
+           </message>
+
+           <message id="181" name="MSP_COMMAND">
+               <description>MSP Commands.</description>
+               <field type="uint8_t" name="command">Command to be executed by MSP (defined in MSP_COMMANDS)</field>
+               <field type="float" name="param1">Parameter 1, as defined by MSP_COMMANDS enum.</field>
+               <field type="float" name="param2">Parameter 2, as defined by MSP_COMMANDS enum.</field>
+               <field type="float" name="param3">Parameter 3, as defined by MSP_COMMANDS enum.</field>
+               <field type="float" name="param4">Parameter 4, as defined by MSP_COMMANDS enum.</field>
+               <field type="float" name="param5">Parameter 5, as defined by MSP_COMMANDS enum.</field>
+               <field type="float" name="param6">Parameter 6, as defined by MSP_COMMANDS enum.</field>
+           </message>
+
+           <message id="182" name="MSP_VISION">
+               <description>MSP Vision</description>
+               <field type="float"         name="x">X Position</field>
+               <field type="float"         name="y">Y Position</field>
+               <field type="float"         name="z">Z Position</field>
+               <field type="float"         name="vx">X Velocity</field>
+               <field type="float"         name="vy">Y Velocity</field>
+               <field type="float"         name="vz">Z Velocity</field>
+               <field type="float"         name="h">Heading</field>
+               <field type="float"         name="p">Pitch</field>
+               <field type="float"         name="r">Roll</field>
+               <field type="float[36]"     name="covariance">6x6 Covariance matrix</field>
+               <field type="uint8_t"       name="quality">Quality of estimation</field>
+               <field type="float"         name="fps">FPS of mocap system</field>
+               <field type="uint64_t"      name="tms">Timestamp</field>
+               <field type="uint32_t"      name="flags">Info flags</field>
+               <field type="uint32_t"      name="errors">Error counter</field>
+           </message>
+           <message id="183" name="MSP_MICRO_GRID">
+               <description>MSP MICRO GRID Data encoded in longs</description>
+               <field type="int32_t[40]"   name="data">SLAM data integers</field>
+               <field type="uint8_t"       name="status">Grid Status</field>
+               <field type="float"         name="cx" >CenterX</field>
+               <field type="float"         name="cy" >CenterY</field>
+               <field type="float"         name="cz" >CenterZ</field>
+               <field type="float"         name="resolution">Resolution in m</field>
+               <field type="float"         name="extension">Extension in m per direction</field>
+               <field type="uint64_t"      name="tms">Timestamp</field>
+               <field type="uint32_t"      name="count">BlockCount</field>
+           </message>
+           <message id="184" name="MSP_MICRO_SLAM">
+               <description>MSP MICRO SLAM Data encoded in longs</description>
+               <field type="float"         name="px" >Planned path X</field>
+               <field type="float"         name="py" >Planned path Y</field>
+               <field type="float"         name="pz" >Planned path Z</field>
+               <field type="float"         name="pd" >Planned direction XY</field>
+               <field type="float"         name="pp" >Planned direction YZ</field>
+               <field type="float"         name="pv" >Planned speed</field>
+               <field type="float"         name="md" >Distance to target</field>
+               <field type="float"         name="mw" >Distance to waypoint</field>
+               <field type="float"         name="dm" >Min.Distance to obstacle</field>
+               <field type="float"         name="ox" >Obstacle X</field>
+               <field type="float"         name="oy" >Obstacle Y</field>
+               <field type="float"         name="oz" >Obstacle Z</field>
+               <field type="uint32_t"      name="wpcount">Counter of waypoints</field>
+               <field type="uint64_t"      name="tms">Timestamp</field>
+           </message>
+      </messages>
+</mavlink>
