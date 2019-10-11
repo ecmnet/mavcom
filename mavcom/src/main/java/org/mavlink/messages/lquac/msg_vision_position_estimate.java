@@ -3,17 +3,16 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_vision_position_estimate
- * Global position/attitude estimate from a vision source.
+ * Local position/attitude estimate from a vision source.
  **/
 public class msg_vision_position_estimate extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_VISION_POSITION_ESTIMATE = 102;
@@ -33,15 +32,15 @@ public class msg_vision_position_estimate extends MAVLinkMessage {
    */
   public long usec;
   /**
-   * Global X position
+   * Local X position
    */
   public float x;
   /**
-   * Global Y position
+   * Local Y position
    */
   public float y;
   /**
-   * Global Z position
+   * Local Z position
    */
   public float z;
   /**

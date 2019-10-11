@@ -11,7 +11,7 @@ package org.mavlink.messages;
  **/
 public interface MAV_COMPONENT {
     /**
-     * Used to broadcast messages to all components of the receiving system. Components should attempt to process messages with this component ID and forward to components on any other interfaces.
+     * Target id (target_component) used to broadcast messages to all components of the receiving system. Components should attempt to process messages with this component ID and forward to components on any other interfaces. Note: This is not a valid *source* component id for a message.
      */
     public final static int MAV_COMP_ID_ALL = 0;
     /**
