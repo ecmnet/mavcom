@@ -1,0 +1,34 @@
+<project name="PMAVLink generator" basedir=".">
+
+	<property name="target.dir" value="target" />
+	<property name="deploy_mavgcl.dir" value="/Users/ecmnet/PixHawk/java/MAVGCL/MAVGCL/lib" />
+
+	<target name="get_metadata">
+      <get src="https://github.com/mavlink/mavlink/raw/master/message_definitions/v1.0/common.xml" dest="mavlink/common.xml" />
+	</target>
+
+	<target name="build_mavlink" depends="get_metadata">
+		<java classname="org.mavlink.generator.MAVLinkGenerator" fork="true" dir=".">
+			<arg value="mavlink/lquac.xml"/>
+			<arg value="src/main/java/"/>
+			<arg value="true"/>
+			<arg value="true"/>
+			<arg value="true"/>
+			<arg value="true"/>
+			<classpath>
+				<pathelement location="target/mavcom-0.0.1.jar" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="DeployMAVGCL" description="Deploy libs to MAVGCL">
+		<copy todir="${deploy_mavgcl.dir}">
+			<fileset dir="${target.dir}">
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+
+</project>
