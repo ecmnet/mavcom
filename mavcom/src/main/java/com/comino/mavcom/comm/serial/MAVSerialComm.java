@@ -89,8 +89,9 @@ public class MAVSerialComm implements IMAVComm {
 			for(i=0;i<ports.length;i++) {
 				if(ports[i].getSystemPortName().contains("tty.SLAB")
 						|| ports[i].getSystemPortName().contains("tty.usb")
-						|| ports[i].getSystemPortName().contains("ttyS1"))
-					//	    || ports[i].getSystemPortName().contains("ttyAMA0"))
+						|| ports[i].getSystemPortName().contains("ttyS1")
+						|| ports[i].getSystemPortName().contains("ttyS4")
+					    || ports[i].getSystemPortName().contains("ttyAMA0"))
 				{
 					break;
 				}
