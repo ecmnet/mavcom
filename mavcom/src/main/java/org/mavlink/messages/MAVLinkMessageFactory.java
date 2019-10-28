@@ -70,6 +70,7 @@ import org.mavlink.messages.lquac.msg_storage_information;
 import org.mavlink.messages.lquac.msg_system_time;
 import org.mavlink.messages.lquac.msg_wifi_config_ap;
 import org.mavlink.messages.lquac.msg_scaled_pressure2;
+import org.mavlink.messages.lquac.msg_play_tune_v2;
 import org.mavlink.messages.lquac.msg_safety_set_allowed_area;
 import org.mavlink.messages.lquac.msg_global_vision_position_estimate;
 import org.mavlink.messages.lquac.msg_scaled_pressure3;
@@ -177,6 +178,7 @@ import org.mavlink.messages.lquac.msg_attitude_quaternion_cov;
 import org.mavlink.messages.lquac.msg_hil_optical_flow;
 import org.mavlink.messages.lquac.msg_servo_output_raw;
 import org.mavlink.messages.lquac.msg_debug;
+import org.mavlink.messages.lquac.msg_supported_tunes;
 import org.mavlink.messages.lquac.msg_param_request_read;
 import org.mavlink.messages.lquac.msg_command_int;
 import org.mavlink.messages.lquac.msg_actuator_output_status;
@@ -304,6 +306,7 @@ import org.mavlink.messages.lquac.msg_vibration;
 import org.mavlink.messages.lquac.msg_storage_information;
 import org.mavlink.messages.lquac.msg_wifi_config_ap;
 import org.mavlink.messages.lquac.msg_scaled_pressure2;
+import org.mavlink.messages.lquac.msg_play_tune_v2;
 import org.mavlink.messages.lquac.msg_scaled_pressure3;
 import org.mavlink.messages.lquac.msg_protocol_version;
 import org.mavlink.messages.lquac.msg_ping;
@@ -368,6 +371,7 @@ import org.mavlink.messages.lquac.msg_power_status;
 import org.mavlink.messages.lquac.msg_attitude_quaternion_cov;
 import org.mavlink.messages.lquac.msg_servo_output_raw;
 import org.mavlink.messages.lquac.msg_debug;
+import org.mavlink.messages.lquac.msg_supported_tunes;
 import org.mavlink.messages.lquac.msg_msp_micro_grid;
 import org.mavlink.messages.lquac.msg_param_request_read;
 import org.mavlink.messages.lquac.msg_command_int;
@@ -844,6 +848,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_scaled_pressure2(sysId, componentId);
       msg.decode(dis);
       break;
+  case MAVLINK_MSG_ID_PLAY_TUNE_V2:
+      msg = new msg_play_tune_v2(sysId, componentId);
+      msg.decode(dis);
+      break;
   case MAVLINK_MSG_ID_SCALED_PRESSURE3:
       msg = new msg_scaled_pressure3(sysId, componentId);
       msg.decode(dis);
@@ -1098,6 +1106,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_DEBUG:
       msg = new msg_debug(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_SUPPORTED_TUNES:
+      msg = new msg_supported_tunes(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_MSP_MICRO_GRID:

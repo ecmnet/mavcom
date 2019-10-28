@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_actuator_output_status
- * The raw values of the actuator outputs.
+ * The raw values of the actuator outputs (e.g. on Pixhawk, from MAIN, AUX ports). This message supersedes SERVO_OUTPUT_RAW.
  **/
 public class msg_actuator_output_status extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS = 375;

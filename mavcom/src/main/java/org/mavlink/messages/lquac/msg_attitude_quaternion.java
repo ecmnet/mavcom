@@ -24,7 +24,7 @@ public class msg_attitude_quaternion extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 32;
+    payload_length = 48;
 }
 
   /**
@@ -59,6 +59,10 @@ public class msg_attitude_quaternion extends MAVLinkMessage {
    * Yaw angular speed
    */
   public float yawspeed;
+  /**
+   * Rotation offset by which the attitude quaternion and angular speed vector should be rotated for user display (quaternion with [w, x, y, z] order, zero-rotation is [1, 0, 0, 0], send [0, 0, 0, 0] if field not supported). This field is intended for systems in which the reference attitude may change during flight. For example, tailsitters VTOLs rotate their reference attitude by 90 degrees between hover mode and fixed wing mode, thus repr_offset_q is equal to [1, 0, 0, 0] in hover mode and equal to [0.7071, 0, 0.7071, 0] in fixed wing mode.
+   */
+  public float[] repr_offset_q = new float[4];
 /**
  * Decode message with raw data
  */
@@ -71,12 +75,15 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   rollspeed = (float)dis.readFloat();
   pitchspeed = (float)dis.readFloat();
   yawspeed = (float)dis.readFloat();
+  for (int i=0; i<4; i++) {
+    repr_offset_q[i] = (float)dis.readFloat();
+  }
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+32];
+  byte[] buffer = new byte[12+48];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -96,15 +103,18 @@ public byte[] encode() throws IOException {
   dos.writeFloat(rollspeed);
   dos.writeFloat(pitchspeed);
   dos.writeFloat(yawspeed);
+  for (int i=0; i<4; i++) {
+    dos.writeFloat(repr_offset_q[i]);
+  }
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 32);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 48);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[42] = crcl;
-  buffer[43] = crch;
+  buffer[58] = crcl;
+  buffer[59] = crch;
   dos.close();
   return buffer;
 }
@@ -117,5 +127,9 @@ return "MAVLINK_MSG_ID_ATTITUDE_QUATERNION : " +   "  time_boot_ms="+time_boot_m
 +  "  rollspeed="+rollspeed
 +  "  pitchspeed="+pitchspeed
 +  "  yawspeed="+yawspeed
++  "  repr_offset_q[0]="+repr_offset_q[0]
++  "  repr_offset_q[1]="+repr_offset_q[1]
++  "  repr_offset_q[2]="+repr_offset_q[2]
++  "  repr_offset_q[3]="+repr_offset_q[3]
 ;}
 }

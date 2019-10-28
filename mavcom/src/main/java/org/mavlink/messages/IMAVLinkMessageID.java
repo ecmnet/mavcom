@@ -128,6 +128,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_STORAGE_INFORMATION = 261;
   public static int MAVLINK_MSG_ID_WIFI_CONFIG_AP = 299;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE2 = 137;
+  public static int MAVLINK_MSG_ID_PLAY_TUNE_V2 = 400;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE3 = 143;
   public static int MAVLINK_MSG_ID_PROTOCOL_VERSION = 300;
   public static int MAVLINK_MSG_ID_PING = 4;
@@ -194,6 +195,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV = 61;
   public static int MAVLINK_MSG_ID_SERVO_OUTPUT_RAW = 36;
   public static int MAVLINK_MSG_ID_DEBUG = 254;
+  public static int MAVLINK_MSG_ID_SUPPORTED_TUNES = 401;
   public static int MAVLINK_MSG_ID_MSP_MICRO_GRID = 183;
   public static int MAVLINK_MSG_ID_PARAM_REQUEST_READ = 20;
   public static int MAVLINK_MSG_ID_COMMAND_INT = 75;
