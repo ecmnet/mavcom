@@ -245,6 +245,12 @@ public class MAVController implements IMAVController, Runnable {
 		}
 		sendMAVLinkMessage(msg);
 		System.out.println("ShellCommand executed: "+s);
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return true;
 	}
 
