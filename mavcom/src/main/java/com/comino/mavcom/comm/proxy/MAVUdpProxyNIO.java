@@ -69,7 +69,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 	private boolean 					isConnected = false;
 
-	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(32768);
+	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(4096);
 
 
 	public MAVUdpProxyNIO(String peerAddress, int pPort, String bindAddress, int bPort, IMAVComm comm) {

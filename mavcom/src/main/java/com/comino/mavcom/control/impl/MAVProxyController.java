@@ -81,6 +81,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	private static final int BAUDRATE_9   = 921600;
 	private static final int BAUDRATE_15  = 1500000;
+	private static final int BAUDRATE_20  = 2000000;
 
 	private StatusManager 				status_manager 	= null;
 	private List<IMAVMessageListener> 	messageListener = null;
@@ -113,8 +114,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		switch(mode) {
 		case MAVController.MODE_NORMAL:
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-	//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
+			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
+			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
 
@@ -132,7 +134,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			System.out.println("Proxy Controller (SITL mode) loaded");
 			break;
 		case MAVController.MODE_USB:
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
+			//			comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
+			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
 			proxy = new MAVUdpProxyNIO("127.0.0.1",14650,"0.0.0.0",14656,comm);
@@ -230,7 +234,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 
 	public boolean isConnected() {
-//		model.sys.setStatus(Status.MSP_ACTIVE, comm.isConnected());
+		//		model.sys.setStatus(Status.MSP_ACTIVE, comm.isConnected());
 		if(mode == MAVController.MODE_NORMAL)
 			return proxy.isConnected() && comm.isConnected();
 		return proxy.isConnected();
