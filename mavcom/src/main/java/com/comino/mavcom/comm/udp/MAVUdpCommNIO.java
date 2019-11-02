@@ -124,6 +124,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 
 			LockSupport.parkNanos(10000000);
+			rxBuffer.clear();
 
 //			Thread t = new Thread(this);
 //			t.setName("MAVLink parser");

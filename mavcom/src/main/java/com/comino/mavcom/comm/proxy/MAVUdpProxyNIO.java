@@ -116,6 +116,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				}
 				channel.connect(peerPort);
 				selector = Selector.open();
+				rxBuffer.clear();
 
 //				Thread t = new Thread(this);
 //				t.setName("Proxy worker");
