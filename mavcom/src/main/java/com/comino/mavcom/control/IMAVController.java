@@ -70,6 +70,8 @@ public interface IMAVController {
 	public boolean sendMAVLinkMessage(MAVLinkMessage msg);
 	public boolean sendMSPLinkCmd(int command, float...params);
 
+	public boolean sendShellCommand(String s);
+
 	public void addStatusChangeListener(IMSPStatusChangedListener listener);
 	public void addMAVLinkListener(IMAVLinkListener listener);
 	public void addMAVMessageListener(IMAVMessageListener listener);

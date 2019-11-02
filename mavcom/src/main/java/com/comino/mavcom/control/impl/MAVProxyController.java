@@ -34,6 +34,7 @@
 
 package com.comino.mavcom.control.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,10 @@ import java.util.concurrent.TimeUnit;
 import org.mavlink.messages.IMAVLinkMessageID;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAV_CMD;
+import org.mavlink.messages.SERIAL_CONTROL_DEV;
+import org.mavlink.messages.SERIAL_CONTROL_FLAG;
 import org.mavlink.messages.lquac.msg_command_long;
+import org.mavlink.messages.lquac.msg_serial_control;
 import org.mavlink.messages.lquac.msg_statustext;
 
 import com.comino.mavcom.comm.IMAVComm;
@@ -109,8 +113,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		switch(mode) {
 		case MAVController.MODE_NORMAL:
-	//		comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
+	//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
 
@@ -191,6 +195,25 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge ack, float...params) {
 		comm.setCmdAcknowledgeListener(ack);
 		return sendMAVLinkCmd(command, params);
+	}
+
+	@Override
+	public boolean sendShellCommand(String s) {
+		String command = s+"\n";
+		msg_serial_control msg = new msg_serial_control(1,1);
+		try {
+			byte[] bytes = command.getBytes("US-ASCII");
+			for(int i =0;i<bytes.length && i<70;i++)
+				msg.data[i] = bytes[i];
+			msg.count = bytes.length;
+			msg.device = SERIAL_CONTROL_DEV.SERIAL_CONTROL_DEV_SHELL;
+			msg.flags  = SERIAL_CONTROL_FLAG.SERIAL_CONTROL_FLAG_RESPOND;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		sendMAVLinkMessage(msg);
+		System.out.println("ShellCommand executed: "+s);
+		return true;
 	}
 
 

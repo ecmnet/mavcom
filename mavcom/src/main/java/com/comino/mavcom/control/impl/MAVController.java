@@ -39,14 +39,18 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.mavlink.messages.MAVLinkMessage;
+import org.mavlink.messages.SERIAL_CONTROL_DEV;
+import org.mavlink.messages.SERIAL_CONTROL_FLAG;
 import org.mavlink.messages.lquac.msg_command_long;
 import org.mavlink.messages.lquac.msg_msp_command;
+import org.mavlink.messages.lquac.msg_serial_control;
 
 import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
@@ -226,6 +230,25 @@ public class MAVController implements IMAVController, Runnable {
 	}
 
 	@Override
+	public boolean sendShellCommand(String s) {
+		String command = s+"\n";
+		msg_serial_control msg = new msg_serial_control(1,1);
+		try {
+			byte[] bytes = command.getBytes("US-ASCII");
+			for(int i =0;i<bytes.length && i<70;i++)
+				msg.data[i] = bytes[i];
+			msg.count = bytes.length;
+			msg.device = SERIAL_CONTROL_DEV.SERIAL_CONTROL_DEV_SHELL;
+			msg.flags  = SERIAL_CONTROL_FLAG.SERIAL_CONTROL_FLAG_RESPOND;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		sendMAVLinkMessage(msg);
+		System.out.println("ShellCommand executed: "+s);
+		return true;
+	}
+
+	@Override
 	public boolean connect() {
 		return false;
 	}
@@ -324,4 +347,5 @@ public class MAVController implements IMAVController, Runnable {
 	public StatusManager getStatusManager() {
 		return status_manager;
 	}
+
 }
