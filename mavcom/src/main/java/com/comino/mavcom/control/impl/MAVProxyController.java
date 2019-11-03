@@ -168,7 +168,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		try {
 			if(msg.sysId==2) {
-				if(proxy.isConnected())
+				if(proxy.isConnected() && model.sys.isStatus(Status.MSP_GCL_CONNECTED))
 					proxy.write(msg);
 			}
 			else {
