@@ -24,7 +24,6 @@ public class PX4HeartBeatPlugin extends MAVLinkPluginBase {
 		model.sys.setStatus(Status.MSP_ARMED,
 				(hb.base_mode & MAV_MODE_FLAG_DECODE_POSITION.MAV_MODE_FLAG_DECODE_POSITION_SAFETY) > 0);
 
-		model.sys.setStatus(Status.MSP_READY, (hb.system_status & MAV_STATE.MAV_STATE_STANDBY) > 0);
 		model.sys.setStatus(Status.MSP_ARMED, (hb.base_mode & MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) != 0);
 
 		if(model.sys.isStatus(Status.MSP_ARMED)) {

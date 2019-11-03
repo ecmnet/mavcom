@@ -47,7 +47,7 @@ public class Status extends Segment {
 	// States
 
 	public static final int MSP_CONNECTED						= 0;
-	public static final int MSP_READY							= 1;
+	public static final int MSP_GCL_CONNECTED				    = 1;
 	public static final int MSP_ACTIVE							= 2;
 	public static final int MSP_RC_ATTACHED						= 3;
 	public static final int MSP_JOY_ATTACHED			        = 4;
@@ -126,7 +126,8 @@ public class Status extends Segment {
 	public float    t_boot_ms     	= Float.NaN;
 	public float    wifi_quality 	= Float.NaN;
 
-	public long     t_offset_ns =	 0;
+	public long     t_offset_ns     = 0;
+	public long     gcl_tms         = 0;
 	public String   version    		= "";
 	public String   build    		= "";
 

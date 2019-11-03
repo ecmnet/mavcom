@@ -200,7 +200,6 @@ public class MAVSimController extends MAVController implements IMAVController {
 
 			model.sys.setStatus(Status.MSP_CONNECTED, true);
 			model.sys.setStatus(Status.MSP_ARMED, true);
-			model.sys.setStatus(Status.MSP_READY, true);
 
 			model.sys.setSensor(Status.MSP_IMU_AVAILABILITY, true);
 			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, true);

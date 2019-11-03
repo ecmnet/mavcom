@@ -93,9 +93,6 @@ public class MAVLinkToModelParser {
 		this.messageListener = new ArrayList<IMAVMessageListener>();
 		this.msglisteners = new HashMap<Class<?>, List<IMAVLinkListener>>();
 
-
-		model.sys.setStatus(Status.MSP_READY, true);
-
 		registerPlugins();
 
 		registerListener(msg_command_ack.class, new IMAVLinkListener() {

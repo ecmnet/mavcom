@@ -111,6 +111,12 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			System.out.println("Connection to device established...");
 		});
 
+		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_FALLING, (a) -> {
+			model.sys.setStatus(Status.MSP_ACTIVE, false);
+			System.out.println("Connection to device lost...");
+			proxy.close();
+		});
+
 
 		switch(mode) {
 		case MAVController.MODE_NORMAL:
