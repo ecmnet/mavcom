@@ -65,7 +65,7 @@ public class MAVSerialComm implements IMAVComm {
 	private DataModel 		    model = null;
 
 
-	private MAVLinkToModelParser parser = null;
+	private MAVLinkToModelParser  parser = null;
 	private MAVLinkBlockingReader reader;
 
 	private static IMAVComm com = null;

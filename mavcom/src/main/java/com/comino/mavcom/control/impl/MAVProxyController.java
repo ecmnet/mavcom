@@ -47,6 +47,7 @@ import org.mavlink.messages.MAV_CMD;
 import org.mavlink.messages.SERIAL_CONTROL_DEV;
 import org.mavlink.messages.SERIAL_CONTROL_FLAG;
 import org.mavlink.messages.lquac.msg_command_long;
+import org.mavlink.messages.lquac.msg_ping;
 import org.mavlink.messages.lquac.msg_serial_control;
 import org.mavlink.messages.lquac.msg_statustext;
 
@@ -153,6 +154,12 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		}
 
 		comm.addMAVLinkListener(proxy);
+
+		// Register processing of PING sent by MAVGCL
+		proxy.registerListener(msg_ping.class, (o) -> {
+			model.sys.gcl_tms = model.sys.getSynchronizedPX4Time_us();
+			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
+		});
 
 	}
 

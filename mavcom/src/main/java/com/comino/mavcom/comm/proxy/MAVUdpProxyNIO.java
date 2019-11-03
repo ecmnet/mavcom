@@ -48,6 +48,7 @@ import java.util.List;
 
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_heartbeat;
+import org.mavlink.messages.lquac.msg_ping;
 
 import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavutils.legacy.ExecutorService;

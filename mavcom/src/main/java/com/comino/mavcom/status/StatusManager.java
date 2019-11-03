@@ -44,15 +44,16 @@ import com.comino.mavutils.legacy.ExecutorService;
 
 public class StatusManager implements Runnable {
 
-	private static final long TIMEOUT_IMU         = 5000000;
-	private static final long TIMEOUT_VISION      = 2000000;
-	private static final long TIMEOUT_CONNECTED   = 100000;
-	private static final long TIMEOUT_RC_ATTACHED = 500000;
-	private static final long TIMEOUT_GPOS        = 200000;
-	private static final long TIMEOUT_LPOS        = 200000;
-	private static final long TIMEOUT_GPS         = 500000;
-	private static final long TIMEOUT_SLAM        = 500000;
-	private static final long TIMEOUT_FLOW        = 200000;
+	private static final long TIMEOUT_IMU             = 5000000;
+	private static final long TIMEOUT_VISION          = 2000000;
+	private static final long TIMEOUT_CONNECTED       = 100000;
+	private static final long TIMEOUT_GCL_CONNECTED   = 1000000;
+	private static final long TIMEOUT_RC_ATTACHED     = 500000;
+	private static final long TIMEOUT_GPOS            = 200000;
+	private static final long TIMEOUT_LPOS            = 200000;
+	private static final long TIMEOUT_GPS             = 500000;
+	private static final long TIMEOUT_SLAM            = 500000;
+	private static final long TIMEOUT_FLOW            = 200000;
 
 	public static final byte  TYPE_ALL             = 0;
 	public static final byte  TYPE_PX4_STATUS      = 1;
@@ -146,6 +147,7 @@ public class StatusManager implements Runnable {
 	@Override
 	public void run() {
 
+		checkTimeouts();
 
 		status_current.set(model.sys);
 
@@ -259,7 +261,6 @@ public class StatusManager implements Runnable {
 
 		status_old.set(status_current);
 
-		checkTimeouts();
 	}
 
 	private void update_callback(final IMSPStatusChangedListener listener, final Status current ) {
@@ -306,6 +307,10 @@ public class StatusManager implements Runnable {
 			model.slam.clear();
 		}
 
+		if (checkTimeOut(model.sys.gcl_tms, TIMEOUT_GCL_CONNECTED)) {
+			model.sys.setStatus(Status.MSP_GCL_CONNECTED, (false));
+		}
+
 		if(!model.sys.isStatus(Status.MSP_SITL)) {
 			if (checkTimeOut(model.rc.tms, TIMEOUT_RC_ATTACHED)) {
 				model.sys.setStatus(Status.MSP_RC_ATTACHED, (false));
@@ -322,6 +327,8 @@ public class StatusManager implements Runnable {
 	}
 
 	private boolean checkTimeOut(long tms, long timeout) {
+		if(tms==0)
+			return false;
 		return model.sys.getSynchronizedPX4Time_us() > (tms + timeout);
 	}
 

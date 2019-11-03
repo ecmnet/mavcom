@@ -147,7 +147,7 @@ public class MAVController implements IMAVController, Runnable {
 	public boolean sendMAVLinkMessage(MAVLinkMessage msg) {
 
 		if(!controller.getCurrentModel().sys.isStatus(Status.MSP_CONNECTED)) {
-			System.out.println("Command rejected. No connection.");
+			//System.out.println("Command rejected. No connection.");
 			return false;
 		}
 
