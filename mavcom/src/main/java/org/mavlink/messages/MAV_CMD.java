@@ -862,12 +862,14 @@ public interface MAV_CMD {
      * Set the interval between messages for a particular MAVLink message ID. This interface replaces REQUEST_DATA_STREAM.
      * PARAM 1 : The MAVLink message ID
      * PARAM 2 : The interval between two messages. Set to -1 to disable and 0 to request default rate.
+     * PARAM 7 : Target address of message stream (if message has target address fields). 0: Flight-stack default (recommended), 1: address of requestor, 2: broadcast.
      */
     public final static int MAV_CMD_SET_MESSAGE_INTERVAL = 511;
     /**
      * Request the target system(s) emit a single instance of a specified message (i.e. a "one-shot" version of MAV_CMD_SET_MESSAGE_INTERVAL).
      * PARAM 1 : The MAVLink message ID of the requested message.
      * PARAM 2 : Index id (if appropriate). The use of this parameter (if any), must be defined in the requested message.
+     * PARAM 7 : Target address for requested message (if message has target address fields). 0: Flight-stack default, 1: address of requestor, 2: broadcast.
      */
     public final static int MAV_CMD_REQUEST_MESSAGE = 512;
     /**

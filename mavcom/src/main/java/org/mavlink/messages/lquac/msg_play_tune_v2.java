@@ -24,7 +24,7 @@ public class msg_play_tune_v2 extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_PLAY_TUNE_V2;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 258;
+    payload_length = 254;
 }
 
   /**
@@ -42,19 +42,19 @@ public class msg_play_tune_v2 extends MAVLinkMessage {
   /**
    * Tune definition as a NULL-terminated string.
    */
-  public char[] tune = new char[252];
+  public char[] tune = new char[248];
   public void setTune(String tmp) {
-    int len = Math.min(tmp.length(), 252);
+    int len = Math.min(tmp.length(), 248);
     for (int i=0; i<len; i++) {
       tune[i] = tmp.charAt(i);
     }
-    for (int i=len; i<252; i++) {
+    for (int i=len; i<248; i++) {
       tune[i] = 0;
     }
   }
   public String getTune() {
     String result="";
-    for (int i=0; i<252; i++) {
+    for (int i=0; i<248; i++) {
       if (tune[i] != 0) result=result+tune[i]; else break;
     }
     return result;
@@ -66,7 +66,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   format = (int)dis.readInt()&0x00FFFFFFFF;
   target_system = (int)dis.readUnsignedByte()&0x00FF;
   target_component = (int)dis.readUnsignedByte()&0x00FF;
-  for (int i=0; i<252; i++) {
+  for (int i=0; i<248; i++) {
     tune[i] = (char)dis.readByte();
   }
 }
@@ -74,7 +74,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+258];
+  byte[] buffer = new byte[12+254];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -89,18 +89,18 @@ public byte[] encode() throws IOException {
   dos.writeInt((int)(format&0x00FFFFFFFF));
   dos.writeByte(target_system&0x00FF);
   dos.writeByte(target_component&0x00FF);
-  for (int i=0; i<252; i++) {
+  for (int i=0; i<248; i++) {
     dos.writeByte(tune[i]);
   }
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 258);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 254);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[268] = crcl;
-  buffer[269] = crch;
+  buffer[264] = crcl;
+  buffer[265] = crch;
   dos.close();
   return buffer;
 }
