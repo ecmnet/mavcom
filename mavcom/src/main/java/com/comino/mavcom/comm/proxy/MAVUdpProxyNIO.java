@@ -68,7 +68,8 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	private Selector 				selector;
 	private IMAVComm 				comm;
 
-	private boolean 					isConnected = false;
+	private boolean 				isConnected   = false;
+	private boolean					proxy_enabled = false;
 
 	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(4096);
 
@@ -104,8 +105,8 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				try {
 					channel = DatagramChannel.open();
 					channel.socket().bind(bindPort);
-			//		channel.socket().setTrafficClass(0x10);
-			//		channel.socket().setBroadcast(true);
+					//		channel.socket().setTrafficClass(0x10);
+					//		channel.socket().setBroadcast(true);
 					channel.socket().setSendBufferSize(32*1024);
 					channel.socket().setReceiveBufferSize(32*1024);
 					channel.configureBlocking(false);
@@ -119,9 +120,9 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				selector = Selector.open();
 				rxBuffer.clear();
 
-//				Thread t = new Thread(this);
-//				t.setName("Proxy worker");
-//				t.start();
+				//				Thread t = new Thread(this);
+				//				t.setName("Proxy worker");
+				//				t.start();
 
 				ExecutorService.submit(this);
 
@@ -142,12 +143,20 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 		return isConnected;
 	}
 
+	public boolean isProxyEnabled() {
+		return proxy_enabled;
+	}
+
+	public void enableProxy(boolean enable) {
+		this.proxy_enabled = enable;
+	}
+
 
 	public void close() {
 		isConnected = false;
 		try {
 			if(selector!=null)
-			   selector.close();
+				selector.close();
 			if (channel != null) {
 				channel.close();
 			}
@@ -157,16 +166,24 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	}
 
 	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
-		System.out.println("Register MavLink listener: "+clazz.getSimpleName()+" : "+listener.getClass().getName());
+
 		List<IMAVLinkListener> list = null;
 		if(listeners.containsKey(clazz)) {
 			list = listeners.get(clazz);
-			list.add(listener);
+			if(!list.contains(listener)) {
+				list.add(listener);
+				System.out.println("Register MavLink listener: "+clazz.getSimpleName()+" : "+listener.getClass().getName());
+			}
 		} else {
 			list  = new ArrayList<IMAVLinkListener>();
 			list.add(listener);
 			listeners.put(clazz, list);
+			System.out.println("Register MavLink listener: "+clazz.getSimpleName()+" : "+listener.getClass().getName());
 		}
+	}
+
+	public void unregisterListener(Class<?> clazz) {
+		listeners.remove(clazz);
 	}
 
 	@Override
@@ -251,7 +268,9 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 	@Override
 	public void received(Object o) {
-		write((MAVLinkMessage) o);
+		if(proxy_enabled) {
+		  write((MAVLinkMessage) o);
+		}
 	}
 
 }

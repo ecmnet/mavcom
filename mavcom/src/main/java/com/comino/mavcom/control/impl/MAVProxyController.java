@@ -44,9 +44,11 @@ import java.util.concurrent.TimeUnit;
 import org.mavlink.messages.IMAVLinkMessageID;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAV_CMD;
+import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.SERIAL_CONTROL_DEV;
 import org.mavlink.messages.SERIAL_CONTROL_FLAG;
 import org.mavlink.messages.lquac.msg_command_long;
+import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_ping;
 import org.mavlink.messages.lquac.msg_serial_control;
 import org.mavlink.messages.lquac.msg_statustext;
@@ -155,8 +157,12 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		comm.addMAVLinkListener(proxy);
 
+		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_BOTH, (a) -> {
+			proxy.enableProxy(a.isStatus(Status.MSP_GCL_CONNECTED));
+		});
+
 		// Register processing of PING sent by MAVGCL
-		proxy.registerListener(msg_ping.class, (o) -> {
+		proxy.registerListener(msg_heartbeat.class, (o) -> {
 			model.sys.gcl_tms = model.sys.getSynchronizedPX4Time_us();
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
 		});
@@ -367,6 +373,13 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			comm.open();
 		} else
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
+
+		if(!proxy.isProxyEnabled()) {
+			msg_heartbeat beat = new msg_heartbeat(2,1);
+			beat.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
+			proxy.write(beat);
+		}
+
 	}
 
 }

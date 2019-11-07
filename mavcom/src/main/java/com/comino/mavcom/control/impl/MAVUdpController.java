@@ -106,7 +106,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 				msg_heartbeat beat = new msg_heartbeat(255,1);
 				beat.type = MAV_TYPE.MAV_TYPE_GCS;
 				comm.write(beat);
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (Exception e) {  }
 		}
 		comm.close();
