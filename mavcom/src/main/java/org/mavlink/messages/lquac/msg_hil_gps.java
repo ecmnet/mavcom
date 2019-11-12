@@ -57,15 +57,15 @@ public class msg_hil_gps extends MAVLinkMessage {
    */
   public int vel;
   /**
-   * GPS velocity in NORTH direction in earth-fixed NED frame
+   * GPS velocity in north direction in earth-fixed NED frame
    */
   public int vn;
   /**
-   * GPS velocity in EAST direction in earth-fixed NED frame
+   * GPS velocity in east direction in earth-fixed NED frame
    */
   public int ve;
   /**
-   * GPS velocity in DOWN direction in earth-fixed NED frame
+   * GPS velocity in down direction in earth-fixed NED frame
    */
   public int vd;
   /**

@@ -40,11 +40,11 @@ public class msg_mount_orientation extends MAVLinkMessage {
    */
   public float pitch;
   /**
-   * Yaw relative to vehicle(set to NaN for invalid).
+   * Yaw relative to vehicle (set to NaN for invalid).
    */
   public float yaw;
   /**
-   * Yaw in absolute frame, North is 0 (set to NaN for invalid).
+   * Yaw in absolute frame relative to Earth's North, north is 0 (set to NaN for invalid).
    */
   public float yaw_absolute;
 /**

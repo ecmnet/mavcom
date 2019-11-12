@@ -100,15 +100,15 @@ public class msg_sim_state extends MAVLinkMessage {
    */
   public float std_dev_vert;
   /**
-   * True velocity in NORTH direction in earth-fixed NED frame
+   * True velocity in north direction in earth-fixed NED frame
    */
   public float vn;
   /**
-   * True velocity in EAST direction in earth-fixed NED frame
+   * True velocity in east direction in earth-fixed NED frame
    */
   public float ve;
   /**
-   * True velocity in DOWN direction in earth-fixed NED frame
+   * True velocity in down direction in earth-fixed NED frame
    */
   public float vd;
 /**

@@ -24,7 +24,7 @@ public class msg_gps_input extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_GPS_INPUT;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 63;
+    payload_length = 65;
 }
 
   /**
@@ -56,15 +56,15 @@ public class msg_gps_input extends MAVLinkMessage {
    */
   public float vdop;
   /**
-   * GPS velocity in NORTH direction in earth-fixed NED frame
+   * GPS velocity in north direction in earth-fixed NED frame
    */
   public float vn;
   /**
-   * GPS velocity in EAST direction in earth-fixed NED frame
+   * GPS velocity in east direction in earth-fixed NED frame
    */
   public float ve;
   /**
-   * GPS velocity in DOWN direction in earth-fixed NED frame
+   * GPS velocity in down direction in earth-fixed NED frame
    */
   public float vd;
   /**
@@ -99,6 +99,10 @@ public class msg_gps_input extends MAVLinkMessage {
    * Number of satellites visible.
    */
   public int satellites_visible;
+  /**
+   * Yaw of vehicle relative to Earth's North, zero means not available, use 36000 for north
+   */
+  public int yaw;
 /**
  * Decode message with raw data
  */
@@ -121,12 +125,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   gps_id = (int)dis.readUnsignedByte()&0x00FF;
   fix_type = (int)dis.readUnsignedByte()&0x00FF;
   satellites_visible = (int)dis.readUnsignedByte()&0x00FF;
+  yaw = (int)dis.readUnsignedShort()&0x00FFFF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+63];
+  byte[] buffer = new byte[12+65];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -156,15 +161,16 @@ public byte[] encode() throws IOException {
   dos.writeByte(gps_id&0x00FF);
   dos.writeByte(fix_type&0x00FF);
   dos.writeByte(satellites_visible&0x00FF);
+  dos.writeShort(yaw&0x00FFFF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 63);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 65);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[73] = crcl;
-  buffer[74] = crch;
+  buffer[75] = crcl;
+  buffer[76] = crch;
   dos.close();
   return buffer;
 }
@@ -187,5 +193,6 @@ return "MAVLINK_MSG_ID_GPS_INPUT : " +   "  time_usec="+time_usec
 +  "  gps_id="+gps_id
 +  "  fix_type="+fix_type
 +  "  satellites_visible="+satellites_visible
++  "  yaw="+yaw
 ;}
 }

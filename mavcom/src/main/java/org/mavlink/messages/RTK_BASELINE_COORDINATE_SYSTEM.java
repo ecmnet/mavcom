@@ -13,7 +13,7 @@ public interface RTK_BASELINE_COORDINATE_SYSTEM {
      */
     public final static int RTK_BASELINE_COORDINATE_SYSTEM_ECEF = 0;
     /**
-     * North, East, Down
+     * RTK basestation centered, north, east, down
      */
     public final static int RTK_BASELINE_COORDINATE_SYSTEM_NED = 1;
 }
