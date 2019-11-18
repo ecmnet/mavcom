@@ -166,7 +166,7 @@ public interface MAV_CMD {
      * Start orbiting on the circumference of a circle defined by the parameters. Setting any value NaN results in using defaults.
      * PARAM 1 : Radius of the circle. positive: Orbit clockwise. negative: Orbit counter-clockwise.
      * PARAM 2 : Tangential Velocity. NaN: Vehicle configuration default.
-     * PARAM 3 : Yaw behavior of the vehicle. 0: vehicle front points to the center (default). 1: Hold last heading. 2: Leave yaw uncontrolled.
+     * PARAM 3 : Yaw behavior of the vehicle.
      * PARAM 4 : Reserved (e.g. for dynamic center beacon options)
      * PARAM 5 : Center point latitude (if no MAV_FRAME specified) / X coordinate according to MAV_FRAME. NaN: Use current vehicle position or current center if already orbiting.
      * PARAM 6 : Center point longitude (if no MAV_FRAME specified) / Y coordinate according to MAV_FRAME. NaN: Use current vehicle position or current center if already orbiting.

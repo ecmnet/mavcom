@@ -9,11 +9,15 @@ package org.mavlink.messages;
  **/
 public interface FENCE_MITIGATE {
     /**
+     * Unknown
+     */
+    public final static int FENCE_MITIGATE_UNKNOWN = 0;
+    /**
      * No actions being taken
      */
-    public final static int FENCE_MITIGATE_NONE = 0;
+    public final static int FENCE_MITIGATE_NONE = 1;
     /**
      * Velocity limiting active to prevent breach
      */
-    public final static int FENCE_MITIGATE_VEL_LIMIT = 1;
+    public final static int FENCE_MITIGATE_VEL_LIMIT = 2;
 }
