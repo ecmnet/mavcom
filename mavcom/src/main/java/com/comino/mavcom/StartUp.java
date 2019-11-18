@@ -51,7 +51,9 @@ import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
+import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.param.PX4ParamReader;
+import com.comino.mavcom.status.StatusManager;
 import com.comino.mavutils.legacy.ExecutorService;
 
 
@@ -120,6 +122,11 @@ public class StartUp implements Runnable {
 
 		params = new PX4ParamReader(control);
 
+		control.getStatusManager().addListener(Status.MSP_CONNECTED, (n) -> {
+	      if(n.isStatus(Status.MSP_CONNECTED))
+	    	  params.requestRefresh();
+		});
+
 	}
 
 	public static void main(String[] args) {
@@ -142,9 +149,6 @@ public class StartUp implements Runnable {
 				if(!control.isConnected()) {
 					Thread.sleep(200);
 					control.connect();
-					Thread.sleep(200);
-					params.requestRefresh();
-					Thread.sleep(200);
 					continue;
 				}
 

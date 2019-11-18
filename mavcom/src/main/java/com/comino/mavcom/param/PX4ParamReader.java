@@ -48,12 +48,12 @@ public class PX4ParamReader implements IMAVLinkListener {
 
 		if(msg.param_index >= msg.param_count-1) {
 			isLoaded = true;
-			System.out.println("Parameters loaded succesfully...");
+			System.out.println("loaded succesfully");
 		}
 	}
 
 	public void requestRefresh() {
-		System.out.println("Reading PX4 parameters from device: ");
+		System.out.print("Reading PX4 parameters from device..");
 		parameterList.clear();
 		msg_param_request_list msg = new msg_param_request_list(1,1);
 		msg.target_component = 1;
