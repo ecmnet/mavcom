@@ -30,7 +30,7 @@ public class PX4ParamReader implements IMAVLinkListener {
 	@Override
 	public void received(Object _msg) {
 
-		if(!(_msg instanceof msg_param_value))
+		if(!(_msg instanceof msg_param_value) || isLoaded)
 			return;
 
 		msg_param_value msg = (msg_param_value)_msg;
@@ -54,6 +54,7 @@ public class PX4ParamReader implements IMAVLinkListener {
 	}
 
 	public void requestRefresh() {
+		isLoaded = false;
 		System.out.print("Reading PX4 parameters from device..");
 		parameterList.clear();
 		msg_param_request_list msg = new msg_param_request_list(1,1);
