@@ -5,6 +5,8 @@
 
 	<target name="get_metadata">
       <get src="https://github.com/mavlink/mavlink/raw/master/message_definitions/v1.0/common.xml" dest="mavlink/common.xml" />
+	  <get src="https://s3.amazonaws.com/px4-travis/Firmware/master/parameters.xml" dest="src/main/java/com/comino/mavcom/param/PX4ParameterFactMetaData.xml"
+				     ignoreerrors="true" maxtime="30" />
 	</target>
 
 	<target name="build_mavlink" depends="get_metadata">
