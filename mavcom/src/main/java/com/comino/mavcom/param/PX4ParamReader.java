@@ -6,6 +6,7 @@ import java.util.Map;
 import org.mavlink.messages.lquac.msg_param_request_list;
 import org.mavlink.messages.lquac.msg_param_value;
 
+import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.control.IMAVMSPController;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 
@@ -15,9 +16,9 @@ public class PX4ParamReader implements IMAVLinkListener {
 	protected Map<String,ParameterAttributes> parameterList = null;
 
 	protected boolean       isLoaded = false;
-	protected IMAVMSPController control = null;
+	protected IMAVController control = null;
 
-	public PX4ParamReader(IMAVMSPController control) {
+	public PX4ParamReader(IMAVController control) {
 
 		this.control = control;
 		this.control.addMAVLinkListener(this);
