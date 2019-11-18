@@ -302,7 +302,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void addMAVLinkListener(IMAVLinkListener listener) {
-
+        comm.addMAVLinkListener(listener);
 	}
 
 	@Override

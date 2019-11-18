@@ -51,6 +51,7 @@ import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
+import com.comino.mavcom.param.PX4ParamReader;
 import com.comino.mavutils.legacy.ExecutorService;
 
 
@@ -65,6 +66,8 @@ public class StartUp implements Runnable {
 	private DataModel      model = null;
 
 	private boolean is_simulation = false;
+
+	private PX4ParamReader params = null;
 
 	public StartUp(String[] args) {
 
@@ -113,6 +116,10 @@ public class StartUp implements Runnable {
 				}
 			}
 		});
+
+
+		params = new PX4ParamReader(control);
+
 	}
 
 	public static void main(String[] args) {
@@ -126,7 +133,7 @@ public class StartUp implements Runnable {
 	public void run() {
 		long tms = System.currentTimeMillis();
 
-		msg_msp_micro_grid grid = new msg_msp_micro_grid(2,1);
+		msg_msp_micro_grid grid = new msg_msp_micro_grid(1,1);
 		msg_msp_status msg = new msg_msp_status(2,1);
 
 		while(true) {
@@ -135,8 +142,12 @@ public class StartUp implements Runnable {
 				if(!control.isConnected()) {
 					Thread.sleep(200);
 					control.connect();
+					Thread.sleep(200);
+					params.requestRefresh();
+					Thread.sleep(200);
 					continue;
 				}
+
 
 				while(model.grid.hasTransfers()) {
 					grid.resolution = 0;
