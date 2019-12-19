@@ -15,9 +15,14 @@ public class MSPVisionPlugin extends MAVLinkPluginBase {
 	public void received(Object o) {
 
 		msg_msp_vision vision = (msg_msp_vision) o;
+
 		model.vision.vx = vision.vx;
 		model.vision.vy = vision.vy;
 		model.vision.vz = vision.vz;
+
+		model.vision.gx = vision.gx;
+		model.vision.gy = vision.gy;
+		model.vision.gz = vision.gz;
 
 		model.vision.cov_px = vision.covariance[MAV_COV.VIS_COV_X];
 		model.vision.cov_py = vision.covariance[MAV_COV.VIS_COV_Y];
