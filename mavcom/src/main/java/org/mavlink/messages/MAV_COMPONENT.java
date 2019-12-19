@@ -463,6 +463,10 @@ public interface MAV_COMPONENT {
      */
     public final static int MAV_COMP_ID_VISUAL_INERTIAL_ODOMETRY = 197;
     /**
+     * Component that manages pairing of vehicle and GCS.
+     */
+    public final static int MAV_COMP_ID_PAIRING_MANAGER = 198;
+    /**
      * Inertial Measurement Unit (IMU) #1.
      */
     public final static int MAV_COMP_ID_IMU = 200;

@@ -28,4 +28,8 @@ public interface MAV_MOUNT_MODE {
      * Load neutral position and start to point to Lat,Lon,Alt
      */
     public final static int MAV_MOUNT_MODE_GPS_POINT = 4;
+    /**
+     * Gimbal tracks system with specified system ID
+     */
+    public final static int MAV_MOUNT_MODE_SYSID_TARGET = 5;
 }

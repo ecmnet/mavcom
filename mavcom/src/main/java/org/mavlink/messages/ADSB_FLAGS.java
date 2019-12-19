@@ -36,4 +36,16 @@ public interface ADSB_FLAGS {
      * null
      */
     public final static int ADSB_FLAGS_SIMULATED = 64;
+    /**
+     * null
+     */
+    public final static int ADSB_FLAGS_VERTICAL_VELOCITY_VALID = 128;
+    /**
+     * null
+     */
+    public final static int ADSB_FLAGS_BARO_VALID = 256;
+    /**
+     * null
+     */
+    public final static int ADSB_FLAGS_SOURCE_UAT = 32768;
 }

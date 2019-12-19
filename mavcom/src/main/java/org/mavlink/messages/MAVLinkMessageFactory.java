@@ -69,6 +69,7 @@ import org.mavlink.messages.lquac.msg_orbit_execution_status;
 import org.mavlink.messages.lquac.msg_storage_information;
 import org.mavlink.messages.lquac.msg_system_time;
 import org.mavlink.messages.lquac.msg_wifi_config_ap;
+import org.mavlink.messages.lquac.msg_component_information;
 import org.mavlink.messages.lquac.msg_scaled_pressure2;
 import org.mavlink.messages.lquac.msg_play_tune_v2;
 import org.mavlink.messages.lquac.msg_safety_set_allowed_area;
@@ -106,6 +107,7 @@ import org.mavlink.messages.lquac.msg_cellular_status;
 import org.mavlink.messages.lquac.msg_time_estimate_to_target;
 import org.mavlink.messages.lquac.msg_high_latency2;
 import org.mavlink.messages.lquac.msg_local_position_ned;
+import org.mavlink.messages.lquac.msg_ais_vessel;
 import org.mavlink.messages.lquac.msg_nav_controller_output;
 import org.mavlink.messages.lquac.msg_gps2_rtk;
 import org.mavlink.messages.lquac.msg_set_gps_global_origin;
@@ -220,6 +222,7 @@ import org.mavlink.messages.lquac.msg_encapsulated_data;
 import org.mavlink.messages.lquac.msg_param_ext_ack;
 import org.mavlink.messages.lquac.msg_orbit_execution_status;
 import org.mavlink.messages.lquac.msg_system_time;
+import org.mavlink.messages.lquac.msg_component_information;
 import org.mavlink.messages.lquac.msg_safety_set_allowed_area;
 import org.mavlink.messages.lquac.msg_global_vision_position_estimate;
 import org.mavlink.messages.lquac.msg_mission_item;
@@ -326,6 +329,7 @@ import org.mavlink.messages.lquac.msg_utm_global_position;
 import org.mavlink.messages.lquac.msg_cellular_status;
 import org.mavlink.messages.lquac.msg_high_latency2;
 import org.mavlink.messages.lquac.msg_local_position_ned;
+import org.mavlink.messages.lquac.msg_ais_vessel;
 import org.mavlink.messages.lquac.msg_nav_controller_output;
 import org.mavlink.messages.lquac.msg_gps2_rtk;
 import org.mavlink.messages.lquac.msg_set_gps_global_origin;
@@ -502,6 +506,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_SYSTEM_TIME:
       msg = new msg_system_time(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_COMPONENT_INFORMATION:
+      msg = new msg_component_information(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_SAFETY_SET_ALLOWED_AREA:
@@ -926,6 +934,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_LOCAL_POSITION_NED:
       msg = new msg_local_position_ned(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_AIS_VESSEL:
+      msg = new msg_ais_vessel(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:

@@ -487,8 +487,8 @@ public interface MAV_CMD {
      * PARAM 2 : Bitmask of option flags.
      * PARAM 3 : Reserved
      * PARAM 4 : Yaw heading, NaN for unchanged. For planes indicates loiter direction (0: clockwise, 1: counter clockwise)
-     * PARAM 5 : Latitude (deg * 1E7)
-     * PARAM 6 : Longitude (deg * 1E7)
+     * PARAM 5 : Latitude
+     * PARAM 6 : Longitude
      * PARAM 7 : Altitude (meters)
      */
     public final static int MAV_CMD_DO_REPOSITION = 192;
@@ -547,6 +547,11 @@ public interface MAV_CMD {
      * PARAM 7 : Empty
      */
     public final static int MAV_CMD_DO_SET_ROI_NONE = 197;
+    /**
+     * Mount tracks system with specified system ID. Determination of target vehicle position may be done with GLOBAL_POSITION_INT or any other means.
+     * PARAM 1 : sysid
+     */
+    public final static int MAV_CMD_DO_SET_ROI_SYSID = 198;
     /**
      * Control onboard camera system.
      * PARAM 1 : Camera ID (-1 for all)
@@ -608,8 +613,8 @@ public interface MAV_CMD {
      * PARAM 2 : roll depending on mount mode (degrees or degrees/second depending on roll input).
      * PARAM 3 : yaw depending on mount mode (degrees or degrees/second depending on yaw input).
      * PARAM 4 : altitude depending on mount mode.
-     * PARAM 5 : latitude in degrees * 1E7, set if appropriate mount mode.
-     * PARAM 6 : longitude in degrees * 1E7, set if appropriate mount mode.
+     * PARAM 5 : latitude, set if appropriate mount mode.
+     * PARAM 6 : longitude, set if appropriate mount mode.
      * PARAM 7 : Mount mode.
      */
     public final static int MAV_CMD_DO_MOUNT_CONTROL = 205;
@@ -837,6 +842,11 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_COMPONENT_ARM_DISARM = 400;
     /**
+     * Turns illuminators ON/OFF. An illuminator is a light source that is used for lighting up dark areas external to the sytstem: e.g. a torch or searchlight (as opposed to a light source for illuminating the system itself, e.g. an indicator light).
+     * PARAM 1 : 0: Illuminators OFF, 1: Illuminators ON
+     */
+    public final static int MAV_CMD_ILLUMINATOR_ON_OFF = 405;
+    /**
      * Request the home position from the vehicle.
      * PARAM 1 : Reserved
      * PARAM 2 : Reserved
@@ -869,6 +879,10 @@ public interface MAV_CMD {
      * Request the target system(s) emit a single instance of a specified message (i.e. a "one-shot" version of MAV_CMD_SET_MESSAGE_INTERVAL).
      * PARAM 1 : The MAVLink message ID of the requested message.
      * PARAM 2 : Index id (if appropriate). The use of this parameter (if any), must be defined in the requested message.
+     * PARAM 3 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 4 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 5 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 6 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
      * PARAM 7 : Target address for requested message (if message has target address fields). 0: Flight-stack default, 1: address of requestor, 2: broadcast.
      */
     public final static int MAV_CMD_REQUEST_MESSAGE = 512;
