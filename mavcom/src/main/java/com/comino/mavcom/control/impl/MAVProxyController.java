@@ -183,7 +183,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			}
 			return true;
 		} catch (Exception e1) {
-			MSPLogger.getInstance().writeLocalMsg("Command rejected: "+msg);
 			return false;
 		}
 
