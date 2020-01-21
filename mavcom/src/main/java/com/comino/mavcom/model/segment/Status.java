@@ -78,6 +78,7 @@ public class Status extends Segment {
 	public static final  int MSP_SLAM_AVAILABILITY    			= 8;
 	public static final  int MSP_BASE_AVAILABILITY    			= 9;
 	public static final  int MSP_RTK_AVAILABILITY    		    =10;
+	public static final  int MSP_GROUND_TRUTH        		    =11;
 
 	// Navigation states
 
@@ -104,7 +105,7 @@ public class Status extends Segment {
 	public static final  int NAVIGATION_STATE_AUTO_PRECLAND 		= 20	; 	// Precision land with landing target
 
 
-	private static final String[] sensor_names = { "IMU","LIDAR","SONAR","GPS","FLOW","MSP","CV","SYSM","SLAM","BASE","RTK",
+	private static final String[] sensor_names = { "IMU","LIDAR","SONAR","GPS","FLOW","MSP","CV","SYSM","SLAM","BASE","RTK","GND",
 
 	};
 
