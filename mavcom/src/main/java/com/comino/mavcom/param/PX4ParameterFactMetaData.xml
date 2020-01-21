@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='UTF-8'?>
 <parameters>
   <version>3</version>
   <parameter_version_major>1</parameter_version_major>
@@ -839,13 +838,6 @@ Set to 2 to use heading from motion capture</short_desc>
       <max>121212</max>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter category="Developer" default="0" name="CBRK_GPSFAIL" type="INT32">
-      <short_desc>Circuit breaker for GPS failure detection</short_desc>
-      <long_desc>Setting this parameter to 240024 will disable the GPS failure detection. If this check is enabled, then the sensor check will fail if the GPS module is missing. It will also check for excessive signal noise on the GPS receiver and warn the user if detected. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
-      <min>0</min>
-      <max>240024</max>
-      <reboot_required>true</reboot_required>
-    </parameter>
     <parameter category="Developer" default="0" name="CBRK_IO_SAFETY" type="INT32">
       <short_desc>Circuit breaker for IO safety</short_desc>
       <long_desc>Setting this parameter to 22027 will disable IO safety. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
@@ -922,7 +914,6 @@ Note: ekf2 will limit the delta velocity bias estimate magnitude to be less than
       <short_desc>Maximum EKF height innovation test ratio that will allow arming</short_desc>
       <min>0.1</min>
       <max>1.0</max>
-      <unit>m</unit>
       <decimal>2</decimal>
       <increment>0.05</increment>
     </parameter>
@@ -930,7 +921,6 @@ Note: ekf2 will limit the delta velocity bias estimate magnitude to be less than
       <short_desc>Maximum EKF position innovation test ratio that will allow arming</short_desc>
       <min>0.1</min>
       <max>1.0</max>
-      <unit>m</unit>
       <decimal>2</decimal>
       <increment>0.05</increment>
     </parameter>
@@ -938,7 +928,6 @@ Note: ekf2 will limit the delta velocity bias estimate magnitude to be less than
       <short_desc>Maximum EKF velocity innovation test ratio that will allow arming</short_desc>
       <min>0.1</min>
       <max>1.0</max>
-      <unit>m/s</unit>
       <decimal>2</decimal>
       <increment>0.05</increment>
     </parameter>
@@ -946,7 +935,6 @@ Note: ekf2 will limit the delta velocity bias estimate magnitude to be less than
       <short_desc>Maximum EKF yaw innovation test ratio that will allow arming</short_desc>
       <min>0.1</min>
       <max>1.0</max>
-      <unit>rad</unit>
       <decimal>2</decimal>
       <increment>0.05</increment>
     </parameter>
@@ -973,6 +961,10 @@ Set -1 to disable the check</short_desc>
       <max>180</max>
       <unit>deg</unit>
     </parameter>
+    <parameter default="1" name="COM_ARM_MAG_STR" type="INT32">
+      <short_desc>Enable mag strength preflight check</short_desc>
+      <long_desc>Deny arming if the estimator detects a strong magnetic disturbance (check enabled by EKF2_MAG_CHECK)</long_desc>
+    </parameter>
     <parameter default="0" name="COM_ARM_MIS_REQ" type="INT32">
       <short_desc>Require valid mission to arm</short_desc>
       <long_desc>The default allows to arm the vehicle without a valid mission.</long_desc>
@@ -980,12 +972,6 @@ Set -1 to disable the check</short_desc>
     <parameter default="0" name="COM_ARM_SWISBTN" type="INT32">
       <short_desc>Arm switch is only a button</short_desc>
       <long_desc>The default uses the arm switch as real switch. If parameter set button gets handled like stick arming.</long_desc>
-      <min>0</min>
-      <max>1</max>
-      <values>
-        <value code="0">Arm switch is a switch that stays on when armed</value>
-        <value code="1">Arm switch is a button that only triggers arming and disarming</value>
-      </values>
     </parameter>
     <parameter default="1" name="COM_ARM_WO_GPS" type="INT32">
       <short_desc>Allow arming without GPS</short_desc>
@@ -1345,8 +1331,14 @@ See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
       <increment>0.1</increment>
     </parameter>
     <parameter default="1" name="COM_RC_OVERRIDE" type="INT32">
-      <short_desc>Enable RC stick override of auto modes</short_desc>
-      <long_desc>When an auto mode is active (except a critical battery reaction) moving the RC sticks gives control back to the pilot in manual position mode immediately. Only has an effect on multicopters and VTOLS in multicopter mode.</long_desc>
+      <short_desc>Enable RC stick override of auto or offboard modes</short_desc>
+      <long_desc>Moving the RC sticks gives control back to the pilot in manual position mode immediately when: 0: an auto mode is active (except a critical battery reaction) 1: offboard mode is active Only has an effect on multicopters and VTOLS in multicopter mode.</long_desc>
+      <min>0</min>
+      <max>3</max>
+      <bitmask>
+        <bit index="0"> Enable override of auto modes</bit>
+        <bit index="1"> Enable override of offboard mode</bit>
+      </bitmask>
     </parameter>
     <parameter default="12.0" name="COM_RC_STICK_OV" type="FLOAT">
       <short_desc>RC stick override threshold</short_desc>
@@ -1398,6 +1390,7 @@ See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -1676,7 +1669,7 @@ Increasing it makes the multi-rotor wind estimates adjust more slowly</short_des
       <decimal>1</decimal>
     </parameter>
     <parameter default="0.05" name="EKF2_EVA_NOISE" type="FLOAT">
-      <short_desc>Measurement noise for vision angle observations used when the vision system does not supply error estimates</short_desc>
+      <short_desc>Measurement noise for vision angle observations used to lower bound or replace the uncertainty included in the message</short_desc>
       <min>0.01</min>
       <unit>rad</unit>
       <decimal>2</decimal>
@@ -1689,7 +1682,7 @@ Sets the number of standard deviations used by the innovation consistency test</
       <decimal>1</decimal>
     </parameter>
     <parameter default="0.1" name="EKF2_EVP_NOISE" type="FLOAT">
-      <short_desc>Measurement noise for vision position observations used when the vision system does not supply error estimates</short_desc>
+      <short_desc>Measurement noise for vision position observations used to lower bound or replace the uncertainty included in the message</short_desc>
       <min>0.01</min>
       <unit>m</unit>
       <decimal>2</decimal>
@@ -1702,7 +1695,7 @@ Sets the number of standard deviations used by the innovation consistency test</
       <decimal>1</decimal>
     </parameter>
     <parameter default="0.1" name="EKF2_EVV_NOISE" type="FLOAT">
-      <short_desc>Measurement noise for vision velocity observations used when the vision system does not supply error estimates</short_desc>
+      <short_desc>Measurement noise for vision velocity observations used to lower bound or replace the uncertainty included in the message</short_desc>
       <min>0.01</min>
       <unit>m/s</unit>
       <decimal>2</decimal>
@@ -3037,15 +3030,6 @@ Set to 0 to disable heading hold</short_desc>
       <decimal>1</decimal>
       <increment>0.5</increment>
     </parameter>
-    <parameter default="3.0" name="FW_T_HGT_OMEGA" type="FLOAT">
-      <short_desc>Complementary filter "omega" parameter for height</short_desc>
-      <long_desc>This is the cross-over frequency (in radians/second) of the complementary filter used to fuse vertical acceleration and barometric height to obtain an estimate of height rate and height. Increasing this frequency weights the solution more towards use of the barometer, whilst reducing it weights the solution more towards use of the accelerometer data.</long_desc>
-      <min>1.0</min>
-      <max>10.0</max>
-      <unit>rad/s</unit>
-      <decimal>1</decimal>
-      <increment>0.5</increment>
-    </parameter>
     <parameter default="0.8" name="FW_T_HRATE_FF" type="FLOAT">
       <short_desc>Height rate feed forward</short_desc>
       <min>0.0</min>
@@ -3163,6 +3147,18 @@ Set to 0 to disable heading hold</short_desc>
     </parameter>
   </group>
   <group name="Failure Detector">
+    <parameter default="0" name="FD_EXT_ATS_EN" type="INT32">
+      <short_desc>Enable PWM input on AUX5 or MAIN5 (depending on board) for engaging failsafe from an external
+automatic trigger system (ATS)</short_desc>
+      <long_desc>External ATS is required by ASTM F3322-18.</long_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter default="1900" name="FD_EXT_ATS_TRIG" type="INT32">
+      <short_desc>The PWM threshold from external automatic trigger system for engaging failsafe</short_desc>
+      <long_desc>External ATS is required by ASTM F3322-18.</long_desc>
+      <unit>microseconds</unit>
+      <decimal>2</decimal>
+    </parameter>
     <parameter default="60" name="FD_FAIL_P" type="INT32">
       <short_desc>FailureDetector Max Pitch</short_desc>
       <long_desc>Maximum pitch angle before FailureDetector triggers the attitude_failure flag If flight termination is enabled (@CBRK_FLIGHTTERM set to 0), the autopilot will terminate the flight and set all the outputs to their failsafe value as soon as the attitude_failure flag is set. Setting this parameter to 0 disables the check</long_desc>
@@ -3238,6 +3234,7 @@ but also ignore less noise</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -3254,6 +3251,7 @@ but also ignore less noise</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -3401,6 +3399,7 @@ but also ignore less noise</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -3872,6 +3871,7 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -3915,6 +3915,7 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -3958,6 +3959,7 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -4082,43 +4084,6 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
   <group name="MKBLCTRL Testmode">
     <parameter default="0" name="MKBLCTRL_TEST" type="INT32">
       <short_desc>Test mode (Identify) of MKBLCTRL Driver</short_desc>
-    </parameter>
-  </group>
-  <group name="MPU9x50 Configuration">
-    <parameter default="4" name="MPU_ACC_LPF_ENM" type="INT32">
-      <short_desc>Low pass filter frequency for Accelerometer</short_desc>
-      <values>
-        <value code="0">MPU9X50_ACC_LPF_460HZ</value>
-        <value code="1">MPU9X50_ACC_LPF_184HZ</value>
-        <value code="2">MPU9X50_ACC_LPF_92HZ</value>
-        <value code="3">MPU9X50_ACC_LPF_41HZ</value>
-        <value code="4">MPU9X50_ACC_LPF_20HZ</value>
-        <value code="5">MPU9X50_ACC_LPF_10HZ</value>
-        <value code="6">MPU9X50_ACC_LPF_5HZ</value>
-        <value code="7">MPU9X50_ACC_LPF_460HZ_NOLPF</value>
-      </values>
-    </parameter>
-    <parameter default="4" name="MPU_GYRO_LPF_ENM" type="INT32">
-      <short_desc>Low pass filter frequency for Gyro</short_desc>
-      <values>
-        <value code="0">MPU9X50_GYRO_LPF_250HZ</value>
-        <value code="1">MPU9X50_GYRO_LPF_184HZ</value>
-        <value code="2">MPU9X50_GYRO_LPF_92HZ</value>
-        <value code="3">MPU9X50_GYRO_LPF_41HZ</value>
-        <value code="4">MPU9X50_GYRO_LPF_20HZ</value>
-        <value code="5">MPU9X50_GYRO_LPF_10HZ</value>
-        <value code="6">MPU9X50_GYRO_LPF_5HZ</value>
-        <value code="7">MPU9X50_GYRO_LPF_3600HZ_NOLPF</value>
-      </values>
-    </parameter>
-    <parameter default="2" name="MPU_SAMPLE_R_ENM" type="INT32">
-      <short_desc>Sample rate in Hz</short_desc>
-      <values>
-        <value code="0">MPU9x50_SAMPLE_RATE_100HZ</value>
-        <value code="1">MPU9x50_SAMPLE_RATE_200HZ</value>
-        <value code="2">MPU9x50_SAMPLE_RATE_500HZ</value>
-        <value code="3">MPU9x50_SAMPLE_RATE_1000HZ</value>
-      </values>
     </parameter>
   </group>
   <group name="Mission">
@@ -4312,7 +4277,21 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="1">Warn only</value>
         <value code="2">Return mode</value>
         <value code="3">Land mode</value>
+        <value code="4">Position Hold mode</value>
       </values>
+    </parameter>
+    <parameter default="500" name="NAV_TRAFF_A_RADM" type="FLOAT">
+      <short_desc>Set NAV TRAFFIC AVOID RADIUS MANNED</short_desc>
+      <long_desc>Defines the Radius where NAV TRAFFIC AVOID is Called For Manned Aviation</long_desc>
+      <min>500</min>
+      <unit>m</unit>
+    </parameter>
+    <parameter default="10" name="NAV_TRAFF_A_RADU" type="FLOAT">
+      <short_desc>Set NAV TRAFFIC AVOID RADIUS</short_desc>
+      <long_desc>Defines the Radius where NAV TRAFFIC AVOID is Called For Unmanned Aviation</long_desc>
+      <min>10</min>
+      <max>500</max>
+      <unit>m</unit>
     </parameter>
   </group>
   <group name="Mixer Output">
@@ -4581,7 +4560,7 @@ if required by the gimbal (only in AUX output mode)</short_desc>
     </parameter>
     <parameter default="5.0" name="MPC_ACC_HOR_MAX" type="FLOAT">
       <short_desc>Maximum horizontal acceleration for auto mode and for manual mode</short_desc>
-      <long_desc>Manual mode: Maximum deceleration for MPC_POS_MODE 1 and 2. Maximum acceleration and deceleration for MPC_POS_MODE 3. Auto mode: Used with MPC_AUTO_MODE 0 only. For MPC_AUTO_MODE 1, MPC_ACC_HOR is always used.</long_desc>
+      <long_desc>Maximum deceleration for MPC_POS_MODE 1 and 2. Maximum acceleration and deceleration for MPC_POS_MODE 3.</long_desc>
       <min>2.0</min>
       <max>15.0</max>
       <unit>m/s/s</unit>
@@ -4606,23 +4585,6 @@ if required by the gimbal (only in AUX output mode)</short_desc>
         <value code="1">Terrain following</value>
         <value code="2">Terrain hold</value>
       </values>
-    </parameter>
-    <parameter default="1" name="MPC_AUTO_MODE" type="INT32">
-      <short_desc>Auto sub-mode</short_desc>
-      <values>
-        <value code="0">Default line tracking</value>
-        <value code="1">Jerk-limited trajectory</value>
-      </values>
-    </parameter>
-    <parameter default="3.0" name="MPC_CRUISE_90" type="FLOAT">
-      <short_desc>Cruise speed when angle prev-current/current-next setpoint
-is 90 degrees. It should be lower than MPC_XY_CRUISE</short_desc>
-      <long_desc>Applies only in AUTO modes (includes also RTL / hold / etc.)</long_desc>
-      <min>1.0</min>
-      <max>20.0</max>
-      <unit>m/s</unit>
-      <decimal>2</decimal>
-      <increment>1</increment>
     </parameter>
     <parameter default="5.0" name="MPC_DEC_HOR_SLOW" type="FLOAT">
       <short_desc>Slow horizontal manual deceleration for manual mode</short_desc>
@@ -4655,7 +4617,7 @@ is 90 degrees. It should be lower than MPC_XY_CRUISE</short_desc>
     </parameter>
     <parameter default="8.0" name="MPC_JERK_AUTO" type="FLOAT">
       <short_desc>Jerk limit in auto mode</short_desc>
-      <long_desc>Limit the maximum jerk of the vehicle (how fast the acceleration can change). A lower value leads to smoother vehicle motions, but it also limits its agility. Note: This is only used in jerk-limited trajectory mode (MPC_AUTO_MODE 1)</long_desc>
+      <long_desc>Limit the maximum jerk of the vehicle (how fast the acceleration can change). A lower value leads to smoother vehicle motions, but it also limits its agility.</long_desc>
       <min>5.0</min>
       <max>80.0</max>
       <unit>m/s/s/s</unit>
@@ -4913,12 +4875,6 @@ the setpoint will be capped to MPC_XY_VEL_MAX</short_desc>
       <min>0.0</min>
       <max>1.5</max>
       <decimal>2</decimal>
-    </parameter>
-    <parameter default="0.3" name="MPC_Z_TRAJ_P" type="FLOAT">
-      <short_desc>Proportional gain for vertical trajectory position error</short_desc>
-      <min>0.1</min>
-      <max>1.0</max>
-      <decimal>1</decimal>
     </parameter>
     <parameter default="0.0" name="MPC_Z_VEL_D" type="FLOAT">
       <short_desc>Differential gain for vertical velocity error</short_desc>
@@ -6054,12 +6010,6 @@ default 1.5 turns per second</short_desc>
       <increment>0.1</increment>
     </parameter>
   </group>
-  <group name="RC Receiver Configuration">
-    <parameter default="1" name="RC_RECEIVER_TYPE" type="INT32">
-      <short_desc>RC receiver type</short_desc>
-      <long_desc>Acceptable values: - RC_RECEIVER_SPEKTRUM = 1, - RC_RECEIVER_LEMONRX = 2,</long_desc>
-    </parameter>
-  </group>
   <group name="RTPS">
     <parameter default="0" name="RTPS_CONFIG" type="INT32">
       <short_desc>Serial Configuration for FastRTPS</short_desc>
@@ -6074,6 +6024,7 @@ default 1.5 turns per second</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -6090,6 +6041,7 @@ default 1.5 turns per second</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -7785,6 +7737,7 @@ default 1.5 turns per second</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -8061,7 +8014,7 @@ FW_CLMBOUT_DIFF if FW_CLMBOUT_DIFF &gt; 0</short_desc>
 A taildragger with stearable wheel might need to pitch up
 a little to keep it's wheel on the ground before airspeed
 to takeoff is reached</short_desc>
-      <min>0.0</min>
+      <min>-10.0</min>
       <max>20.0</max>
       <unit>deg</unit>
       <decimal>1</decimal>
@@ -8080,6 +8033,10 @@ to takeoff is reached</short_desc>
     </parameter>
   </group>
   <group name="SD Logging">
+    <parameter default="0" name="SDLOG_BOOT_BAT" type="INT32">
+      <short_desc>Battery-only Logging</short_desc>
+      <long_desc>When enabled, logging will not start from boot if battery power is not detected (e.g. powered via USB on a test bench). This prevents extraneous flight logs from being created during bench testing. Note that this only applies to log-from-boot modes. This has no effect on arm-based modes.</long_desc>
+    </parameter>
     <parameter default="0" name="SDLOG_DIRS_MAX" type="INT32">
       <short_desc>Maximum number of log directories to keep</short_desc>
       <long_desc>If there are more log directories than this value, the system will delete the oldest directories during startup. In addition, the system will delete old logs if there is not enough free space left. The minimum amount is 300 MB. If this is set to 0, old directories will only be removed if the free space falls below the minimum. Note: this does not apply to mission log files.</long_desc>
@@ -8139,6 +8096,14 @@ to takeoff is reached</short_desc>
     </parameter>
   </group>
   <group name="SITL">
+    <parameter default="0" name="SIM_ACCEL_BLOCK" type="INT32">
+      <short_desc>Simulator block accelerometer data</short_desc>
+      <long_desc>Enable to block the publication of any incoming simulation accelerometer data.</long_desc>
+    </parameter>
+    <parameter default="0" name="SIM_BARO_BLOCK" type="INT32">
+      <short_desc>Simulator block barometer data</short_desc>
+      <long_desc>Enable to block the publication of any incoming simulation barometer data.</long_desc>
+    </parameter>
     <parameter default="60" name="SIM_BAT_DRAIN" type="FLOAT">
       <short_desc>Simulator Battery drain interval</short_desc>
       <min>1</min>
@@ -8154,6 +8119,29 @@ Particularly useful for testing different low-battery behaviour</short_desc>
       <max>100</max>
       <unit>%</unit>
       <increment>0.1</increment>
+    </parameter>
+    <parameter default="0" name="SIM_DPRES_BLOCK" type="INT32">
+      <short_desc>Simulator block differential pressure data</short_desc>
+      <long_desc>Enable to block the publication of any incoming simulation differential pressure data.</long_desc>
+    </parameter>
+    <parameter default="0" name="SIM_GPS_BLOCK" type="INT32">
+      <short_desc>Simulator block GPS data</short_desc>
+      <long_desc>Enable to block the publication of any incoming simulation GPS data.</long_desc>
+    </parameter>
+    <parameter default="0.0" name="SIM_GPS_NOISE_X" type="FLOAT">
+      <short_desc>Simulator GPS noise multiplier</short_desc>
+      <min>0</min>
+      <max>10</max>
+      <unit>%</unit>
+      <increment>0.1</increment>
+    </parameter>
+    <parameter default="0" name="SIM_GYRO_BLOCK" type="INT32">
+      <short_desc>Simulator block gyroscope data</short_desc>
+      <long_desc>Enable to block the publication of any incoming simulation gyroscope data.</long_desc>
+    </parameter>
+    <parameter default="0" name="SIM_MAG_BLOCK" type="INT32">
+      <short_desc>Simulator block magnetometer data</short_desc>
+      <long_desc>Enable to block the publication of any incoming simulation magnetometer data.</long_desc>
     </parameter>
   </group>
   <group name="Sensor Calibration">
@@ -8612,6 +8600,22 @@ is less than 50% of this value</short_desc>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
+    <parameter default="20.0" name="IMU_GYRO_NF_BW" type="FLOAT">
+      <short_desc>Driver level notch bandwidth for gyro</short_desc>
+      <long_desc>The frequency width of the stop band for the 2nd order notch filter on the gyro driver. See "IMU_GYRO_NF_FREQ" to activate the filter and to set the notch frequency.</long_desc>
+      <min>0</min>
+      <max>100</max>
+      <unit>Hz</unit>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter default="0.0" name="IMU_GYRO_NF_FREQ" type="FLOAT">
+      <short_desc>Driver level notch frequency for gyro</short_desc>
+      <long_desc>The center frequency for the 2nd order notch filter on the gyro driver. This filter can be enabled to avoid feedback amplification of structural resonances at a specific frequency. This only affects the signal sent to the controllers, not the estimators. 0 disables the filter. See "IMU_GYRO_NF_BW" to set the bandwidth of the filter.</long_desc>
+      <min>0</min>
+      <max>1000</max>
+      <unit>Hz</unit>
+      <reboot_required>true</reboot_required>
+    </parameter>
     <parameter default="0" name="IMU_GYRO_RATEMAX" type="INT32">
       <short_desc>Gyro control data maximum publication rate</short_desc>
       <long_desc>This is the maximum rate the gyro control data (sensor_gyro_control) will be allowed to publish at. Set to 0 to disable and publish at the native sensor sample rate.</long_desc>
@@ -8728,6 +8732,7 @@ is less than 50% of this value</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -8882,6 +8887,7 @@ is less than 50% of this value</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -9306,6 +9312,7 @@ is less than 50% of this value</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -9325,6 +9332,7 @@ is less than 50% of this value</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -9341,6 +9349,7 @@ is less than 50% of this value</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -9359,6 +9368,7 @@ is less than 50% of this value</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -9398,6 +9408,39 @@ is less than 50% of this value</short_desc>
     <parameter default="0" name="SER_GPS2_BAUD" type="INT32">
       <short_desc>Baudrate for the GPS 2 Serial Port</short_desc>
       <long_desc>Configure the Baudrate for the GPS 2 Serial Port. Note: certain drivers such as the GPS can determine the Baudrate automatically.</long_desc>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">Auto</value>
+        <value code="50">50 8N1</value>
+        <value code="75">75 8N1</value>
+        <value code="110">110 8N1</value>
+        <value code="134">134 8N1</value>
+        <value code="150">150 8N1</value>
+        <value code="200">200 8N1</value>
+        <value code="300">300 8N1</value>
+        <value code="600">600 8N1</value>
+        <value code="1200">1200 8N1</value>
+        <value code="1800">1800 8N1</value>
+        <value code="2400">2400 8N1</value>
+        <value code="4800">4800 8N1</value>
+        <value code="9600">9600 8N1</value>
+        <value code="19200">19200 8N1</value>
+        <value code="38400">38400 8N1</value>
+        <value code="57600">57600 8N1</value>
+        <value code="115200">115200 8N1</value>
+        <value code="230400">230400 8N1</value>
+        <value code="460800">460800 8N1</value>
+        <value code="500000">500000 8N1</value>
+        <value code="921600">921600 8N1</value>
+        <value code="1000000">1000000 8N1</value>
+        <value code="1500000">1500000 8N1</value>
+        <value code="2000000">2000000 8N1</value>
+        <value code="3000000">3000000 8N1</value>
+      </values>
+    </parameter>
+    <parameter default="0" name="SER_GPS3_BAUD" type="INT32">
+      <short_desc>Baudrate for the GPS 3 Serial Port</short_desc>
+      <long_desc>Configure the Baudrate for the GPS 3 Serial Port. Note: certain drivers such as the GPS can determine the Baudrate automatically.</long_desc>
       <reboot_required>true</reboot_required>
       <values>
         <value code="0">Auto</value>
@@ -9780,33 +9823,6 @@ is less than 50% of this value</short_desc>
       <increment>0.5</increment>
     </parameter>
   </group>
-  <group name="Snapdragon UART ESC">
-    <parameter default="250000" name="UART_ESC_BAUD" type="INT32">
-      <short_desc>ESC UART baud rate</short_desc>
-      <long_desc>Default rate is 250Kbps, whic is used in off-the-shelf QRP ESC products.</long_desc>
-    </parameter>
-    <parameter default="2" name="UART_ESC_MODEL" type="INT32">
-      <short_desc>ESC model</short_desc>
-      <long_desc>See esc_model_t enum definition in uart_esc_dev.h for all supported ESC model enum values.</long_desc>
-      <values>
-        <value code="0">ESC_200QX</value>
-        <value code="1">ESC_350QX</value>
-        <value code="2">ESC_210QC</value>
-      </values>
-    </parameter>
-    <parameter default="4" name="UART_ESC_MOTOR1" type="INT32">
-      <short_desc>Motor 1 Mapping</short_desc>
-    </parameter>
-    <parameter default="2" name="UART_ESC_MOTOR2" type="INT32">
-      <short_desc>Motor 2 Mapping</short_desc>
-    </parameter>
-    <parameter default="1" name="UART_ESC_MOTOR3" type="INT32">
-      <short_desc>Motor 3 Mapping</short_desc>
-    </parameter>
-    <parameter default="3" name="UART_ESC_MOTOR4" type="INT32">
-      <short_desc>Motor 4 Mapping</short_desc>
-    </parameter>
-  </group>
   <group name="System">
     <parameter default="31" name="LED_RGB1_MAXBRT" type="INT32">
       <short_desc>RGB Led brightness limit</short_desc>
@@ -9951,6 +9967,7 @@ is less than 50% of this value</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
@@ -9967,6 +9984,7 @@ is less than 50% of this value</short_desc>
         <value code="104">TELEM/SERIAL 4</value>
         <value code="201">GPS 1</value>
         <value code="202">GPS 2</value>
+        <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
       </values>
     </parameter>
