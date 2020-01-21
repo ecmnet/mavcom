@@ -28,4 +28,44 @@ public interface SERIAL_CONTROL_DEV {
      * system shell
      */
     public final static int SERIAL_CONTROL_DEV_SHELL = 10;
+    /**
+     * SERIAL0
+     */
+    public final static int SERIAL_CONTROL_SERIAL0 = 100;
+    /**
+     * SERIAL1
+     */
+    public final static int SERIAL_CONTROL_SERIAL1 = 101;
+    /**
+     * SERIAL2
+     */
+    public final static int SERIAL_CONTROL_SERIAL2 = 102;
+    /**
+     * SERIAL3
+     */
+    public final static int SERIAL_CONTROL_SERIAL3 = 103;
+    /**
+     * SERIAL4
+     */
+    public final static int SERIAL_CONTROL_SERIAL4 = 104;
+    /**
+     * SERIAL5
+     */
+    public final static int SERIAL_CONTROL_SERIAL5 = 105;
+    /**
+     * SERIAL6
+     */
+    public final static int SERIAL_CONTROL_SERIAL6 = 106;
+    /**
+     * SERIAL7
+     */
+    public final static int SERIAL_CONTROL_SERIAL7 = 107;
+    /**
+     * SERIAL8
+     */
+    public final static int SERIAL_CONTROL_SERIAL8 = 108;
+    /**
+     * SERIAL9
+     */
+    public final static int SERIAL_CONTROL_SERIAL9 = 109;
 }

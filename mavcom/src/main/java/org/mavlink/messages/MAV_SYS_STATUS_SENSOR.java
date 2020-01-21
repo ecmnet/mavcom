@@ -120,4 +120,8 @@ public interface MAV_SYS_STATUS_SENSOR {
      * 0x8000000 Satellite Communication
      */
     public final static int MAV_SYS_STATUS_SENSOR_SATCOM = 134217728;
+    /**
+     * 0x10000000 pre-arm check status. Always healthy when armed
+     */
+    public final static int MAV_SYS_STATUS_PREARM_CHECK = 268435456;
 }
