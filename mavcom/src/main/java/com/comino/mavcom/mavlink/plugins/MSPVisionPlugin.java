@@ -45,7 +45,7 @@ public class MSPVisionPlugin extends MAVLinkPluginBase {
 
 		model.vision.flags = (int) vision.flags;
 		model.vision.fps = vision.fps;
-		if (model.vision.errors < 5 && ( vision.vx !=0 || vision.vy!=0)) {
+		if (model.vision.errors < 5) {
 			model.vision.tms = model.sys.getSynchronizedPX4Time_us();
 			model.sys.setSensor(Status.MSP_OPCV_AVAILABILITY, true);
 		}
