@@ -58,7 +58,7 @@ public class ParameterFactMetaData {
 
 		try {
 			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = dBuilder.parse(getClass().getResourceAsStream(filename));
+			Document doc = dBuilder.parse(getClass().getResourceAsStream("/"+filename));
 
 			if (doc.hasChildNodes()) {
 				String v_major = doc.getElementsByTagName("parameter_version_major").item(0).getTextContent();
