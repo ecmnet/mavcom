@@ -24,7 +24,13 @@
 		</java>
 	</target>
 
-	<target name="DeployMAVGCL" description="Deploy libs to MAVGCL">
+	<target name="mvn">
+		    <exec dir="." executable="sh">
+		        <arg line="-c '/usr/local/Cellar/maven/3.6.3/bin/mvn clean install'" />
+		    </exec>
+		</target>
+
+	<target name="DeployMAVGCL" depends="mvn" description="Deploy libs to MAVGCL">
 		<copy todir="${deploy_mavgcl.dir}">
 			<fileset dir="${target.dir}">
 				<include name="*.jar" />
