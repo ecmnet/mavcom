@@ -129,7 +129,7 @@ public class MSP3DUtils {
 		ConvertRotation3D_F32.eulerToMatrix(EulerType.XYZ, r, p, yw, state.getRotation());
 	}
 
-	public static void convertToSe3_F64(float x, float y, float z, float r, float p, float yw, Se3_F64 state) {
+	public static void convertToSe3_F64(double x, double y, double z, double r, double p, double yw, Se3_F64 state) {
 		state.setTranslation(x, y, z);
 		ConvertRotation3D_F64.eulerToMatrix(EulerType.XYZ, r, p, yw, state.getRotation());
 	}

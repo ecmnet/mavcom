@@ -24,14 +24,6 @@ public class MSPVisionPlugin extends MAVLinkPluginBase {
 		model.vision.gy = vision.gy;
 		model.vision.gz = vision.gz;
 
-		model.vision.cov_px = vision.covariance[MAV_COV.VIS_COV_X];
-		model.vision.cov_py = vision.covariance[MAV_COV.VIS_COV_Y];
-		model.vision.cov_pz = vision.covariance[MAV_COV.VIS_COV_Z];
-
-		model.vision.cov_vx = vision.covariance[MAV_COV.VIS_COV_VX];
-		model.vision.cov_vy = vision.covariance[MAV_COV.VIS_COV_VY];
-		model.vision.cov_vz = vision.covariance[MAV_COV.VIS_COV_VZ];
-
 		model.vision.x = vision.x;
 		model.vision.y = vision.y;
 		model.vision.z = vision.z;

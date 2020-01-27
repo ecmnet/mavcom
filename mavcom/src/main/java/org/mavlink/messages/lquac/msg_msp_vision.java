@@ -24,7 +24,7 @@ public class msg_msp_vision extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_VISION;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 213;
+    payload_length = 69;
 }
 
   /**
@@ -80,10 +80,6 @@ public class msg_msp_vision extends MAVLinkMessage {
    */
   public float gz;
   /**
-   * 6x6 Covariance matrix
-   */
-  public float[] covariance = new float[36];
-  /**
    * FPS of mocap system
    */
   public float fps;
@@ -116,9 +112,6 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   gx = (float)dis.readFloat();
   gy = (float)dis.readFloat();
   gz = (float)dis.readFloat();
-  for (int i=0; i<36; i++) {
-    covariance[i] = (float)dis.readFloat();
-  }
   fps = (float)dis.readFloat();
   flags = (int)dis.readInt()&0x00FFFFFFFF;
   errors = (int)dis.readInt()&0x00FFFFFFFF;
@@ -128,7 +121,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+213];
+  byte[] buffer = new byte[12+69];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -153,9 +146,6 @@ public byte[] encode() throws IOException {
   dos.writeFloat(gx);
   dos.writeFloat(gy);
   dos.writeFloat(gz);
-  for (int i=0; i<36; i++) {
-    dos.writeFloat(covariance[i]);
-  }
   dos.writeFloat(fps);
   dos.writeInt((int)(flags&0x00FFFFFFFF));
   dos.writeInt((int)(errors&0x00FFFFFFFF));
@@ -163,12 +153,12 @@ public byte[] encode() throws IOException {
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 213);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 69);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[223] = crcl;
-  buffer[224] = crch;
+  buffer[79] = crcl;
+  buffer[80] = crch;
   dos.close();
   return buffer;
 }
@@ -186,42 +176,6 @@ return "MAVLINK_MSG_ID_MSP_VISION : " +   "  tms="+tms
 +  "  gx="+gx
 +  "  gy="+gy
 +  "  gz="+gz
-+  "  covariance[0]="+covariance[0]
-+  "  covariance[1]="+covariance[1]
-+  "  covariance[2]="+covariance[2]
-+  "  covariance[3]="+covariance[3]
-+  "  covariance[4]="+covariance[4]
-+  "  covariance[5]="+covariance[5]
-+  "  covariance[6]="+covariance[6]
-+  "  covariance[7]="+covariance[7]
-+  "  covariance[8]="+covariance[8]
-+  "  covariance[9]="+covariance[9]
-+  "  covariance[10]="+covariance[10]
-+  "  covariance[11]="+covariance[11]
-+  "  covariance[12]="+covariance[12]
-+  "  covariance[13]="+covariance[13]
-+  "  covariance[14]="+covariance[14]
-+  "  covariance[15]="+covariance[15]
-+  "  covariance[16]="+covariance[16]
-+  "  covariance[17]="+covariance[17]
-+  "  covariance[18]="+covariance[18]
-+  "  covariance[19]="+covariance[19]
-+  "  covariance[20]="+covariance[20]
-+  "  covariance[21]="+covariance[21]
-+  "  covariance[22]="+covariance[22]
-+  "  covariance[23]="+covariance[23]
-+  "  covariance[24]="+covariance[24]
-+  "  covariance[25]="+covariance[25]
-+  "  covariance[26]="+covariance[26]
-+  "  covariance[27]="+covariance[27]
-+  "  covariance[28]="+covariance[28]
-+  "  covariance[29]="+covariance[29]
-+  "  covariance[30]="+covariance[30]
-+  "  covariance[31]="+covariance[31]
-+  "  covariance[32]="+covariance[32]
-+  "  covariance[33]="+covariance[33]
-+  "  covariance[34]="+covariance[34]
-+  "  covariance[35]="+covariance[35]
 +  "  fps="+fps
 +  "  flags="+flags
 +  "  errors="+errors
