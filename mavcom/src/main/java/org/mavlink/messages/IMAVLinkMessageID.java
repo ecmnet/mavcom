@@ -70,7 +70,6 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_MISSION_ITEM_INT = 73;
   public static int MAVLINK_MSG_ID_NAMED_VALUE_FLOAT = 251;
   public static int MAVLINK_MSG_ID_VIDEO_STREAM_STATUS = 270;
-  public static int MAVLINK_MSG_ID_STATUSTEXT_LONG = 365;
   public static int MAVLINK_MSG_ID_RC_CHANNELS_SCALED = 34;
   public static int MAVLINK_MSG_ID_ALTITUDE = 141;
   public static int MAVLINK_MSG_ID_MSP_COMMAND = 181;

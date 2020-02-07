@@ -812,7 +812,7 @@ Set to 2 to use heading from motion capture</short_desc>
   <group name="Circuit Breaker">
     <parameter category="Developer" default="0" name="CBRK_AIRSPD_CHK" type="INT32">
       <short_desc>Circuit breaker for airspeed sensor</short_desc>
-      <long_desc>Setting this parameter to 162128 will disable the check for an airspeed sensor. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
+      <long_desc>Setting this parameter to 162128 will disable the check for an airspeed sensor. The sensor driver will not be started and it cannot be calibrated. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
       <min>0</min>
       <max>162128</max>
       <reboot_required>true</reboot_required>
@@ -871,6 +871,13 @@ Set to 2 to use heading from motion capture</short_desc>
       <long_desc>Setting this parameter to 201607 will disable the position and velocity accuracy checks in the commander. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
       <min>0</min>
       <max>201607</max>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter category="Developer" default="0" name="CBRK_VTOLARMING" type="INT32">
+      <short_desc>Circuit breaker for arming in fixed-wing mode check</short_desc>
+      <long_desc>Setting this parameter to 159753 will enable arming in fixed-wing mode for VTOLs. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
+      <min>0</min>
+      <max>159753</max>
       <reboot_required>true</reboot_required>
     </parameter>
   </group>
@@ -1331,13 +1338,13 @@ See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
       <increment>0.1</increment>
     </parameter>
     <parameter default="1" name="COM_RC_OVERRIDE" type="INT32">
-      <short_desc>Enable RC stick override of auto or offboard modes</short_desc>
-      <long_desc>Moving the RC sticks gives control back to the pilot in manual position mode immediately when: 0: an auto mode is active (except a critical battery reaction) 1: offboard mode is active Only has an effect on multicopters and VTOLS in multicopter mode.</long_desc>
+      <short_desc>Enable RC stick override of auto and/or offboard modes</short_desc>
+      <long_desc>When RC stick override is enabled, moving the RC sticks immediately gives control back to the pilot (switches to manual position mode): bit 0: Enable for auto modes (except for in critical battery reaction), bit 1: Enable for offboard mode. Only has an effect on multicopters, and VTOLS in multicopter mode.</long_desc>
       <min>0</min>
       <max>3</max>
       <bitmask>
-        <bit index="0"> Enable override of auto modes</bit>
-        <bit index="1"> Enable override of offboard mode</bit>
+        <bit index="0"> Enable override in auto modes</bit>
+        <bit index="1"> Enable override in offboard mode</bit>
       </bitmask>
     </parameter>
     <parameter default="12.0" name="COM_RC_STICK_OV" type="FLOAT">
@@ -1713,17 +1720,17 @@ Sets the number of standard deviations used by the innovation consistency test</
       <long_desc>If set to true the observation noise is set from the parameters directly, if set to false the measurement noise is taken from the vision message and the parameter are used as a lower bound.</long_desc>
     </parameter>
     <parameter default="0.0" name="EKF2_EV_POS_X" type="FLOAT">
-      <short_desc>X position of VI sensor focal point in body frame</short_desc>
+      <short_desc>X position of VI sensor focal point in body frame (forward axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_EV_POS_Y" type="FLOAT">
-      <short_desc>Y position of VI sensor focal point in body frame</short_desc>
+      <short_desc>Y position of VI sensor focal point in body frame (right axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_EV_POS_Z" type="FLOAT">
-      <short_desc>Z position of VI sensor focal point in body frame</short_desc>
+      <short_desc>Z position of VI sensor focal point in body frame (down axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
@@ -1792,17 +1799,17 @@ Sets the number of standard deviations used by the innovation consistency test</
       </bitmask>
     </parameter>
     <parameter default="0.0" name="EKF2_GPS_POS_X" type="FLOAT">
-      <short_desc>X position of GPS antenna in body frame</short_desc>
+      <short_desc>X position of GPS antenna in body frame (forward axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_GPS_POS_Y" type="FLOAT">
-      <short_desc>Y position of GPS antenna in body frame</short_desc>
+      <short_desc>Y position of GPS antenna in body frame (right axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_GPS_POS_Z" type="FLOAT">
-      <short_desc>Z position of GPS antenna in body frame</short_desc>
+      <short_desc>Z position of GPS antenna in body frame (down axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
@@ -1889,17 +1896,17 @@ Sets the number of standard deviations used by the innovation consistency test</
       </values>
     </parameter>
     <parameter default="0.0" name="EKF2_IMU_POS_X" type="FLOAT">
-      <short_desc>X position of IMU in body frame</short_desc>
+      <short_desc>X position of IMU in body frame (forward axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_IMU_POS_Y" type="FLOAT">
-      <short_desc>Y position of IMU in body frame</short_desc>
+      <short_desc>Y position of IMU in body frame (right axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_IMU_POS_Z" type="FLOAT">
-      <short_desc>Z position of IMU in body frame</short_desc>
+      <short_desc>Z position of IMU in body frame (down axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
@@ -2087,17 +2094,17 @@ Assumes measurement is timestamped at trailing edge of integration period</short
       <decimal>2</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_OF_POS_X" type="FLOAT">
-      <short_desc>X position of optical flow focal point in body frame</short_desc>
+      <short_desc>X position of optical flow focal point in body frame (forward axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_OF_POS_Y" type="FLOAT">
-      <short_desc>Y position of optical flow focal point in body frame</short_desc>
+      <short_desc>Y position of optical flow focal point in body frame (right axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_OF_POS_Z" type="FLOAT">
-      <short_desc>Z position of optical flow focal point in body frame</short_desc>
+      <short_desc>Z position of optical flow focal point in body frame (down axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
@@ -2257,17 +2264,17 @@ This is the ratio of static pressure error to dynamic pressure generated by a wi
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_RNG_POS_X" type="FLOAT">
-      <short_desc>X position of range finder origin in body frame</short_desc>
+      <short_desc>X position of range finder origin in body frame (forward axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_RNG_POS_Y" type="FLOAT">
-      <short_desc>Y position of range finder origin in body frame</short_desc>
+      <short_desc>Y position of range finder origin in body frame (right axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
     <parameter default="0.0" name="EKF2_RNG_POS_Z" type="FLOAT">
-      <short_desc>Z position of range finder origin in body frame</short_desc>
+      <short_desc>Z position of range finder origin in body frame (down axis with origin relative to vehicle centre of gravity)</short_desc>
       <unit>m</unit>
       <decimal>3</decimal>
     </parameter>
@@ -3902,6 +3909,11 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="8">External Vision</value>
       </values>
     </parameter>
+    <parameter default="1" name="MAV_0_RADIO_CTL" type="INT32">
+      <short_desc>Enable software throttling of mavlink on instance 0</short_desc>
+      <long_desc>If enabled, MAVLink messages will be throttled according to `txbuf` field reported by radio_status. Requires a radio to send the mavlink message RADIO_STATUS.</long_desc>
+      <reboot_required>True</reboot_required>
+    </parameter>
     <parameter default="1200" name="MAV_0_RATE" type="INT32">
       <short_desc>Maximum MAVLink sending rate for instance 0</short_desc>
       <long_desc>Configure the maximum sending rate for the MAVLink streams in Bytes/sec. If the configured streams exceed the maximum rate, the sending rate of each stream is automatically decreased. If this is set to 0 a value of half of the theoretical maximum bandwidth is used. This corresponds to baudrate/20 Bytes/s (baudrate/10 = maximum data rate on 8N1-configured links).</long_desc>
@@ -3946,6 +3958,11 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="8">External Vision</value>
       </values>
     </parameter>
+    <parameter default="1" name="MAV_1_RADIO_CTL" type="INT32">
+      <short_desc>Enable software throttling of mavlink on instance 1</short_desc>
+      <long_desc>If enabled, MAVLink messages will be throttled according to `txbuf` field reported by radio_status. Requires a radio to send the mavlink message RADIO_STATUS.</long_desc>
+      <reboot_required>True</reboot_required>
+    </parameter>
     <parameter default="0" name="MAV_1_RATE" type="INT32">
       <short_desc>Maximum MAVLink sending rate for instance 1</short_desc>
       <long_desc>Configure the maximum sending rate for the MAVLink streams in Bytes/sec. If the configured streams exceed the maximum rate, the sending rate of each stream is automatically decreased. If this is set to 0 a value of half of the theoretical maximum bandwidth is used. This corresponds to baudrate/20 Bytes/s (baudrate/10 = maximum data rate on 8N1-configured links).</long_desc>
@@ -3989,6 +4006,11 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="7">Minimal</value>
         <value code="8">External Vision</value>
       </values>
+    </parameter>
+    <parameter default="1" name="MAV_2_RADIO_CTL" type="INT32">
+      <short_desc>Enable software throttling of mavlink on instance 2</short_desc>
+      <long_desc>If enabled, MAVLink messages will be throttled according to `txbuf` field reported by radio_status. Requires a radio to send the mavlink message RADIO_STATUS.</long_desc>
+      <reboot_required>True</reboot_required>
     </parameter>
     <parameter default="0" name="MAV_2_RATE" type="INT32">
       <short_desc>Maximum MAVLink sending rate for instance 2</short_desc>
@@ -4036,9 +4058,9 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="2">Always use version 2</value>
       </values>
     </parameter>
-    <parameter default="0" name="MAV_RADIO_ID" type="INT32">
-      <short_desc>MAVLink Radio ID</short_desc>
-      <long_desc>When non-zero the MAVLink app will attempt to configure the radio to this ID and re-set the parameter to 0. If the value is negative it will reset the complete radio config to factory defaults.</long_desc>
+    <parameter default="0" name="MAV_SIK_RADIO_ID" type="INT32">
+      <short_desc>MAVLink SiK Radio ID</short_desc>
+      <long_desc>When non-zero the MAVLink app will attempt to configure the SiK radio to this ID and re-set the parameter to 0. If the value is negative it will reset the complete radio config to factory defaults. Only applies if this mavlink instance is going through a SiK radio</long_desc>
       <min>-1</min>
       <max>240</max>
     </parameter>
@@ -8592,32 +8614,40 @@ is less than 50% of this value</short_desc>
       </values>
     </parameter>
     <parameter default="30.0" name="IMU_ACCEL_CUTOFF" type="FLOAT">
-      <short_desc>Driver level cutoff frequency for accel</short_desc>
-      <long_desc>The cutoff frequency for the 2nd order butterworth filter on the accel driver. This only affects the signal sent to the controllers, not the estimators. 0 disables the filter.</long_desc>
+      <short_desc>Low pass filter cutoff frequency for accel</short_desc>
+      <long_desc>The cutoff frequency for the 2nd order butterworth filter on the primary accelerometer. This only affects the signal sent to the controllers, not the estimators. 0 disables the filter.</long_desc>
+      <min>0</min>
+      <max>1000</max>
+      <unit>Hz</unit>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter default="10.0" name="IMU_DGYRO_CUTOFF" type="FLOAT">
+      <short_desc>Cutoff frequency for angular acceleration</short_desc>
+      <long_desc>The cutoff frequency for the 2nd order butterworth filter used on the time derivative of the measured angular velocity. Set to 0 to disable the filter.</long_desc>
       <min>0</min>
       <max>1000</max>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter default="30.0" name="IMU_GYRO_CUTOFF" type="FLOAT">
-      <short_desc>Driver level cutoff frequency for gyro</short_desc>
-      <long_desc>The cutoff frequency for the 2nd order butterworth filter on the gyro driver. This only affects the signal sent to the controllers, not the estimators. 0 disables the filter.</long_desc>
+      <short_desc>Low pass filter cutoff frequency for gyro</short_desc>
+      <long_desc>The cutoff frequency for the 2nd order butterworth filter on the primary gyro. This only affects the signal sent to the controllers, not the estimators. 0 disables the filter.</long_desc>
       <min>0</min>
       <max>1000</max>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter default="20.0" name="IMU_GYRO_NF_BW" type="FLOAT">
-      <short_desc>Driver level notch bandwidth for gyro</short_desc>
-      <long_desc>The frequency width of the stop band for the 2nd order notch filter on the gyro driver. See "IMU_GYRO_NF_FREQ" to activate the filter and to set the notch frequency.</long_desc>
+      <short_desc>Notch filter bandwidth for gyro</short_desc>
+      <long_desc>The frequency width of the stop band for the 2nd order notch filter on the primary gyro. See "IMU_GYRO_NF_FREQ" to activate the filter and to set the notch frequency.</long_desc>
       <min>0</min>
       <max>100</max>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter default="0.0" name="IMU_GYRO_NF_FREQ" type="FLOAT">
-      <short_desc>Driver level notch frequency for gyro</short_desc>
-      <long_desc>The center frequency for the 2nd order notch filter on the gyro driver. This filter can be enabled to avoid feedback amplification of structural resonances at a specific frequency. This only affects the signal sent to the controllers, not the estimators. 0 disables the filter. See "IMU_GYRO_NF_BW" to set the bandwidth of the filter.</long_desc>
+      <short_desc>Notch filter frequency for gyro</short_desc>
+      <long_desc>The center frequency for the 2nd order notch filter on the primary gyro. This filter can be enabled to avoid feedback amplification of structural resonances at a specific frequency. This only affects the signal sent to the controllers, not the estimators. 0 disables the filter. See "IMU_GYRO_NF_BW" to set the bandwidth of the filter.</long_desc>
       <min>0</min>
       <max>1000</max>
       <unit>Hz</unit>
@@ -8660,6 +8690,27 @@ is less than 50% of this value</short_desc>
       <max>0.1</max>
       <decimal>10</decimal>
       <increment>.000000001</increment>
+    </parameter>
+    <parameter default="80" name="PCF8583_ADDR" type="INT32">
+      <short_desc>PCF8583 rotorfreq (i2c) i2c address</short_desc>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="80">0x50</value>
+        <value code="81">0x51</value>
+      </values>
+    </parameter>
+    <parameter default="1000000" name="PCF8583_POOL" type="INT32">
+      <short_desc>PCF8583 rotorfreq (i2c) pool interval</short_desc>
+      <unit>us</unit>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter default="500000" name="PCF8583_RESET" type="INT32">
+      <short_desc>PCF8583 rotorfreq (i2c) counter reset value</short_desc>
+      <long_desc>Internal device counter is reset to 0 when overun this value, counter is able to store upto 6 digits reset of counter takes some time - measurement with reset has worse accurancy</long_desc>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">- reset avter every measurement</value>
+      </values>
     </parameter>
     <parameter default="1013.25" name="SENS_BARO_QNH" type="FLOAT">
       <short_desc>QNH for barometer</short_desc>
@@ -10554,6 +10605,45 @@ is less than 50% of this value</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
   </group>
+  <group name="UUV Attitude Control">
+    <parameter default="0.0" name="UUV_DIRCT_PITCH" type="FLOAT">
+      <short_desc>Direct pitch input</short_desc>
+    </parameter>
+    <parameter default="0.0" name="UUV_DIRCT_ROLL" type="FLOAT">
+      <short_desc>Direct roll input</short_desc>
+    </parameter>
+    <parameter default="0.0" name="UUV_DIRCT_THRUST" type="FLOAT">
+      <short_desc>Direct thrust input</short_desc>
+    </parameter>
+    <parameter default="0.0" name="UUV_DIRCT_YAW" type="FLOAT">
+      <short_desc>Direct yaw input</short_desc>
+    </parameter>
+    <parameter default="0" name="UUV_INPUT_MODE" type="INT32">
+      <short_desc>Select Input Mode</short_desc>
+      <values>
+        <value code="0">use Attitude Setpoints</value>
+        <value code="1">Direct Feedthrough</value>
+      </values>
+    </parameter>
+    <parameter default="2.0" name="UUV_PITCH_D" type="FLOAT">
+      <short_desc>Pitch differential gain</short_desc>
+    </parameter>
+    <parameter default="4.0" name="UUV_PITCH_P" type="FLOAT">
+      <short_desc>Pitch proportional gain</short_desc>
+    </parameter>
+    <parameter default="1.5" name="UUV_ROLL_D" type="FLOAT">
+      <short_desc>Roll differential gain</short_desc>
+    </parameter>
+    <parameter default="4.0" name="UUV_ROLL_P" type="FLOAT">
+      <short_desc>Roll proportional gain</short_desc>
+    </parameter>
+    <parameter default="2.0" name="UUV_YAW_D" type="FLOAT">
+      <short_desc>Yaw differential gain</short_desc>
+    </parameter>
+    <parameter default="4.0" name="UUV_YAW_P" type="FLOAT">
+      <short_desc>Yawh proportional gain</short_desc>
+    </parameter>
+  </group>
   <group name="VTOL Attitude Control">
     <parameter default="8.0" name="VT_ARSP_BLEND" type="FLOAT">
       <short_desc>Transition blending airspeed</short_desc>
@@ -10828,6 +10918,12 @@ MPC_Z_VEL_MAX_DN at zero throttle, and 0.5 * MPC_LAND_SPEED at full throttle</sh
         <value code="0">Fixed descent speed of MPC_LAND_SPEED</value>
         <value code="1">User assisted descent speed</value>
       </values>
+    </parameter>
+    <parameter default="2" name="PCF8583_MAGNET" type="INT32">
+      <short_desc>PCF8583 rotorfreq (i2c) magnet count</short_desc>
+      <long_desc>Nmumber of signals per rotation of rotor</long_desc>
+      <min>1</min>
+      <reboot_required>true</reboot_required>
     </parameter>
     <parameter default="0.1" name="RV_YAW_P" type="FLOAT">
       <short_desc>RV_YAW_P</short_desc>

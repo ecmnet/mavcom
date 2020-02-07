@@ -40,7 +40,7 @@ public class msg_battery_status extends MAVLinkMessage {
    */
   public int temperature;
   /**
-   * Battery voltage of cells. Cells above the valid cell count for this battery should have the UINT16_MAX value.
+   * Battery voltage of cells. Cells above the valid cell count for this battery should have the UINT16_MAX value. If individual cell voltages are unknown or not measured for this battery, then the overall battery voltage should be filled in cell 0, with all others set to UINT16_MAX. If the voltage of the battery is greater than (UINT16_MAX - 1), then cell 0 should be set to (UINT16_MAX - 1), and cell 1 to the remaining voltage. This can be extended to multiple cells if the total voltage is greater than 2 * (UINT16_MAX - 1).
    */
   public int[] voltages = new int[10];
   /**

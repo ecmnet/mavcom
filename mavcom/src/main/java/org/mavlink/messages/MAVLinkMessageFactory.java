@@ -135,7 +135,6 @@ import org.mavlink.messages.lquac.msg_mission_request_int;
 import org.mavlink.messages.lquac.msg_manual_setpoint;
 import org.mavlink.messages.lquac.msg_named_value_float;
 import org.mavlink.messages.lquac.msg_video_stream_status;
-import org.mavlink.messages.lquac.msg_statustext_long;
 import org.mavlink.messages.lquac.msg_scaled_imu;
 import org.mavlink.messages.lquac.msg_rc_channels_scaled;
 import org.mavlink.messages.lquac.msg_altitude;
@@ -251,7 +250,6 @@ import org.mavlink.messages.lquac.msg_sys_status;
 import org.mavlink.messages.lquac.msg_mission_item_int;
 import org.mavlink.messages.lquac.msg_named_value_float;
 import org.mavlink.messages.lquac.msg_video_stream_status;
-import org.mavlink.messages.lquac.msg_statustext_long;
 import org.mavlink.messages.lquac.msg_rc_channels_scaled;
 import org.mavlink.messages.lquac.msg_altitude;
 import org.mavlink.messages.lquac.msg_msp_command;
@@ -622,10 +620,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_VIDEO_STREAM_STATUS:
       msg = new msg_video_stream_status(sysId, componentId);
-      msg.decode(dis);
-      break;
-  case MAVLINK_MSG_ID_STATUSTEXT_LONG:
-      msg = new msg_statustext_long(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_RC_CHANNELS_SCALED:

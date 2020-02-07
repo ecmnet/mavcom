@@ -13,7 +13,7 @@ public interface MAV_CMD {
      * PARAM 1 : Hold time. (ignored by fixed wing, time to stay at waypoint for rotary wing)
      * PARAM 2 : Acceptance radius (if the sphere with this radius is hit, the waypoint counts as reached)
      * PARAM 3 : 0 to pass through the WP, if > 0 radius to pass by WP. Positive value for clockwise orbit, negative value for counter-clockwise orbit. Allows trajectory control.
-     * PARAM 4 : Desired yaw angle at waypoint (rotary wing). NaN for unchanged.
+     * PARAM 4 : Desired yaw angle at waypoint (rotary wing). NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -24,7 +24,7 @@ public interface MAV_CMD {
      * PARAM 1 : Empty
      * PARAM 2 : Empty
      * PARAM 3 : Radius around waypoint. If positive loiter clockwise, else counter-clockwise
-     * PARAM 4 : Desired yaw angle. NaN for unchanged.
+     * PARAM 4 : Desired yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -35,7 +35,7 @@ public interface MAV_CMD {
      * PARAM 1 : Number of turns.
      * PARAM 2 : Empty
      * PARAM 3 : Radius around waypoint. If positive loiter clockwise, else counter-clockwise
-     * PARAM 4 : Forward moving aircraft this sets exit xtrack location: 0 for center of loiter wp, 1 for exit location. Else, this is desired yaw angle. NaN for unchanged.
+     * PARAM 4 : Forward moving aircraft this sets exit xtrack location: 0 for center of loiter wp, 1 for exit location. Else, this is desired yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -46,7 +46,7 @@ public interface MAV_CMD {
      * PARAM 1 : Loiter time.
      * PARAM 2 : Empty
      * PARAM 3 : Radius around waypoint. If positive loiter clockwise, else counter-clockwise.
-     * PARAM 4 : Forward moving aircraft this sets exit xtrack location: 0 for center of loiter wp, 1 for exit location. Else, this is desired yaw angle.  NaN for unchanged.
+     * PARAM 4 : Forward moving aircraft this sets exit xtrack location: 0 for center of loiter wp, 1 for exit location. Else, this is desired yaw angle.  NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -68,7 +68,7 @@ public interface MAV_CMD {
      * PARAM 1 : Minimum target altitude if landing is aborted (0 = undefined/use system default).
      * PARAM 2 : Precision land mode.
      * PARAM 3 : Empty.
-     * PARAM 4 : Desired yaw angle. NaN for unchanged.
+     * PARAM 4 : Desired yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude.
      * PARAM 6 : Longitude.
      * PARAM 7 : Landing altitude (ground level in current frame).
@@ -79,7 +79,7 @@ public interface MAV_CMD {
      * PARAM 1 : Minimum pitch (if airspeed sensor present), desired pitch without sensor
      * PARAM 2 : Empty
      * PARAM 3 : Empty
-     * PARAM 4 : Yaw angle (if magnetometer present), ignored without magnetometer. NaN for unchanged.
+     * PARAM 4 : Yaw angle (if magnetometer present), ignored without magnetometer. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -211,7 +211,7 @@ public interface MAV_CMD {
      * PARAM 1 : Empty
      * PARAM 2 : Front transition heading.
      * PARAM 3 : Empty
-     * PARAM 4 : Yaw angle. NaN for unchanged.
+     * PARAM 4 : Yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -222,7 +222,7 @@ public interface MAV_CMD {
      * PARAM 1 : Empty
      * PARAM 2 : Empty
      * PARAM 3 : Approach altitude (with the same reference as the Altitude field). NaN if unspecified.
-     * PARAM 4 : Yaw angle. NaN for unchanged.
+     * PARAM 4 : Yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude (ground level)
@@ -486,7 +486,7 @@ public interface MAV_CMD {
      * PARAM 1 : Ground speed, less than 0 (-1) for default
      * PARAM 2 : Bitmask of option flags.
      * PARAM 3 : Reserved
-     * PARAM 4 : Yaw heading, NaN for unchanged. For planes indicates loiter direction (0: clockwise, 1: counter clockwise)
+     * PARAM 4 : Yaw heading. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.). For planes indicates loiter direction (0: clockwise, 1: counter clockwise)
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude (meters)

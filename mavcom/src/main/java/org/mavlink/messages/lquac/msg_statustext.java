@@ -24,7 +24,7 @@ public class msg_statustext extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_STATUSTEXT;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 51;
+    payload_length = 54;
 }
 
   /**
@@ -51,6 +51,14 @@ public class msg_statustext extends MAVLinkMessage {
     }
     return result;
   }
+  /**
+   * Unique (opaque) identifier for this statustext message.  May be used to reassemble a logical long-statustext message from a sequence of chunks.  A value of zero indicates this is the only chunk in the sequence and the message can be emitted immediately.
+   */
+  public int id;
+  /**
+   * This chunk's sequence number; indexing is from zero.  Any null character in the text field is taken to mean this was the last chunk.
+   */
+  public int chunk_seq;
 /**
  * Decode message with raw data
  */
@@ -59,12 +67,14 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   for (int i=0; i<50; i++) {
     text[i] = (char)dis.readByte();
   }
+  id = (int)dis.readUnsignedShort()&0x00FFFF;
+  chunk_seq = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+51];
+  byte[] buffer = new byte[12+54];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -80,20 +90,24 @@ public byte[] encode() throws IOException {
   for (int i=0; i<50; i++) {
     dos.writeByte(text[i]);
   }
+  dos.writeShort(id&0x00FFFF);
+  dos.writeByte(chunk_seq&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 51);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 54);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[61] = crcl;
-  buffer[62] = crch;
+  buffer[64] = crcl;
+  buffer[65] = crch;
   dos.close();
   return buffer;
 }
 public String toString() {
 return "MAVLINK_MSG_ID_STATUSTEXT : " +   "  severity="+severity
 +  "  text="+getText()
++  "  id="+id
++  "  chunk_seq="+chunk_seq
 ;}
 }
