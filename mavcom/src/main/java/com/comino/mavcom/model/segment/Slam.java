@@ -51,6 +51,7 @@ public class Slam extends Segment {
 	public float    ox;		// nearest obstacle x
 	public float    oy;		// nearest obstacle y
 	public float    oz;		// nearest obstacle z
+	public float  quality;	// SLAM quality
 
 	public Slam() {
 		clear();
@@ -69,6 +70,7 @@ public class Slam extends Segment {
 		ox = a.ox;
 		oy = a.oy;
 		oz = a.oz;
+		quality = a.quality;
 	}
 
 	public Slam clone() {
@@ -90,6 +92,7 @@ public class Slam extends Segment {
 		ox = Float.NaN;
 		oy = Float.NaN;
 		oz = Float.NaN;
+		quality = 0;
 	}
 
 	public void set(float pd, float pp, float pv, float di) {

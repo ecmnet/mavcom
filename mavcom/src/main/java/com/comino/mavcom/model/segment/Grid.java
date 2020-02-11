@@ -144,6 +144,7 @@ public class Grid extends Segment {
 			for(int i=0; i< array.length && transfer.size() > 0;i++) {
 				array[i] = transfer.poll();
 			}
+			count = transfer.size();
 			return true;
 		}
 		catch(Exception e) {
@@ -158,6 +159,7 @@ public class Grid extends Segment {
 
 	@SuppressWarnings("unlikely-arg-type")
 	public void fromArray(long[] array) {
+
 		for(int i=0; i< array.length;i++) {
 			if(data.containsKey(array[i]))
 				return;
@@ -178,7 +180,7 @@ public class Grid extends Segment {
 		data.forEach((i,e) -> {
 			transfer.add(i);
 		});
-		count = -1;
+		count = data.size();
 	}
 
 	public void translate(float dx, float dy, float dz) {
@@ -242,6 +244,7 @@ public class Grid extends Segment {
 
 		if(set) {
 			if(!data.containsKey(block)) {
+				// Object pooling?
 				Point3D_F32 p = new Point3D_F32((float)Math.round((float)xpos * blocks_per_m)/blocks_per_m,
 						(float)Math.round((float)ypos * blocks_per_m)/blocks_per_m,
 						(float)Math.round((float)zpos * blocks_per_m)/blocks_per_m);
@@ -255,8 +258,7 @@ public class Grid extends Segment {
 				data.remove(block);
 			}
 		}
-
-		count = data.size();
+		count = transfer.size();
 		return true;
 	}
 
@@ -280,8 +282,7 @@ public class Grid extends Segment {
 				data.remove(block);
 			}
 		}
-		count = data.size();
-
+		count = transfer.size();
 		return true;
 	}
 
