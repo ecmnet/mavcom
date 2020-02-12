@@ -64,9 +64,8 @@ public class Grid extends Segment {
 
 	private static  LinkedList<Integer>        transfer;
 	private static  Map<Integer,Point3D_F32>   data;
-	private static  Point3D_F32     null_data = new Point3D_F32();
 
-	//	private  Map<Integer,BlockPoint2D> data = null;
+	private final static  Point3D_F32     null_data = new Point3D_F32();
 
 	public int      count;
 	public byte    status;
@@ -113,14 +112,6 @@ public class Grid extends Segment {
 		vy               = a.vy;
 		vz               = a.vz;
 
-//		transfer         = a.transfer;
-//		data             = a.data;
-
-		//		transfer.clear();
-		//		transfer.addAll(a.transfer);
-		//
-		//		data.clear();
-		//		data.putAll(a.data);
 	}
 
 	public Grid clone() {
@@ -139,17 +130,19 @@ public class Grid extends Segment {
 		try {
 			if(!hasTransfers())
 				return false;
-			Arrays.fill(array, 0);
 			if(transfer.isEmpty() || array == null )
 				return false;
-			for(int i=0; i< array.length && transfer.size() > 0;i++) {
-				array[i] = transfer.poll();
+
+			synchronized(this) {
+				Arrays.fill(array, 0);
+				for(int i=0; i< array.length && transfer.size() > 0;i++) {
+					array[i] = transfer.poll();
+				}
 			}
-			count = transfer.size();
 			return true;
 		}
 		catch(Exception e) {
-		//	System.out.println("Array-Transfer: "+e.getMessage()+"A="+array+" T="+transfer);
+			//	System.out.println("Array-Transfer: "+e.getMessage()+"A="+array+" T="+transfer);
 			return false;
 		}
 	}
@@ -178,9 +171,11 @@ public class Grid extends Segment {
 
 	public void invalidateTransfer() {
 		transfer.clear();
-		data.forEach((i,e) -> {
-			transfer.add(i);
-		});
+		synchronized(this) {
+			data.forEach((i,e) -> {
+				transfer.add(i);
+			});
+		}
 		count = transfer.size();
 	}
 
@@ -244,19 +239,24 @@ public class Grid extends Segment {
 	}
 
 	public boolean  setBlock(int block, boolean set) {
+
 		if(block< 0 || block > max_length)
 			return false;
 
-		if(set) {
-			if(!data.containsKey(block) ) {
-			    data.put(block, null_data);
-				transfer.add(block);
+		synchronized(this) {
+			if(set) {
+				if(!data.containsKey(block) ) {
+					data.put(block, null_data);
+					transfer.removeFirstOccurrence(-block);
+					transfer.add(block);
+				}
 			}
-		}
-		else {
-			if(data.containsKey(block)) {
-				transfer.add(-block);
-				data.remove(block);
+			else {
+				if(data.containsKey(block)) {
+					data.remove(block);
+					transfer.removeFirstOccurrence(block);
+					transfer.add(-block);
+				}
 			}
 		}
 		count = transfer.size();

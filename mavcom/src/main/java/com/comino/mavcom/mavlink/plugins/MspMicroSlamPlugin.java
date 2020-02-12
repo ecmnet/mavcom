@@ -25,7 +25,7 @@ public class MspMicroSlamPlugin extends MAVLinkPluginBase {
 		model.slam.oy = slam.oy;
 		model.slam.oz = slam.oz;
 		model.slam.quality = slam.quality;
-		model.slam.tms = model.sys.getSynchronizedPX4Time_us();
+		model.slam.tms = slam.tms;
 
 	}
 }
