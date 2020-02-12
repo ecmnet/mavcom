@@ -64,6 +64,7 @@ public class Grid extends Segment {
 
 	private static  LinkedList<Integer>        transfer;
 	private static  Map<Integer,Point3D_F32>   data;
+	private static  Point3D_F32     null_data = new Point3D_F32();
 
 	//	private  Map<Integer,BlockPoint2D> data = null;
 
@@ -180,7 +181,7 @@ public class Grid extends Segment {
 		data.forEach((i,e) -> {
 			transfer.add(i);
 		});
-		count = data.size();
+		count = transfer.size();
 	}
 
 	public void translate(float dx, float dy, float dz) {
@@ -238,27 +239,7 @@ public class Grid extends Segment {
 	}
 
 	public boolean  setBlock(double xpos, double ypos, double zpos, boolean set) {
-		int block = calculateBlock(xpos, ypos, zpos);
-		if(block< 0 || block > max_length)
-			return false;
-
-		if(set) {
-			if(!data.containsKey(block)) {
-				// Object pooling?
-				Point3D_F32 p = new Point3D_F32((float)Math.round((float)xpos * blocks_per_m)/blocks_per_m,
-						(float)Math.round((float)ypos * blocks_per_m)/blocks_per_m,
-						(float)Math.round((float)zpos * blocks_per_m)/blocks_per_m);
-				data.put(block,p);
-				transfer.add(block);
-			}
-		}
-		else {
-			if(data.containsKey(block)) {
-				transfer.add(-block);
-				data.remove(block);
-			}
-		}
-		count = transfer.size();
+		setBlock(calculateBlock(xpos, ypos, zpos),set);
 		return true;
 	}
 
@@ -267,12 +248,8 @@ public class Grid extends Segment {
 			return false;
 
 		if(set) {
-			if(!data.containsKey(block)) {
-				data.put(block,new Point3D_F32(
-						((int)(block % dimension)-cx)*resolution_cm/100f,
-						((int)((block / dimension) % dimension)-cy)*resolution_cm/100f,
-						((int)(block / (dimension * dimension))-cz)*resolution_cm/100f
-						));
+			if(!data.containsKey(block) ) {
+			    data.put(block, null_data);
 				transfer.add(block);
 			}
 		}
