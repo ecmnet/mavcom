@@ -153,7 +153,7 @@ public class MAVLinkToModelParser {
 					long now_ns = System.currentTimeMillis() * 1000000L;
 					msg_timesync sync = (msg_timesync) o;
 
-					if (sync.tc1 == 0) {
+					if (sync.tc1 == 0 && (System.currentTimeMillis() - time_sync_cycle) > TIME_SYNC_CYCLE_MS) {
 						msg_timesync sync_s = new msg_timesync(255, 1);
 						sync_s.tc1 = now_ns;
 						sync_s.ts1 = sync.ts1;
@@ -178,6 +178,7 @@ public class MAVLinkToModelParser {
 						//		System.out.println("OFFSET="+model.sys.t_offset_ns+":"+sync.ts1);
 						// PX4="+model.sys.getSynchronizedPX4Time_us());
 					}
+				//	time_sync_cycle = System.currentTimeMillis();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -285,17 +286,17 @@ public class MAVLinkToModelParser {
 			}
 		}
 
-		if ((System.currentTimeMillis() - time_sync_cycle) > TIME_SYNC_CYCLE_MS && TIME_SYNC_CYCLE_MS > 0) {
-
-			if(!link.isSerial())
-				return;
-
-			time_sync_cycle = System.currentTimeMillis();
-			msg_timesync sync_s = new msg_timesync(255, 1);
-			sync_s.tc1 = 0;
-			sync_s.ts1 = System.currentTimeMillis() * 1000000L;
-			link.write(sync_s);
-		}
+//		if ((System.currentTimeMillis() - time_sync_cycle) > TIME_SYNC_CYCLE_MS && TIME_SYNC_CYCLE_MS > 0) {
+//
+//			if(!link.isSerial())
+//				return;
+//
+//			time_sync_cycle = System.currentTimeMillis();
+//			msg_timesync sync_s = new msg_timesync(255, 1);
+//			sync_s.tc1 = 0;
+//			sync_s.ts1 = System.currentTimeMillis() * 1000000L;
+//			link.write(sync_s);
+//		}
 
 	}
 }
