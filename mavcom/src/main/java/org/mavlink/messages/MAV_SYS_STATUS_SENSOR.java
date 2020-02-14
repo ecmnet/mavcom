@@ -124,4 +124,8 @@ public interface MAV_SYS_STATUS_SENSOR {
      * 0x10000000 pre-arm check status. Always healthy when armed
      */
     public final static int MAV_SYS_STATUS_PREARM_CHECK = 268435456;
+    /**
+     * 0x20000000 Avoidance/collision prevention
+     */
+    public final static int MAV_SYS_STATUS_OBSTACLE_AVOIDANCE = 536870912;
 }
