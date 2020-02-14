@@ -94,6 +94,8 @@ public class Grid extends Segment {
 		transfer = new LinkedList<Integer>();
 		data     = new ConcurrentHashMap<Integer, Point3D_F32>(1);
 
+		setIndicator(0,0,0);
+
 	}
 
 	public void set(Grid a) {
@@ -280,7 +282,7 @@ public class Grid extends Segment {
 	}
 
 	public float getExtension() {
-		return extension_cm / 100f;
+		return extension_cm / 200f;
 	}
 
 	public float getIndicatorX() {
