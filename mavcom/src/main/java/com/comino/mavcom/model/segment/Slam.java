@@ -51,6 +51,7 @@ public class Slam extends Segment {
 	public float    ox;		// nearest obstacle x
 	public float    oy;		// nearest obstacle y
 	public float    oz;		// nearest obstacle z
+	public float    fps;    // Rate in Hz.
 	public float  quality;	// SLAM quality
 
 	public Slam() {
@@ -70,6 +71,7 @@ public class Slam extends Segment {
 		ox = a.ox;
 		oy = a.oy;
 		oz = a.oz;
+		fps = a.fps;
 		quality = a.quality;
 	}
 
@@ -92,6 +94,7 @@ public class Slam extends Segment {
 		ox = Float.NaN;
 		oy = Float.NaN;
 		oz = Float.NaN;
+		fps = 0;
 		quality = 0;
 	}
 

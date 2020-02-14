@@ -24,7 +24,7 @@ public class msg_msp_micro_slam extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_MICRO_SLAM;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 64;
+    payload_length = 68;
 }
 
   /**
@@ -84,6 +84,10 @@ public class msg_msp_micro_slam extends MAVLinkMessage {
    */
   public float quality;
   /**
+   * Rate in Hz
+   */
+  public float fps;
+  /**
    * Counter of waypoints
    */
   public long wpcount;
@@ -105,13 +109,14 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   oy = (float)dis.readFloat();
   oz = (float)dis.readFloat();
   quality = (float)dis.readFloat();
+  fps = (float)dis.readFloat();
   wpcount = (int)dis.readInt()&0x00FFFFFFFF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+64];
+  byte[] buffer = new byte[12+68];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -137,16 +142,17 @@ public byte[] encode() throws IOException {
   dos.writeFloat(oy);
   dos.writeFloat(oz);
   dos.writeFloat(quality);
+  dos.writeFloat(fps);
   dos.writeInt((int)(wpcount&0x00FFFFFFFF));
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 64);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 68);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[74] = crcl;
-  buffer[75] = crch;
+  buffer[78] = crcl;
+  buffer[79] = crch;
   dos.close();
   return buffer;
 }
@@ -165,6 +171,7 @@ return "MAVLINK_MSG_ID_MSP_MICRO_SLAM : " +   "  tms="+tms
 +  "  oy="+oy
 +  "  oz="+oz
 +  "  quality="+quality
++  "  fps="+fps
 +  "  wpcount="+wpcount
 ;}
 }

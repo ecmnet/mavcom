@@ -215,6 +215,7 @@
                <field type="float"         name="oy" >Obstacle Y</field>
                <field type="float"         name="oz" >Obstacle Z</field>
                <field type="float"         name="quality" >Quality</field>
+               <field type="float"         name="fps">Rate in Hz</field>
                <field type="uint32_t"      name="wpcount">Counter of waypoints</field>
                <field type="uint64_t"      name="tms">Timestamp</field>
            </message>
