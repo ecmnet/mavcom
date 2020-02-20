@@ -27,11 +27,6 @@ public class PX4AttitudeTargetPlugin extends MAVLinkPluginBase {
 		model.attitude.sp = sp[1];
 		model.attitude.sy = sp[2];
 
-		if(model.sys.isStatus(Status.MSP_ARMED))
-		    model.attitude.st = att.thrust;
-		else
-			model.attitude.st = 0;
-
 		model.attitude.srr = att.body_roll_rate;
 		model.attitude.spr = att.body_pitch_rate;
 		model.attitude.syr = att.body_yaw_rate;

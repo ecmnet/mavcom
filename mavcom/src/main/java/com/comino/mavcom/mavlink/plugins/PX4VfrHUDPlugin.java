@@ -17,6 +17,7 @@ public class PX4VfrHUDPlugin extends MAVLinkPluginBase {
 		model.hud.vs = hud.climb;
 		model.hud.h  = hud.heading;
 		model.hud.as = hud.airspeed;
+		model.attitude.st = hud.throttle / 100.0f;
 
 	}
 }

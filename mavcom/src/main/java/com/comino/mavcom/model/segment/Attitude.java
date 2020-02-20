@@ -56,7 +56,7 @@ public class Attitude extends Segment {
 	public float sr        	 = Float.NaN;	// setpoint roll in rad
 	public float sp          = Float.NaN;	// setpoint pitch in rad
 	public float sy          = Float.NaN;	// setpoint yaw in rad
-	public float st          = Float.NaN;
+	public float st          = Float.NaN;   // throttle
 
 	public float srr          = Float.NaN;	// setpoint rollrate in rad/s
 	public float spr          = Float.NaN;	// setpoint pitchrate in rad/s
