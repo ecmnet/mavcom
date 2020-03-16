@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit;
 import org.mavlink.messages.IMAVLinkMessageID;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAV_CMD;
+import org.mavlink.messages.MAV_COMPONENT;
 import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.SERIAL_CONTROL_DEV;
 import org.mavlink.messages.SERIAL_CONTROL_FLAG;
@@ -75,6 +76,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	protected String peerAddress = null;
 
+
 	protected static IMAVMSPController controller = null;
 
 	protected IMAVComm comm = null;
@@ -87,6 +89,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	private static final int BAUDRATE_9   = 921600;
 	private static final int BAUDRATE_15  = 1500000;
 	private static final int BAUDRATE_20  = 2000000;
+
+	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_AUTOPILOT1);
+	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1,MAV_COMPONENT.MAV_COMP_ID_AUTOPILOT1);
 
 	private StatusManager 				status_manager 	= null;
 	private List<IMAVMessageListener> 	messageListener = null;
@@ -119,7 +124,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_FALLING, (a) -> {
 			model.sys.setStatus(Status.MSP_ACTIVE, false);
 			System.out.println("Connection to device lost...");
-			proxy.close();
 		});
 
 
@@ -168,6 +172,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			model.sys.gcl_tms = model.sys.getSynchronizedPX4Time_us();
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
 		});
+
+		beat_gcs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
+		beat_px4.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
+
 
 	}
 
@@ -267,7 +275,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		if(comm.isConnected()) {
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES, 1);
 		}
-		future = ExecutorService.get().scheduleAtFixedRate(this, 1, 1, TimeUnit.SECONDS);
+		future = ExecutorService.get().scheduleAtFixedRate(this, 1, 333, TimeUnit.MILLISECONDS);
 		return true;
 	}
 
@@ -377,16 +385,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
 
 		if(!proxy.isProxyEnabled()) {
-			msg_heartbeat beat = new msg_heartbeat(2,1);
-			beat.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
-			proxy.write(beat);
+			sendMAVLinkMessage(beat_gcs);
 		}
 
-		try {
-		  msg_heartbeat comm_beat = new msg_heartbeat(1,1);
-		  comm_beat.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
-			comm.write(comm_beat);
-		} catch (IOException e) { }
+		sendMAVLinkMessage(beat_px4);
 	}
 
 }

@@ -136,7 +136,7 @@ public class MAVController implements IMAVController, Runnable {
 				writeLogToFile(msg.toString());
 			});
 
-			ExecutorService.get().schedule(this, 10, TimeUnit.SECONDS);
+			ExecutorService.get().schedule(this, 10 , TimeUnit.SECONDS);
 			return this.filename;
 		}
 		return null;
