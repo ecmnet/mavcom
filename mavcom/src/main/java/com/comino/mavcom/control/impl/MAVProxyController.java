@@ -127,6 +127,17 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		});
 
 
+		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_RISING, (a) -> {
+				System.out.println("Connection to GCS established...");
+			    proxy.enableProxy(true);
+		});
+
+		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_FALLING, (a) -> {
+			System.out.println("Connection to GCS lost...");
+		    proxy.enableProxy(false);
+	});
+
+
 		switch(mode) {
 		case MAVController.MODE_NORMAL:
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
@@ -163,9 +174,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		comm.addMAVLinkListener(proxy);
 
-		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_BOTH, (a) -> {
-			proxy.enableProxy(a.isStatus(Status.MSP_GCL_CONNECTED));
-		});
 
 		// Register processing of PING sent by MAVGCL
 		proxy.registerListener(msg_heartbeat.class, (o) -> {
@@ -375,8 +383,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public void run() {
 
+
 		if(!proxy.isConnected())  {
-			proxy.open();
+			proxy.close(); proxy.open();
 		}
 		if(!comm.isConnected()) {
 			model.sys.setStatus(Status.MSP_ACTIVE, false);
