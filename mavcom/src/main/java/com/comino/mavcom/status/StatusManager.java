@@ -49,6 +49,7 @@ public class StatusManager implements Runnable {
 	private static final long TIMEOUT_CONNECTED       = 1000000;
 	private static final long TIMEOUT_GCL_CONNECTED   = 2000000;
 	private static final long TIMEOUT_RC_ATTACHED     = 5000000;
+	private static final long TIMEOUT_JOY_ATTACHED    = 1000000;
 	private static final long TIMEOUT_GPOS            = 1000000;
 	private static final long TIMEOUT_LPOS            = 1000000;
 	private static final long TIMEOUT_GPS             = 2000000;

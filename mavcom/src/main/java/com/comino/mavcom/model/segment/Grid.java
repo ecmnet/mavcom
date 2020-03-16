@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.comino.mavcom.model.segment.generic.Segment;
+import com.comino.mavcom.model.struct.MapPoint3D_F32;
 
 import georegression.struct.point.Point3D_F32;
 
@@ -63,9 +64,9 @@ public class Grid extends Segment {
 	private int      blocks_per_m    = 0;
 
 	private static  LinkedList<Integer>        transfer;
-	private static  Map<Integer,Point3D_F32>   data;
+	private static  Map<Integer,MapPoint3D_F32>    data;
 
-	private final static  Point3D_F32     null_data = new Point3D_F32();
+	private final static  MapPoint3D_F32     null_data = new MapPoint3D_F32();
 
 	public int      count;
 	public byte    status;
@@ -92,7 +93,7 @@ public class Grid extends Segment {
 		this.max_length = dimension * dimension * dimension;
 
 		transfer = new LinkedList<Integer>();
-		data     = new ConcurrentHashMap<Integer, Point3D_F32>(1);
+		data     = new ConcurrentHashMap<Integer, MapPoint3D_F32>(1);
 
 		setIndicator(0,0,0);
 
@@ -160,7 +161,7 @@ public class Grid extends Segment {
 			if(data.containsKey(array[i]))
 				return;
 			if(array[i]>0) {
-				data.put((int)array[i],new Point3D_F32(
+				data.put((int)array[i],new MapPoint3D_F32(
 						((int)(array[i] % dimension)-cx)*resolution_cm/100f,
 						((int)((array[i] / dimension) % dimension)-cy)*resolution_cm/100f,
 						((int)(array[i] / (dimension* dimension))-cz)*resolution_cm/100f
@@ -273,7 +274,7 @@ public class Grid extends Segment {
 		return !data.isEmpty();
 	}
 
-	public Map<Integer, Point3D_F32> getData() {
+	public Map<Integer, MapPoint3D_F32> getData() {
 		return data;
 	}
 

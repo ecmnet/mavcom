@@ -119,8 +119,11 @@
               <entry value="21" name="SAVE_MAP2D">
                   <description>Saves a map corresponding to the global position</description>
               </entry>
-              <entry value="23" name="LOAD_MAP2D">
+              <entry value="22" name="LOAD_MAP2D">
                   <description>Load a map corresponding to the global position</description>
+              </entry>
+              <entry value="24" name="TEST_SEQ1">
+                  <description>Execute a test sequence for testing </description>
               </entry>
               <entry value="30" name="APPLY_MAP_FILTER">
                   <description>Applies a map filter to the current map </description>

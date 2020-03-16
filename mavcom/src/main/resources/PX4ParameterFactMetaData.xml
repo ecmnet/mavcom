@@ -735,6 +735,7 @@ Set to 2 to use heading from motion capture</short_desc>
       <max>3000</max>
       <unit>ms</unit>
       <decimal>1</decimal>
+      <reboot_required>true</reboot_required>
     </parameter>
     <parameter default="25.0" name="TRIG_DISTANCE" type="FLOAT">
       <short_desc>Camera trigger distance</short_desc>
@@ -743,6 +744,7 @@ Set to 2 to use heading from motion capture</short_desc>
       <unit>m</unit>
       <decimal>1</decimal>
       <increment>1</increment>
+      <reboot_required>true</reboot_required>
     </parameter>
     <parameter default="4" name="TRIG_INTERFACE" type="INT32">
       <short_desc>Camera trigger Interface</short_desc>
@@ -762,6 +764,16 @@ Set to 2 to use heading from motion capture</short_desc>
       <max>10000.0</max>
       <unit>ms</unit>
       <decimal>1</decimal>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter default="1.0" name="TRIG_MIN_INTERVA" type="FLOAT">
+      <short_desc>Minimum camera trigger interval</short_desc>
+      <long_desc>This parameter sets the minimum time between two consecutive trigger events the specific camera setup is supporting.</long_desc>
+      <min>1.0</min>
+      <max>10000.0</max>
+      <unit>ms</unit>
+      <decimal>1</decimal>
+      <reboot_required>true</reboot_required>
     </parameter>
     <parameter default="0" name="TRIG_MODE" type="INT32">
       <short_desc>Camera trigger mode</short_desc>
@@ -789,6 +801,7 @@ Set to 2 to use heading from motion capture</short_desc>
       <long_desc>This parameter sets the polarity of the trigger (0 = active low, 1 = active high )</long_desc>
       <min>0</min>
       <max>1</max>
+      <reboot_required>true</reboot_required>
       <values>
         <value code="0">Active low</value>
         <value code="1">Active high</value>
@@ -1003,7 +1016,7 @@ Set -1 to disable the check</short_desc>
       <max>300</max>
       <unit>s</unit>
       <decimal>1</decimal>
-      <increment>0.5</increment>
+      <increment>1</increment>
     </parameter>
     <parameter default="5.0" name="COM_EF_C2T" type="FLOAT">
       <short_desc>Engine Failure Current/Throttle Threshold</short_desc>
@@ -1221,13 +1234,6 @@ Set -1 to disable the check</short_desc>
       <short_desc>Enable Motor Testing</short_desc>
       <long_desc>If set, enables the motor test interface via MAVLink (DO_MOTOR_TEST), that allows spinning the motors for testing purposes.</long_desc>
     </parameter>
-    <parameter default="100" name="COM_OA_BOOT_T" type="INT32">
-      <short_desc>Set avoidance system bootup timeout</short_desc>
-      <long_desc>The avoidance system running on the companion computer is expected to boot within this time and start providing trajectory points. If no avoidance system is detected a MAVLink warning message is sent.</long_desc>
-      <min>0</min>
-      <max>200</max>
-      <unit>s</unit>
-    </parameter>
     <parameter default="0" name="COM_OBL_ACT" type="INT32">
       <short_desc>Set offboard loss failsafe mode</short_desc>
       <long_desc>The offboard loss failsafe will only be entered after a timeout, set by COM_OF_LOSS_T in seconds.</long_desc>
@@ -1255,13 +1261,13 @@ Set -1 to disable the check</short_desc>
         <value code="7">Lockdown</value>
       </values>
     </parameter>
-    <parameter default="0.0" name="COM_OF_LOSS_T" type="FLOAT">
+    <parameter default="0.5" name="COM_OF_LOSS_T" type="FLOAT">
       <short_desc>Time-out to wait when offboard connection is lost before triggering offboard lost action.
 See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
       <min>0</min>
       <max>60</max>
       <unit>s</unit>
-      <increment>1</increment>
+      <increment>0.01</increment>
     </parameter>
     <parameter default="0" name="COM_POSCTL_NAVL" type="INT32">
       <short_desc>Position control navigation loss response</short_desc>
@@ -1428,57 +1434,6 @@ See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
       <min>-1800000000</min>
       <max>1800000000</max>
       <unit>deg * 1e7</unit>
-    </parameter>
-    <parameter default="120.0" name="NAV_DLL_AH_T" type="FLOAT">
-      <short_desc>Airfield home wait time</short_desc>
-      <long_desc>The amount of time in seconds the system should wait at the airfield home waypoint</long_desc>
-      <min>0.0</min>
-      <max>3600.0</max>
-      <unit>s</unit>
-      <decimal>0</decimal>
-      <increment>1</increment>
-    </parameter>
-    <parameter default="0" name="NAV_DLL_CHSK" type="INT32">
-      <short_desc>Skip comms hold wp</short_desc>
-      <long_desc>If set to 1 the system will skip the comms hold wp on data link loss and will directly fly to airfield home</long_desc>
-    </parameter>
-    <parameter default="600.0" name="NAV_DLL_CH_ALT" type="FLOAT">
-      <short_desc>Comms hold alt</short_desc>
-      <long_desc>Altitude of comms hold waypoint</long_desc>
-      <min>-50</min>
-      <max>30000</max>
-      <unit>m</unit>
-      <decimal>1</decimal>
-      <increment>0.5</increment>
-    </parameter>
-    <parameter default="-266072120" name="NAV_DLL_CH_LAT" type="INT32">
-      <short_desc>Comms hold Lat</short_desc>
-      <long_desc>Latitude of comms hold waypoint</long_desc>
-      <min>-900000000</min>
-      <max>900000000</max>
-      <unit>deg * 1e7</unit>
-    </parameter>
-    <parameter default="1518453890" name="NAV_DLL_CH_LON" type="INT32">
-      <short_desc>Comms hold Lon</short_desc>
-      <long_desc>Longitude of comms hold waypoint</long_desc>
-      <min>-1800000000</min>
-      <max>1800000000</max>
-      <unit>deg * 1e7</unit>
-    </parameter>
-    <parameter default="120.0" name="NAV_DLL_CH_T" type="FLOAT">
-      <short_desc>Comms hold wait time</short_desc>
-      <long_desc>The amount of time in seconds the system should wait at the comms hold waypoint</long_desc>
-      <min>0.0</min>
-      <max>3600.0</max>
-      <unit>s</unit>
-      <decimal>0</decimal>
-      <increment>1</increment>
-    </parameter>
-    <parameter default="2" name="NAV_DLL_N" type="INT32">
-      <short_desc>Number of allowed Datalink timeouts</short_desc>
-      <long_desc>After more than this number of data link timeouts the aircraft returns home directly</long_desc>
-      <min>0</min>
-      <max>1000</max>
     </parameter>
   </group>
   <group name="EKF2">
@@ -1848,6 +1803,14 @@ Sets the number of standard deviations used by the innovation consistency test</
       <max>5.0</max>
       <unit>m/s</unit>
       <decimal>2</decimal>
+    </parameter>
+    <parameter default="15.0" name="EKF2_GSF_TAS" type="FLOAT">
+      <short_desc>Default value of true airspeed used in EKF-GSF AHRS calculation.
+If no airspeed measurements are avalable, the EKF-GSF AHRS calculation will assume this value of true airspeed when compensating for centripetal acceleration during turns. Set to zero to disable centripetal acceleration compensation during fixed wing flight modes</short_desc>
+      <min>0.0</min>
+      <max>100.0</max>
+      <unit>m/s</unit>
+      <decimal>1</decimal>
     </parameter>
     <parameter default="1.0e-3" name="EKF2_GYR_B_NOISE" type="FLOAT">
       <short_desc>Process noise for IMU rate gyro bias prediction</short_desc>
@@ -2366,6 +2329,10 @@ This is the ratio of static pressure error to dynamic pressure generated by a wi
         <value code="0">Normal (use airspeed if available)</value>
         <value code="1">Airspeed disabled</value>
       </values>
+    </parameter>
+    <parameter default="1" name="FW_ARSP_SCALE_EN" type="INT32">
+      <short_desc>Enable airspeed scaling</short_desc>
+      <long_desc>This enables a logic that automatically adjusts the output of the rate controller to take into account the real torque produced by an aerodynamic control surface given the current deviation from the trim airspeed (FW_AIRSPD_TRIM). Enable when using aerodynamic control surfaces (e.g.: plane) Disable when using rotor wings (e.g.: autogyro)</long_desc>
     </parameter>
     <parameter default="0" name="FW_BAT_SCALE_EN" type="INT32">
       <short_desc>Whether to scale throttle by battery power level</short_desc>
@@ -4261,13 +4228,12 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
     </parameter>
     <parameter default="0" name="NAV_DLL_ACT" type="INT32">
       <short_desc>Set data link loss failsafe mode</short_desc>
-      <long_desc>The data link loss failsafe will only be entered after a timeout, set by COM_DL_LOSS_T in seconds. Once the timeout occurs the selected action will be executed. Setting this parameter to 4 will enable CASA Outback Challenge rules, which are only recommended to participants of that competition.</long_desc>
+      <long_desc>The data link loss failsafe will only be entered after a timeout, set by COM_DL_LOSS_T in seconds. Once the timeout occurs the selected action will be executed.</long_desc>
       <values>
         <value code="0">Disabled</value>
         <value code="1">Hold mode</value>
         <value code="2">Return mode</value>
         <value code="3">Land mode</value>
-        <value code="4">Data Link Auto Recovery (CASA Outback Challenge rules)</value>
         <value code="5">Terminate</value>
         <value code="6">Lockdown</value>
       </values>
@@ -4312,24 +4278,15 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
     </parameter>
     <parameter default="2" name="NAV_RCL_ACT" type="INT32">
       <short_desc>Set RC loss failsafe mode</short_desc>
-      <long_desc>The RC loss failsafe will only be entered after a timeout, set by COM_RC_LOSS_T in seconds. If RC input checks have been disabled by setting the COM_RC_IN_MODE param it will not be triggered. Setting this parameter to 4 will enable CASA Outback Challenge rules, which are only recommended to participants of that competition.</long_desc>
+      <long_desc>The RC loss failsafe will only be entered after a timeout, set by COM_RC_LOSS_T in seconds. If RC input checks have been disabled by setting the COM_RC_IN_MODE param it will not be triggered.</long_desc>
       <values>
         <value code="0">Disabled</value>
         <value code="1">Hold mode</value>
         <value code="2">Return mode</value>
         <value code="3">Land mode</value>
-        <value code="4">RC Auto Recovery (CASA Outback Challenge rules)</value>
         <value code="5">Terminate</value>
         <value code="6">Lockdown</value>
       </values>
-    </parameter>
-    <parameter default="120.0" name="NAV_RCL_LT" type="FLOAT">
-      <short_desc>RC Loss Loiter Time (CASA Outback Challenge rules)</short_desc>
-      <long_desc>The amount of time in seconds the system should loiter at current position before termination. Only applies if NAV_RCL_ACT is set to 2 (CASA Outback Challenge rules). Set to -1 to make the system skip loitering.</long_desc>
-      <min>-1.0</min>
-      <unit>s</unit>
-      <decimal>1</decimal>
-      <increment>0.1</increment>
     </parameter>
     <parameter default="1" name="NAV_TRAFF_AVOID" type="INT32">
       <short_desc>Set traffic avoidance mode</short_desc>
@@ -4845,6 +4802,10 @@ Setting this parameter to 0 disables the filter</short_desc>
       <unit>m/s</unit>
       <decimal>2</decimal>
     </parameter>
+    <parameter category="Developer" default="0" name="MPC_USE_HTE" type="INT32">
+      <short_desc>Hover thrust source selector</short_desc>
+      <long_desc>Set false to use the fixed parameter MPC_THR_HOVER (EXPERIMENTAL) Set true to use the value computed by the hover thrust estimator</long_desc>
+    </parameter>
     <parameter default="5.0" name="MPC_VELD_LP" type="FLOAT">
       <short_desc>Low pass filter cut freq. for numerical velocity derivative</short_desc>
       <min>0.0</min>
@@ -5048,15 +5009,6 @@ default 1.5 turns per second</short_desc>
       <short_desc>Battery power level scaler</short_desc>
       <long_desc>This compensates for voltage drop of the battery over time by attempting to normalize performance across the operating range of the battery. The copter should constantly behave as if it was fully charged with reduced max acceleration at lower battery percentages. i.e. if hover is at 0.5 throttle at 100% battery, it will still be 0.5 at 60% battery.</long_desc>
     </parameter>
-    <parameter default="0." name="MC_DTERM_CUTOFF" type="FLOAT">
-      <short_desc>Cutoff frequency for the low pass filter on the D-term in the rate controller</short_desc>
-      <long_desc>The D-term uses the derivative of the rate and thus is the most susceptible to noise. Therefore, using a D-term filter allows to decrease the driver-level filtering, which leads to reduced control latency and permits to increase the P gains. A value of 0 disables the filter.</long_desc>
-      <min>0</min>
-      <max>1000</max>
-      <unit>Hz</unit>
-      <decimal>0</decimal>
-      <increment>10</increment>
-    </parameter>
     <parameter default="0.003" name="MC_PITCHRATE_D" type="FLOAT">
       <short_desc>Pitch rate D gain</short_desc>
       <long_desc>Pitch rate differential gain. Small values help reduce fast oscillations. If value is too big oscillations will appear again.</long_desc>
@@ -5080,7 +5032,7 @@ default 1.5 turns per second</short_desc>
     <parameter default="1.0" name="MC_PITCHRATE_K" type="FLOAT">
       <short_desc>Pitch rate controller gain</short_desc>
       <long_desc>Global gain of the controller. This gain scales the P, I and D terms of the controller: output = MC_PITCHRATE_K * (MC_PITCHRATE_P * error + MC_PITCHRATE_I * error_integral + MC_PITCHRATE_D * error_derivative) Set MC_PITCHRATE_P=1 to implement a PID in the ideal form. Set MC_PITCHRATE_K=1 to implement a PID in the parallel form.</long_desc>
-      <min>0.0</min>
+      <min>0.01</min>
       <max>5.0</max>
       <decimal>4</decimal>
       <increment>0.0005</increment>
@@ -5088,7 +5040,7 @@ default 1.5 turns per second</short_desc>
     <parameter default="0.15" name="MC_PITCHRATE_P" type="FLOAT">
       <short_desc>Pitch rate P gain</short_desc>
       <long_desc>Pitch rate proportional gain, i.e. control output for angular speed error 1 rad/s.</long_desc>
-      <min>0.0</min>
+      <min>0.01</min>
       <max>0.6</max>
       <decimal>3</decimal>
       <increment>0.01</increment>
@@ -5124,7 +5076,7 @@ default 1.5 turns per second</short_desc>
     <parameter default="1.0" name="MC_ROLLRATE_K" type="FLOAT">
       <short_desc>Roll rate controller gain</short_desc>
       <long_desc>Global gain of the controller. This gain scales the P, I and D terms of the controller: output = MC_ROLLRATE_K * (MC_ROLLRATE_P * error + MC_ROLLRATE_I * error_integral + MC_ROLLRATE_D * error_derivative) Set MC_ROLLRATE_P=1 to implement a PID in the ideal form. Set MC_ROLLRATE_K=1 to implement a PID in the parallel form.</long_desc>
-      <min>0.0</min>
+      <min>0.01</min>
       <max>5.0</max>
       <decimal>4</decimal>
       <increment>0.0005</increment>
@@ -5132,7 +5084,7 @@ default 1.5 turns per second</short_desc>
     <parameter default="0.15" name="MC_ROLLRATE_P" type="FLOAT">
       <short_desc>Roll rate P gain</short_desc>
       <long_desc>Roll rate proportional gain, i.e. control output for angular speed error 1 rad/s.</long_desc>
-      <min>0.0</min>
+      <min>0.01</min>
       <max>0.5</max>
       <decimal>3</decimal>
       <increment>0.01</increment>
@@ -5969,48 +5921,6 @@ default 1.5 turns per second</short_desc>
       <long_desc>Parameter used to model the nonlinear relationship between motor control signal (e.g. PWM) and static thrust. The model is: rel_thrust = factor * rel_signal^2 + (1-factor) * rel_signal, where rel_thrust is the normalized thrust between 0 and 1, and rel_signal is the relative motor control signal between 0 and 1.</long_desc>
       <min>0.0</min>
       <max>1.0</max>
-    </parameter>
-  </group>
-  <group name="Payload drop">
-    <parameter default="0.03" name="BD_GPROPERTIES" type="FLOAT">
-      <short_desc>Ground drag property</short_desc>
-      <long_desc>This parameter encodes the ground drag coefficient and the corresponding decrease in wind speed from the plane altitude to ground altitude.</long_desc>
-      <min>0.001</min>
-      <max>0.1</max>
-    </parameter>
-    <parameter default="0.1" name="BD_OBJ_CD" type="FLOAT">
-      <short_desc>Payload drag coefficient of the dropped object</short_desc>
-      <long_desc>The drag coefficient (cd) is the typical drag constant for air. It is in general object specific, but the closest primitive shape to the actual object should give good results: http://en.wikipedia.org/wiki/Drag_coefficient</long_desc>
-      <min>0.08</min>
-      <max>1.5</max>
-    </parameter>
-    <parameter default="0.6" name="BD_OBJ_MASS" type="FLOAT">
-      <short_desc>Payload mass</short_desc>
-      <long_desc>A typical small toy ball: 0.025 kg OBC water bottle: 0.6 kg</long_desc>
-      <min>0.001</min>
-      <max>5.0</max>
-      <unit>kg</unit>
-    </parameter>
-    <parameter default="0.00311724531" name="BD_OBJ_SURFACE" type="FLOAT">
-      <short_desc>Payload front surface area</short_desc>
-      <long_desc>A typical small toy ball: (0.045 * 0.045) / 4.0 * pi = 0.001590 m^2 OBC water bottle: (0.063 * 0.063) / 4.0 * pi = 0.003117 m^2</long_desc>
-      <min>0.001</min>
-      <max>0.5</max>
-      <unit>m^2</unit>
-    </parameter>
-    <parameter default="30.0" name="BD_PRECISION" type="FLOAT">
-      <short_desc>Drop precision</short_desc>
-      <long_desc>If the system is closer than this distance on passing over the drop position, it will release the payload. This is a safeguard to prevent a drop out of the required accuracy.</long_desc>
-      <min>1.0</min>
-      <max>80.0</max>
-      <unit>m</unit>
-    </parameter>
-    <parameter default="120.0" name="BD_TURNRADIUS" type="FLOAT">
-      <short_desc>Plane turn radius</short_desc>
-      <long_desc>The planes known minimal turn radius - use a higher value to make the plane maneuver more distant from the actual drop position. This is to ensure the wings are level during the drop.</long_desc>
-      <min>30.0</min>
-      <max>500.0</max>
-      <unit>m</unit>
     </parameter>
   </group>
   <group name="Peripheral">
@@ -8282,9 +8192,6 @@ Particularly useful for testing different low-battery behaviour</short_desc>
     <parameter category="System" default="0" name="CAL_ACC_PRIME" type="INT32">
       <short_desc>Primary accel ID</short_desc>
     </parameter>
-    <parameter category="System" default="0" name="CAL_BARO_PRIME" type="INT32">
-      <short_desc>Primary baro ID</short_desc>
-    </parameter>
     <parameter category="System" default="1" name="CAL_GYRO0_EN" type="INT32">
       <short_desc>Gyro 0 enabled</short_desc>
     </parameter>
@@ -8654,9 +8561,9 @@ is less than 50% of this value</short_desc>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter default="10.0" name="IMU_DGYRO_CUTOFF" type="FLOAT">
-      <short_desc>Cutoff frequency for angular acceleration</short_desc>
-      <long_desc>The cutoff frequency for the 2nd order butterworth filter used on the time derivative of the measured angular velocity. Set to 0 to disable the filter.</long_desc>
+    <parameter default="30.0" name="IMU_DGYRO_CUTOFF" type="FLOAT">
+      <short_desc>Cutoff frequency for angular acceleration (D-Term filter)</short_desc>
+      <long_desc>The cutoff frequency for the 2nd order butterworth filter used on the time derivative of the measured angular velocity, also known as the D-term filter in the rate controller. The D-term uses the derivative of the rate and thus is the most susceptible to noise. Therefore, using a D-term filter allows to decrease the driver-level filtering, which leads to reduced control latency and permits to increase the P gains. A value of 0 disables the filter.</long_desc>
       <min>0</min>
       <max>1000</max>
       <unit>Hz</unit>
@@ -8664,7 +8571,7 @@ is less than 50% of this value</short_desc>
     </parameter>
     <parameter default="30.0" name="IMU_GYRO_CUTOFF" type="FLOAT">
       <short_desc>Low pass filter cutoff frequency for gyro</short_desc>
-      <long_desc>The cutoff frequency for the 2nd order butterworth filter on the primary gyro. This only affects the signal sent to the controllers, not the estimators. 0 disables the filter.</long_desc>
+      <long_desc>The cutoff frequency for the 2nd order butterworth filter on the primary gyro. This only affects the angular velocity sent to the controllers, not the estimators. Doesn't apply to the angular acceleration (D-Term filter), see IMU_DGYRO_CUTOFF. A value of 0 disables the filter.</long_desc>
       <min>0</min>
       <max>1000</max>
       <unit>Hz</unit>
@@ -8672,7 +8579,7 @@ is less than 50% of this value</short_desc>
     </parameter>
     <parameter default="20.0" name="IMU_GYRO_NF_BW" type="FLOAT">
       <short_desc>Notch filter bandwidth for gyro</short_desc>
-      <long_desc>The frequency width of the stop band for the 2nd order notch filter on the primary gyro. See "IMU_GYRO_NF_FREQ" to activate the filter and to set the notch frequency.</long_desc>
+      <long_desc>The frequency width of the stop band for the 2nd order notch filter on the primary gyro. See "IMU_GYRO_NF_FREQ" to activate the filter and to set the notch frequency. Applies to both angular velocity and angular acceleration sent to the controllers.</long_desc>
       <min>0</min>
       <max>100</max>
       <unit>Hz</unit>
@@ -8680,7 +8587,7 @@ is less than 50% of this value</short_desc>
     </parameter>
     <parameter default="0.0" name="IMU_GYRO_NF_FREQ" type="FLOAT">
       <short_desc>Notch filter frequency for gyro</short_desc>
-      <long_desc>The center frequency for the 2nd order notch filter on the primary gyro. This filter can be enabled to avoid feedback amplification of structural resonances at a specific frequency. This only affects the signal sent to the controllers, not the estimators. 0 disables the filter. See "IMU_GYRO_NF_BW" to set the bandwidth of the filter.</long_desc>
+      <long_desc>The center frequency for the 2nd order notch filter on the primary gyro. This filter can be enabled to avoid feedback amplification of structural resonances at a specific frequency. This only affects the signal sent to the controllers, not the estimators. Applies to both angular velocity and angular acceleration sent to the controllers. See "IMU_GYRO_NF_BW" to set the bandwidth of the filter. A value of 0 disables the filter.</long_desc>
       <min>0</min>
       <max>1000</max>
       <unit>Hz</unit>

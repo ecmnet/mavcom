@@ -34,6 +34,7 @@
 
 package com.comino.mavcom.control.impl;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	protected   DataModel model = null;
 	protected   MAVUdpProxyNIO proxy = null;
 
+	private static final int BAUDRATE_5   = 57600;
 	private static final int BAUDRATE_9   = 921600;
 	private static final int BAUDRATE_15  = 1500000;
 	private static final int BAUDRATE_20  = 2000000;
@@ -144,7 +146,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		case MAVController.MODE_USB:
 			//			comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_5, false);
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
@@ -364,6 +366,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void run() {
+
 		if(!proxy.isConnected())  {
 			proxy.open();
 		}
@@ -379,6 +382,11 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			proxy.write(beat);
 		}
 
+		try {
+		  msg_heartbeat comm_beat = new msg_heartbeat(1,1);
+		  comm_beat.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
+			comm.write(comm_beat);
+		} catch (IOException e) { }
 	}
 
 }
