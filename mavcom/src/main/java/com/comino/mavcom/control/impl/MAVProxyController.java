@@ -34,7 +34,6 @@
 
 package com.comino.mavcom.control.impl;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,6 @@ import org.mavlink.messages.SERIAL_CONTROL_DEV;
 import org.mavlink.messages.SERIAL_CONTROL_FLAG;
 import org.mavlink.messages.lquac.msg_command_long;
 import org.mavlink.messages.lquac.msg_heartbeat;
-import org.mavlink.messages.lquac.msg_ping;
 import org.mavlink.messages.lquac.msg_serial_control;
 import org.mavlink.messages.lquac.msg_statustext;
 

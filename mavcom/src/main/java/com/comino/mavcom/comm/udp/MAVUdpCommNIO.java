@@ -50,7 +50,6 @@ import org.mavlink.messages.lquac.msg_heartbeat;
 
 import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
-import com.comino.mavutils.legacy.ExecutorService;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
@@ -58,6 +57,7 @@ import com.comino.mavcom.mavlink.MAVLinkToModelParser;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
+import com.comino.mavutils.legacy.ExecutorService;
 
 
 public class MAVUdpCommNIO implements IMAVComm, Runnable {

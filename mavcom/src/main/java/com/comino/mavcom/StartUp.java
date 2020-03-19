@@ -53,7 +53,6 @@ import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.param.PX4Parameters;
-import com.comino.mavcom.status.StatusManager;
 import com.comino.mavutils.legacy.ExecutorService;
 
 

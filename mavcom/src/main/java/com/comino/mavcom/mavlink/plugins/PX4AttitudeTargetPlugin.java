@@ -2,7 +2,6 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_attitude_target;
 
-import com.comino.mavcom.model.segment.Status;
 import com.comino.mavutils.MSPMathUtils;
 
 

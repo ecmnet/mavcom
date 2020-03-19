@@ -2,7 +2,6 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.MAV_MODE_FLAG;
 import org.mavlink.messages.MAV_MODE_FLAG_DECODE_POSITION;
-import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.lquac.msg_heartbeat;
 
 import com.comino.mavcom.mavlink.MAV_CUST_MODE;

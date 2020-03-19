@@ -39,13 +39,10 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.mavlink.messages.MAV_SEVERITY;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.comino.mavcom.log.MSPLogger;
 
 public class ParameterFactMetaData {
 

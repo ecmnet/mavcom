@@ -8,7 +8,6 @@ import org.mavlink.messages.lquac.msg_param_set;
 import org.mavlink.messages.lquac.msg_param_value;
 
 import com.comino.mavcom.control.IMAVController;
-import com.comino.mavcom.control.IMAVMSPController;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 
 public class PX4Parameters implements IMAVLinkListener {

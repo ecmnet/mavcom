@@ -2,7 +2,6 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_msp_vision;
 
-import com.comino.mavcom.mavlink.MAV_COV;
 import com.comino.mavcom.model.segment.Status;
 
 public class MSPVisionPlugin extends MAVLinkPluginBase {
