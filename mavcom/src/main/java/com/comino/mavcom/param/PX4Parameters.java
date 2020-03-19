@@ -32,7 +32,7 @@ public class PX4Parameters implements IMAVLinkListener {
 		return parameters;
 	}
 
-	private PX4Parameters(IMAVController control) {
+	public PX4Parameters(IMAVController control) {
 
 		this.control = control;
 		this.control.addMAVLinkListener(this);
