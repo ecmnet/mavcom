@@ -52,7 +52,7 @@ import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
-import com.comino.mavcom.param.PX4ParamReader;
+import com.comino.mavcom.param.PX4Parameters;
 import com.comino.mavcom.status.StatusManager;
 import com.comino.mavutils.legacy.ExecutorService;
 
@@ -69,7 +69,7 @@ public class StartUp implements Runnable {
 
 	private boolean is_simulation = false;
 
-	private PX4ParamReader params = null;
+	private PX4Parameters params = null;
 
 	public StartUp(String[] args) {
 
@@ -120,7 +120,7 @@ public class StartUp implements Runnable {
 		});
 
 
-		params = new PX4ParamReader(control);
+		params = PX4Parameters.getInstance(control);
 
 		control.getStatusManager().addListener(Status.MSP_CONNECTED, (n) -> {
 	      if(n.isStatus(Status.MSP_CONNECTED))

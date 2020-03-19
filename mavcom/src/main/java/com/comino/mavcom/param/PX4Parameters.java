@@ -4,13 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.mavlink.messages.lquac.msg_param_request_list;
+import org.mavlink.messages.lquac.msg_param_set;
 import org.mavlink.messages.lquac.msg_param_value;
 
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.control.IMAVMSPController;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 
-public class PX4ParamReader implements IMAVLinkListener {
+public class PX4Parameters implements IMAVLinkListener {
+
+	private static PX4Parameters parameters = null;
 
 	protected ParameterFactMetaData metadata = null;
 	protected Map<String,ParameterAttributes> parameterList = null;
@@ -18,7 +21,18 @@ public class PX4ParamReader implements IMAVLinkListener {
 	protected boolean       isLoaded = false;
 	protected IMAVController control = null;
 
-	public PX4ParamReader(IMAVController control) {
+	public static PX4Parameters getInstance(IMAVController control) {
+		if(parameters == null)
+			parameters = new PX4Parameters(control);
+		return parameters;
+	}
+
+	public static PX4Parameters getInstance() {
+		assert(parameters!=null);
+		return parameters;
+	}
+
+	private PX4Parameters(IMAVController control) {
 
 		this.control = control;
 		this.control.addMAVLinkListener(this);
@@ -74,6 +88,21 @@ public class PX4ParamReader implements IMAVLinkListener {
 		if(isLoaded)
 		  return this.parameterList.get(paramName);
 		return null;
+	}
+
+	public void sendParameter(String name, float val) {
+		System.out.println("Try to set "+name+" to "+val+"...");
+
+		ParameterAttributes att = parameterList.get(name.toUpperCase());
+		att.value = val;
+
+		final msg_param_set msg = new msg_param_set(255,1);
+		msg.target_component = 1;
+		msg.target_system = 1;
+		msg.param_type = att.vtype;
+		msg.setParam_id(att.name);
+		msg.param_value = ParamUtils.valToParam(att.vtype, val);
+		control.sendMAVLinkMessage(msg);
 	}
 
 }
