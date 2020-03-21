@@ -9,6 +9,7 @@ import org.mavlink.messages.lquac.msg_param_value;
 
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
+import com.comino.mavcom.model.segment.Status;
 
 public class PX4Parameters implements IMAVLinkListener {
 
@@ -62,6 +63,7 @@ public class PX4Parameters implements IMAVLinkListener {
 
 		if(msg.param_index >= msg.param_count-1) {
 			isLoaded = true;
+			control.getCurrentModel().sys.setStatus(Status.MSP_PARAMS_LOADED, true);
 			System.out.println("PX4 Parameters loaded succesfully");
 		}
 	}
@@ -90,9 +92,14 @@ public class PX4Parameters implements IMAVLinkListener {
 	}
 
 	public void sendParameter(String name, float val) {
-		System.out.println("Try to set "+name+" to "+val+"...");
 
 		ParameterAttributes att = parameterList.get(name.toUpperCase());
+
+		if(att==null)
+			return;
+
+		System.out.println("Parameter "+name+" set to "+val);
+
 		att.value = val;
 
 		final msg_param_set msg = new msg_param_set(255,1);

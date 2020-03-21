@@ -59,6 +59,7 @@ public class Status extends Segment {
 	public static final int MSP_INAIR							= 10;
 	public static final int MSP_GPOS_VALID		            	= 11;
 	public static final int MSP_LPOS_VALID         		    	= 12;
+	public static final int MSP_PARAMS_LOADED      		    	= 13;
 
 
 	// Low level sensors
