@@ -41,7 +41,7 @@ public class Slam extends Segment {
 
 	public float    px;		// planned path x
 	public float    py;		// planned path y
-	public float    pz;		// planned path y
+	public float    pz;		// planned path Z
 	public float    pd;		// planned direction XY
 	public float    pp;		// planned direction YZ
 	public float    pv;		// planned speed
