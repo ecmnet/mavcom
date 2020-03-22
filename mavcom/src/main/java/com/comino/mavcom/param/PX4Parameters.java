@@ -3,11 +3,13 @@ package com.comino.mavcom.param;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.mavlink.messages.MAV_SEVERITY;
 import org.mavlink.messages.lquac.msg_param_request_list;
 import org.mavlink.messages.lquac.msg_param_set;
 import org.mavlink.messages.lquac.msg_param_value;
 
 import com.comino.mavcom.control.IMAVController;
+import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.model.segment.Status;
 
@@ -95,8 +97,10 @@ public class PX4Parameters implements IMAVLinkListener {
 
 		ParameterAttributes att = parameterList.get(name.toUpperCase());
 
-		if(att==null)
+		if(att==null) {
+			MSPLogger.getInstance().writeLocalMsg("Setting Parameter "+name+" failed", MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 			return;
+		}
 
 		System.out.println("Parameter "+name+" set to "+val);
 
