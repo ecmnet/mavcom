@@ -37,6 +37,7 @@ package com.comino.mavcom.comm.udp;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
@@ -103,7 +104,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		if(isConnected)
 			return true;
 
-		parser.reset(); rxBuffer.clear();
+		parser.reset(); 	((Buffer)rxBuffer).clear();
 
 		if(channel!=null && channel.isOpen() && parser.isConnected()) {
 			isConnected = true;
@@ -124,7 +125,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 
 			LockSupport.parkNanos(10000000);
-			rxBuffer.clear();
+			((Buffer)rxBuffer).clear();
 
 //			Thread t = new Thread(this);
 //			t.setName("MAVLink parser");

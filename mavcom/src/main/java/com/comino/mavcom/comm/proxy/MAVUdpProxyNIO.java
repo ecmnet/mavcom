@@ -37,6 +37,7 @@ package com.comino.mavcom.comm.proxy;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
@@ -94,7 +95,6 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			return true;
 		}
 
-		rxBuffer.clear();
 
 		while(!isConnected) {
 			try {
@@ -117,7 +117,8 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				}
 				channel.connect(peerPort);
 				selector = Selector.open();
-				rxBuffer.clear();
+				((Buffer)rxBuffer).clear();
+
 
 				//				Thread t = new Thread(this);
 				//				t.setName("Proxy worker");
@@ -128,6 +129,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 				return true;
 			} catch(Exception e) {
+				e.printStackTrace();
 				try {
 					channel.disconnect();
 					channel.close();
