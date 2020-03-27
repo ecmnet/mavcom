@@ -100,7 +100,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			try {
 
 				isConnected = true;
-				//			System.out.println("Connect to UDP channel");
+	//						System.out.println("Connect to UDP channel");
 				try {
 					channel = DatagramChannel.open();
 					channel.socket().bind(bindPort);
@@ -113,6 +113,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 					Thread.sleep(100);
 
 				} catch (Exception e) {
+					e.printStackTrace();
 					continue;
 				}
 				channel.connect(peerPort);
@@ -155,6 +156,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 	public void close() {
 		isConnected = false;
+		((Buffer)rxBuffer).clear();
 		try {
 			if(selector!=null)
 				selector.close();
@@ -227,7 +229,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 						try {
 							if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
 								if(rxBuffer.position()>0) {
-									rxBuffer.flip();
+									((Buffer)rxBuffer).flip();
 									while(rxBuffer.hasRemaining())
 										reader.put(rxBuffer.get());
 									rxBuffer.compact();

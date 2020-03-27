@@ -104,7 +104,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		if(isConnected)
 			return true;
 
-		parser.reset(); 	((Buffer)rxBuffer).clear();
+		parser.reset(); ((Buffer)rxBuffer).clear();
 
 		if(channel!=null && channel.isOpen() && parser.isConnected()) {
 			isConnected = true;
@@ -187,7 +187,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 					if (key.isReadable()) {
 						if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
-							rxBuffer.flip();
+							((Buffer)rxBuffer).flip();
 							while(rxBuffer.hasRemaining())
 								reader.put(rxBuffer.get());
 							rxBuffer.compact();
@@ -195,7 +195,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 					}
 				}
 			} catch(Exception e) {
-				rxBuffer.clear();
+				((Buffer)rxBuffer).clear();
 				model.sys.setStatus(Status.MSP_CONNECTED,false);
 				try { channel.close(); } catch (IOException e1) { 	}
 				isConnected = false;
