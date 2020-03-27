@@ -168,6 +168,16 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			System.out.println("Proxy Controller (serial mode) loaded: "+peerAddress);
 			model.sys.setStatus(Status.MSP_SITL,false);
 			break;
+		case MAVController.MODE_SERVER:
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_5, false);
+			comm.open();
+			try { Thread.sleep(500); } catch (InterruptedException e) { }
+
+			proxy = new MAVUdpProxyNIO("192.168.178.20",14550,"192.168.178.25",14555,comm);
+			peerAddress = "192.168.178.20";
+			System.out.println("Proxy Controller loaded (Server): "+peerAddress);
+			model.sys.setStatus(Status.MSP_SITL,false);
+			break;
 		}
 
 		comm.addMAVLinkListener(proxy);

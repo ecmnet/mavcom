@@ -56,7 +56,7 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 
 public class MAVSerialComm implements IMAVComm {
 
-	//	private static final int BAUDRATE  = 57600
+	private static final int TEST  = 57600;
 
 
 	private SerialPort 			serialPort;
@@ -79,8 +79,12 @@ public class MAVSerialComm implements IMAVComm {
 	}
 
 	private MAVSerialComm(DataModel model, int baudrate) {
+
+		boolean found = false;
+
 		this.model = model; int i=0;
 		this.baudrate = baudrate;
+
 		System.out.print("Searching ports... ");
 
 		SerialPort[] ports = SerialPort.getCommPorts();
@@ -91,19 +95,25 @@ public class MAVSerialComm implements IMAVComm {
 						|| ports[i].getSystemPortName().contains("tty.usb")
 						|| ports[i].getSystemPortName().contains("ttyS1")
 						|| ports[i].getSystemPortName().contains("ttyS4")
-					    || ports[i].getSystemPortName().contains("ttyAMA0"))
+						|| ports[i].getSystemPortName().contains("ttyACM0")
+						|| ports[i].getSystemPortName().contains("ttyAMA0"))
 				{
+					found = true;
 					break;
 				}
 			}
 
-			this.serialPort = ports[i];
+			if(found)
+				this.serialPort = ports[i];
 		}
 		else
 			this.serialPort  =SerialPort.getCommPort("/dev/tty.SLAB_USBtoUART");
 
-		this.port = serialPort.getSystemPortName();
-		System.out.println(port+" found");
+		if(found) {
+			this.port = serialPort.getSystemPortName();
+			System.out.println(port+" found");
+		} else
+			System.out.println("! No Serial port found...");
 
 		this.parser     = new MAVLinkToModelParser(model, this);
 		this.reader     = new MAVLinkBlockingReader(3, parser);
@@ -117,6 +127,9 @@ public class MAVSerialComm implements IMAVComm {
 	@Override
 	public boolean open() {
 
+		if(serialPort==null)
+			return false;
+
 		if(serialPort.isOpen())
 			return true;
 
@@ -129,6 +142,7 @@ public class MAVSerialComm implements IMAVComm {
 			} catch (Exception e) {	}
 		}
 		System.out.println("Serial port "+this.getClass().getSimpleName()+" opened: "+port);
+		System.out.println(serialPort.getPortDescription());
 		return true;
 	}
 
@@ -157,12 +171,16 @@ public class MAVSerialComm implements IMAVComm {
 	 */
 	@Override
 	public void close() {
-		serialPort.closePort();
+		if(serialPort!=null)
+			serialPort.closePort();
 	}
 
 	private boolean open(String portName, int baudRate, int dataBits, int stopBits, int parity) {
 
 		byte[] buf = new byte[16384];
+
+		if(serialPort==null)
+			return false;
 
 		if(serialPort.isOpen())
 			return true;
@@ -187,7 +205,6 @@ public class MAVSerialComm implements IMAVComm {
 					try {
 						avail = serialPort.bytesAvailable();
 						serialPort.readBytes(buf, avail);
-						//System.out.println(MAVLinkReader3.bytesToHex(buf, avail));
 						reader.put(buf, avail);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -197,16 +214,16 @@ public class MAVSerialComm implements IMAVComm {
 			serialPort.openPort();
 			model.sys.setStatus(Status.MSP_CONNECTED, true);
 
-//			Thread serialTh = new Thread(()-> {
-//				int avail=0;
-//				while(true) {
-//					avail = serialPort.readBytes(buf, buf.length);
-//					reader.put(buf, avail);
-//				}
-//			});
-//			serialTh.setName("Serial");
-//			serialTh.setPriority(Thread.MIN_PRIORITY);
-//			serialTh.start();
+			//			Thread serialTh = new Thread(()-> {
+			//				int avail=0;
+			//				while(true) {
+			//					avail = serialPort.readBytes(buf, buf.length);
+			//					reader.put(buf, avail);
+			//				}
+			//			});
+			//			serialTh.setName("Serial");
+			//			serialTh.setPriority(Thread.MIN_PRIORITY);
+			//			serialTh.start();
 
 		} catch (Exception e2) {
 			e2.printStackTrace();
@@ -275,7 +292,7 @@ public class MAVSerialComm implements IMAVComm {
 
 
 	public static void main(String[] args) {
-		MAVSerialComm comm = new MAVSerialComm(new DataModel(),921600);
+		MAVSerialComm comm = new MAVSerialComm(new DataModel(),TEST);
 		comm.open();
 
 
@@ -318,7 +335,10 @@ public class MAVSerialComm implements IMAVComm {
 				//				System.out.println("REM="+comm.getModel().battery.p+" VOLT="+comm.getModel().battery.b0+" CURRENT="+comm.getModel().battery.c0);
 				//				System.out.println("ANGLEX="+comm.getModel().attitude.p+" ANGLEY="+comm.getModel().attitude.r+" "+comm.getModel().sys.toString());
 				Thread.sleep(2000);
-				System.out.println("Errors: "+comm.getErrorCount()+"Current Unix Time: "+(System.nanoTime()/1000*1000)+" "+msg);
+//				System.out.println("Errors: "+comm.getErrorCount()+"Current Unix Time: "+(System.nanoTime()/1000*1000)+" "+msg);
+				comm.getMavLinkMessageMap().forEach((a,m) -> {
+					System.out.println(a+":"+m);
+				});
 			}
 
 			//			colService.stop();
