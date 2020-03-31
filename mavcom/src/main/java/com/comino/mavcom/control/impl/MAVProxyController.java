@@ -173,7 +173,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
 
-			proxy = new MAVUdpProxyNIO("192.168.178.20",14550,"192.168.178.25",14555,comm);
+			proxy = new MAVUdpProxyNIO("192.168.178.20",14550,"0.0.0.0",14555,comm);
 			peerAddress = "192.168.178.20";
 			System.out.println("Proxy Controller loaded (Server): "+peerAddress);
 			model.sys.setStatus(Status.MSP_SITL,false);

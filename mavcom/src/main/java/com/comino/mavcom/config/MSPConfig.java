@@ -36,6 +36,7 @@ package com.comino.mavcom.config;
 
 
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -66,8 +67,8 @@ public class MSPConfig {
 	}
 
 	private MSPConfig(String path, String filename) {
-		this.fileName = filename;
 		this.path = path;
+		this.fileName = filename;
 		this.prop = new Properties();
 		System.out.println("\nInitializing ("+filename+", Java "+System.getProperty("java.version")+" [new packaging])...");
 		refreshProperties();
