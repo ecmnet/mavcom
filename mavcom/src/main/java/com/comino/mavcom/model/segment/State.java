@@ -43,7 +43,7 @@ public class State extends Segment {
 
 	public static final int 	STATE_Z_AVAILABLE  = 0;
 	public static final int 	STATE_H_AVAILABLE  = 1;
-	public static final int	STATE_XY_AVAILABLE = 2;
+	public static final int	    STATE_XY_AVAILABLE = 2;
 
 	// flags
 
@@ -161,9 +161,9 @@ public class State extends Segment {
 
 	public void clear() {
 		flags 	= 0;
-		l_x		= 0;
-		l_y		= 0;
-		l_z		= 0;
+		l_x		= Float.NaN;
+		l_y		= Float.NaN;
+		l_z		= Float.NaN;
 		h		= 0;
 		l_vx	= 0;
 		l_vy	= 0;
