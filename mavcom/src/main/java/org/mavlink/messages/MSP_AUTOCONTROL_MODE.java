@@ -25,6 +25,10 @@ public interface MSP_AUTOCONTROL_MODE {
      */
     public final static int COLLISION_PREVENTION = 3;
     /**
+     * Follow person
+     */
+    public final static int FOLLOW_OBJECT = 4;
+    /**
      * PX4 local planner
      */
     public final static int PX4_PLANNER = 8;
