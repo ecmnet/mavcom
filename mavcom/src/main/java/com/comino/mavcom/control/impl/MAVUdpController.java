@@ -102,7 +102,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 				if(!comm.isConnected()) {
 				 comm.open();
 				}
-				model.sys.setStatus(Status.MSP_SITL, isSITL);
+				model.sys.setStatus(Status.MSP_SITL, isSimulation());
 				msg_heartbeat beat = new msg_heartbeat(255,1);
 				beat.type = MAV_TYPE.MAV_TYPE_GCS;
 				comm.write(beat);

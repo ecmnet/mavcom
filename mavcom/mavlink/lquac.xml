@@ -94,6 +94,9 @@
               <entry value="3" name="COLLISION_PREVENTION">
                   <description>JumpBack mode</description>
               </entry>
+              <entry value="4" name="FOLLOW_OBJECT">
+                  <description>Follow person</description>
+              </entry>
               <entry value="8" name="PX4_PLANNER">
                   <description>PX4 local planner</description>
               </entry>
