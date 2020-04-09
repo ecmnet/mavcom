@@ -55,6 +55,10 @@ public class Grid extends Segment {
 
 	private static final long serialVersionUID = -77272456745165428L;
 
+	private static int blockx;
+	private static int blocky;
+	private static int blockz;
+
 	// TODO: add blockcount => is 0 then refresh on MAVGCL side
 
 	private int      dimension 		 = 0;
@@ -227,9 +231,9 @@ public class Grid extends Segment {
 	}
 
 	public void setIndicator(double vx, double vy, double vz) {
-		this.vx = (int)Math.round((vx) * blocks_per_m)+cx;
-		this.vy = (int)Math.round((vy) * blocks_per_m)+cy;
-		this.vz = (int)Math.round((vz) * blocks_per_m)+cz;
+		this.vx = (int)Math.round((float)(vx) * blocks_per_m)+cx;
+		this.vy = (int)Math.round((float)(vy) * blocks_per_m)+cy;
+		this.vz = (int)Math.round((float)(vz) * blocks_per_m)+cz;
 	}
 
 	public boolean setBlock(double xpos, double ypos, double zpos) {
@@ -300,17 +304,17 @@ public class Grid extends Segment {
 
 
 	private int calculateBlock(double xpos, double ypos, double zpos) {
-		int blockx  =  (int)Math.round(xpos * blocks_per_m) + cx;
+	    blockx  =  (int)Math.round((float)xpos * blocks_per_m) + cx;
 		if(blockx > dimension-1)
 			blockx = dimension -1;
 		if(blockx < 0)
 			blockx = 0;
-		int blocky = (int)Math.round(ypos * blocks_per_m ) + cy;
+	    blocky = (int)Math.round((float)ypos * blocks_per_m ) + cy;
 		if(blocky > dimension-1)
 			blocky = dimension -1;
 		if(blocky < 0)
 			blocky = 0;
-		int blockz = (int)Math.round(zpos * blocks_per_m ) + cy;
+	    blockz = (int)Math.round((float)zpos * blocks_per_m ) + cy;
 		if(blockz > dimension-1)
 			blockz = dimension -1;
 		if(blockz < 0)
