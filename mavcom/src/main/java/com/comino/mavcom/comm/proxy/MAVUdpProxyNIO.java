@@ -112,6 +112,9 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 					Thread.sleep(100);
 
+				} catch(java.net.BindException b) {
+					System.err.println("Connection error: "+b.getLocalizedMessage());
+					System.exit(-1);
 				} catch (Exception e) {
 					e.printStackTrace();
 					continue;
@@ -130,7 +133,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 				return true;
 			} catch(Exception e) {
-				e.printStackTrace();
+				System.err.println(e.getLocalizedMessage());
 				try {
 					channel.disconnect();
 					channel.close();

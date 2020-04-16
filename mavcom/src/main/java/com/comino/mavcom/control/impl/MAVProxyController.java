@@ -145,7 +145,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
 
 			proxy = new MAVUdpProxyNIO("172.168.178.2",14550,"172.168.178.1",14555,comm);
-			peerAddress = "172.168.178.2";
+			peerAddress = "172.168.178.1";
 			System.out.println("Proxy Controller loaded: "+peerAddress);
 			model.sys.setStatus(Status.MSP_SITL,false);
 			break;
@@ -176,10 +176,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 //			comm.open();
 //			try { Thread.sleep(500); } catch (InterruptedException e) { }
 
-//			comm = MAVUdpCommNIO.getInstance(model, "192.168.178.20",14580, 14540);
-			comm = MAVUdpCommNIO.getInstance(model, "192.168.178.20",14280, 14030);
-			proxy = new MAVUdpProxyNIO("192.168.178.20",14650,"192.168.178.22",14656,comm);
-			peerAddress = "192.168.178.22";
+			comm = MAVUdpCommNIO.getInstance(model, "172.168.178.2",14580, 14540);
+//			comm = MAVUdpCommNIO.getInstance(model, "172.168.178.2",14280, 14030);
+			proxy = new MAVUdpProxyNIO("172.168.178.2",14650,"172.168.178.22",14656,comm);
+			peerAddress = "172.168.178.22";
 			System.out.println("Proxy Controller loaded (Server): "+peerAddress);
 			break;
 		}
