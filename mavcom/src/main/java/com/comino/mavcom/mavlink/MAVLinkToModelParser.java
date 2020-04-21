@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.mavlink.messages.MAVLinkMessage;
+import org.mavlink.messages.MAV_RESULT;
 import org.mavlink.messages.MAV_SEVERITY;
 import org.mavlink.messages.lquac.msg_command_ack;
 import org.mavlink.messages.lquac.msg_statustext;
@@ -113,15 +114,26 @@ public class MAVLinkToModelParser {
 				if(logger==null)
 					logger = MSPLogger.getInstance();
 				switch (ack.result) {
-				case 1:
+				case MAV_RESULT.MAV_RESULT_ACCEPTED:
+					logger.writeLocalMsg("Command " + ack.command + " is accepted",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+					break;
+				case MAV_RESULT.MAV_RESULT_FAILED:
 					logger.writeLocalMsg("Command " + ack.command + " failed",MAV_SEVERITY.MAV_SEVERITY_WARNING);
 					break;
-				case 2:
+				case MAV_RESULT.MAV_RESULT_DENIED:
 					logger.writeLocalMsg("Command " + ack.command + " denied",MAV_SEVERITY.MAV_SEVERITY_WARNING);
 					break;
-				case 3:
+				case MAV_RESULT.MAV_RESULT_UNSUPPORTED:
 					logger.writeLocalMsg("Command " + ack.command + " is unsupported",MAV_SEVERITY.MAV_SEVERITY_WARNING);
+					break;
+				case MAV_RESULT.MAV_RESULT_TEMPORARILY_REJECTED:
+					logger.writeLocalMsg("Command " + ack.command + " is temporarily rejected",MAV_SEVERITY.MAV_SEVERITY_WARNING);
+					break;
+				case MAV_RESULT.MAV_RESULT_IN_PROGRESS:
+					logger.writeLocalMsg("Command " + ack.command + " is in progress",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+					break;
 				default:
+					logger.writeLocalMsg("Command " + ack.command + " -> unknown result",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 				}
 			}
 
