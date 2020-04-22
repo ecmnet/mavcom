@@ -20,4 +20,5 @@ public abstract class MAVLinkPluginBase implements IMAVLinkListener {
 		return clazz;
 	}
 
+
 }

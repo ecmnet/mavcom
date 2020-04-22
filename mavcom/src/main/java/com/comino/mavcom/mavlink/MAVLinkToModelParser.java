@@ -107,6 +107,7 @@ public class MAVLinkToModelParser {
 					cmd_ack.received(ack.command, ack.result);
 					cmd_ack = null;
 				}
+
 				if(model.sys.isStatus(Status.MSP_PROXY)) {
 					return;
 				}

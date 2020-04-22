@@ -323,6 +323,7 @@ public class StatusManager implements Runnable {
 			model.sys.setStatus(Status.MSP_CONNECTED, false);
 			System.out.println("..Connection timeout");
 			//	model.sys.setStatus(Status.MSP_ACTIVE, false);
+			model.sys.wifi_quality = 0;
 			model.sys.tms = model.sys.getSynchronizedPX4Time_us();
 		}
 	}
