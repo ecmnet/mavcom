@@ -53,6 +53,7 @@ public class Slam extends Segment {
 	public float    oz;		// nearest obstacle z
 	public float    fps;    // Rate in Hz.
 	public float  quality;	// SLAM quality
+	public int    wpcount;
 
 	public Slam() {
 		clear();
@@ -73,6 +74,7 @@ public class Slam extends Segment {
 		oz = a.oz;
 		fps = a.fps;
 		quality = a.quality;
+		wpcount = a.wpcount;
 	}
 
 	public Slam clone() {
@@ -96,6 +98,7 @@ public class Slam extends Segment {
 		oz = Float.NaN;
 		fps = 0;
 		quality = 0;
+		wpcount = 0;
 	}
 
 	public void set(float pd, float pp, float pv, float di) {
