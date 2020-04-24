@@ -196,21 +196,21 @@ public class StatusManager implements Runnable {
 
 					switch(entry.state) {
 					case EDGE_BOTH:
-						if(((status_current.nav_state & entry.mask) != entry.mask && (status_old.nav_state & entry.mask) == entry.mask ) ||
-						   ((status_current.nav_state & entry.mask) == entry.mask && (status_old.nav_state & entry.mask) != entry.mask )) {
+						if((status_current.nav_state != entry.mask && status_old.nav_state == entry.mask ) ||
+								(status_current.nav_state == entry.mask && status_old.nav_state != entry.mask )) {
 							update_callback(entry.listener, status_current);
 							entry.last_triggered = System.currentTimeMillis();
 						}
 						break;
 					case EDGE_RISING:
-						if((status_current.nav_state & entry.mask) == entry.mask && (status_old.nav_state & entry.mask) != entry.mask ) {
+						if(status_current.nav_state == entry.mask && status_old.nav_state!=entry.mask) {
 							update_callback(entry.listener, status_current);
 							entry.last_triggered = System.currentTimeMillis();
 						}
 						break;
 					case EDGE_FALLING:
 
-						if((status_current.nav_state & entry.mask) != entry.mask && (status_old.nav_state & entry.mask) == entry.mask) {
+						if(status_current.nav_state != entry.mask && status_old.nav_state==entry.mask) {
 							update_callback(entry.listener, status_current);
 							entry.last_triggered = System.currentTimeMillis();
 						}
@@ -266,13 +266,11 @@ public class StatusManager implements Runnable {
 
 	private void update_callback(final IMSPStatusChangedListener listener, final Status current ) {
 
-		try {
 		ExecutorService.get().execute(() -> {
-			listener.update(current);
-		});
-		} catch(Exception e) {
 
-		}
+			listener.update(current);
+
+		});
 
 	}
 
