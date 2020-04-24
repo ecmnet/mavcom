@@ -73,6 +73,8 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(4096);
 
+	private List<IMAVLinkListener> listener_list = null;
+
 
 	public MAVUdpProxyNIO(String peerAddress, int pPort, String bindAddress, int bPort, IMAVComm comm) {
 
@@ -198,7 +200,6 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 		SelectionKey key = null;
 		MAVLinkMessage msg = null;
 		Iterator<?> selectedKeys = null;
-		List<IMAVLinkListener> listener_list = null;
 
 		try {
 			channel.register(selector, SelectionKey.OP_READ );
