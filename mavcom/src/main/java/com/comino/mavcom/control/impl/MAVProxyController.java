@@ -350,6 +350,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			for (IMAVMessageListener msglistener : messageListener)
 				msglistener.messageReceived(m);
 		}
+		System.out.println(m);
 	}
 
 

@@ -315,6 +315,7 @@ public class MAVController implements IMAVController, Runnable {
 		if(comm!=null) {
 			comm.writeMessage(m);
 		}
+		System.out.println(m);
 		model.msg.set(m);
 	}
 
