@@ -46,7 +46,7 @@ public class PX4Parameters implements IMAVLinkListener {
 	@Override
 	public void received(Object _msg) {
 
-		if(!(_msg instanceof msg_param_value) || isLoaded)
+		if(!(_msg instanceof msg_param_value) )
 			return;
 
 		msg_param_value msg = (msg_param_value)_msg;
@@ -63,7 +63,7 @@ public class PX4Parameters implements IMAVLinkListener {
 		parameterList.put(attributes.name,attributes);
 
 
-		if(msg.param_index >= msg.param_count-1) {
+		if(msg.param_index >= msg.param_count-1 && !isLoaded) {
 			isLoaded = true;
 			control.getCurrentModel().sys.setStatus(Status.MSP_PARAMS_LOADED, true);
 			System.out.println("PX4 Parameters loaded succesfully");
