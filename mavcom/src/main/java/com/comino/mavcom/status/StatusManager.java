@@ -145,6 +145,10 @@ public class StatusManager implements Runnable {
 		status_old.status &= 0x1;
 	}
 
+	public Status get() {
+		return status_current;
+	}
+
 	@Override
 	public void run() {
 

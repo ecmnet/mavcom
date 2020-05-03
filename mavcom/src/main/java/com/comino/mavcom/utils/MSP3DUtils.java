@@ -104,6 +104,10 @@ public class MSP3DUtils {
 		return t;
 	}
 
+	public static void convertModelToVector4D_F32(DataModel model, Vector4D_F32 vector) {
+		vector.set(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.y);
+	}
+
 	public static void convertModelToSe3_F32(DataModel model, Se3_F32 state) {
 		convertToSe3_F32(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.r, model.attitude.p, model.attitude.y, state);
 	}

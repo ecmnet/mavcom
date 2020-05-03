@@ -209,6 +209,10 @@ public class Status extends Segment {
 		return true;
 	}
 
+	public boolean isNavState(int box) {
+		return box == nav_state;
+	}
+
 	public void  setAutopilotMode(int box, boolean val) {
 		if(val)
 			autopilot = (int) (autopilot | (1<<box));
