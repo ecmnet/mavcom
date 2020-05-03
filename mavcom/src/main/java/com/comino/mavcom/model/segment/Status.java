@@ -110,7 +110,7 @@ public class Status extends Segment {
 
 	};
 
-	public  int     autopilot    	= 0;
+	public  long    autopilot    	= 0;
 	public  int     px4_status   	= 0;
 	public  int     nav_state       = 0;
 
@@ -279,7 +279,7 @@ public class Status extends Segment {
 
 
 	public String toString() {
-		return "Status="+Integer.toBinaryString(status)+" Autopilot="+Integer.toBinaryString(autopilot);
+		return "Status="+Integer.toBinaryString(status)+" Autopilot="+Long.toBinaryString(autopilot);
 	}
 
 
