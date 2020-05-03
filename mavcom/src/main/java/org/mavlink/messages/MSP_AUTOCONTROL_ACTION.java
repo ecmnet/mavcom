@@ -49,6 +49,10 @@ public interface MSP_AUTOCONTROL_ACTION {
      */
     public final static int TAKEOFF = 26;
     /**
+     * Offboard landing
+     */
+    public final static int LAND = 27;
+    /**
      * Applies a map filter to the current map
      */
     public final static int APPLY_MAP_FILTER = 30;

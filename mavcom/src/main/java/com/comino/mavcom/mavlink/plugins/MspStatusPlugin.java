@@ -16,7 +16,7 @@ public class MspStatusPlugin extends MAVLinkPluginBase {
 		msg_msp_status status = (msg_msp_status) o;
 		model.sys.status = (int)status.status;
 		model.sys.load_m = status.load;
-		model.sys.autopilot = (int)status.autopilot_mode;
+		model.sys.autopilot = (long)status.autopilot_mode;
 		model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, true);
 		model.sys.setStatus(Status.MSP_ACTIVE, true);
 		model.sys.wifi_quality = status.wifi_quality/100f;

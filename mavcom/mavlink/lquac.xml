@@ -106,7 +106,7 @@
            </enum>
 
            <enum name="MSP_AUTOCONTROL_ACTION">
-              <description>Auto-Control action (Bit 16-31)</description>
+              <description>Auto-Control action (Bit 16-63)</description>
               <entry value="16" name="RTL">
                   <description>Returns to local home position and lands device</description>
               </entry>
@@ -136,6 +136,9 @@
               </entry>
               <entry value="26" name="TAKEOFF">
                   <description>Offboard takeoff</description>
+              </entry>
+              <entry value="27" name="LAND">
+                  <description>Offboard landing</description>
               </entry>
               <entry value="30" name="APPLY_MAP_FILTER">
                   <description>Applies a map filter to the current map </description>
