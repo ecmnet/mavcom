@@ -87,7 +87,7 @@ public byte[] encode() throws IOException {
 public String toString() {
 return "MAVLINK_MSG_ID_CAMERA_SETTINGS : " +   "  time_boot_ms="+time_boot_ms
 +  "  mode_id="+mode_id
-+  "  zoomLevel="+zoomLevel
-+  "  focusLevel="+focusLevel
++  "  zoomLevel="+String.format("%#2.5f",(float)zoomLevel)
++  "  focusLevel="+String.format("%#2.5f",(float)focusLevel)
 ;}
 }

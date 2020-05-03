@@ -139,11 +139,11 @@ return "MAVLINK_MSG_ID_DISTANCE_SENSOR : " +   "  time_boot_ms="+time_boot_ms
 +  "  id="+id
 +  "  orientation="+orientation
 +  "  covariance="+covariance
-+  "  horizontal_fov="+horizontal_fov
-+  "  vertical_fov="+vertical_fov
-+  "  quaternion[0]="+quaternion[0]
-+  "  quaternion[1]="+quaternion[1]
-+  "  quaternion[2]="+quaternion[2]
-+  "  quaternion[3]="+quaternion[3]
++  "  horizontal_fov="+String.format("%#2.5f",(float)horizontal_fov)
++  "  vertical_fov="+String.format("%#2.5f",(float)vertical_fov)
++  "  quaternion[0]="+String.format("%#2.5f",(float)quaternion[0])
++  "  quaternion[1]="+String.format("%#2.5f",(float)quaternion[1])
++  "  quaternion[2]="+String.format("%#2.5f",(float)quaternion[2])
++  "  quaternion[3]="+String.format("%#2.5f",(float)quaternion[3])
 ;}
 }

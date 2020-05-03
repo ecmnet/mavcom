@@ -137,12 +137,12 @@ public byte[] encode() throws IOException {
 public String toString() {
 return "MAVLINK_MSG_ID_GIMBAL_DEVICE_INFORMATION : " +   "  time_boot_ms="+time_boot_ms
 +  "  firmware_version="+firmware_version
-+  "  tilt_max="+tilt_max
-+  "  tilt_min="+tilt_min
-+  "  tilt_rate_max="+tilt_rate_max
-+  "  pan_max="+pan_max
-+  "  pan_min="+pan_min
-+  "  pan_rate_max="+pan_rate_max
++  "  tilt_max="+String.format("%#2.5f",(float)tilt_max)
++  "  tilt_min="+String.format("%#2.5f",(float)tilt_min)
++  "  tilt_rate_max="+String.format("%#2.5f",(float)tilt_rate_max)
++  "  pan_max="+String.format("%#2.5f",(float)pan_max)
++  "  pan_min="+String.format("%#2.5f",(float)pan_min)
++  "  pan_rate_max="+String.format("%#2.5f",(float)pan_rate_max)
 +  "  cap_flags="+cap_flags
 +  "  vendor_name[0]="+vendor_name[0]
 +  "  vendor_name[1]="+vendor_name[1]

@@ -107,13 +107,13 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_GIMBAL_DEVICE_SET_ATTITUDE : " +   "  q[0]="+q[0]
-+  "  q[1]="+q[1]
-+  "  q[2]="+q[2]
-+  "  q[3]="+q[3]
-+  "  angular_velocity_x="+angular_velocity_x
-+  "  angular_velocity_y="+angular_velocity_y
-+  "  angular_velocity_z="+angular_velocity_z
+return "MAVLINK_MSG_ID_GIMBAL_DEVICE_SET_ATTITUDE : " +   "  q[0]="+String.format("%#2.5f",(float)q[0])
++  "  q[1]="+String.format("%#2.5f",(float)q[1])
++  "  q[2]="+String.format("%#2.5f",(float)q[2])
++  "  q[3]="+String.format("%#2.5f",(float)q[3])
++  "  angular_velocity_x="+String.format("%#2.5f",(float)angular_velocity_x)
++  "  angular_velocity_y="+String.format("%#2.5f",(float)angular_velocity_y)
++  "  angular_velocity_z="+String.format("%#2.5f",(float)angular_velocity_z)
 +  "  flags="+flags
 +  "  target_system="+target_system
 +  "  target_component="+target_component

@@ -164,19 +164,19 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_MSP_VISION : " +   "  tms="+tms
-+  "  x="+x
-+  "  y="+y
-+  "  z="+z
-+  "  vx="+vx
-+  "  vy="+vy
-+  "  vz="+vz
-+  "  h="+h
-+  "  p="+p
-+  "  r="+r
-+  "  gx="+gx
-+  "  gy="+gy
-+  "  gz="+gz
-+  "  fps="+fps
++  "  x="+String.format("%#2.5f",(float)x)
++  "  y="+String.format("%#2.5f",(float)y)
++  "  z="+String.format("%#2.5f",(float)z)
++  "  vx="+String.format("%#2.5f",(float)vx)
++  "  vy="+String.format("%#2.5f",(float)vy)
++  "  vz="+String.format("%#2.5f",(float)vz)
++  "  h="+String.format("%#2.5f",(float)h)
++  "  p="+String.format("%#2.5f",(float)p)
++  "  r="+String.format("%#2.5f",(float)r)
++  "  gx="+String.format("%#2.5f",(float)gx)
++  "  gy="+String.format("%#2.5f",(float)gy)
++  "  gz="+String.format("%#2.5f",(float)gz)
++  "  fps="+String.format("%#2.5f",(float)fps)
 +  "  flags="+flags
 +  "  errors="+errors
 +  "  quality="+quality

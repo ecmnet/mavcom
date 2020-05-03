@@ -106,21 +106,21 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV : " +   "  time_usec="+time_usec
-+  "  q[0]="+q[0]
-+  "  q[1]="+q[1]
-+  "  q[2]="+q[2]
-+  "  q[3]="+q[3]
-+  "  rollspeed="+rollspeed
-+  "  pitchspeed="+pitchspeed
-+  "  yawspeed="+yawspeed
-+  "  covariance[0]="+covariance[0]
-+  "  covariance[1]="+covariance[1]
-+  "  covariance[2]="+covariance[2]
-+  "  covariance[3]="+covariance[3]
-+  "  covariance[4]="+covariance[4]
-+  "  covariance[5]="+covariance[5]
-+  "  covariance[6]="+covariance[6]
-+  "  covariance[7]="+covariance[7]
-+  "  covariance[8]="+covariance[8]
++  "  q[0]="+String.format("%#2.5f",(float)q[0])
++  "  q[1]="+String.format("%#2.5f",(float)q[1])
++  "  q[2]="+String.format("%#2.5f",(float)q[2])
++  "  q[3]="+String.format("%#2.5f",(float)q[3])
++  "  rollspeed="+String.format("%#2.5f",(float)rollspeed)
++  "  pitchspeed="+String.format("%#2.5f",(float)pitchspeed)
++  "  yawspeed="+String.format("%#2.5f",(float)yawspeed)
++  "  covariance[0]="+String.format("%#2.5f",(float)covariance[0])
++  "  covariance[1]="+String.format("%#2.5f",(float)covariance[1])
++  "  covariance[2]="+String.format("%#2.5f",(float)covariance[2])
++  "  covariance[3]="+String.format("%#2.5f",(float)covariance[3])
++  "  covariance[4]="+String.format("%#2.5f",(float)covariance[4])
++  "  covariance[5]="+String.format("%#2.5f",(float)covariance[5])
++  "  covariance[6]="+String.format("%#2.5f",(float)covariance[6])
++  "  covariance[7]="+String.format("%#2.5f",(float)covariance[7])
++  "  covariance[8]="+String.format("%#2.5f",(float)covariance[8])
 ;}
 }

@@ -111,7 +111,7 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_PARAM_VALUE : " +   "  param_value="+param_value
+return "MAVLINK_MSG_ID_PARAM_VALUE : " +   "  param_value="+String.format("%#2.5f",(float)param_value)
 +  "  param_count="+param_count
 +  "  param_index="+param_index
 +  "  param_id="+getParam_id()

@@ -134,16 +134,16 @@ public String toString() {
 return "MAVLINK_MSG_ID_HOME_POSITION : " +   "  latitude="+latitude
 +  "  longitude="+longitude
 +  "  altitude="+altitude
-+  "  x="+x
-+  "  y="+y
-+  "  z="+z
-+  "  q[0]="+q[0]
-+  "  q[1]="+q[1]
-+  "  q[2]="+q[2]
-+  "  q[3]="+q[3]
-+  "  approach_x="+approach_x
-+  "  approach_y="+approach_y
-+  "  approach_z="+approach_z
++  "  x="+String.format("%#2.5f",(float)x)
++  "  y="+String.format("%#2.5f",(float)y)
++  "  z="+String.format("%#2.5f",(float)z)
++  "  q[0]="+String.format("%#2.5f",(float)q[0])
++  "  q[1]="+String.format("%#2.5f",(float)q[1])
++  "  q[2]="+String.format("%#2.5f",(float)q[2])
++  "  q[3]="+String.format("%#2.5f",(float)q[3])
++  "  approach_x="+String.format("%#2.5f",(float)approach_x)
++  "  approach_y="+String.format("%#2.5f",(float)approach_y)
++  "  approach_z="+String.format("%#2.5f",(float)approach_z)
 +  "  time_usec="+time_usec
 ;}
 }

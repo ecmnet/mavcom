@@ -103,12 +103,12 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_MSP_COMMAND : " +   "  param1="+param1
-+  "  param2="+param2
-+  "  param3="+param3
-+  "  param4="+param4
-+  "  param5="+param5
-+  "  param6="+param6
+return "MAVLINK_MSG_ID_MSP_COMMAND : " +   "  param1="+String.format("%#2.5f",(float)param1)
++  "  param2="+String.format("%#2.5f",(float)param2)
++  "  param3="+String.format("%#2.5f",(float)param3)
++  "  param4="+String.format("%#2.5f",(float)param4)
++  "  param5="+String.format("%#2.5f",(float)param5)
++  "  param6="+String.format("%#2.5f",(float)param6)
 +  "  command="+command
 ;}
 }

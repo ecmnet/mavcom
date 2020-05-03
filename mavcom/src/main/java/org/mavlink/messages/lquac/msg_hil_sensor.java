@@ -152,19 +152,19 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_HIL_SENSOR : " +   "  time_usec="+time_usec
-+  "  xacc="+xacc
-+  "  yacc="+yacc
-+  "  zacc="+zacc
-+  "  xgyro="+xgyro
-+  "  ygyro="+ygyro
-+  "  zgyro="+zgyro
-+  "  xmag="+xmag
-+  "  ymag="+ymag
-+  "  zmag="+zmag
-+  "  abs_pressure="+abs_pressure
-+  "  diff_pressure="+diff_pressure
-+  "  pressure_alt="+pressure_alt
-+  "  temperature="+temperature
++  "  xacc="+String.format("%#2.5f",(float)xacc)
++  "  yacc="+String.format("%#2.5f",(float)yacc)
++  "  zacc="+String.format("%#2.5f",(float)zacc)
++  "  xgyro="+String.format("%#2.5f",(float)xgyro)
++  "  ygyro="+String.format("%#2.5f",(float)ygyro)
++  "  zgyro="+String.format("%#2.5f",(float)zgyro)
++  "  xmag="+String.format("%#2.5f",(float)xmag)
++  "  ymag="+String.format("%#2.5f",(float)ymag)
++  "  zmag="+String.format("%#2.5f",(float)zmag)
++  "  abs_pressure="+String.format("%#2.5f",(float)abs_pressure)
++  "  diff_pressure="+String.format("%#2.5f",(float)diff_pressure)
++  "  pressure_alt="+String.format("%#2.5f",(float)pressure_alt)
++  "  temperature="+String.format("%#2.5f",(float)temperature)
 +  "  fields_updated="+fields_updated
 ;}
 }

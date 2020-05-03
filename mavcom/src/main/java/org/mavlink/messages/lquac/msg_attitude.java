@@ -104,11 +104,11 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_ATTITUDE : " +   "  time_boot_ms="+time_boot_ms
-+  "  roll="+roll
-+  "  pitch="+pitch
-+  "  yaw="+yaw
-+  "  rollspeed="+rollspeed
-+  "  pitchspeed="+pitchspeed
-+  "  yawspeed="+yawspeed
++  "  roll="+String.format("%#2.5f",(float)roll)
++  "  pitch="+String.format("%#2.5f",(float)pitch)
++  "  yaw="+String.format("%#2.5f",(float)yaw)
++  "  rollspeed="+String.format("%#2.5f",(float)rollspeed)
++  "  pitchspeed="+String.format("%#2.5f",(float)pitchspeed)
++  "  yawspeed="+String.format("%#2.5f",(float)yawspeed)
 ;}
 }

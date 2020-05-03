@@ -187,26 +187,26 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_SIM_STATE : " +   "  q1="+q1
-+  "  q2="+q2
-+  "  q3="+q3
-+  "  q4="+q4
-+  "  roll="+roll
-+  "  pitch="+pitch
-+  "  yaw="+yaw
-+  "  xacc="+xacc
-+  "  yacc="+yacc
-+  "  zacc="+zacc
-+  "  xgyro="+xgyro
-+  "  ygyro="+ygyro
-+  "  zgyro="+zgyro
-+  "  lat="+lat
-+  "  lon="+lon
-+  "  alt="+alt
-+  "  std_dev_horz="+std_dev_horz
-+  "  std_dev_vert="+std_dev_vert
-+  "  vn="+vn
-+  "  ve="+ve
-+  "  vd="+vd
+return "MAVLINK_MSG_ID_SIM_STATE : " +   "  q1="+String.format("%#2.5f",(float)q1)
++  "  q2="+String.format("%#2.5f",(float)q2)
++  "  q3="+String.format("%#2.5f",(float)q3)
++  "  q4="+String.format("%#2.5f",(float)q4)
++  "  roll="+String.format("%#2.5f",(float)roll)
++  "  pitch="+String.format("%#2.5f",(float)pitch)
++  "  yaw="+String.format("%#2.5f",(float)yaw)
++  "  xacc="+String.format("%#2.5f",(float)xacc)
++  "  yacc="+String.format("%#2.5f",(float)yacc)
++  "  zacc="+String.format("%#2.5f",(float)zacc)
++  "  xgyro="+String.format("%#2.5f",(float)xgyro)
++  "  ygyro="+String.format("%#2.5f",(float)ygyro)
++  "  zgyro="+String.format("%#2.5f",(float)zgyro)
++  "  lat="+String.format("%#2.5f",(float)lat)
++  "  lon="+String.format("%#2.5f",(float)lon)
++  "  alt="+String.format("%#2.5f",(float)alt)
++  "  std_dev_horz="+String.format("%#2.5f",(float)std_dev_horz)
++  "  std_dev_vert="+String.format("%#2.5f",(float)std_dev_vert)
++  "  vn="+String.format("%#2.5f",(float)vn)
++  "  ve="+String.format("%#2.5f",(float)ve)
++  "  vd="+String.format("%#2.5f",(float)vd)
 ;}
 }

@@ -196,8 +196,8 @@ return "MAVLINK_MSG_ID_OBSTACLE_DISTANCE : " +   "  time_usec="+time_usec
 +  "  max_distance="+max_distance
 +  "  sensor_type="+sensor_type
 +  "  increment="+increment
-+  "  increment_f="+increment_f
-+  "  angle_offset="+angle_offset
++  "  increment_f="+String.format("%#2.5f",(float)increment_f)
++  "  angle_offset="+String.format("%#2.5f",(float)angle_offset)
 +  "  frame="+frame
 ;}
 }

@@ -148,15 +148,15 @@ public String toString() {
 return "MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT : " +   "  time_boot_ms="+time_boot_ms
 +  "  lat_int="+lat_int
 +  "  lon_int="+lon_int
-+  "  alt="+alt
-+  "  vx="+vx
-+  "  vy="+vy
-+  "  vz="+vz
-+  "  afx="+afx
-+  "  afy="+afy
-+  "  afz="+afz
-+  "  yaw="+yaw
-+  "  yaw_rate="+yaw_rate
++  "  alt="+String.format("%#2.5f",(float)alt)
++  "  vx="+String.format("%#2.5f",(float)vx)
++  "  vy="+String.format("%#2.5f",(float)vy)
++  "  vz="+String.format("%#2.5f",(float)vz)
++  "  afx="+String.format("%#2.5f",(float)afx)
++  "  afy="+String.format("%#2.5f",(float)afy)
++  "  afz="+String.format("%#2.5f",(float)afz)
++  "  yaw="+String.format("%#2.5f",(float)yaw)
++  "  yaw_rate="+String.format("%#2.5f",(float)yaw_rate)
 +  "  type_mask="+type_mask
 +  "  coordinate_frame="+coordinate_frame
 ;}

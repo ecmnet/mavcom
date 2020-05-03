@@ -98,9 +98,9 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS : " +   "  time_boot_ms="+time_boot_ms
-+  "  image_interval="+image_interval
++  "  image_interval="+String.format("%#2.5f",(float)image_interval)
 +  "  recording_time_ms="+recording_time_ms
-+  "  available_capacity="+available_capacity
++  "  available_capacity="+String.format("%#2.5f",(float)available_capacity)
 +  "  image_status="+image_status
 +  "  video_status="+video_status
 ;}

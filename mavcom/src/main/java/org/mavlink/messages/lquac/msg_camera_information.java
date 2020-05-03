@@ -169,9 +169,9 @@ public byte[] encode() throws IOException {
 public String toString() {
 return "MAVLINK_MSG_ID_CAMERA_INFORMATION : " +   "  time_boot_ms="+time_boot_ms
 +  "  firmware_version="+firmware_version
-+  "  focal_length="+focal_length
-+  "  sensor_size_h="+sensor_size_h
-+  "  sensor_size_v="+sensor_size_v
++  "  focal_length="+String.format("%#2.5f",(float)focal_length)
++  "  sensor_size_h="+String.format("%#2.5f",(float)sensor_size_h)
++  "  sensor_size_v="+String.format("%#2.5f",(float)sensor_size_v)
 +  "  flags="+flags
 +  "  resolution_h="+resolution_h
 +  "  resolution_v="+resolution_v

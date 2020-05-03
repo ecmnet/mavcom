@@ -158,17 +158,17 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_SET_POSITION_TARGET_LOCAL_NED : " +   "  time_boot_ms="+time_boot_ms
-+  "  x="+x
-+  "  y="+y
-+  "  z="+z
-+  "  vx="+vx
-+  "  vy="+vy
-+  "  vz="+vz
-+  "  afx="+afx
-+  "  afy="+afy
-+  "  afz="+afz
-+  "  yaw="+yaw
-+  "  yaw_rate="+yaw_rate
++  "  x="+String.format("%#2.5f",(float)x)
++  "  y="+String.format("%#2.5f",(float)y)
++  "  z="+String.format("%#2.5f",(float)z)
++  "  vx="+String.format("%#2.5f",(float)vx)
++  "  vy="+String.format("%#2.5f",(float)vy)
++  "  vz="+String.format("%#2.5f",(float)vz)
++  "  afx="+String.format("%#2.5f",(float)afx)
++  "  afy="+String.format("%#2.5f",(float)afy)
++  "  afz="+String.format("%#2.5f",(float)afz)
++  "  yaw="+String.format("%#2.5f",(float)yaw)
++  "  yaw_rate="+String.format("%#2.5f",(float)yaw_rate)
 +  "  type_mask="+type_mask
 +  "  target_system="+target_system
 +  "  target_component="+target_component

@@ -109,7 +109,7 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_VIDEO_STREAM_STATUS : " +   "  framerate="+framerate
+return "MAVLINK_MSG_ID_VIDEO_STREAM_STATUS : " +   "  framerate="+String.format("%#2.5f",(float)framerate)
 +  "  bitrate="+bitrate
 +  "  flags="+flags
 +  "  resolution_h="+resolution_h

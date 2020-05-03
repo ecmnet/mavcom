@@ -109,11 +109,11 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT : " +   "  nav_roll="+nav_roll
-+  "  nav_pitch="+nav_pitch
-+  "  alt_error="+alt_error
-+  "  aspd_error="+aspd_error
-+  "  xtrack_error="+xtrack_error
+return "MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT : " +   "  nav_roll="+String.format("%#2.5f",(float)nav_roll)
++  "  nav_pitch="+String.format("%#2.5f",(float)nav_pitch)
++  "  alt_error="+String.format("%#2.5f",(float)alt_error)
++  "  aspd_error="+String.format("%#2.5f",(float)aspd_error)
++  "  xtrack_error="+String.format("%#2.5f",(float)xtrack_error)
 +  "  nav_bearing="+nav_bearing
 +  "  target_bearing="+target_bearing
 +  "  wp_dist="+wp_dist

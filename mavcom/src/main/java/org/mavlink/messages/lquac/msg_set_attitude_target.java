@@ -120,14 +120,14 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_SET_ATTITUDE_TARGET : " +   "  time_boot_ms="+time_boot_ms
-+  "  q[0]="+q[0]
-+  "  q[1]="+q[1]
-+  "  q[2]="+q[2]
-+  "  q[3]="+q[3]
-+  "  body_roll_rate="+body_roll_rate
-+  "  body_pitch_rate="+body_pitch_rate
-+  "  body_yaw_rate="+body_yaw_rate
-+  "  thrust="+thrust
++  "  q[0]="+String.format("%#2.5f",(float)q[0])
++  "  q[1]="+String.format("%#2.5f",(float)q[1])
++  "  q[2]="+String.format("%#2.5f",(float)q[2])
++  "  q[3]="+String.format("%#2.5f",(float)q[3])
++  "  body_roll_rate="+String.format("%#2.5f",(float)body_roll_rate)
++  "  body_pitch_rate="+String.format("%#2.5f",(float)body_pitch_rate)
++  "  body_yaw_rate="+String.format("%#2.5f",(float)body_yaw_rate)
++  "  thrust="+String.format("%#2.5f",(float)thrust)
 +  "  target_system="+target_system
 +  "  target_component="+target_component
 +  "  type_mask="+type_mask

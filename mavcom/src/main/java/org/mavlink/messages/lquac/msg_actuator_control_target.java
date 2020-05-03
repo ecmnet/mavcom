@@ -84,14 +84,14 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET : " +   "  time_usec="+time_usec
-+  "  controls[0]="+controls[0]
-+  "  controls[1]="+controls[1]
-+  "  controls[2]="+controls[2]
-+  "  controls[3]="+controls[3]
-+  "  controls[4]="+controls[4]
-+  "  controls[5]="+controls[5]
-+  "  controls[6]="+controls[6]
-+  "  controls[7]="+controls[7]
++  "  controls[0]="+String.format("%#2.5f",(float)controls[0])
++  "  controls[1]="+String.format("%#2.5f",(float)controls[1])
++  "  controls[2]="+String.format("%#2.5f",(float)controls[2])
++  "  controls[3]="+String.format("%#2.5f",(float)controls[3])
++  "  controls[4]="+String.format("%#2.5f",(float)controls[4])
++  "  controls[5]="+String.format("%#2.5f",(float)controls[5])
++  "  controls[6]="+String.format("%#2.5f",(float)controls[6])
++  "  controls[7]="+String.format("%#2.5f",(float)controls[7])
 +  "  group_mlx="+group_mlx
 ;}
 }

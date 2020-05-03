@@ -158,20 +158,20 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_MSP_MICRO_SLAM : " +   "  tms="+tms
-+  "  px="+px
-+  "  py="+py
-+  "  pz="+pz
-+  "  pd="+pd
-+  "  pp="+pp
-+  "  pv="+pv
-+  "  md="+md
-+  "  mw="+mw
-+  "  dm="+dm
-+  "  ox="+ox
-+  "  oy="+oy
-+  "  oz="+oz
-+  "  quality="+quality
-+  "  fps="+fps
++  "  px="+String.format("%#2.5f",(float)px)
++  "  py="+String.format("%#2.5f",(float)py)
++  "  pz="+String.format("%#2.5f",(float)pz)
++  "  pd="+String.format("%#2.5f",(float)pd)
++  "  pp="+String.format("%#2.5f",(float)pp)
++  "  pv="+String.format("%#2.5f",(float)pv)
++  "  md="+String.format("%#2.5f",(float)md)
++  "  mw="+String.format("%#2.5f",(float)mw)
++  "  dm="+String.format("%#2.5f",(float)dm)
++  "  ox="+String.format("%#2.5f",(float)ox)
++  "  oy="+String.format("%#2.5f",(float)oy)
++  "  oz="+String.format("%#2.5f",(float)oz)
++  "  quality="+String.format("%#2.5f",(float)quality)
++  "  fps="+String.format("%#2.5f",(float)fps)
 +  "  wpcount="+wpcount
 ;}
 }

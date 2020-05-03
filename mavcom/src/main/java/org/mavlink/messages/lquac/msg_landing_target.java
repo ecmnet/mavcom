@@ -150,20 +150,20 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_LANDING_TARGET : " +   "  time_usec="+time_usec
-+  "  angle_x="+angle_x
-+  "  angle_y="+angle_y
-+  "  distance="+distance
-+  "  size_x="+size_x
-+  "  size_y="+size_y
++  "  angle_x="+String.format("%#2.5f",(float)angle_x)
++  "  angle_y="+String.format("%#2.5f",(float)angle_y)
++  "  distance="+String.format("%#2.5f",(float)distance)
++  "  size_x="+String.format("%#2.5f",(float)size_x)
++  "  size_y="+String.format("%#2.5f",(float)size_y)
 +  "  target_num="+target_num
 +  "  frame="+frame
-+  "  x="+x
-+  "  y="+y
-+  "  z="+z
-+  "  q[0]="+q[0]
-+  "  q[1]="+q[1]
-+  "  q[2]="+q[2]
-+  "  q[3]="+q[3]
++  "  x="+String.format("%#2.5f",(float)x)
++  "  y="+String.format("%#2.5f",(float)y)
++  "  z="+String.format("%#2.5f",(float)z)
++  "  q[0]="+String.format("%#2.5f",(float)q[0])
++  "  q[1]="+String.format("%#2.5f",(float)q[1])
++  "  q[2]="+String.format("%#2.5f",(float)q[2])
++  "  q[3]="+String.format("%#2.5f",(float)q[3])
 +  "  type="+type
 +  "  position_valid="+position_valid
 ;}

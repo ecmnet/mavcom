@@ -176,28 +176,28 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_CONTROL_SYSTEM_STATE : " +   "  time_usec="+time_usec
-+  "  x_acc="+x_acc
-+  "  y_acc="+y_acc
-+  "  z_acc="+z_acc
-+  "  x_vel="+x_vel
-+  "  y_vel="+y_vel
-+  "  z_vel="+z_vel
-+  "  x_pos="+x_pos
-+  "  y_pos="+y_pos
-+  "  z_pos="+z_pos
-+  "  airspeed="+airspeed
-+  "  vel_variance[0]="+vel_variance[0]
-+  "  vel_variance[1]="+vel_variance[1]
-+  "  vel_variance[2]="+vel_variance[2]
-+  "  pos_variance[0]="+pos_variance[0]
-+  "  pos_variance[1]="+pos_variance[1]
-+  "  pos_variance[2]="+pos_variance[2]
-+  "  q[0]="+q[0]
-+  "  q[1]="+q[1]
-+  "  q[2]="+q[2]
-+  "  q[3]="+q[3]
-+  "  roll_rate="+roll_rate
-+  "  pitch_rate="+pitch_rate
-+  "  yaw_rate="+yaw_rate
++  "  x_acc="+String.format("%#2.5f",(float)x_acc)
++  "  y_acc="+String.format("%#2.5f",(float)y_acc)
++  "  z_acc="+String.format("%#2.5f",(float)z_acc)
++  "  x_vel="+String.format("%#2.5f",(float)x_vel)
++  "  y_vel="+String.format("%#2.5f",(float)y_vel)
++  "  z_vel="+String.format("%#2.5f",(float)z_vel)
++  "  x_pos="+String.format("%#2.5f",(float)x_pos)
++  "  y_pos="+String.format("%#2.5f",(float)y_pos)
++  "  z_pos="+String.format("%#2.5f",(float)z_pos)
++  "  airspeed="+String.format("%#2.5f",(float)airspeed)
++  "  vel_variance[0]="+String.format("%#2.5f",(float)vel_variance[0])
++  "  vel_variance[1]="+String.format("%#2.5f",(float)vel_variance[1])
++  "  vel_variance[2]="+String.format("%#2.5f",(float)vel_variance[2])
++  "  pos_variance[0]="+String.format("%#2.5f",(float)pos_variance[0])
++  "  pos_variance[1]="+String.format("%#2.5f",(float)pos_variance[1])
++  "  pos_variance[2]="+String.format("%#2.5f",(float)pos_variance[2])
++  "  q[0]="+String.format("%#2.5f",(float)q[0])
++  "  q[1]="+String.format("%#2.5f",(float)q[1])
++  "  q[2]="+String.format("%#2.5f",(float)q[2])
++  "  q[3]="+String.format("%#2.5f",(float)q[3])
++  "  roll_rate="+String.format("%#2.5f",(float)roll_rate)
++  "  pitch_rate="+String.format("%#2.5f",(float)pitch_rate)
++  "  yaw_rate="+String.format("%#2.5f",(float)yaw_rate)
 ;}
 }

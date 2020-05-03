@@ -115,12 +115,12 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_SAFETY_SET_ALLOWED_AREA : " +   "  p1x="+p1x
-+  "  p1y="+p1y
-+  "  p1z="+p1z
-+  "  p2x="+p2x
-+  "  p2y="+p2y
-+  "  p2z="+p2z
+return "MAVLINK_MSG_ID_SAFETY_SET_ALLOWED_AREA : " +   "  p1x="+String.format("%#2.5f",(float)p1x)
++  "  p1y="+String.format("%#2.5f",(float)p1y)
++  "  p1z="+String.format("%#2.5f",(float)p1z)
++  "  p2x="+String.format("%#2.5f",(float)p2x)
++  "  p2y="+String.format("%#2.5f",(float)p2y)
++  "  p2z="+String.format("%#2.5f",(float)p2z)
 +  "  target_system="+target_system
 +  "  target_component="+target_component
 +  "  frame="+frame

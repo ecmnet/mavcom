@@ -122,14 +122,14 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_ESTIMATOR_STATUS : " +   "  time_usec="+time_usec
-+  "  vel_ratio="+vel_ratio
-+  "  pos_horiz_ratio="+pos_horiz_ratio
-+  "  pos_vert_ratio="+pos_vert_ratio
-+  "  mag_ratio="+mag_ratio
-+  "  hagl_ratio="+hagl_ratio
-+  "  tas_ratio="+tas_ratio
-+  "  pos_horiz_accuracy="+pos_horiz_accuracy
-+  "  pos_vert_accuracy="+pos_vert_accuracy
++  "  vel_ratio="+String.format("%#2.5f",(float)vel_ratio)
++  "  pos_horiz_ratio="+String.format("%#2.5f",(float)pos_horiz_ratio)
++  "  pos_vert_ratio="+String.format("%#2.5f",(float)pos_vert_ratio)
++  "  mag_ratio="+String.format("%#2.5f",(float)mag_ratio)
++  "  hagl_ratio="+String.format("%#2.5f",(float)hagl_ratio)
++  "  tas_ratio="+String.format("%#2.5f",(float)tas_ratio)
++  "  pos_horiz_accuracy="+String.format("%#2.5f",(float)pos_horiz_accuracy)
++  "  pos_vert_accuracy="+String.format("%#2.5f",(float)pos_vert_accuracy)
 +  "  flags="+flags
 ;}
 }

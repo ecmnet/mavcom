@@ -152,13 +152,13 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_MISSION_ITEM : " +   "  param1="+param1
-+  "  param2="+param2
-+  "  param3="+param3
-+  "  param4="+param4
-+  "  x="+x
-+  "  y="+y
-+  "  z="+z
+return "MAVLINK_MSG_ID_MISSION_ITEM : " +   "  param1="+String.format("%#2.5f",(float)param1)
++  "  param2="+String.format("%#2.5f",(float)param2)
++  "  param3="+String.format("%#2.5f",(float)param3)
++  "  param4="+String.format("%#2.5f",(float)param4)
++  "  x="+String.format("%#2.5f",(float)x)
++  "  y="+String.format("%#2.5f",(float)y)
++  "  z="+String.format("%#2.5f",(float)z)
 +  "  seq="+seq
 +  "  command="+command
 +  "  target_system="+target_system

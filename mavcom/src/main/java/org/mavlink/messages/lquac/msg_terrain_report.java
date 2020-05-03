@@ -105,8 +105,8 @@ public byte[] encode() throws IOException {
 public String toString() {
 return "MAVLINK_MSG_ID_TERRAIN_REPORT : " +   "  lat="+lat
 +  "  lon="+lon
-+  "  terrain_height="+terrain_height
-+  "  current_height="+current_height
++  "  terrain_height="+String.format("%#2.5f",(float)terrain_height)
++  "  current_height="+String.format("%#2.5f",(float)current_height)
 +  "  spacing="+spacing
 +  "  pending="+pending
 +  "  loaded="+loaded
