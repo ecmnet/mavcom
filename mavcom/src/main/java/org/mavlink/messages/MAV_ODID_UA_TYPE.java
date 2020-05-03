@@ -17,9 +17,9 @@ public interface MAV_ODID_UA_TYPE {
      */
     public final static int MAV_ODID_UA_TYPE_AEROPLANE = 1;
     /**
-     * Rotorcraft (including Multirotor).
+     * Helicopter or multirotor.
      */
-    public final static int MAV_ODID_UA_TYPE_ROTORCRAFT = 2;
+    public final static int MAV_ODID_UA_TYPE_HELICOPTER_OR_MULTIROTOR = 2;
     /**
      * Gyroplane.
      */
@@ -27,7 +27,7 @@ public interface MAV_ODID_UA_TYPE {
     /**
      * VTOL (Vertical Take-Off and Landing). Fixed wing aircraft that can take off vertically.
      */
-    public final static int MAV_ODID_UA_TYPE_VTOL = 4;
+    public final static int MAV_ODID_UA_TYPE_HYBRID_LIFT = 4;
     /**
      * Ornithopter.
      */
@@ -53,7 +53,7 @@ public interface MAV_ODID_UA_TYPE {
      */
     public final static int MAV_ODID_UA_TYPE_AIRSHIP = 10;
     /**
-     * Free Fall/Parachute.
+     * Free Fall/Parachute (unpowered).
      */
     public final static int MAV_ODID_UA_TYPE_FREE_FALL_PARACHUTE = 11;
     /**

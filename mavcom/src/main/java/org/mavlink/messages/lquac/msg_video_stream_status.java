@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_video_stream_status
- * Information about the status of a video stream.
+ * Information about the status of a video stream. It may be requested using MAV_CMD_REQUEST_MESSAGE.
  **/
 public class msg_video_stream_status extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_VIDEO_STREAM_STATUS = 270;

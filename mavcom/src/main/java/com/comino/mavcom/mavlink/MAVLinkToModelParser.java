@@ -57,6 +57,7 @@ import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.utils.MSPPluginHelper;
+import com.comino.mavutils.legacy.ExecutorService;
 
 public class MAVLinkToModelParser {
 
@@ -101,43 +102,44 @@ public class MAVLinkToModelParser {
 			@Override
 			public void received(Object o) {
 
-				msg_command_ack ack = (msg_command_ack) o;
+				ExecutorService.get().submit(() -> {
+					msg_command_ack ack = (msg_command_ack) o;
 
-				if(cmd_ack!=null) {
-					cmd_ack.received(ack.command, ack.result);
-					cmd_ack = null;
-				}
+					if(cmd_ack!=null) {
+						cmd_ack.received(ack.command, ack.result);
+						cmd_ack = null;
+					}
 
-				if(model.sys.isStatus(Status.MSP_PROXY)) {
-					return;
-				}
+					if(model.sys.isStatus(Status.MSP_PROXY)) {
+						return;
+					}
 
-				if(logger==null)
-					logger = MSPLogger.getInstance();
-				switch (ack.result) {
-				case MAV_RESULT.MAV_RESULT_ACCEPTED:
-					logger.writeLocalMsg("Command " + ack.command + " is accepted",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
-					break;
-				case MAV_RESULT.MAV_RESULT_FAILED:
-					logger.writeLocalMsg("Command " + ack.command + " failed",MAV_SEVERITY.MAV_SEVERITY_WARNING);
-					break;
-				case MAV_RESULT.MAV_RESULT_DENIED:
-					logger.writeLocalMsg("Command " + ack.command + " denied",MAV_SEVERITY.MAV_SEVERITY_WARNING);
-					break;
-				case MAV_RESULT.MAV_RESULT_UNSUPPORTED:
-					logger.writeLocalMsg("Command " + ack.command + " is unsupported",MAV_SEVERITY.MAV_SEVERITY_WARNING);
-					break;
-				case MAV_RESULT.MAV_RESULT_TEMPORARILY_REJECTED:
-					logger.writeLocalMsg("Command " + ack.command + " is temporarily rejected",MAV_SEVERITY.MAV_SEVERITY_WARNING);
-					break;
-				case MAV_RESULT.MAV_RESULT_IN_PROGRESS:
-					logger.writeLocalMsg("Command " + ack.command + " is in progress",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
-					break;
-				default:
-					logger.writeLocalMsg("Command " + ack.command + " -> unknown result",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
-				}
+					if(logger==null)
+						logger = MSPLogger.getInstance();
+					switch (ack.result) {
+					case MAV_RESULT.MAV_RESULT_ACCEPTED:
+						logger.writeLocalMsg("Command " + ack.command + " is accepted",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+						break;
+					case MAV_RESULT.MAV_RESULT_FAILED:
+						logger.writeLocalMsg("Command " + ack.command + " failed",MAV_SEVERITY.MAV_SEVERITY_WARNING);
+						break;
+					case MAV_RESULT.MAV_RESULT_DENIED:
+						logger.writeLocalMsg("Command " + ack.command + " denied",MAV_SEVERITY.MAV_SEVERITY_WARNING);
+						break;
+					case MAV_RESULT.MAV_RESULT_UNSUPPORTED:
+						logger.writeLocalMsg("Command " + ack.command + " is unsupported",MAV_SEVERITY.MAV_SEVERITY_WARNING);
+						break;
+					case MAV_RESULT.MAV_RESULT_TEMPORARILY_REJECTED:
+						logger.writeLocalMsg("Command " + ack.command + " is temporarily rejected",MAV_SEVERITY.MAV_SEVERITY_WARNING);
+						break;
+					case MAV_RESULT.MAV_RESULT_IN_PROGRESS:
+						logger.writeLocalMsg("Command " + ack.command + " is in progress",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+						break;
+					default:
+						logger.writeLocalMsg("Command " + ack.command + " -> unknown result",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+					}
+				});
 			}
-
 		});
 
 		registerListener(msg_statustext.class, new IMAVLinkListener() {
@@ -191,7 +193,7 @@ public class MAVLinkToModelParser {
 						//		System.out.println("OFFSET="+model.sys.t_offset_ns+":"+sync.ts1);
 						// PX4="+model.sys.getSynchronizedPX4Time_us());
 					}
-				//	time_sync_cycle = System.currentTimeMillis();
+					//	time_sync_cycle = System.currentTimeMillis();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -299,17 +301,17 @@ public class MAVLinkToModelParser {
 			}
 		}
 
-//		if ((System.currentTimeMillis() - time_sync_cycle) > TIME_SYNC_CYCLE_MS && TIME_SYNC_CYCLE_MS > 0) {
-//
-//			if(!link.isSerial())
-//				return;
-//
-//			time_sync_cycle = System.currentTimeMillis();
-//			msg_timesync sync_s = new msg_timesync(255, 1);
-//			sync_s.tc1 = 0;
-//			sync_s.ts1 = System.currentTimeMillis() * 1000000L;
-//			link.write(sync_s);
-//		}
+		//		if ((System.currentTimeMillis() - time_sync_cycle) > TIME_SYNC_CYCLE_MS && TIME_SYNC_CYCLE_MS > 0) {
+		//
+		//			if(!link.isSerial())
+		//				return;
+		//
+		//			time_sync_cycle = System.currentTimeMillis();
+		//			msg_timesync sync_s = new msg_timesync(255, 1);
+		//			sync_s.tc1 = 0;
+		//			sync_s.ts1 = System.currentTimeMillis() * 1000000L;
+		//			link.write(sync_s);
+		//		}
 
 	}
 }

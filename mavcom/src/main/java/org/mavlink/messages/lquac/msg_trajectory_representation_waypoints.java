@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_trajectory_representation_waypoints
- * Describe a trajectory using an array of up-to 5 waypoints in the local frame.
+ * Describe a trajectory using an array of up-to 5 waypoints in the local frame (MAV_FRAME_LOCAL_NED).
  **/
 public class msg_trajectory_representation_waypoints extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS = 332;
@@ -28,7 +28,7 @@ public class msg_trajectory_representation_waypoints extends MAVLinkMessage {
 }
 
   /**
-   * Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number.
+   * Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.
    */
   public long time_usec;
   /**

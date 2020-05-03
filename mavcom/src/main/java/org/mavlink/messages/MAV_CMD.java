@@ -5,7 +5,7 @@
 package org.mavlink.messages;
 /**
  * Interface MAV_CMD
- * Commands to be executed by the MAV. They can be executed on user request, or as part of a mission script. If the action is used in a mission, the parameter mapping to the waypoint/mission message is as follows: Param 1, Param 2, Param 3, Param 4, X: Param 5, Y:Param 6, Z:Param 7. This command list is similar what ARINC 424 is for commercial aircraft: A data format how to interpret waypoint/mission data. See https://mavlink.io/en/guide/xml_schema.html#MAV_CMD for information about the structure of the MAV_CMD entries
+ * Commands to be executed by the MAV. They can be executed on user request, or as part of a mission script. If the action is used in a mission, the parameter mapping to the waypoint/mission message is as follows: Param 1, Param 2, Param 3, Param 4, X: Param 5, Y:Param 6, Z:Param 7. This command list is similar what ARINC 424 is for commercial aircraft: A data format how to interpret waypoint/mission data. NaN and INT32_MAX may be used in float/integer params (respectively) to indicate optional/default values (e.g. to use the component's current yaw or latitude rather than a specific value). See https://mavlink.io/en/guide/xml_schema.html#MAV_CMD for information about the structure of the MAV_CMD entries
  **/
 public interface MAV_CMD {
     /**
@@ -174,7 +174,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_ORBIT = 34;
     /**
-     * Sets the region of interest (ROI) for a sensor set or the vehicle itself. This can then be used by the vehicles control system to control the vehicle attitude and the attitude of various sensors such as cameras.
+     * Sets the region of interest (ROI) for a sensor set or the vehicle itself. This can then be used by the vehicle's control system to control the vehicle attitude and the attitude of various sensors such as cameras.
      * PARAM 1 : Region of interest mode.
      * PARAM 2 : Waypoint index/ target ID. (see MAV_ROI enum)
      * PARAM 3 : ROI index (allows a vehicle to manage multiple ROI's)
@@ -291,7 +291,7 @@ public interface MAV_CMD {
      * PARAM 4 : Empty
      * PARAM 5 : Empty
      * PARAM 6 : Empty
-     * PARAM 7 : Finish Altitude
+     * PARAM 7 : Target Altitude
      */
     public final static int MAV_CMD_CONDITION_CHANGE_ALT = 113;
     /**
@@ -489,7 +489,7 @@ public interface MAV_CMD {
      * PARAM 4 : Yaw heading. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.). For planes indicates loiter direction (0: clockwise, 1: counter clockwise)
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
-     * PARAM 7 : Altitude (meters)
+     * PARAM 7 : Altitude
      */
     public final static int MAV_CMD_DO_REPOSITION = 192;
     /**
@@ -515,30 +515,30 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_SET_REVERSE = 194;
     /**
-     * Sets the region of interest (ROI) to a location. This can then be used by the vehicles control system to control the vehicle attitude and the attitude of various sensors such as cameras.
-     * PARAM 1 : Empty
+     * Sets the region of interest (ROI) to a location. This can then be used by the vehicle's control system to control the vehicle attitude and the attitude of various sensors such as cameras. This command can be sent to a gimbal manager but not to a gimbal device. A gimbal is not to react to this message.
+     * PARAM 1 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
      * PARAM 2 : Empty
      * PARAM 3 : Empty
      * PARAM 4 : Empty
-     * PARAM 5 : Latitude
-     * PARAM 6 : Longitude
-     * PARAM 7 : Altitude
+     * PARAM 5 : Latitude of ROI location
+     * PARAM 6 : Longitude of ROI location
+     * PARAM 7 : Altitude of ROI location
      */
     public final static int MAV_CMD_DO_SET_ROI_LOCATION = 195;
     /**
-     * Sets the region of interest (ROI) to be toward next waypoint, with optional pitch/roll/yaw offset. This can then be used by the vehicles control system to control the vehicle attitude and the attitude of various sensors such as cameras.
-     * PARAM 1 : Empty
+     * Sets the region of interest (ROI) to be toward next waypoint, with optional pitch/roll/yaw offset. This can then be used by the vehicle's control system to control the vehicle attitude and the attitude of various sensors such as cameras. This command can be sent to a gimbal manager but not to a gimbal device. A gimbal device is not to react to this message.
+     * PARAM 1 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
      * PARAM 2 : Empty
      * PARAM 3 : Empty
      * PARAM 4 : Empty
-     * PARAM 5 : pitch offset from next waypoint
-     * PARAM 6 : roll offset from next waypoint
-     * PARAM 7 : yaw offset from next waypoint
+     * PARAM 5 : Pitch offset from next waypoint, positive tilting up
+     * PARAM 6 : roll offset from next waypoint, positive banking to the right
+     * PARAM 7 : yaw offset from next waypoint, positive panning to the right
      */
     public final static int MAV_CMD_DO_SET_ROI_WPNEXT_OFFSET = 196;
     /**
-     * Cancels any previous ROI command returning the vehicle/sensors to default flight characteristics. This can then be used by the vehicles control system to control the vehicle attitude and the attitude of various sensors such as cameras.
-     * PARAM 1 : Empty
+     * Cancels any previous ROI command returning the vehicle/sensors to default flight characteristics. This can then be used by the vehicle's control system to control the vehicle attitude and the attitude of various sensors such as cameras. This command can be sent to a gimbal manager but not to a gimbal device. A gimbal device is not to react to this message. After this command the gimbal manager should go back to manual input if available, and otherwise assume a neutral position.
+     * PARAM 1 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
      * PARAM 2 : Empty
      * PARAM 3 : Empty
      * PARAM 4 : Empty
@@ -548,8 +548,9 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_SET_ROI_NONE = 197;
     /**
-     * Mount tracks system with specified system ID. Determination of target vehicle position may be done with GLOBAL_POSITION_INT or any other means.
+     * Mount tracks system with specified system ID. Determination of target vehicle position may be done with GLOBAL_POSITION_INT or any other means. This command can be sent to a gimbal manager but not to a gimbal device. A gimbal device is not to react to this message.
      * PARAM 1 : sysid
+     * PARAM 2 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
      */
     public final static int MAV_CMD_DO_SET_ROI_SYSID = 198;
     /**
@@ -564,7 +565,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_CONTROL_VIDEO = 200;
     /**
-     * Sets the region of interest (ROI) for a sensor set or the vehicle itself. This can then be used by the vehicles control system to control the vehicle attitude and the attitude of various sensors such as cameras.
+     * Sets the region of interest (ROI) for a sensor set or the vehicle itself. This can then be used by the vehicle's control system to control the vehicle attitude and the attitude of various sensors such as cameras.
      * PARAM 1 : Region of interest mode.
      * PARAM 2 : Waypoint index/ target ID (depends on param 1).
      * PARAM 3 : Region of interest index. (allows a vehicle to manage multiple ROI's)
@@ -858,6 +859,13 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_GET_HOME_POSITION = 410;
     /**
+     * Inject artificial failure for testing purposes. Note that autopilots should implement an additional protection before accepting this command such as a specific param setting.
+     * PARAM 1 : The unit which is affected by the failure.
+     * PARAM 2 : The type how the failure manifests itself.
+     * PARAM 3 : Instance affected by failure (0 to signal all).
+     */
+    public final static int MAV_CMD_INJECT_FAILURE = 420;
+    /**
      * Starts receiver pairing.
      * PARAM 1 : 0:Spektrum.
      * PARAM 2 : RC type.
@@ -887,7 +895,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_REQUEST_MESSAGE = 512;
     /**
-     * Request MAVLink protocol version compatibility
+     * Request MAVLink protocol version compatibility. All receivers should ACK the command and then emit their capabilities in an PROTOCOL_VERSION message
      * PARAM 1 : 1: Request supported protocol versions by all nodes on the network
      * PARAM 2 : Reserved (all remaining params)
      */
@@ -946,21 +954,27 @@ public interface MAV_CMD {
      * Set camera running mode. Use NaN for reserved values. GCS will send a MAV_CMD_REQUEST_VIDEO_STREAM_STATUS command after a mode change if the camera supports video streaming.
      * PARAM 1 : Reserved (Set to 0)
      * PARAM 2 : Camera mode
-     * PARAM 3 : Reserved (all remaining params)
+     * PARAM 3 : 
+     * PARAM 4 : 
+     * PARAM 7 : 
      */
     public final static int MAV_CMD_SET_CAMERA_MODE = 530;
     /**
-     * Set camera zoom. Camera must respond with a CAMERA_SETTINGS message (on success). Use NaN for reserved values.
+     * Set camera zoom. Camera must respond with a CAMERA_SETTINGS message (on success).
      * PARAM 1 : Zoom type
      * PARAM 2 : Zoom value. The range of valid values depend on the zoom type.
-     * PARAM 3 : Reserved (all remaining params)
+     * PARAM 3 : 
+     * PARAM 4 : 
+     * PARAM 7 : 
      */
     public final static int MAV_CMD_SET_CAMERA_ZOOM = 531;
     /**
-     * Set camera focus. Camera must respond with a CAMERA_SETTINGS message (on success). Use NaN for reserved values.
+     * Set camera focus. Camera must respond with a CAMERA_SETTINGS message (on success).
      * PARAM 1 : Focus type
      * PARAM 2 : Focus value
-     * PARAM 3 : Reserved (all remaining params)
+     * PARAM 3 : 
+     * PARAM 4 : 
+     * PARAM 7 : 
      */
     public final static int MAV_CMD_SET_CAMERA_FOCUS = 532;
     /**
@@ -975,6 +989,32 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_JUMP_TAG = 601;
     /**
+     * High level setpoint to be sent to a gimbal manager to set a gimbal attitude. It is possible to set combinations of the values below. E.g. an angle as well as a desired angular rate can be used to get to this angle at a certain angular rate, or an angular rate only will result in continuous turning. NaN is to be used to signal unset. Note: a gimbal is never to react to this command but only the gimbal manager.
+     * PARAM 1 : Tilt/pitch angular velocity (positive to point up).
+     * PARAM 2 : Pan/yaw angular velocity (positive to pan to the right).
+     * PARAM 3 : Pitch/tilt angle relative to world horizon (negative is to tilt down, positive to tilt up).
+     * PARAM 4 : Yaw/pan angle (positive is pan to the right, relative to vehicle for PAN mode, absolute to North for HOLD mode) 
+     * PARAM 5 : Gimbal manager flags to use.
+     * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
+     */
+    public final static int MAV_CMD_DO_GIMBAL_MANAGER_ATTITUDE = 1000;
+    /**
+     * If the gimbal manager supports visual tracking (GIMBAL_MANAGER_CAP_FLAGS_HAS_TRACKING_POINT is set), this command allows to initiate the tracking. Such a tracking gimbal manager would usually be an integrated camera/gimbal, or alternatively a companion computer connected to a camera.
+     * PARAM 1 : Point to track x value.
+     * PARAM 2 : Point to track y value.
+     * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
+     */
+    public final static int MAV_CMD_DO_GIMBAL_MANAGER_TRACK_POINT = 1001;
+    /**
+     * If the gimbal supports visual tracking (GIMBAL_MANAGER_CAP_FLAGS_HAS_TRACKING_RECTANGLE is set), this command allows to initiate the tracking. Such a tracking gimbal manager would usually be an integrated camera/gimbal, or alternatively a companion computer connected to a camera.
+     * PARAM 1 : Top left corner of rectangle x value (normalized 0..1, 0 is left, 1 is right).
+     * PARAM 2 : Top left corner of rectangle y value (normalized 0..1, 0 is top, 1 is bottom).
+     * PARAM 3 : Bottom right corner of rectangle x value (normalized 0..1, 0 is left, 1 is right).
+     * PARAM 4 : Bottom right corner of rectangle y value (normalized 0..1, 0 is top, 1 is bottom).
+     * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
+     */
+    public final static int MAV_CMD_DO_GIMBAL_MANAGER_TRACK_RECTANGLE = 1002;
+    /**
      * Start image capture sequence. Sends CAMERA_IMAGE_CAPTURED after each capture. Use NaN for reserved values.
      * PARAM 1 : Reserved (Set to 0)
      * PARAM 2 : Desired elapsed time between two consecutive pictures (in seconds). Minimum values depend on hardware (typically greater than 2 seconds).
@@ -986,13 +1026,19 @@ public interface MAV_CMD {
     /**
      * Stop image capture sequence Use NaN for reserved values.
      * PARAM 1 : Reserved (Set to 0)
-     * PARAM 2 : Reserved (all remaining params)
+     * PARAM 2 : 
+     * PARAM 3 : 
+     * PARAM 4 : 
+     * PARAM 7 : 
      */
     public final static int MAV_CMD_IMAGE_STOP_CAPTURE = 2001;
     /**
-     * Re-request a CAMERA_IMAGE_CAPTURE message. Use NaN for reserved values.
-     * PARAM 1 : Sequence number for missing CAMERA_IMAGE_CAPTURE message
-     * PARAM 2 : Reserved (all remaining params)
+     * Re-request a CAMERA_IMAGE_CAPTURED message.
+     * PARAM 1 : Sequence number for missing CAMERA_IMAGE_CAPTURED message
+     * PARAM 2 : 
+     * PARAM 3 : 
+     * PARAM 4 : 
+     * PARAM 7 : 
      */
     public final static int MAV_CMD_REQUEST_CAMERA_IMAGE_CAPTURE = 2002;
     /**
@@ -1003,40 +1049,45 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_TRIGGER_CONTROL = 2003;
     /**
-     * Starts video capture (recording). Use NaN for reserved values.
+     * Starts video capture (recording).
      * PARAM 1 : Video Stream ID (0 for all streams)
      * PARAM 2 : Frequency CAMERA_CAPTURE_STATUS messages should be sent while recording (0 for no messages, otherwise frequency)
-     * PARAM 3 : Reserved (all remaining params)
+     * PARAM 3 : 
+     * PARAM 4 : 
+     * PARAM 5 : 
+     * PARAM 6 : 
+     * PARAM 7 : 
      */
     public final static int MAV_CMD_VIDEO_START_CAPTURE = 2500;
     /**
-     * Stop the current video capture (recording). Use NaN for reserved values.
+     * Stop the current video capture (recording).
      * PARAM 1 : Video Stream ID (0 for all streams)
-     * PARAM 2 : Reserved (all remaining params)
+     * PARAM 2 : 
+     * PARAM 3 : 
+     * PARAM 4 : 
+     * PARAM 5 : 
+     * PARAM 6 : 
+     * PARAM 7 : 
      */
     public final static int MAV_CMD_VIDEO_STOP_CAPTURE = 2501;
     /**
      * Start video streaming
      * PARAM 1 : Video Stream ID (0 for all streams, 1 for first, 2 for second, etc.)
-     * PARAM 2 : Reserved
      */
     public final static int MAV_CMD_VIDEO_START_STREAMING = 2502;
     /**
      * Stop the given video stream
      * PARAM 1 : Video Stream ID (0 for all streams, 1 for first, 2 for second, etc.)
-     * PARAM 2 : Reserved
      */
     public final static int MAV_CMD_VIDEO_STOP_STREAMING = 2503;
     /**
      * Request video stream information (VIDEO_STREAM_INFORMATION)
      * PARAM 1 : Video Stream ID (0 for all streams, 1 for first, 2 for second, etc.)
-     * PARAM 2 : Reserved (all remaining params)
      */
     public final static int MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION = 2504;
     /**
      * Request video stream status (VIDEO_STREAM_STATUS)
      * PARAM 1 : Video Stream ID (0 for all streams, 1 for first, 2 for second, etc.)
-     * PARAM 2 : Reserved (all remaining params)
      */
     public final static int MAV_CMD_REQUEST_VIDEO_STREAM_STATUS = 2505;
     /**
@@ -1065,11 +1116,11 @@ public interface MAV_CMD {
      * 
      * PARAM 1 : Landing gear ID (default: 0, -1 for all)
      * PARAM 2 : Landing gear position (Down: 0, Up: 1, NaN for no change)
-     * PARAM 3 : Reserved, set to NaN
-     * PARAM 4 : Reserved, set to NaN
-     * PARAM 5 : Reserved, set to NaN
-     * PARAM 6 : Reserved, set to NaN
-     * PARAM 7 : Reserved, set to NaN
+     * PARAM 3 : 
+     * PARAM 4 : 
+     * PARAM 5 : 
+     * PARAM 6 : 
+     * PARAM 7 : 
      */
     public final static int MAV_CMD_AIRFRAME_CONFIGURATION = 2520;
     /**
@@ -1211,7 +1262,7 @@ public interface MAV_CMD {
      * PARAM 4 : Minimum altitude clearance to the release position. A negative value indicates the system can define the clearance at will.
      * PARAM 5 : Latitude unscaled for MISSION_ITEM or in 1e7 degrees for MISSION_ITEM_INT
      * PARAM 6 : Longitude unscaled for MISSION_ITEM or in 1e7 degrees for MISSION_ITEM_INT
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_PAYLOAD_PREPARE_DEPLOY = 30001;
     /**
@@ -1233,7 +1284,7 @@ public interface MAV_CMD {
      * PARAM 4 : User defined
      * PARAM 5 : Latitude unscaled
      * PARAM 6 : Longitude unscaled
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_WAYPOINT_USER_1 = 31000;
     /**
@@ -1244,7 +1295,7 @@ public interface MAV_CMD {
      * PARAM 4 : User defined
      * PARAM 5 : Latitude unscaled
      * PARAM 6 : Longitude unscaled
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_WAYPOINT_USER_2 = 31001;
     /**
@@ -1255,7 +1306,7 @@ public interface MAV_CMD {
      * PARAM 4 : User defined
      * PARAM 5 : Latitude unscaled
      * PARAM 6 : Longitude unscaled
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_WAYPOINT_USER_3 = 31002;
     /**
@@ -1266,7 +1317,7 @@ public interface MAV_CMD {
      * PARAM 4 : User defined
      * PARAM 5 : Latitude unscaled
      * PARAM 6 : Longitude unscaled
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_WAYPOINT_USER_4 = 31003;
     /**
@@ -1277,7 +1328,7 @@ public interface MAV_CMD {
      * PARAM 4 : User defined
      * PARAM 5 : Latitude unscaled
      * PARAM 6 : Longitude unscaled
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_WAYPOINT_USER_5 = 31004;
     /**
@@ -1288,7 +1339,7 @@ public interface MAV_CMD {
      * PARAM 4 : User defined
      * PARAM 5 : Latitude unscaled
      * PARAM 6 : Longitude unscaled
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_SPATIAL_USER_1 = 31005;
     /**
@@ -1299,7 +1350,7 @@ public interface MAV_CMD {
      * PARAM 4 : User defined
      * PARAM 5 : Latitude unscaled
      * PARAM 6 : Longitude unscaled
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_SPATIAL_USER_2 = 31006;
     /**
@@ -1310,7 +1361,7 @@ public interface MAV_CMD {
      * PARAM 4 : User defined
      * PARAM 5 : Latitude unscaled
      * PARAM 6 : Longitude unscaled
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_SPATIAL_USER_3 = 31007;
     /**
@@ -1321,7 +1372,7 @@ public interface MAV_CMD {
      * PARAM 4 : User defined
      * PARAM 5 : Latitude unscaled
      * PARAM 6 : Longitude unscaled
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_SPATIAL_USER_4 = 31008;
     /**
@@ -1332,7 +1383,7 @@ public interface MAV_CMD {
      * PARAM 4 : User defined
      * PARAM 5 : Latitude unscaled
      * PARAM 6 : Longitude unscaled
-     * PARAM 7 : Altitude (MSL), in meters
+     * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_SPATIAL_USER_5 = 31009;
     /**

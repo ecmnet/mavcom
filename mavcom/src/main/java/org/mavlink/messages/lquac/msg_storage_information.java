@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_storage_information
- * Information about a storage medium. This message is sent in response to a request and whenever the status of the storage changes (STORAGE_STATUS).
+ * Information about a storage medium. This message is sent in response to a request with MAV_CMD_REQUEST_MESSAGE and whenever the status of the storage changes (STORAGE_STATUS). Use MAV_CMD_REQUEST_MESSAGE.param2 to indicate the index/id of requested storage: 0 for all, 1 for first, 2 for second, etc.
  **/
 public class msg_storage_information extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_STORAGE_INFORMATION = 261;

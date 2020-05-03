@@ -44,7 +44,7 @@ public class msg_set_gps_global_origin extends MAVLinkMessage {
    */
   public int target_system;
   /**
-   * Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number.
+   * Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.
    */
   public long time_usec;
 /**

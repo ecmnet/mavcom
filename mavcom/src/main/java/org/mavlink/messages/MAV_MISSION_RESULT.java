@@ -25,7 +25,7 @@ public interface MAV_MISSION_RESULT {
      */
     public final static int MAV_MISSION_UNSUPPORTED = 3;
     /**
-     * Mission item exceeds storage space.
+     * Mission items exceed storage space.
      */
     public final static int MAV_MISSION_NO_SPACE = 4;
     /**

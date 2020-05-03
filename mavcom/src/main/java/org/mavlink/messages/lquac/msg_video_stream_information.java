@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_video_stream_information
- * Information about video stream
+ * Information about video stream. It may be requested using MAV_CMD_REQUEST_MESSAGE, where param2 indicates the video stream id: 0 for all streams, 1 for first, 2 for second, etc.
  **/
 public class msg_video_stream_information extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_VIDEO_STREAM_INFORMATION = 269;

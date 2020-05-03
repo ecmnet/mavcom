@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_trajectory_representation_bezier
- * Describe a trajectory using an array of up-to 5 bezier points in the local frame.
+ * Describe a trajectory using an array of up-to 5 bezier control points in the local frame (MAV_FRAME_LOCAL_NED).
  **/
 public class msg_trajectory_representation_bezier extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_BEZIER = 333;
@@ -28,31 +28,31 @@ public class msg_trajectory_representation_bezier extends MAVLinkMessage {
 }
 
   /**
-   * Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number.
+   * Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.
    */
   public long time_usec;
   /**
-   * X-coordinate of starting bezier point, set to NaN if not being used
+   * X-coordinate of bezier control points. Set to NaN if not being used
    */
   public float[] pos_x = new float[5];
   /**
-   * Y-coordinate of starting bezier point, set to NaN if not being used
+   * Y-coordinate of bezier control points. Set to NaN if not being used
    */
   public float[] pos_y = new float[5];
   /**
-   * Z-coordinate of starting bezier point, set to NaN if not being used
+   * Z-coordinate of bezier control points. Set to NaN if not being used
    */
   public float[] pos_z = new float[5];
   /**
-   * Bezier time horizon, set to NaN if velocity/acceleration should not be incorporated
+   * Bezier time horizon. Set to NaN if velocity/acceleration should not be incorporated
    */
   public float[] delta = new float[5];
   /**
-   * Yaw, set to NaN for unchanged
+   * Yaw. Set to NaN for unchanged
    */
   public float[] pos_yaw = new float[5];
   /**
-   * Number of valid points (up-to 5 waypoints are possible)
+   * Number of valid control points (up-to 5 points are possible)
    */
   public int valid_points;
 /**

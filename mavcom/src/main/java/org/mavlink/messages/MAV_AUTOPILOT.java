@@ -21,7 +21,7 @@ public interface MAV_AUTOPILOT {
      */
     public final static int MAV_AUTOPILOT_SLUGS = 2;
     /**
-     * ArduPilot - Plane/Copter/Rover/Sub/Tracker, http://ardupilot.org
+     * ArduPilot - Plane/Copter/Rover/Sub/Tracker, https://ardupilot.org
      */
     public final static int MAV_AUTOPILOT_ARDUPILOTMEGA = 3;
     /**

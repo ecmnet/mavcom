@@ -41,7 +41,7 @@ public interface CAMERA_CAP_FLAGS {
      */
     public final static int CAMERA_CAP_FLAGS_HAS_BASIC_FOCUS = 128;
     /**
-     * Camera has video streaming capabilities (use MAV_CMD_REQUEST_VIDEO_STREAM_INFORMATION for video streaming info)
+     * Camera has video streaming capabilities (request VIDEO_STREAM_INFORMATION with MAV_CMD_REQUEST_MESSAGE for video streaming info)
      */
     public final static int CAMERA_CAP_FLAGS_HAS_VIDEO_STREAM = 256;
 }

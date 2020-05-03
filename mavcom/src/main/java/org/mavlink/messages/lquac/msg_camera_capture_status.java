@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_camera_capture_status
- * Information about the status of a capture.
+ * Information about the status of a capture. Can be requested with a MAV_CMD_REQUEST_MESSAGE command.
  **/
 public class msg_camera_capture_status extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS = 262;

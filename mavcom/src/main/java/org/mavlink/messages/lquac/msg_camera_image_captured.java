@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_camera_image_captured
- * Information about a captured image
+ * Information about a captured image. This is emitted every time a message is captured. It may be re-requested using MAV_CMD_REQUEST_MESSAGE, using param2 to indicate the sequence number for the missing image.
  **/
 public class msg_camera_image_captured extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED = 263;

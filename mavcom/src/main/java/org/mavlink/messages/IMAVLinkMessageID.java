@@ -38,9 +38,11 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_PARAM_EXT_ACK = 324;
   public static int MAVLINK_MSG_ID_ORBIT_EXECUTION_STATUS = 360;
   public static int MAVLINK_MSG_ID_SYSTEM_TIME = 2;
+  public static int MAVLINK_MSG_ID_GIMBAL_DEVICE_SET_ATTITUDE = 284;
   public static int MAVLINK_MSG_ID_COMPONENT_INFORMATION = 395;
   public static int MAVLINK_MSG_ID_SAFETY_SET_ALLOWED_AREA = 54;
   public static int MAVLINK_MSG_ID_GLOBAL_VISION_POSITION_ESTIMATE = 101;
+  public static int MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS = 281;
   public static int MAVLINK_MSG_ID_MISSION_ITEM = 39;
   public static int MAVLINK_MSG_ID_HIGHRES_IMU = 105;
   public static int MAVLINK_MSG_ID_UAVCAN_NODE_INFO = 311;
@@ -75,6 +77,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_MSP_COMMAND = 181;
   public static int MAVLINK_MSG_ID_WHEEL_DISTANCE = 9000;
   public static int MAVLINK_MSG_ID_MISSION_CHANGED = 52;
+  public static int MAVLINK_MSG_ID_RAW_RPM = 339;
   public static int MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS = 262;
   public static int MAVLINK_MSG_ID_LOGGING_ACK = 268;
   public static int MAVLINK_MSG_ID_OPTICAL_FLOW_RAD = 106;
@@ -96,6 +99,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_MSP_MICRO_SLAM = 184;
   public static int MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET = 140;
   public static int MAVLINK_MSG_ID_SETUP_SIGNING = 256;
+  public static int MAVLINK_MSG_ID_GIMBAL_MANAGER_INFORMATION = 280;
   public static int MAVLINK_MSG_ID_FLIGHT_INFORMATION = 264;
   public static int MAVLINK_MSG_ID_OBSTACLE_DISTANCE = 330;
   public static int MAVLINK_MSG_ID_HIL_SENSOR = 107;
@@ -107,6 +111,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_ISBD_LINK_STATUS = 335;
   public static int MAVLINK_MSG_ID_UAVCAN_NODE_STATUS = 310;
   public static int MAVLINK_MSG_ID_LOG_REQUEST_LIST = 117;
+  public static int MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_ATTITUDE = 282;
   public static int MAVLINK_MSG_ID_LOG_ERASE = 121;
   public static int MAVLINK_MSG_ID_DISTANCE_SENSOR = 132;
   public static int MAVLINK_MSG_ID_BUTTON_CHANGE = 257;
@@ -144,6 +149,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_MEMORY_VECT = 249;
   public static int MAVLINK_MSG_ID_RAW_PRESSURE = 28;
   public static int MAVLINK_MSG_ID_ONBOARD_COMPUTER_STATUS = 390;
+  public static int MAVLINK_MSG_ID_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE = 286;
   public static int MAVLINK_MSG_ID_UTM_GLOBAL_POSITION = 340;
   public static int MAVLINK_MSG_ID_CELLULAR_STATUS = 334;
   public static int MAVLINK_MSG_ID_HIGH_LATENCY2 = 235;
@@ -176,6 +182,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_SET_HOME_POSITION = 243;
   public static int MAVLINK_MSG_ID_GPS2_RAW = 124;
   public static int MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT = 87;
+  public static int MAVLINK_MSG_ID_GIMBAL_DEVICE_INFORMATION = 283;
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_SYSTEM = 12904;
   public static int MAVLINK_MSG_ID_CAMERA_INFORMATION = 259;
   public static int MAVLINK_MSG_ID_TERRAIN_REPORT = 136;
@@ -192,6 +199,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_STATUSTEXT = 253;
   public static int MAVLINK_MSG_ID_PARAM_MAP_RC = 50;
   public static int MAVLINK_MSG_ID_FENCE_STATUS = 162;
+  public static int MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS = 285;
   public static int MAVLINK_MSG_ID_POWER_STATUS = 125;
   public static int MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV = 61;
   public static int MAVLINK_MSG_ID_SERVO_OUTPUT_RAW = 36;

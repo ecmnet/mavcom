@@ -25,11 +25,11 @@ public class msg_gps_raw_int extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_GPS_RAW_INT;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 50;
+    payload_length = 52;
 }
 
   /**
-   * Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude the number.
+   * Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.
    */
   public long time_usec;
   /**
@@ -73,21 +73,25 @@ public class msg_gps_raw_int extends MAVLinkMessage {
    */
   public long alt_ellipsoid;
   /**
-   * Position uncertainty. Positive for up.
+   * Position uncertainty.
    */
   public long h_acc;
   /**
-   * Altitude uncertainty. Positive for up.
+   * Altitude uncertainty.
    */
   public long v_acc;
   /**
-   * Speed uncertainty. Positive for up.
+   * Speed uncertainty.
    */
   public long vel_acc;
   /**
    * Heading / track uncertainty
    */
   public long hdg_acc;
+  /**
+   * Yaw in earth frame from north. Use 0 if this GPS does not provide yaw. Use 65535 if this GPS is configured to provide yaw and is currently unable to provide it. Use 36000 for north.
+   */
+  public int yaw;
 /**
  * Decode message with raw data
  */
@@ -107,12 +111,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   v_acc = (int)dis.readInt()&0x00FFFFFFFF;
   vel_acc = (int)dis.readInt()&0x00FFFFFFFF;
   hdg_acc = (int)dis.readInt()&0x00FFFFFFFF;
+  yaw = (int)dis.readUnsignedShort()&0x00FFFF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+50];
+  byte[] buffer = new byte[12+52];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -139,15 +144,16 @@ public byte[] encode() throws IOException {
   dos.writeInt((int)(v_acc&0x00FFFFFFFF));
   dos.writeInt((int)(vel_acc&0x00FFFFFFFF));
   dos.writeInt((int)(hdg_acc&0x00FFFFFFFF));
+  dos.writeShort(yaw&0x00FFFF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 50);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 52);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[60] = crcl;
-  buffer[61] = crch;
+  buffer[62] = crcl;
+  buffer[63] = crch;
   dos.close();
   return buffer;
 }
@@ -167,5 +173,6 @@ return "MAVLINK_MSG_ID_GPS_RAW_INT : " +   "  time_usec="+time_usec
 +  "  v_acc="+v_acc
 +  "  vel_acc="+vel_acc
 +  "  hdg_acc="+hdg_acc
++  "  yaw="+yaw
 ;}
 }

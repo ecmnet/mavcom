@@ -81,7 +81,7 @@ public interface MAV_COMPONENT {
     /**
      * Id for a component on privately managed MAVLink network. Can be used for any purpose but may not be published by components outside of the private network.
      */
-    public final static int MAV_COMP_ID_USE16 = 40;
+    public final static int MAV_COMP_ID_USER16 = 40;
     /**
      * Id for a component on privately managed MAVLink network. Can be used for any purpose but may not be published by components outside of the private network.
      */

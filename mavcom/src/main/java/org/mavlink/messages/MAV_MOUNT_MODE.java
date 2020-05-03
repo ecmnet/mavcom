@@ -5,7 +5,7 @@
 package org.mavlink.messages;
 /**
  * Interface MAV_MOUNT_MODE
- * Enumeration of possible mount operation modes
+ * Enumeration of possible mount operation modes. This message is used by obsolete/deprecated gimbal messages.
  **/
 public interface MAV_MOUNT_MODE {
     /**

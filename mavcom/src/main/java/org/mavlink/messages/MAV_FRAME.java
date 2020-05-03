@@ -13,7 +13,7 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_GLOBAL = 0;
     /**
-     * Local coordinate frame, Z-down (x: north, y: east, z: down).
+     * Local coordinate frame, Z-down (x: North, y: East, z: Down).
      */
     public final static int MAV_FRAME_LOCAL_NED = 1;
     /**
@@ -25,7 +25,7 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_GLOBAL_RELATIVE_ALT = 3;
     /**
-     * Local coordinate frame, Z-up (x: east, y: north, z: up).
+     * Local coordinate frame, Z-up (x: East, y: North, z: Up).
      */
     public final static int MAV_FRAME_LOCAL_ENU = 4;
     /**
@@ -57,37 +57,37 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_GLOBAL_TERRAIN_ALT_INT = 11;
     /**
-     * Body fixed frame of reference, Z-down (x: forward, y: right, z: down).
+     * MAV_FRAME_BODY_FRD - Body fixed frame of reference, Z-down (x: Forward, y: Right, z: Down).
      */
-    public final static int MAV_FRAME_BODY_FRD = 12;
+    public final static int MAV_FRAME_RESERVED_12 = 12;
     /**
-     * Body fixed frame of reference, Z-up (x: forward, y: left, z: up).
+     * MAV_FRAME_BODY_FLU - Body fixed frame of reference, Z-up (x: Forward, y: Left, z: Up).
      */
-    public final static int MAV_FRAME_BODY_FLU = 13;
+    public final static int MAV_FRAME_RESERVED_13 = 13;
     /**
-     * Odometry local coordinate frame of data given by a motion capture system, Z-down (x: north, y: east, z: down).
+     * MAV_FRAME_MOCAP_NED - Odometry local coordinate frame of data given by a motion capture system, Z-down (x: North, y: East, z: Down).
      */
-    public final static int MAV_FRAME_MOCAP_NED = 14;
+    public final static int MAV_FRAME_RESERVED_14 = 14;
     /**
-     * Odometry local coordinate frame of data given by a motion capture system, Z-up (x: east, y: north, z: up).
+     * MAV_FRAME_MOCAP_ENU - Odometry local coordinate frame of data given by a motion capture system, Z-up (x: East, y: North, z: Up).
      */
-    public final static int MAV_FRAME_MOCAP_ENU = 15;
+    public final static int MAV_FRAME_RESERVED_15 = 15;
     /**
-     * Odometry local coordinate frame of data given by a vision estimation system, Z-down (x: north, y: east, z: down).
+     * MAV_FRAME_VISION_NED - Odometry local coordinate frame of data given by a vision estimation system, Z-down (x: North, y: East, z: Down).
      */
-    public final static int MAV_FRAME_VISION_NED = 16;
+    public final static int MAV_FRAME_RESERVED_16 = 16;
     /**
-     * Odometry local coordinate frame of data given by a vision estimation system, Z-up (x: east, y: north, z: up).
+     * MAV_FRAME_VISION_ENU - Odometry local coordinate frame of data given by a vision estimation system, Z-up (x: East, y: North, z: Up).
      */
-    public final static int MAV_FRAME_VISION_ENU = 17;
+    public final static int MAV_FRAME_RESERVED_17 = 17;
     /**
-     * Odometry local coordinate frame of data given by an estimator running onboard the vehicle, Z-down (x: north, y: east, z: down).
+     * MAV_FRAME_ESTIM_NED - Odometry local coordinate frame of data given by an estimator running onboard the vehicle, Z-down (x: North, y: East, z: Down).
      */
-    public final static int MAV_FRAME_ESTIM_NED = 18;
+    public final static int MAV_FRAME_RESERVED_18 = 18;
     /**
-     * Odometry local coordinate frame of data given by an estimator running onboard the vehicle, Z-up (x: east, y: noth, z: up).
+     * MAV_FRAME_ESTIM_ENU - Odometry local coordinate frame of data given by an estimator running onboard the vehicle, Z-up (x: East, y: North, z: Up).
      */
-    public final static int MAV_FRAME_ESTIM_ENU = 19;
+    public final static int MAV_FRAME_RESERVED_19 = 19;
     /**
      * Forward, Right, Down coordinate frame. This is a local frame with Z-down and arbitrary F/R alignment (i.e. not aligned with NED/earth frame).
      */

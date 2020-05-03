@@ -134,6 +134,9 @@
               <entry value="25" name="ROTATE">
                   <description>Rotates to a given heading </description>
               </entry>
+              <entry value="26" name="TAKEOFF">
+                  <description>Offboard takeoff</description>
+              </entry>
               <entry value="30" name="APPLY_MAP_FILTER">
                   <description>Applies a map filter to the current map </description>
               </entry>
