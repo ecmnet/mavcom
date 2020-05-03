@@ -357,17 +357,40 @@ public class MAVLinkGenerator {
 					}
 					fieldLen += type.getLengthType();
 
+
 					if(field.getType().isArray && field.getType().type != MAVLinkDataType.CHAR) {
 						for(int i=0;i<type.arrayLenth;i++) {
-							forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName()+"["+i+"]" + "=\"+"
-									+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR ? "get" + attr + "()" : field.getName())
-									+"["+i+"]"+"\n";
+							switch(field.getType().type) {
+
+							case MAVLinkDataType.FLOAT:
+							case MAVLinkDataType.DOUBLE:
+								forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName()+"["+i+"]"  + "=\"+"
+										+ "String.format(\"%#2.5f\",(float)"+field.getName()+"["+i+"])"
+										+"\n";
+								break;
+							default:
+
+								forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName()+"["+i+"]" + "=\"+"
+										+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR ? "get" + attr + "()" : field.getName())
+										+"["+i+"]"+"\n";
+							}
 						}
 
 					} else
-						forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName() + "=\"+"
-								+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR ? "get" + attr + "()" : field.getName())
-								+"\n";
+						switch(field.getType().type) {
+
+						case MAVLinkDataType.FLOAT:
+						case MAVLinkDataType.DOUBLE:
+							forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName() + "=\"+"
+									+ "String.format(\"%#2.5f\",(float)"+field.getName()+")"
+									+"\n";
+							break;
+						default:
+							forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName() + "=\"+"
+									+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR ? "get" + attr + "()" : field.getName())
+									+"\n";
+
+						}
 
 
 					if(j < message.getExtensionIndex() || message.getExtensionIndex() == 0) {
@@ -383,7 +406,7 @@ public class MAVLinkGenerator {
 				int extra_crc = MAVLinkCRC.crc_calculate(MAVLinkCRC.stringToByte(extraCrcBuffer));
 				int magicNumber = (extra_crc & 0x00FF) ^ ((extra_crc >> 8 & 0x00FF));
 
-				  MAVLINK_MESSAGE_CRCS[message.getId()] = magicNumber;
+				MAVLINK_MESSAGE_CRCS[message.getId()] = magicNumber;
 
 				writer.print("/**\n");
 				writer.print(" * Decode message with raw data\n");
@@ -779,8 +802,8 @@ public class MAVLinkGenerator {
 			}
 			writer.print("  public static char[] MAVLINK_MESSAGE_CRCS = {\n");
 			for (int i = 0; i < MAVLINK_MESSAGE_CRCS.length; i++) {
-//				if (i % 25 == 0)
-//					writer.print("\n ");
+				//				if (i % 25 == 0)
+				//					writer.print("\n ");
 				writer.print(MAVLINK_MESSAGE_CRCS[i]);
 				if (i != MAVLINK_MESSAGE_CRCS.length - 1)
 					writer.print(",");
