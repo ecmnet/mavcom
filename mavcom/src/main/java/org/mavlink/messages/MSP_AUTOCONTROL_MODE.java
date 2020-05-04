@@ -36,4 +36,8 @@ public interface MSP_AUTOCONTROL_MODE {
      * Interactive mode (by mouse)
      */
     public final static int INTERACTIVE = 9;
+    /**
+     * Takeoff procedure
+     */
+    public final static int TAKEOFF_PROCEDURE = 10;
 }

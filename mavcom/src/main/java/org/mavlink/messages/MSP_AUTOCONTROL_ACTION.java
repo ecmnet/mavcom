@@ -5,7 +5,7 @@
 package org.mavlink.messages;
 /**
  * Interface MSP_AUTOCONTROL_ACTION
- * Auto-Control action (Bit 16-31)
+ * Auto-Control action (Bit 16-63)
  **/
 public interface MSP_AUTOCONTROL_ACTION {
     /**
@@ -55,9 +55,9 @@ public interface MSP_AUTOCONTROL_ACTION {
     /**
      * Applies a map filter to the current map
      */
-    public final static int APPLY_MAP_FILTER = 30;
+    public final static int APPLY_MAP_FILTER = 60;
     /**
      * Controls offboard updater
      */
-    public final static int OFFBOARD_UPDATER = 31;
+    public final static int OFFBOARD_UPDATER = 63;
 }

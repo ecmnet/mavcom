@@ -103,6 +103,9 @@
               <entry value="9" name="INTERACTIVE">
                   <description>Interactive mode (by mouse)</description>
               </entry>
+              <entry value="10" name="TAKEOFF_PROCEDURE">
+                  <description>Takeoff procedure</description>
+              </entry>
            </enum>
 
            <enum name="MSP_AUTOCONTROL_ACTION">
@@ -140,10 +143,10 @@
               <entry value="27" name="LAND">
                   <description>Offboard landing</description>
               </entry>
-              <entry value="30" name="APPLY_MAP_FILTER">
+              <entry value="60" name="APPLY_MAP_FILTER">
                   <description>Applies a map filter to the current map </description>
               </entry>
-               <entry value="31" name="OFFBOARD_UPDATER">
+               <entry value="63" name="OFFBOARD_UPDATER">
                   <description>Controls offboard updater</description>
               </entry>
            </enum>
