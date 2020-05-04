@@ -282,6 +282,10 @@ public class Grid extends Segment {
 		return data;
 	}
 
+	public void setData(Map<Integer, MapPoint3D_F32> _data) {
+		data = _data;
+	}
+
 	public float getResolution() {
 		return resolution_cm / 100f;
 	}
