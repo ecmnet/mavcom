@@ -126,14 +126,14 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 
 		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_RISING, (a) -> {
-				System.out.println("Connection to GCS established...");
-			    proxy.enableProxy(true);
+			System.out.println("Connection to GCS established...");
+			proxy.enableProxy(true);
 		});
 
 		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_FALLING, (a) -> {
 			System.out.println("Connection to GCS lost...");
-		    proxy.enableProxy(false);
-	});
+			proxy.enableProxy(false);
+		});
 
 
 		switch(mode) {
@@ -172,12 +172,12 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 			model.sys.setStatus(Status.MSP_SITL,true);
 
-//			comm = MAVSerialComm.getInstance(model, BAUDRATE_5, false);
-//			comm.open();
-//			try { Thread.sleep(500); } catch (InterruptedException e) { }
+			//			comm = MAVSerialComm.getInstance(model, BAUDRATE_5, false);
+			//			comm.open();
+			//			try { Thread.sleep(500); } catch (InterruptedException e) { }
 
 			comm = MAVUdpCommNIO.getInstance(model, "172.168.178.2",14580, 14540);
-//			comm = MAVUdpCommNIO.getInstance(model, "172.168.178.2",14280, 14030);
+			//			comm = MAVUdpCommNIO.getInstance(model, "172.168.178.2",14280, 14030);
 			proxy = new MAVUdpProxyNIO("172.168.178.2",14650,"172.168.178.22",14656,comm);
 			peerAddress = "172.168.178.22";
 			System.out.println("Proxy Controller loaded (Server): "+peerAddress);
@@ -331,7 +331,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void addMAVLinkListener(IMAVLinkListener listener) {
-        comm.addMAVLinkListener(listener);
+		comm.addMAVLinkListener(listener);
 	}
 
 	@Override
@@ -341,16 +341,18 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void writeLogMessage(LogMessage m) {
-		msg_statustext msg = new msg_statustext();
-		msg.setText(m.text);
-		msg.componentId = 1;
-		msg.severity =m.severity;
-		proxy.write(msg);
-		if (messageListener != null) {
-			for (IMAVMessageListener msglistener : messageListener)
-				msglistener.messageReceived(m);
-		}
-		System.out.println(m);
+		ExecutorService.get().submit(() -> {
+			msg_statustext msg = new msg_statustext();
+			msg.setText(m.text);
+			msg.componentId = 1;
+			msg.severity =m.severity;
+			proxy.write(msg);
+			if (messageListener != null) {
+				for (IMAVMessageListener msglistener : messageListener)
+					msglistener.messageReceived(m);
+			}
+			System.out.println(m);
+		});
 	}
 
 

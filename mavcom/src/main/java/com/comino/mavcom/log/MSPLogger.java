@@ -37,6 +37,7 @@ import org.mavlink.messages.MAV_SEVERITY;
 
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.model.segment.LogMessage;
+import com.comino.mavutils.legacy.ExecutorService;
 
 public class MSPLogger {
 
@@ -71,22 +72,18 @@ public class MSPLogger {
 
 	}
 
-	public void writeLocalMsg(String msg, int severity) {
-		if(severity == MAV_SEVERITY.MAV_SEVERITY_DEBUG && !debug_msg_enabled)
-			return;
-		LogMessage m = new LogMessage();
-		m.text = msg; m.severity = severity;
-		m.tms = control.getCurrentModel().sys.getSynchronizedPX4Time_us();
-		control.writeLogMessage(m);
+	public void writeLocalDebugMsg(String msg) {
+		writeLocalMsg(msg,MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 	}
 
-	public void writeLocalDebugMsg(String msg) {
-		if(debug_msg_enabled) {
+	public void writeLocalMsg(String msg, int severity) {
+			if(severity == MAV_SEVERITY.MAV_SEVERITY_DEBUG && !debug_msg_enabled)
+				return;
 			LogMessage m = new LogMessage();
-			m.text = msg; m.severity = MAV_SEVERITY.MAV_SEVERITY_DEBUG;
+			m.text = msg; m.severity = severity;
 			m.tms = control.getCurrentModel().sys.getSynchronizedPX4Time_us();
 			control.writeLogMessage(m);
-		}
 	}
+
 
 }
