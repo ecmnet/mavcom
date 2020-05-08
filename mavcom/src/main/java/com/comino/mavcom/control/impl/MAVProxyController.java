@@ -342,6 +342,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public void writeLogMessage(LogMessage m) {
 		ExecutorService.get().submit(() -> {
+
+			this.model.msg = m;
+			this.model.msg.tms = model.sys.getSynchronizedPX4Time_us();
+
 			msg_statustext msg = new msg_statustext();
 			msg.setText(m.text);
 			msg.componentId = 1;
