@@ -126,11 +126,11 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				((Buffer)rxBuffer).clear();
 
 
-				//				Thread t = new Thread(this);
-				//				t.setName("Proxy worker");
-				//				t.start();
+								Thread t = new Thread(this);
+								t.setName("Proxy worker");
+								t.start();
 
-				ExecutorService.submit(this);
+//				ExecutorService.submit(this);
 
 
 				return true;
@@ -268,6 +268,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 		if(msg!=null && channel!=null && channel.isConnected() && isConnected) {
 			try {
 				channel.write(ByteBuffer.wrap(msg.encode()));
+
 			} catch (IOException e) {}
 		}
 

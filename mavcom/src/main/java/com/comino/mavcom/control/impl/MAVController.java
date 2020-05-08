@@ -312,13 +312,11 @@ public class MAVController implements IMAVController, Runnable {
 
 	@Override
 	public void writeLogMessage(LogMessage m) {
-		ExecutorService.get().submit(() -> {
 			if(comm!=null) {
 				comm.writeMessage(m);
 			}
 			System.out.println(m);
 			model.msg.set(m);
-		});
 	}
 
 

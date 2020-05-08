@@ -3,6 +3,7 @@ package com.comino.mavcom.mavlink;
 public class MAV_MASK {
 
 	public static final int     MASK_POSITION_IGNORE      = 0b000000000000111;
+	public static final int     MASK_POSITION_IGNORE_ZLOCK= 0b000000000000011;
 	public static final int     MASK_VELOCITY_IGNORE      = 0b000000000111000;
 	public static final int     MASK_ACCELERATION_IGNORE  = 0b000000111000000;
 	public static final int     MASK_FORCE_IGNORE         = 0b000001000000000;
