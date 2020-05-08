@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.comino.mavcom.model.DataModel;
+import com.comino.mavcom.struct.Polar3D_F32;
+import com.comino.mavcom.struct.Polar4D_F32;
 
 import georegression.geometry.ConvertRotation3D_F32;
 import georegression.geometry.ConvertRotation3D_F64;
@@ -104,8 +106,47 @@ public class MSP3DUtils {
 		return t;
 	}
 
-	public static void convertModelToVector4D_F32(DataModel model, Vector4D_F32 vector) {
+	public static boolean convertCurrentState(DataModel model, Vector4D_F32 vector) {
 		vector.set(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.y);
+		return isFinite(vector);
+	}
+
+	public static boolean convertTargetState(DataModel model, Vector4D_F32 vector) {
+		vector.set(model.target_state.l_x, model.target_state.l_y, model.target_state.l_z, model.attitude.y);
+		return isFinite(vector);
+	}
+
+	public static boolean convertCurrentSpeed(DataModel model, Vector4D_F32 vector) {
+		vector.set(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
+		return isFinite(vector);
+	}
+
+	public static boolean convertCurrentSpeed(DataModel model, Polar3D_F32 polar) {
+		polar.set(model.state.l_vx, model.state.l_vy, model.state.l_vz );
+		return Float.isFinite(polar.value);
+	}
+
+	public static boolean convertCurrentSpeed(DataModel model, Polar4D_F32 polar) {
+		polar.set(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
+		return Float.isFinite(polar.value);
+	}
+
+	public static void setNaN(Vector4D_F32 vector) {
+		vector.set(Float.NaN,Float.NaN,Float.NaN,Float.NaN);
+	}
+
+	public static boolean isNaN(Vector4D_F32 vector) {
+		return Float.isNaN(vector.x) || Float.isNaN(vector.y) || Float.isNaN(vector.z);
+	}
+
+	public static boolean isFinite(Vector4D_F32 vector) {
+		return Float.isFinite(vector.x) && Float.isFinite(vector.y) && Float.isFinite(vector.z);
+	}
+
+	public static void replaceNaN(Vector4D_F32 target, Vector4D_F32 source) {
+		if(Float.isNaN(target.x)) target.x = source.x;
+		if(Float.isNaN(target.y)) target.y = source.y;
+		if(Float.isNaN(target.z)) target.z = source.z;
 	}
 
 	public static void convertModelToSe3_F32(DataModel model, Se3_F32 state) {
