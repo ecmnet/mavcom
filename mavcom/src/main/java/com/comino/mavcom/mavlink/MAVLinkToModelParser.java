@@ -257,7 +257,6 @@ public class MAVLinkToModelParser {
 
 	public void writeMessage(LogMessage m) {
 		if (lastMessage == null || lastMessage.tms < m.tms) {
-			System.out.println(m.text);
 			if (messageListener != null) {
 				for (IMAVMessageListener msglistener : messageListener)
 					msglistener.messageReceived(m);
