@@ -40,6 +40,7 @@ public class LogMessage extends Segment {
 
 	private static final long serialVersionUID = 3345013931542810501L;
 
+	private static final String[] severity_texts = { "Emergency","Alert","Critical","Error","Warning","Notice","Info","Debug" };
 
 	public String    text = null;
 	public int   severity = 0;
@@ -87,8 +88,12 @@ public class LogMessage extends Segment {
 		this.severity = 0;
 	}
 
+	public String getSeverityString() {
+		return "["+severity_texts[severity]+"]";
+	}
+
 	public String toString() {
-		return "["+severity+"] "+text;
+		return String.format("%-13s %s", getSeverityString(), text);
 	}
 
 }
