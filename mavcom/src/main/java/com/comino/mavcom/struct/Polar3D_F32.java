@@ -104,8 +104,8 @@ public class Polar3D_F32 {
 		this.angle_xy = getDirection(t.y-c.y, t.x-c.x);
 		this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
 
-		this.angle_xy = MSPMathUtils.normAngle2(this.angle_xy);
-		this.angle_xz = MSPMathUtils.normAngle2(this.angle_xz);
+		this.angle_xy = MSPMathUtils.normAngle(this.angle_xy);
+		this.angle_xz = MSPMathUtils.normAngle(this.angle_xz);
 
 	}
 
@@ -119,8 +119,8 @@ public class Polar3D_F32 {
 		this.angle_xy = getDirection((float)t.y-c.y, (float)t.x-c.x);
 		this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
 
-		this.angle_xy = MSPMathUtils.normAngle2(this.angle_xy);
-		this.angle_xz = MSPMathUtils.normAngle2(this.angle_xz);
+		this.angle_xy = MSPMathUtils.normAngle(this.angle_xy);
+		this.angle_xz = MSPMathUtils.normAngle(this.angle_xz);
 
 	}
 
@@ -134,8 +134,8 @@ public class Polar3D_F32 {
 		this.angle_xy = getDirection(t.y-c.y, t.x-c.x);
 		this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
 
-		this.angle_xy = MSPMathUtils.normAngle2(this.angle_xy);
-		this.angle_xz = MSPMathUtils.normAngle2(this.angle_xz);
+		this.angle_xy = MSPMathUtils.normAngle(this.angle_xy);
+		this.angle_xz = MSPMathUtils.normAngle(this.angle_xz);
 	}
 
 	public void constraint(float max_x, float max_y, float max_z) {
