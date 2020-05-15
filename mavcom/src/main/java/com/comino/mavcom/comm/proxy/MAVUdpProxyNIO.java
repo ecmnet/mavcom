@@ -102,7 +102,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			try {
 
 				isConnected = true;
-	//						System.out.println("Connect to UDP channel");
+				//						System.out.println("Connect to UDP channel");
 				try {
 					channel = DatagramChannel.open();
 					channel.socket().bind(bindPort);
@@ -126,11 +126,11 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				((Buffer)rxBuffer).clear();
 
 
-								Thread t = new Thread(this);
-								t.setName("Proxy worker");
-								t.start();
+				Thread t = new Thread(this);
+				t.setName("Proxy worker");
+				t.start();
 
-//				ExecutorService.submit(this);
+				//				ExecutorService.submit(this);
 
 
 				return true;
@@ -277,7 +277,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	@Override
 	public void received(Object o) {
 		if(proxy_enabled) {
-		  write((MAVLinkMessage) o);
+			write((MAVLinkMessage) o);
 		}
 	}
 
