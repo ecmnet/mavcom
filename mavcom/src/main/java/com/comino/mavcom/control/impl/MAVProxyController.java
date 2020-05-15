@@ -341,22 +341,24 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void writeLogMessage(LogMessage m) {
-		ExecutorService.get().submit(() -> {
 
-			this.model.msg = m;
-			this.model.msg.tms = model.sys.getSynchronizedPX4Time_us();
+		this.model.msg = m;
+		this.model.msg.tms = model.sys.getSynchronizedPX4Time_us();
 
-			msg_statustext msg = new msg_statustext();
-			msg.setText(m.text);
-			msg.componentId = 1;
-			msg.severity =m.severity;
-			proxy.write(msg);
-			if (messageListener != null) {
-				for (IMAVMessageListener msglistener : messageListener)
-					msglistener.messageReceived(m);
-			}
-			System.out.println(m);
-		});
+		msg_statustext msg = new msg_statustext();
+		msg.setText(m.text);
+		msg.componentId = 1;
+		msg.severity =m.severity;
+		proxy.write(msg);
+		if (messageListener != null) {
+			for (IMAVMessageListener msglistener : messageListener)
+				msglistener.messageReceived(m);
+		}
+		if(isSimulation()) {
+			ExecutorService.get().submit(() -> {
+				System.out.println(m);
+			});
+		}
 	}
 
 
