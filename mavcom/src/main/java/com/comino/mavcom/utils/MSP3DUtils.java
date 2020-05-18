@@ -135,8 +135,12 @@ public class MSP3DUtils {
 		vector.set(Float.NaN,Float.NaN,Float.NaN,Float.NaN);
 	}
 
-	public static boolean isNaN(Vector4D_F32 vector) {
+	public static boolean hasNaN(Vector4D_F32 vector) {
 		return Float.isNaN(vector.x) || Float.isNaN(vector.y) || Float.isNaN(vector.z);
+	}
+
+	public static boolean isNaN(Vector4D_F32 vector) {
+		return Float.isNaN(vector.x) && Float.isNaN(vector.y) && Float.isNaN(vector.z) && Float.isNaN(vector.w);
 	}
 
 	public static boolean isFinite(Vector4D_F32 vector) {
@@ -205,8 +209,16 @@ public class MSP3DUtils {
 	}
 
 	public static void rotateXY(Vector4D_F32 in, Vector4D_F32 out, float angle) {
-		out.x =  in.x * (float)Math.cos(angle) + in.y * (float)Math.sin(angle);
-		out.y = -in.x * (float)Math.sin(angle) + in.y * (float)Math.cos(angle);
+
+		if(Float.isNaN(in.x))
+			out.x = Float.NaN;
+		else
+			out.x =  in.x * (float)Math.cos(angle) + in.y * (float)Math.sin(angle);
+
+		if(Float.isNaN(in.y))
+			out.y = Float.NaN;
+		else
+			out.y = -in.x * (float)Math.sin(angle) + in.y * (float)Math.cos(angle);
 		out.z = in.z;
 		out.w = in.w;
 	}
