@@ -115,8 +115,8 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		try {
 			channel = DatagramChannel.open();
 			channel.bind(bindPort);
-		//	channel.socket().setTrafficClass(0x04);
-		//	channel.socket().setBroadcast(true);
+			//	channel.socket().setTrafficClass(0x04);
+			//	channel.socket().setBroadcast(true);
 			channel.socket().setReceiveBufferSize(32*1024);
 			channel.socket().setSendBufferSize(32*1024);
 			channel.connect(peerPort);
@@ -133,7 +133,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 			t.setDaemon(true);
 			t.start();
 
-//			ExecutorService.submit(this);
+			//			ExecutorService.submit(this);
 
 
 		} catch(Exception e) {
@@ -200,7 +200,11 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 							}
 							rxBuffer.compact();
 						}
-					   transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
+						if((System.currentTimeMillis() - start) > 200) {
+							transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
+							bcount = 0; start = System.currentTimeMillis();
+						}
+
 					}
 				}
 			} catch(Exception e) {

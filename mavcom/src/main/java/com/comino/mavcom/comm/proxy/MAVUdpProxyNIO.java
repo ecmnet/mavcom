@@ -252,7 +252,10 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 											comm.write(msg);
 									}
 
-									transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
+									if((System.currentTimeMillis() - start) > 200) {
+										transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
+										bcount = 0; start = System.currentTimeMillis();
+									}
 								}
 							}
 						} catch(Exception io) { }
