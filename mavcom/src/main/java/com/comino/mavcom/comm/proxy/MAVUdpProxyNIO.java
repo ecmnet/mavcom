@@ -74,6 +74,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(4096);
 
 	private List<IMAVLinkListener> listener_list = null;
+	private long                   transfer_speed = 0;
 
 
 	public MAVUdpProxyNIO(String peerAddress, int pPort, String bindAddress, int bPort, IMAVComm comm) {
@@ -199,10 +200,12 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 		SelectionKey key = null;
 		MAVLinkMessage msg = null;
-		Iterator<?> selectedKeys = null;
+		Iterator<?> selectedKeys = null; long bcount = 0; long start;
 
 		try {
 			channel.register(selector, SelectionKey.OP_READ );
+
+			bcount = 0;
 
 			if(comm.isConnected()) {
 				msg_heartbeat hb = new msg_heartbeat(255,1);
@@ -213,7 +216,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				return;
 			}
 
-
+            start = System.currentTimeMillis();
 			while(isConnected) {
 
 				if(selector.select(1000)==0)
@@ -234,8 +237,10 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 							if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
 								if(rxBuffer.position()>0) {
 									((Buffer)rxBuffer).flip();
-									while(rxBuffer.hasRemaining())
+									while(rxBuffer.hasRemaining()) {
+										bcount++;
 										reader.put(rxBuffer.get());
+									}
 									rxBuffer.compact();
 									while((msg=reader.getNextMessage())!=null) {
 										listener_list = listeners.get(msg.getClass());
@@ -246,6 +251,8 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 										if(comm.isConnected())
 											comm.write(msg);
 									}
+
+									transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
 								}
 							}
 						} catch(Exception io) { }
@@ -279,6 +286,10 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 		if(proxy_enabled) {
 			write((MAVLinkMessage) o);
 		}
+	}
+
+	public long getTransferRate() {
+		return transfer_speed;
 	}
 
 }

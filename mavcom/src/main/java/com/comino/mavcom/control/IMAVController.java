@@ -56,6 +56,7 @@ public interface IMAVController {
 	public String enableFileLogging(boolean enable, String directory);
 
 	public int getErrorCount();
+	public long getTransferRate();
 
 	public DataModel getCurrentModel();
 

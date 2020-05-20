@@ -421,4 +421,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		sendMAVLinkMessage(beat_px4);
 	}
 
+	@Override
+	public long getTransferRate() {
+		return proxy.getTransferRate();
+	}
+
 }

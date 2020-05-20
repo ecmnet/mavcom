@@ -72,7 +72,8 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 	private MAVLinkToModelParser	parser = null;
 
-	private boolean					isConnected = false;
+	private boolean					isConnected    = false;
+	private long                    transfer_speed = 0;
 
 	private MAVLinkBlockingReader reader;
 
@@ -158,6 +159,9 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	public void run() {
 		SelectionKey key = null;
 		Iterator<?> selectedKeys = null;
+		long bcount = 0; long start;
+
+		bcount = 0;
 
 		if(channel.isConnected()) {
 			isConnected = true;
@@ -169,6 +173,8 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		} else
 			isConnected = false;
 
+
+		start = System.currentTimeMillis();
 
 		while(isConnected) {
 
@@ -188,10 +194,13 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 					if (key.isReadable()) {
 						if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
 							((Buffer)rxBuffer).flip();
-							while(rxBuffer.hasRemaining())
+							while(rxBuffer.hasRemaining()) {
 								reader.put(rxBuffer.get());
+								bcount++;
+							}
 							rxBuffer.compact();
 						}
+					   transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
 					}
 				}
 			} catch(Exception e) {
@@ -322,6 +331,11 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	@Override
 	public void setCmdAcknowledgeListener(IMAVCmdAcknowledge ack) {
 		parser.setCmdAcknowledgeListener(ack);
+	}
+
+	@Override
+	public long getTransferRate() {
+		return transfer_speed;
 	}
 
 }

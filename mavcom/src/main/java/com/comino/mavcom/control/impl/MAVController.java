@@ -351,4 +351,10 @@ public class MAVController implements IMAVController, Runnable {
 		return status_manager;
 	}
 
+
+	@Override
+	public long getTransferRate() {
+		return comm.getTransferRate();
+	}
+
 }

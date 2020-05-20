@@ -364,6 +364,12 @@ public class MAVSerialComm implements IMAVComm {
 
 	}
 
+	@Override
+	public long getTransferRate() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 
 }

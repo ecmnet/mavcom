@@ -69,6 +69,8 @@ public interface IMAVComm {
 
 	public int getErrorCount();
 
+	public long getTransferRate();
+
 	public void writeMessage(LogMessage m);
 
 
