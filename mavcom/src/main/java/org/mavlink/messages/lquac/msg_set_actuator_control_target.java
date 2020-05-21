@@ -96,14 +96,14 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET : " +   "  time_usec="+time_usec
-+  "  controls[0]="+String.format("%#2.5f",(float)controls[0])
-+  "  controls[1]="+String.format("%#2.5f",(float)controls[1])
-+  "  controls[2]="+String.format("%#2.5f",(float)controls[2])
-+  "  controls[3]="+String.format("%#2.5f",(float)controls[3])
-+  "  controls[4]="+String.format("%#2.5f",(float)controls[4])
-+  "  controls[5]="+String.format("%#2.5f",(float)controls[5])
-+  "  controls[6]="+String.format("%#2.5f",(float)controls[6])
-+  "  controls[7]="+String.format("%#2.5f",(float)controls[7])
++  "  controls[0]="+format((float)controls[0])
++  "  controls[1]="+format((float)controls[1])
++  "  controls[2]="+format((float)controls[2])
++  "  controls[3]="+format((float)controls[3])
++  "  controls[4]="+format((float)controls[4])
++  "  controls[5]="+format((float)controls[5])
++  "  controls[6]="+format((float)controls[6])
++  "  controls[7]="+format((float)controls[7])
 +  "  group_mlx="+group_mlx
 +  "  target_system="+target_system
 +  "  target_component="+target_component

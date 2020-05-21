@@ -32,11 +32,11 @@ public class msg_component_information extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * Version of the component firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)
+   * Version of the component firmware, encoded as: (Dev & 0xff) << 24 | (Patch & 0xff) << 16 | (Minor & 0xff) << 8 | (Major & 0xff)
    */
   public long firmware_version;
   /**
-   * Version of the component hardware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)
+   * Version of the component hardware, encoded as: (Dev & 0xff) << 24 | (Patch & 0xff) << 16 | (Minor & 0xff) << 8 | (Major & 0xff)
    */
   public long hardware_version;
   /**

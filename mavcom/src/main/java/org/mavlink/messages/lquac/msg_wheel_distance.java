@@ -84,22 +84,22 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_WHEEL_DISTANCE : " +   "  time_usec="+time_usec
-+  "  distance[0]="+String.format("%#2.5f",(float)distance[0])
-+  "  distance[1]="+String.format("%#2.5f",(float)distance[1])
-+  "  distance[2]="+String.format("%#2.5f",(float)distance[2])
-+  "  distance[3]="+String.format("%#2.5f",(float)distance[3])
-+  "  distance[4]="+String.format("%#2.5f",(float)distance[4])
-+  "  distance[5]="+String.format("%#2.5f",(float)distance[5])
-+  "  distance[6]="+String.format("%#2.5f",(float)distance[6])
-+  "  distance[7]="+String.format("%#2.5f",(float)distance[7])
-+  "  distance[8]="+String.format("%#2.5f",(float)distance[8])
-+  "  distance[9]="+String.format("%#2.5f",(float)distance[9])
-+  "  distance[10]="+String.format("%#2.5f",(float)distance[10])
-+  "  distance[11]="+String.format("%#2.5f",(float)distance[11])
-+  "  distance[12]="+String.format("%#2.5f",(float)distance[12])
-+  "  distance[13]="+String.format("%#2.5f",(float)distance[13])
-+  "  distance[14]="+String.format("%#2.5f",(float)distance[14])
-+  "  distance[15]="+String.format("%#2.5f",(float)distance[15])
++  "  distance[0]="+format((float)distance[0])
++  "  distance[1]="+format((float)distance[1])
++  "  distance[2]="+format((float)distance[2])
++  "  distance[3]="+format((float)distance[3])
++  "  distance[4]="+format((float)distance[4])
++  "  distance[5]="+format((float)distance[5])
++  "  distance[6]="+format((float)distance[6])
++  "  distance[7]="+format((float)distance[7])
++  "  distance[8]="+format((float)distance[8])
++  "  distance[9]="+format((float)distance[9])
++  "  distance[10]="+format((float)distance[10])
++  "  distance[11]="+format((float)distance[11])
++  "  distance[12]="+format((float)distance[12])
++  "  distance[13]="+format((float)distance[13])
++  "  distance[14]="+format((float)distance[14])
++  "  distance[15]="+format((float)distance[15])
 +  "  count="+count
 ;}
 }

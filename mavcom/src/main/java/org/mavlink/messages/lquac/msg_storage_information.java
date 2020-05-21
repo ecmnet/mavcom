@@ -116,11 +116,11 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_STORAGE_INFORMATION : " +   "  time_boot_ms="+time_boot_ms
-+  "  total_capacity="+String.format("%#2.5f",(float)total_capacity)
-+  "  used_capacity="+String.format("%#2.5f",(float)used_capacity)
-+  "  available_capacity="+String.format("%#2.5f",(float)available_capacity)
-+  "  read_speed="+String.format("%#2.5f",(float)read_speed)
-+  "  write_speed="+String.format("%#2.5f",(float)write_speed)
++  "  total_capacity="+format((float)total_capacity)
++  "  used_capacity="+format((float)used_capacity)
++  "  available_capacity="+format((float)available_capacity)
++  "  read_speed="+format((float)read_speed)
++  "  write_speed="+format((float)write_speed)
 +  "  storage_id="+storage_id
 +  "  storage_count="+storage_count
 +  "  status="+status

@@ -158,12 +158,12 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_HIL_STATE : " +   "  time_usec="+time_usec
-+  "  roll="+String.format("%#2.5f",(float)roll)
-+  "  pitch="+String.format("%#2.5f",(float)pitch)
-+  "  yaw="+String.format("%#2.5f",(float)yaw)
-+  "  rollspeed="+String.format("%#2.5f",(float)rollspeed)
-+  "  pitchspeed="+String.format("%#2.5f",(float)pitchspeed)
-+  "  yawspeed="+String.format("%#2.5f",(float)yawspeed)
++  "  roll="+format((float)roll)
++  "  pitch="+format((float)pitch)
++  "  yaw="+format((float)yaw)
++  "  rollspeed="+format((float)rollspeed)
++  "  pitchspeed="+format((float)pitchspeed)
++  "  yawspeed="+format((float)yawspeed)
 +  "  lat="+lat
 +  "  lon="+lon
 +  "  alt="+alt

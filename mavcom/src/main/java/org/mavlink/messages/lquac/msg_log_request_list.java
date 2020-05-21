@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_log_request_list
- * Request a list of available logs. On some systems calling this may stop on-board logging until LOG_REQUEST_END is called.
+ * Request a list of available logs. On some systems calling this may stop on-board logging until LOG_REQUEST_END is called. If there are no log files available this request shall be answered with one LOG_ENTRY message with id = 0 and num_logs = 0.
  **/
 public class msg_log_request_list extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_LOG_REQUEST_LIST = 117;

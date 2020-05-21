@@ -92,9 +92,9 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_MOUNT_ORIENTATION : " +   "  time_boot_ms="+time_boot_ms
-+  "  roll="+String.format("%#2.5f",(float)roll)
-+  "  pitch="+String.format("%#2.5f",(float)pitch)
-+  "  yaw="+String.format("%#2.5f",(float)yaw)
-+  "  yaw_absolute="+String.format("%#2.5f",(float)yaw_absolute)
++  "  roll="+format((float)roll)
++  "  pitch="+format((float)pitch)
++  "  yaw="+format((float)yaw)
++  "  yaw_absolute="+format((float)yaw_absolute)
 ;}
 }

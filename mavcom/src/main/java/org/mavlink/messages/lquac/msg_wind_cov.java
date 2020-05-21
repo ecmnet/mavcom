@@ -116,13 +116,13 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_WIND_COV : " +   "  time_usec="+time_usec
-+  "  wind_x="+String.format("%#2.5f",(float)wind_x)
-+  "  wind_y="+String.format("%#2.5f",(float)wind_y)
-+  "  wind_z="+String.format("%#2.5f",(float)wind_z)
-+  "  var_horiz="+String.format("%#2.5f",(float)var_horiz)
-+  "  var_vert="+String.format("%#2.5f",(float)var_vert)
-+  "  wind_alt="+String.format("%#2.5f",(float)wind_alt)
-+  "  horiz_accuracy="+String.format("%#2.5f",(float)horiz_accuracy)
-+  "  vert_accuracy="+String.format("%#2.5f",(float)vert_accuracy)
++  "  wind_x="+format((float)wind_x)
++  "  wind_y="+format((float)wind_y)
++  "  wind_z="+format((float)wind_z)
++  "  var_horiz="+format((float)var_horiz)
++  "  var_vert="+format((float)var_vert)
++  "  wind_alt="+format((float)wind_alt)
++  "  horiz_accuracy="+format((float)horiz_accuracy)
++  "  vert_accuracy="+format((float)vert_accuracy)
 ;}
 }

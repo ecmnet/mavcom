@@ -32,7 +32,7 @@ public class msg_camera_information extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * Version of the camera firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)
+   * Version of the camera firmware, encoded as: (Dev & 0xff) << 24 | (Patch & 0xff) << 16 | (Minor & 0xff) << 8 | (Major & 0xff)
    */
   public long firmware_version;
   /**
@@ -169,9 +169,9 @@ public byte[] encode() throws IOException {
 public String toString() {
 return "MAVLINK_MSG_ID_CAMERA_INFORMATION : " +   "  time_boot_ms="+time_boot_ms
 +  "  firmware_version="+firmware_version
-+  "  focal_length="+String.format("%#2.5f",(float)focal_length)
-+  "  sensor_size_h="+String.format("%#2.5f",(float)sensor_size_h)
-+  "  sensor_size_v="+String.format("%#2.5f",(float)sensor_size_v)
++  "  focal_length="+format((float)focal_length)
++  "  sensor_size_h="+format((float)sensor_size_h)
++  "  sensor_size_v="+format((float)sensor_size_v)
 +  "  flags="+flags
 +  "  resolution_h="+resolution_h
 +  "  resolution_v="+resolution_v

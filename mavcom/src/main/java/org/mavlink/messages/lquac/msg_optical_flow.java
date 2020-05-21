@@ -122,14 +122,14 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_OPTICAL_FLOW : " +   "  time_usec="+time_usec
-+  "  flow_comp_m_x="+String.format("%#2.5f",(float)flow_comp_m_x)
-+  "  flow_comp_m_y="+String.format("%#2.5f",(float)flow_comp_m_y)
-+  "  ground_distance="+String.format("%#2.5f",(float)ground_distance)
++  "  flow_comp_m_x="+format((float)flow_comp_m_x)
++  "  flow_comp_m_y="+format((float)flow_comp_m_y)
++  "  ground_distance="+format((float)ground_distance)
 +  "  flow_x="+flow_x
 +  "  flow_y="+flow_y
 +  "  sensor_id="+sensor_id
 +  "  quality="+quality
-+  "  flow_rate_x="+String.format("%#2.5f",(float)flow_rate_x)
-+  "  flow_rate_y="+String.format("%#2.5f",(float)flow_rate_y)
++  "  flow_rate_x="+format((float)flow_rate_x)
++  "  flow_rate_y="+format((float)flow_rate_y)
 ;}
 }

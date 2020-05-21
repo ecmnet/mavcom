@@ -45,6 +45,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS = 281;
   public static int MAVLINK_MSG_ID_MISSION_ITEM = 39;
   public static int MAVLINK_MSG_ID_HIGHRES_IMU = 105;
+  public static int MAVLINK_MSG_ID_GENERATOR_STATUS = 373;
   public static int MAVLINK_MSG_ID_UAVCAN_NODE_INFO = 311;
   public static int MAVLINK_MSG_ID_ATTITUDE_QUATERNION = 31;
   public static int MAVLINK_MSG_ID_SCALED_IMU2 = 116;

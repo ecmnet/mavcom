@@ -139,13 +139,13 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_COMMAND_INT : " +   "  param1="+String.format("%#2.5f",(float)param1)
-+  "  param2="+String.format("%#2.5f",(float)param2)
-+  "  param3="+String.format("%#2.5f",(float)param3)
-+  "  param4="+String.format("%#2.5f",(float)param4)
+return "MAVLINK_MSG_ID_COMMAND_INT : " +   "  param1="+format((float)param1)
++  "  param2="+format((float)param2)
++  "  param3="+format((float)param3)
++  "  param4="+format((float)param4)
 +  "  x="+x
 +  "  y="+y
-+  "  z="+String.format("%#2.5f",(float)z)
++  "  z="+format((float)z)
 +  "  command="+command
 +  "  target_system="+target_system
 +  "  target_component="+target_component

@@ -102,18 +102,18 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE : " +   "  usec="+usec
-+  "  x="+String.format("%#2.5f",(float)x)
-+  "  y="+String.format("%#2.5f",(float)y)
-+  "  z="+String.format("%#2.5f",(float)z)
-+  "  covariance[0]="+String.format("%#2.5f",(float)covariance[0])
-+  "  covariance[1]="+String.format("%#2.5f",(float)covariance[1])
-+  "  covariance[2]="+String.format("%#2.5f",(float)covariance[2])
-+  "  covariance[3]="+String.format("%#2.5f",(float)covariance[3])
-+  "  covariance[4]="+String.format("%#2.5f",(float)covariance[4])
-+  "  covariance[5]="+String.format("%#2.5f",(float)covariance[5])
-+  "  covariance[6]="+String.format("%#2.5f",(float)covariance[6])
-+  "  covariance[7]="+String.format("%#2.5f",(float)covariance[7])
-+  "  covariance[8]="+String.format("%#2.5f",(float)covariance[8])
++  "  x="+format((float)x)
++  "  y="+format((float)y)
++  "  z="+format((float)z)
++  "  covariance[0]="+format((float)covariance[0])
++  "  covariance[1]="+format((float)covariance[1])
++  "  covariance[2]="+format((float)covariance[2])
++  "  covariance[3]="+format((float)covariance[3])
++  "  covariance[4]="+format((float)covariance[4])
++  "  covariance[5]="+format((float)covariance[5])
++  "  covariance[6]="+format((float)covariance[6])
++  "  covariance[7]="+format((float)covariance[7])
++  "  covariance[8]="+format((float)covariance[8])
 +  "  reset_counter="+reset_counter
 ;}
 }

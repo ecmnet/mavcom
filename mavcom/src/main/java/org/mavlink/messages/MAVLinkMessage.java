@@ -23,6 +23,7 @@
 package org.mavlink.messages;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import org.mavlink.IMAVLinkMessage;
 
@@ -55,6 +56,12 @@ public abstract class MAVLinkMessage extends MAVLinkMessageCoder implements IMAV
      * Serial UID
      */
     private static final long serialVersionUID = 2000873536402943462L;
+
+    private static final DecimalFormat f = new DecimalFormat("%#2.5f");
+
+    public String format(float n) {
+    	return f.format(n);
+    }
 
     /**
      * Message length

@@ -104,9 +104,9 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_VIBRATION : " +   "  time_usec="+time_usec
-+  "  vibration_x="+String.format("%#2.5f",(float)vibration_x)
-+  "  vibration_y="+String.format("%#2.5f",(float)vibration_y)
-+  "  vibration_z="+String.format("%#2.5f",(float)vibration_z)
++  "  vibration_x="+format((float)vibration_x)
++  "  vibration_y="+format((float)vibration_y)
++  "  vibration_z="+format((float)vibration_z)
 +  "  clipping_0="+clipping_0
 +  "  clipping_1="+clipping_1
 +  "  clipping_2="+clipping_2

@@ -135,10 +135,10 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_PARAM_MAP_RC : " +   "  param_value0="+String.format("%#2.5f",(float)param_value0)
-+  "  scale="+String.format("%#2.5f",(float)scale)
-+  "  param_value_min="+String.format("%#2.5f",(float)param_value_min)
-+  "  param_value_max="+String.format("%#2.5f",(float)param_value_max)
+return "MAVLINK_MSG_ID_PARAM_MAP_RC : " +   "  param_value0="+format((float)param_value0)
++  "  scale="+format((float)scale)
++  "  param_value_min="+format((float)param_value_min)
++  "  param_value_max="+format((float)param_value_max)
 +  "  param_index="+param_index
 +  "  target_system="+target_system
 +  "  target_component="+target_component

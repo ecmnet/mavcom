@@ -104,10 +104,10 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_MANUAL_SETPOINT : " +   "  time_boot_ms="+time_boot_ms
-+  "  roll="+String.format("%#2.5f",(float)roll)
-+  "  pitch="+String.format("%#2.5f",(float)pitch)
-+  "  yaw="+String.format("%#2.5f",(float)yaw)
-+  "  thrust="+String.format("%#2.5f",(float)thrust)
++  "  roll="+format((float)roll)
++  "  pitch="+format((float)pitch)
++  "  yaw="+format((float)yaw)
++  "  thrust="+format((float)thrust)
 +  "  mode_switch="+mode_switch
 +  "  manual_override_switch="+manual_override_switch
 ;}

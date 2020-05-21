@@ -114,13 +114,13 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_ATTITUDE : " +   "  flags="+flags
-+  "  q[0]="+String.format("%#2.5f",(float)q[0])
-+  "  q[1]="+String.format("%#2.5f",(float)q[1])
-+  "  q[2]="+String.format("%#2.5f",(float)q[2])
-+  "  q[3]="+String.format("%#2.5f",(float)q[3])
-+  "  angular_velocity_x="+String.format("%#2.5f",(float)angular_velocity_x)
-+  "  angular_velocity_y="+String.format("%#2.5f",(float)angular_velocity_y)
-+  "  angular_velocity_z="+String.format("%#2.5f",(float)angular_velocity_z)
++  "  q[0]="+format((float)q[0])
++  "  q[1]="+format((float)q[1])
++  "  q[2]="+format((float)q[2])
++  "  q[3]="+format((float)q[3])
++  "  angular_velocity_x="+format((float)angular_velocity_x)
++  "  angular_velocity_y="+format((float)angular_velocity_y)
++  "  angular_velocity_z="+format((float)angular_velocity_z)
 +  "  target_system="+target_system
 +  "  target_component="+target_component
 +  "  gimbal_device_id="+gimbal_device_id

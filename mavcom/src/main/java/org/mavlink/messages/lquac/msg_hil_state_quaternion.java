@@ -162,13 +162,13 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_HIL_STATE_QUATERNION : " +   "  time_usec="+time_usec
-+  "  attitude_quaternion[0]="+String.format("%#2.5f",(float)attitude_quaternion[0])
-+  "  attitude_quaternion[1]="+String.format("%#2.5f",(float)attitude_quaternion[1])
-+  "  attitude_quaternion[2]="+String.format("%#2.5f",(float)attitude_quaternion[2])
-+  "  attitude_quaternion[3]="+String.format("%#2.5f",(float)attitude_quaternion[3])
-+  "  rollspeed="+String.format("%#2.5f",(float)rollspeed)
-+  "  pitchspeed="+String.format("%#2.5f",(float)pitchspeed)
-+  "  yawspeed="+String.format("%#2.5f",(float)yawspeed)
++  "  attitude_quaternion[0]="+format((float)attitude_quaternion[0])
++  "  attitude_quaternion[1]="+format((float)attitude_quaternion[1])
++  "  attitude_quaternion[2]="+format((float)attitude_quaternion[2])
++  "  attitude_quaternion[3]="+format((float)attitude_quaternion[3])
++  "  rollspeed="+format((float)rollspeed)
++  "  pitchspeed="+format((float)pitchspeed)
++  "  yawspeed="+format((float)yawspeed)
 +  "  lat="+lat
 +  "  lon="+lon
 +  "  alt="+alt

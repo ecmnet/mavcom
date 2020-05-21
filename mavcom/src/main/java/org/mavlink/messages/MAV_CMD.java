@@ -75,7 +75,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_NAV_LAND = 21;
     /**
-     * Takeoff from ground / hand
+     * Takeoff from ground / hand. Vehicles that support multiple takeoff modes (e.g. VTOL quadplane) should take off using the currently configured mode.
      * PARAM 1 : Minimum pitch (if airspeed sensor present), desired pitch without sensor
      * PARAM 2 : Empty
      * PARAM 3 : Empty
@@ -207,7 +207,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_NAV_SPLINE_WAYPOINT = 82;
     /**
-     * Takeoff from ground using VTOL mode, and transition to forward flight with specified heading.
+     * Takeoff from ground using VTOL mode, and transition to forward flight with specified heading. The command should be ignored by vehicles that dont support both VTOL and fixed-wing flight (multicopters, boats,etc.).
      * PARAM 1 : Empty
      * PARAM 2 : Front transition heading.
      * PARAM 3 : Empty
@@ -365,7 +365,7 @@ public interface MAV_CMD {
      * PARAM 1 : Use current (1=use current location, 0=use specified location)
      * PARAM 2 : Empty
      * PARAM 3 : Empty
-     * PARAM 4 : Empty
+     * PARAM 4 : Yaw angle. NaN to use default heading
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -886,7 +886,7 @@ public interface MAV_CMD {
     /**
      * Request the target system(s) emit a single instance of a specified message (i.e. a "one-shot" version of MAV_CMD_SET_MESSAGE_INTERVAL).
      * PARAM 1 : The MAVLink message ID of the requested message.
-     * PARAM 2 : Index id (if appropriate). The use of this parameter (if any), must be defined in the requested message.
+     * PARAM 2 : Use for index ID, if required. Otherwise, the use of this parameter (if any) must be defined in the requested message. By default assumed not used (0).
      * PARAM 3 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
      * PARAM 4 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
      * PARAM 5 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).

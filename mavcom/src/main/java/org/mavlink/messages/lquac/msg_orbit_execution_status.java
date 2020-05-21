@@ -98,10 +98,10 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_ORBIT_EXECUTION_STATUS : " +   "  time_usec="+time_usec
-+  "  radius="+String.format("%#2.5f",(float)radius)
++  "  radius="+format((float)radius)
 +  "  x="+x
 +  "  y="+y
-+  "  z="+String.format("%#2.5f",(float)z)
++  "  z="+format((float)z)
 +  "  frame="+frame
 ;}
 }

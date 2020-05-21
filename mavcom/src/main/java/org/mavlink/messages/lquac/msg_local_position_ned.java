@@ -104,11 +104,11 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_LOCAL_POSITION_NED : " +   "  time_boot_ms="+time_boot_ms
-+  "  x="+String.format("%#2.5f",(float)x)
-+  "  y="+String.format("%#2.5f",(float)y)
-+  "  z="+String.format("%#2.5f",(float)z)
-+  "  vx="+String.format("%#2.5f",(float)vx)
-+  "  vy="+String.format("%#2.5f",(float)vy)
-+  "  vz="+String.format("%#2.5f",(float)vz)
++  "  x="+format((float)x)
++  "  y="+format((float)y)
++  "  z="+format((float)z)
++  "  vx="+format((float)vx)
++  "  vy="+format((float)vy)
++  "  vz="+format((float)vz)
 ;}
 }

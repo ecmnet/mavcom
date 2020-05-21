@@ -135,13 +135,13 @@ public byte[] encode() throws IOException {
 public String toString() {
 return "MAVLINK_MSG_ID_HIL_OPTICAL_FLOW : " +   "  time_usec="+time_usec
 +  "  integration_time_us="+integration_time_us
-+  "  integrated_x="+String.format("%#2.5f",(float)integrated_x)
-+  "  integrated_y="+String.format("%#2.5f",(float)integrated_y)
-+  "  integrated_xgyro="+String.format("%#2.5f",(float)integrated_xgyro)
-+  "  integrated_ygyro="+String.format("%#2.5f",(float)integrated_ygyro)
-+  "  integrated_zgyro="+String.format("%#2.5f",(float)integrated_zgyro)
++  "  integrated_x="+format((float)integrated_x)
++  "  integrated_y="+format((float)integrated_y)
++  "  integrated_xgyro="+format((float)integrated_xgyro)
++  "  integrated_ygyro="+format((float)integrated_ygyro)
++  "  integrated_zgyro="+format((float)integrated_zgyro)
 +  "  time_delta_distance_us="+time_delta_distance_us
-+  "  distance="+String.format("%#2.5f",(float)distance)
++  "  distance="+format((float)distance)
 +  "  temperature="+temperature
 +  "  sensor_id="+sensor_id
 +  "  quality="+quality

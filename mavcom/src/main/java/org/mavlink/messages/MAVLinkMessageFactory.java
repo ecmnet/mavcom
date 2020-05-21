@@ -43,6 +43,7 @@ import org.mavlink.messages.lquac.msg_global_vision_position_estimate;
 import org.mavlink.messages.lquac.msg_gimbal_manager_status;
 import org.mavlink.messages.lquac.msg_mission_item;
 import org.mavlink.messages.lquac.msg_highres_imu;
+import org.mavlink.messages.lquac.msg_generator_status;
 import org.mavlink.messages.lquac.msg_uavcan_node_info;
 import org.mavlink.messages.lquac.msg_attitude_quaternion;
 import org.mavlink.messages.lquac.msg_scaled_imu2;
@@ -236,6 +237,7 @@ import org.mavlink.messages.lquac.msg_global_vision_position_estimate;
 import org.mavlink.messages.lquac.msg_gimbal_manager_status;
 import org.mavlink.messages.lquac.msg_mission_item;
 import org.mavlink.messages.lquac.msg_highres_imu;
+import org.mavlink.messages.lquac.msg_generator_status;
 import org.mavlink.messages.lquac.msg_uavcan_node_info;
 import org.mavlink.messages.lquac.msg_attitude_quaternion;
 import org.mavlink.messages.lquac.msg_scaled_imu2;
@@ -548,6 +550,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_HIGHRES_IMU:
       msg = new msg_highres_imu(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_GENERATOR_STATUS:
+      msg = new msg_generator_status(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_UAVCAN_NODE_INFO:

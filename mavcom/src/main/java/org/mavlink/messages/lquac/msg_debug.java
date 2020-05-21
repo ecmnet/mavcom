@@ -80,7 +80,7 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_DEBUG : " +   "  time_boot_ms="+time_boot_ms
-+  "  value="+String.format("%#2.5f",(float)value)
++  "  value="+format((float)value)
 +  "  ind="+ind
 ;}
 }

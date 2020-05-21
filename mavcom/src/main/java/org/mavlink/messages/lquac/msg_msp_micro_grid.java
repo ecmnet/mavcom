@@ -160,11 +160,11 @@ return "MAVLINK_MSG_ID_MSP_MICRO_GRID : " +   "  tms="+tms
 +  "  data[37]="+data[37]
 +  "  data[38]="+data[38]
 +  "  data[39]="+data[39]
-+  "  cx="+String.format("%#2.5f",(float)cx)
-+  "  cy="+String.format("%#2.5f",(float)cy)
-+  "  cz="+String.format("%#2.5f",(float)cz)
-+  "  resolution="+String.format("%#2.5f",(float)resolution)
-+  "  extension="+String.format("%#2.5f",(float)extension)
++  "  cx="+format((float)cx)
++  "  cy="+format((float)cy)
++  "  cz="+format((float)cz)
++  "  resolution="+format((float)resolution)
++  "  extension="+format((float)extension)
 +  "  count="+count
 +  "  status="+status
 ;}

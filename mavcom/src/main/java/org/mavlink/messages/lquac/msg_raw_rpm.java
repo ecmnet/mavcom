@@ -73,7 +73,7 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_RAW_RPM : " +   "  frequency="+String.format("%#2.5f",(float)frequency)
+return "MAVLINK_MSG_ID_RAW_RPM : " +   "  frequency="+format((float)frequency)
 +  "  index="+index
 ;}
 }

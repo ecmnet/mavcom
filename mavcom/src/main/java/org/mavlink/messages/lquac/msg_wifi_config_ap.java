@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_wifi_config_ap
- * Configure AP SSID and Password.
+ * Configure WiFi AP SSID, password, and mode. This message is re-emitted as an acknowledgement by the AP. The message may also be explicitly requested using MAV_CMD_REQUEST_MESSAGE
  **/
 public class msg_wifi_config_ap extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_WIFI_CONFIG_AP = 299;
@@ -24,11 +24,11 @@ public class msg_wifi_config_ap extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_WIFI_CONFIG_AP;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 96;
+    payload_length = 98;
 }
 
   /**
-   * Name of Wi-Fi network (SSID). Leave it blank to leave it unchanged.
+   * Name of Wi-Fi network (SSID). Blank to leave it unchanged when setting. Current SSID when sent back as a response.
    */
   public char[] ssid = new char[32];
   public void setSsid(String tmp) {
@@ -48,7 +48,7 @@ public class msg_wifi_config_ap extends MAVLinkMessage {
     return result;
   }
   /**
-   * Password. Leave it blank for an open AP.
+   * Password. Blank for an open AP. MD5 hash when message is sent back as a response.
    */
   public char[] password = new char[64];
   public void setPassword(String tmp) {
@@ -67,6 +67,14 @@ public class msg_wifi_config_ap extends MAVLinkMessage {
     }
     return result;
   }
+  /**
+   * WiFi Mode.
+   */
+  public int mode;
+  /**
+   * Message acceptance response (sent back to GS).
+   */
+  public int response;
 /**
  * Decode message with raw data
  */
@@ -77,12 +85,14 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   for (int i=0; i<64; i++) {
     password[i] = (char)dis.readByte();
   }
+  mode = (int)dis.readByte();
+  response = (int)dis.readByte();
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+96];
+  byte[] buffer = new byte[12+98];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -100,20 +110,24 @@ public byte[] encode() throws IOException {
   for (int i=0; i<64; i++) {
     dos.writeByte(password[i]);
   }
+  dos.write(mode&0x00FF);
+  dos.write(response&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 96);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 98);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[106] = crcl;
-  buffer[107] = crch;
+  buffer[108] = crcl;
+  buffer[109] = crch;
   dos.close();
   return buffer;
 }
 public String toString() {
 return "MAVLINK_MSG_ID_WIFI_CONFIG_AP : " +   "  ssid="+getSsid()
 +  "  password="+getPassword()
++  "  mode="+mode
++  "  response="+response
 ;}
 }

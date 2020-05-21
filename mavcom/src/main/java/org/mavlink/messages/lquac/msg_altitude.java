@@ -104,11 +104,11 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_ALTITUDE : " +   "  time_usec="+time_usec
-+  "  altitude_monotonic="+String.format("%#2.5f",(float)altitude_monotonic)
-+  "  altitude_amsl="+String.format("%#2.5f",(float)altitude_amsl)
-+  "  altitude_local="+String.format("%#2.5f",(float)altitude_local)
-+  "  altitude_relative="+String.format("%#2.5f",(float)altitude_relative)
-+  "  altitude_terrain="+String.format("%#2.5f",(float)altitude_terrain)
-+  "  bottom_clearance="+String.format("%#2.5f",(float)bottom_clearance)
++  "  altitude_monotonic="+format((float)altitude_monotonic)
++  "  altitude_amsl="+format((float)altitude_amsl)
++  "  altitude_local="+format((float)altitude_local)
++  "  altitude_relative="+format((float)altitude_relative)
++  "  altitude_terrain="+format((float)altitude_terrain)
++  "  bottom_clearance="+format((float)bottom_clearance)
 ;}
 }

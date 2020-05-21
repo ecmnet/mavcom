@@ -104,9 +104,9 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_COLLISION : " +   "  id="+id
-+  "  time_to_minimum_delta="+String.format("%#2.5f",(float)time_to_minimum_delta)
-+  "  altitude_minimum_delta="+String.format("%#2.5f",(float)altitude_minimum_delta)
-+  "  horizontal_minimum_delta="+String.format("%#2.5f",(float)horizontal_minimum_delta)
++  "  time_to_minimum_delta="+format((float)time_to_minimum_delta)
++  "  altitude_minimum_delta="+format((float)altitude_minimum_delta)
++  "  horizontal_minimum_delta="+format((float)horizontal_minimum_delta)
 +  "  src="+src
 +  "  action="+action
 +  "  threat_level="+threat_level

@@ -28,7 +28,7 @@ public class msg_vfr_hud extends MAVLinkMessage {
 }
 
   /**
-   * Current indicated airspeed (IAS).
+   * Vehicle speed in form appropriate for vehicle type. For standard aircraft this is typically calibrated airspeed (CAS) or indicated airspeed (IAS) - either of which can be used by a pilot to estimate stall speed.
    */
   public float airspeed;
   /**
@@ -97,10 +97,10 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_VFR_HUD : " +   "  airspeed="+String.format("%#2.5f",(float)airspeed)
-+  "  groundspeed="+String.format("%#2.5f",(float)groundspeed)
-+  "  alt="+String.format("%#2.5f",(float)alt)
-+  "  climb="+String.format("%#2.5f",(float)climb)
+return "MAVLINK_MSG_ID_VFR_HUD : " +   "  airspeed="+format((float)airspeed)
++  "  groundspeed="+format((float)groundspeed)
++  "  alt="+format((float)alt)
++  "  climb="+format((float)climb)
 +  "  heading="+heading
 +  "  throttle="+throttle
 ;}

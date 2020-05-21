@@ -164,19 +164,19 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_MSP_VISION : " +   "  tms="+tms
-+  "  x="+String.format("%#2.5f",(float)x)
-+  "  y="+String.format("%#2.5f",(float)y)
-+  "  z="+String.format("%#2.5f",(float)z)
-+  "  vx="+String.format("%#2.5f",(float)vx)
-+  "  vy="+String.format("%#2.5f",(float)vy)
-+  "  vz="+String.format("%#2.5f",(float)vz)
-+  "  h="+String.format("%#2.5f",(float)h)
-+  "  p="+String.format("%#2.5f",(float)p)
-+  "  r="+String.format("%#2.5f",(float)r)
-+  "  gx="+String.format("%#2.5f",(float)gx)
-+  "  gy="+String.format("%#2.5f",(float)gy)
-+  "  gz="+String.format("%#2.5f",(float)gz)
-+  "  fps="+String.format("%#2.5f",(float)fps)
++  "  x="+format((float)x)
++  "  y="+format((float)y)
++  "  z="+format((float)z)
++  "  vx="+format((float)vx)
++  "  vy="+format((float)vy)
++  "  vz="+format((float)vz)
++  "  h="+format((float)h)
++  "  p="+format((float)p)
++  "  r="+format((float)r)
++  "  gx="+format((float)gx)
++  "  gy="+format((float)gy)
++  "  gz="+format((float)gz)
++  "  fps="+format((float)fps)
 +  "  flags="+flags
 +  "  errors="+errors
 +  "  quality="+quality

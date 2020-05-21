@@ -32,7 +32,7 @@ public class msg_gimbal_device_information extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * Version of the gimbal firmware (v << 24 & 0xff = Dev, v << 16 & 0xff = Patch, v << 8 & 0xff = Minor, v & 0xff = Major)
+   * Version of the gimbal firmware, encoded as: (Dev & 0xff) << 24 | (Patch & 0xff) << 16 | (Minor & 0xff) << 8 | (Major & 0xff)
    */
   public long firmware_version;
   /**
@@ -137,12 +137,12 @@ public byte[] encode() throws IOException {
 public String toString() {
 return "MAVLINK_MSG_ID_GIMBAL_DEVICE_INFORMATION : " +   "  time_boot_ms="+time_boot_ms
 +  "  firmware_version="+firmware_version
-+  "  tilt_max="+String.format("%#2.5f",(float)tilt_max)
-+  "  tilt_min="+String.format("%#2.5f",(float)tilt_min)
-+  "  tilt_rate_max="+String.format("%#2.5f",(float)tilt_rate_max)
-+  "  pan_max="+String.format("%#2.5f",(float)pan_max)
-+  "  pan_min="+String.format("%#2.5f",(float)pan_min)
-+  "  pan_rate_max="+String.format("%#2.5f",(float)pan_rate_max)
++  "  tilt_max="+format((float)tilt_max)
++  "  tilt_min="+format((float)tilt_min)
++  "  tilt_rate_max="+format((float)tilt_rate_max)
++  "  pan_max="+format((float)pan_max)
++  "  pan_min="+format((float)pan_min)
++  "  pan_rate_max="+format((float)pan_rate_max)
 +  "  cap_flags="+cap_flags
 +  "  vendor_name[0]="+vendor_name[0]
 +  "  vendor_name[1]="+vendor_name[1]

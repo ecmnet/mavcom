@@ -120,16 +120,16 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_ATTITUDE_QUATERNION : " +   "  time_boot_ms="+time_boot_ms
-+  "  q1="+String.format("%#2.5f",(float)q1)
-+  "  q2="+String.format("%#2.5f",(float)q2)
-+  "  q3="+String.format("%#2.5f",(float)q3)
-+  "  q4="+String.format("%#2.5f",(float)q4)
-+  "  rollspeed="+String.format("%#2.5f",(float)rollspeed)
-+  "  pitchspeed="+String.format("%#2.5f",(float)pitchspeed)
-+  "  yawspeed="+String.format("%#2.5f",(float)yawspeed)
-+  "  repr_offset_q[0]="+String.format("%#2.5f",(float)repr_offset_q[0])
-+  "  repr_offset_q[1]="+String.format("%#2.5f",(float)repr_offset_q[1])
-+  "  repr_offset_q[2]="+String.format("%#2.5f",(float)repr_offset_q[2])
-+  "  repr_offset_q[3]="+String.format("%#2.5f",(float)repr_offset_q[3])
++  "  q1="+format((float)q1)
++  "  q2="+format((float)q2)
++  "  q3="+format((float)q3)
++  "  q4="+format((float)q4)
++  "  rollspeed="+format((float)rollspeed)
++  "  pitchspeed="+format((float)pitchspeed)
++  "  yawspeed="+format((float)yawspeed)
++  "  repr_offset_q[0]="+format((float)repr_offset_q[0])
++  "  repr_offset_q[1]="+format((float)repr_offset_q[1])
++  "  repr_offset_q[2]="+format((float)repr_offset_q[2])
++  "  repr_offset_q[3]="+format((float)repr_offset_q[3])
 ;}
 }

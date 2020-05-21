@@ -57,9 +57,9 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_GLOBAL_TERRAIN_ALT_INT = 11;
     /**
-     * MAV_FRAME_BODY_FRD - Body fixed frame of reference, Z-down (x: Forward, y: Right, z: Down).
+     * Body fixed frame of reference, Z-down (x: Forward, y: Right, z: Down).
      */
-    public final static int MAV_FRAME_RESERVED_12 = 12;
+    public final static int MAV_FRAME_BODY_FRD = 12;
     /**
      * MAV_FRAME_BODY_FLU - Body fixed frame of reference, Z-up (x: Forward, y: Left, z: Up).
      */

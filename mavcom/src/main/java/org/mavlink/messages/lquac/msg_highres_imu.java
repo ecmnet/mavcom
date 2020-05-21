@@ -158,19 +158,19 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_HIGHRES_IMU : " +   "  time_usec="+time_usec
-+  "  xacc="+String.format("%#2.5f",(float)xacc)
-+  "  yacc="+String.format("%#2.5f",(float)yacc)
-+  "  zacc="+String.format("%#2.5f",(float)zacc)
-+  "  xgyro="+String.format("%#2.5f",(float)xgyro)
-+  "  ygyro="+String.format("%#2.5f",(float)ygyro)
-+  "  zgyro="+String.format("%#2.5f",(float)zgyro)
-+  "  xmag="+String.format("%#2.5f",(float)xmag)
-+  "  ymag="+String.format("%#2.5f",(float)ymag)
-+  "  zmag="+String.format("%#2.5f",(float)zmag)
-+  "  abs_pressure="+String.format("%#2.5f",(float)abs_pressure)
-+  "  diff_pressure="+String.format("%#2.5f",(float)diff_pressure)
-+  "  pressure_alt="+String.format("%#2.5f",(float)pressure_alt)
-+  "  temperature="+String.format("%#2.5f",(float)temperature)
++  "  xacc="+format((float)xacc)
++  "  yacc="+format((float)yacc)
++  "  zacc="+format((float)zacc)
++  "  xgyro="+format((float)xgyro)
++  "  ygyro="+format((float)ygyro)
++  "  zgyro="+format((float)zgyro)
++  "  xmag="+format((float)xmag)
++  "  ymag="+format((float)ymag)
++  "  zmag="+format((float)zmag)
++  "  abs_pressure="+format((float)abs_pressure)
++  "  diff_pressure="+format((float)diff_pressure)
++  "  pressure_alt="+format((float)pressure_alt)
++  "  temperature="+format((float)temperature)
 +  "  fields_updated="+fields_updated
 +  "  id="+id
 ;}

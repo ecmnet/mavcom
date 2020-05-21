@@ -112,9 +112,9 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_DEBUG_VECT : " +   "  time_usec="+time_usec
-+  "  x="+String.format("%#2.5f",(float)x)
-+  "  y="+String.format("%#2.5f",(float)y)
-+  "  z="+String.format("%#2.5f",(float)z)
++  "  x="+format((float)x)
++  "  y="+format((float)y)
++  "  z="+format((float)z)
 +  "  name="+getName()
 ;}
 }

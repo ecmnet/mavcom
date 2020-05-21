@@ -127,13 +127,13 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_COMMAND_LONG : " +   "  param1="+String.format("%#2.5f",(float)param1)
-+  "  param2="+String.format("%#2.5f",(float)param2)
-+  "  param3="+String.format("%#2.5f",(float)param3)
-+  "  param4="+String.format("%#2.5f",(float)param4)
-+  "  param5="+String.format("%#2.5f",(float)param5)
-+  "  param6="+String.format("%#2.5f",(float)param6)
-+  "  param7="+String.format("%#2.5f",(float)param7)
+return "MAVLINK_MSG_ID_COMMAND_LONG : " +   "  param1="+format((float)param1)
++  "  param2="+format((float)param2)
++  "  param3="+format((float)param3)
++  "  param4="+format((float)param4)
++  "  param5="+format((float)param5)
++  "  param6="+format((float)param6)
++  "  param7="+format((float)param7)
 +  "  command="+command
 +  "  target_system="+target_system
 +  "  target_component="+target_component

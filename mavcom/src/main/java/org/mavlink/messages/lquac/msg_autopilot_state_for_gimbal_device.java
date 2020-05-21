@@ -126,16 +126,16 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE : " +   "  time_boot_us="+time_boot_us
-+  "  q[0]="+String.format("%#2.5f",(float)q[0])
-+  "  q[1]="+String.format("%#2.5f",(float)q[1])
-+  "  q[2]="+String.format("%#2.5f",(float)q[2])
-+  "  q[3]="+String.format("%#2.5f",(float)q[3])
++  "  q[0]="+format((float)q[0])
++  "  q[1]="+format((float)q[1])
++  "  q[2]="+format((float)q[2])
++  "  q[3]="+format((float)q[3])
 +  "  q_estimated_delay_us="+q_estimated_delay_us
-+  "  vx="+String.format("%#2.5f",(float)vx)
-+  "  vy="+String.format("%#2.5f",(float)vy)
-+  "  vz="+String.format("%#2.5f",(float)vz)
++  "  vx="+format((float)vx)
++  "  vy="+format((float)vy)
++  "  vz="+format((float)vz)
 +  "  v_estimated_delay_us="+v_estimated_delay_us
-+  "  feed_forward_angular_velocity_z="+String.format("%#2.5f",(float)feed_forward_angular_velocity_z)
++  "  feed_forward_angular_velocity_z="+format((float)feed_forward_angular_velocity_z)
 +  "  target_system="+target_system
 +  "  target_component="+target_component
 ;}
