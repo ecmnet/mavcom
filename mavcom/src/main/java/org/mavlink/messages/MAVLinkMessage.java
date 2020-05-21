@@ -57,7 +57,7 @@ public abstract class MAVLinkMessage extends MAVLinkMessageCoder implements IMAV
      */
     private static final long serialVersionUID = 2000873536402943462L;
 
-    private static final DecimalFormat f = new DecimalFormat("%#2.5f");
+    private static final DecimalFormat f = new DecimalFormat("#0.00000");
 
     public String format(float n) {
     	return f.format(n);
