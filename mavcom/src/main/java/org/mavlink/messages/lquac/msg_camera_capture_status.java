@@ -24,7 +24,7 @@ public class msg_camera_capture_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 18;
+    payload_length = 22;
 }
 
   /**
@@ -51,6 +51,10 @@ public class msg_camera_capture_status extends MAVLinkMessage {
    * Current status of video capturing (0: idle, 1: capture in progress)
    */
   public int video_status;
+  /**
+   * Total number of images.
+   */
+  public long image_count;
 /**
  * Decode message with raw data
  */
@@ -61,12 +65,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   available_capacity = (float)dis.readFloat();
   image_status = (int)dis.readUnsignedByte()&0x00FF;
   video_status = (int)dis.readUnsignedByte()&0x00FF;
+  image_count = (int)dis.readInt();
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+18];
+  byte[] buffer = new byte[12+22];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -84,15 +89,16 @@ public byte[] encode() throws IOException {
   dos.writeFloat(available_capacity);
   dos.writeByte(image_status&0x00FF);
   dos.writeByte(video_status&0x00FF);
+  dos.writeInt((int)(image_count&0x00FFFFFFFF));
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 18);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 22);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[28] = crcl;
-  buffer[29] = crch;
+  buffer[32] = crcl;
+  buffer[33] = crch;
   dos.close();
   return buffer;
 }
@@ -103,5 +109,6 @@ return "MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS : " +   "  time_boot_ms="+time_boot
 +  "  available_capacity="+format((float)available_capacity)
 +  "  image_status="+image_status
 +  "  video_status="+video_status
++  "  image_count="+image_count
 ;}
 }

@@ -42,11 +42,11 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_NAV_LOITER_TURNS = 18;
     /**
-     * Loiter around this waypoint for X seconds
-     * PARAM 1 : Loiter time.
-     * PARAM 2 : Empty
-     * PARAM 3 : Radius around waypoint. If positive loiter clockwise, else counter-clockwise.
-     * PARAM 4 : Forward moving aircraft this sets exit xtrack location: 0 for center of loiter wp, 1 for exit location. Else, this is desired yaw angle.  NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
+     * Loiter at the specified latitude, longitude and altitude for a certain amount of time. Multicopter vehicles stop at the point (within a vehicle-specific acceptance radius). Forward-moving vehicles (e.g. fixed-wing) circle the point with the specified radius/direction. If the Heading Required parameter (2) is non-zero forward moving aircraft will only leave the loiter circle once heading towards the next waypoint.
+     * PARAM 1 : Loiter time (only starts once Lat, Lon and Alt is reached).
+     * PARAM 2 : Leave loiter circle only once heading towards the next waypoint (0 = False)
+     * PARAM 3 : Loiter radius around waypoint for forward-moving vehicles. If positive loiter clockwise, else counter-clockwise.
+     * PARAM 4 : For forward-moving aircraft this sets exit xtrack location: 0 for center of loiter wp, 1 for exit location. Else, this is desired yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -67,7 +67,7 @@ public interface MAV_CMD {
      * Land at location.
      * PARAM 1 : Minimum target altitude if landing is aborted (0 = undefined/use system default).
      * PARAM 2 : Precision land mode.
-     * PARAM 3 : Empty.
+     * PARAM 3 : Empty
      * PARAM 4 : Desired yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude.
      * PARAM 6 : Longitude.
@@ -143,11 +143,11 @@ public interface MAV_CMD {
     /**
      * Begin following a target
      * PARAM 1 : System ID (of the FOLLOW_TARGET beacon). Send 0 to disable follow-me and return to the default position hold mode.
-     * PARAM 2 : RESERVED
-     * PARAM 3 : RESERVED
+     * PARAM 2 : Reserved
+     * PARAM 3 : Reserved
      * PARAM 4 : Altitude mode: 0: Keep current altitude, 1: keep altitude difference to target, 2: go to a fixed altitude above home.
      * PARAM 5 : Altitude above home. (used if mode=2)
-     * PARAM 6 : RESERVED
+     * PARAM 6 : Reserved
      * PARAM 7 : Time to land in which the MAV should go to the default position hold mode after a message RX timeout.
      */
     public final static int MAV_CMD_DO_FOLLOW = 32;
@@ -439,7 +439,7 @@ public interface MAV_CMD {
     public final static int MAV_CMD_DO_FLIGHTTERMINATION = 185;
     /**
      * Change altitude set point.
-     * PARAM 1 : Altitude.
+     * PARAM 1 : Altitude
      * PARAM 2 : Frame of new altitude.
      * PARAM 3 : Empty
      * PARAM 4 : Empty
@@ -549,7 +549,7 @@ public interface MAV_CMD {
     public final static int MAV_CMD_DO_SET_ROI_NONE = 197;
     /**
      * Mount tracks system with specified system ID. Determination of target vehicle position may be done with GLOBAL_POSITION_INT or any other means. This command can be sent to a gimbal manager but not to a gimbal device. A gimbal device is not to react to this message.
-     * PARAM 1 : sysid
+     * PARAM 1 : System ID
      * PARAM 2 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
      */
     public final static int MAV_CMD_DO_SET_ROI_SYSID = 198;
@@ -643,7 +643,7 @@ public interface MAV_CMD {
     public final static int MAV_CMD_DO_FENCE_ENABLE = 207;
     /**
      * Mission command to trigger a parachute
-     * PARAM 1 : action
+     * PARAM 1 : Action
      * PARAM 2 : Empty
      * PARAM 3 : Empty
      * PARAM 4 : Empty
@@ -814,20 +814,31 @@ public interface MAV_CMD {
      * PARAM 2 : 0: Do nothing for onboard computer, 1: Reboot onboard computer, 2: Shutdown onboard computer, 3: Reboot onboard computer and keep it in the bootloader until upgraded.
      * PARAM 3 : WIP: 0: Do nothing for camera, 1: Reboot onboard camera, 2: Shutdown onboard camera, 3: Reboot onboard camera and keep it in the bootloader until upgraded
      * PARAM 4 : WIP: 0: Do nothing for mount (e.g. gimbal), 1: Reboot mount, 2: Shutdown mount, 3: Reboot mount and keep it in the bootloader until upgraded
-     * PARAM 5 : Reserved, send 0
-     * PARAM 6 : Reserved, send 0
+     * PARAM 5 : Reserved (set to 0)
+     * PARAM 6 : Reserved (set to 0)
      * PARAM 7 : WIP: ID (e.g. camera ID -1 for all IDs)
      */
     public final static int MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN = 246;
+    /**
+     * Request a target system to start, cancel, or restart upgrade of one (or all) of its components. For example, the command might be sent to a companion computer to cause it to upgrade a connected flight controller. The system doing the upgrade will report progress using the normal command protocol sequence (COMMAND_ACK regularly sent with result=MAV_RESULT_IN_PROGRESS, followed by a final result of MAV_RESULT_ACCEPTED or MAV_RESULT_FAILED). The operation can be cancelled, in which case the updating system would send COMMAND_ACK with MAV_RESULT_ACCEPTED. The operation can be restarted, in which case the updating system should respond with progress updates (as though it had a new message).
+     * PARAM 1 : Component id of the component to be upgraded. If set to 0, all components should be upgraded.
+     * PARAM 2 : 0: Start component upgrade, 1: Cancel component upgrade, 2: Restart component upgrade.
+     * PARAM 3 : 0: Do not reboot component after the action is executed, 1: Reboot component after the action is executed.
+     * PARAM 4 : Reserved
+     * PARAM 5 : Reserved
+     * PARAM 6 : Reserved
+     * PARAM 7 : WIP: upgrade progress report rate (can be used for more granular control).
+     */
+    public final static int MAV_CMD_DO_UPGRADE = 247;
     /**
      * Override current mission with command to pause mission, pause mission and move to position, continue/resume mission. When param 1 indicates that the mission is paused (MAV_GOTO_DO_HOLD), param 2 defines whether it holds in place or moves to another position.
      * PARAM 1 : MAV_GOTO_DO_HOLD: pause mission and either hold or move to specified position (depending on param2), MAV_GOTO_DO_CONTINUE: resume mission.
      * PARAM 2 : MAV_GOTO_HOLD_AT_CURRENT_POSITION: hold at current position, MAV_GOTO_HOLD_AT_SPECIFIED_POSITION: hold at specified position.
      * PARAM 3 : Coordinate frame of hold point.
      * PARAM 4 : Desired yaw angle.
-     * PARAM 5 : Latitude / X position.
-     * PARAM 6 : Longitude / Y position.
-     * PARAM 7 : Altitude / Z position.
+     * PARAM 5 : Latitude/X position.
+     * PARAM 6 : Longitude/Y position.
+     * PARAM 7 : Altitude/Z position.
      */
     public final static int MAV_CMD_OVERRIDE_GOTO = 252;
     /**
@@ -929,7 +940,8 @@ public interface MAV_CMD {
      * Format a storage medium. Once format is complete, a STORAGE_INFORMATION message is sent. Use the command's target_component to target a specific component's storage.
      * PARAM 1 : Storage ID (1 for first, 2 for second, etc.)
      * PARAM 2 : 0: No action 1: Format storage
-     * PARAM 3 : Reserved (all remaining params)
+     * PARAM 3 : 0: No action 1: Reset Image Count
+     * PARAM 4 : Reserved (all remaining params)
      */
     public final static int MAV_CMD_STORAGE_FORMAT = 526;
     /**
@@ -1162,8 +1174,8 @@ public interface MAV_CMD {
      * PARAM 2 : User defined
      * PARAM 3 : User defined
      * PARAM 4 : User defined
-     * PARAM 5 : Unscaled target latitude of center of circle in CIRCLE_MODE
-     * PARAM 6 : Unscaled target longitude of center of circle in CIRCLE_MODE
+     * PARAM 5 : Target latitude of center of circle in CIRCLE_MODE
+     * PARAM 6 : Target longitude of center of circle in CIRCLE_MODE
      */
     public final static int MAV_CMD_SET_GUIDED_SUBMODE_CIRCLE = 4001;
     /**

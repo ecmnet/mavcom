@@ -20,4 +20,8 @@ public interface WIFI_CONFIG_AP_MODE {
      * WiFi configured as a station connected to an existing local WiFi network.
      */
     public final static int WIFI_CONFIG_AP_MODE_STATION = 2;
+    /**
+     * WiFi disabled.
+     */
+    public final static int WIFI_CONFIG_AP_MODE_DISABLED = 3;
 }

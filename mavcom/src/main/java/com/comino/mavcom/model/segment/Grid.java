@@ -59,8 +59,6 @@ public class Grid extends Segment {
 	private static int blocky;
 	private static int blockz;
 
-	// TODO: add blockcount => is 0 then refresh on MAVGCL side
-
 	private int      dimension 		 = 0;
 	private int      resolution_cm 	 = 0;
 	private int      extension_cm    = 0;

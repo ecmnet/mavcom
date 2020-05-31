@@ -125,6 +125,7 @@ public class Status extends Segment {
 
 	public float	load_m	     	= Float.NaN;	  	//MSP
 	public float    t_armed_ms    	= Float.NaN;
+	public float    t_takeoff_ms    = Float.NaN;
 	public float    t_boot_ms     	= Float.NaN;
 	public float    wifi_quality 	= Float.NaN;
 
@@ -148,6 +149,7 @@ public class Status extends Segment {
 		autopilot  = s.autopilot;
 
 		t_armed_ms    = s.t_armed_ms;
+		t_takeoff_ms  = s.t_takeoff_ms;
 		t_boot_ms     = s.t_boot_ms;
 		wifi_quality  = s. wifi_quality;
 
@@ -258,6 +260,7 @@ public class Status extends Segment {
 		drops_p   	  = 0;
 		error1        = 0;
 		t_armed_ms    = 0;
+		t_takeoff_ms  = 0;
 		t_boot_ms     = 0;
 		px4_status    = 0;
 		nav_state     = 0;
