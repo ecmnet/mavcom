@@ -62,6 +62,10 @@
                   <param index="1">X Pos in video (optional)</param>
                   <param index="2">Y-Pos in video (optional)</param>
               </entry>
+                  <entry value="80" name="SELECT_VIDEO_STREAM">
+                  <description>Select video stream</description>
+                  <param index="1">Number of videostream to be selected</param>
+              </entry>
             </enum>
 
             <enum name="MSP_COMPONENT_CTRL">

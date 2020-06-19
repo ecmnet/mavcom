@@ -56,7 +56,7 @@ public class msg_camera_image_captured extends MAVLinkMessage {
    */
   public float[] q = new float[4];
   /**
-   * Zero based index of this image (image count -1)
+   * Zero based index of this image (i.e. a new image will have index CAMERA_CAPTURE_STATUS.image count -1)
    */
   public long image_index;
   /**

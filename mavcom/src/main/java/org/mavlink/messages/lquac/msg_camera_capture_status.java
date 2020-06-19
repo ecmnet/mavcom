@@ -52,7 +52,7 @@ public class msg_camera_capture_status extends MAVLinkMessage {
    */
   public int video_status;
   /**
-   * Total number of images.
+   * Total number of images captured ('forever', or until reset using MAV_CMD_STORAGE_FORMAT).
    */
   public long image_count;
 /**

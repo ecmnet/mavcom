@@ -144,4 +144,8 @@ public interface MAV_TYPE {
      * Servo
      */
     public final static int MAV_TYPE_SERVO = 33;
+    /**
+     * Open Drone ID. See https://mavlink.io/en/services/opendroneid.html.
+     */
+    public final static int MAV_TYPE_ODID = 34;
 }

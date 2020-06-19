@@ -43,6 +43,10 @@ public interface FAILURE_UNIT {
     /**
      * null
      */
+    public final static int FAILURE_UNIT_SENSOR_AIRSPEED = 8;
+    /**
+     * null
+     */
     public final static int FAILURE_UNIT_SYSTEM_BATTERY = 100;
     /**
      * null

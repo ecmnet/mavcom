@@ -24,7 +24,7 @@ public class msg_distance_sensor extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_DISTANCE_SENSOR;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 38;
+    payload_length = 39;
 }
 
   /**
@@ -71,6 +71,10 @@ public class msg_distance_sensor extends MAVLinkMessage {
    * Quaternion of the sensor orientation in vehicle body frame (w, x, y, z order, zero-rotation is 1, 0, 0, 0). Zero-rotation is along the vehicle body x-axis. This field is required if the orientation is set to MAV_SENSOR_ROTATION_CUSTOM. Set it to 0 if invalid."
    */
   public float[] quaternion = new float[4];
+  /**
+   * Signal quality of the sensor. Specific to each sensor type, representing the relation of the signal strength with the target reflectivity, distance, size or aspect, but normalised as a percentage. 0 = unknown/unset signal quality, 1 = invalid signal, 100 = perfect signal.
+   */
+  public int signal_quality;
 /**
  * Decode message with raw data
  */
@@ -88,12 +92,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   for (int i=0; i<4; i++) {
     quaternion[i] = (float)dis.readFloat();
   }
+  signal_quality = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+38];
+  byte[] buffer = new byte[12+39];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -118,15 +123,16 @@ public byte[] encode() throws IOException {
   for (int i=0; i<4; i++) {
     dos.writeFloat(quaternion[i]);
   }
+  dos.writeByte(signal_quality&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 38);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 39);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[48] = crcl;
-  buffer[49] = crch;
+  buffer[49] = crcl;
+  buffer[50] = crch;
   dos.close();
   return buffer;
 }
@@ -145,5 +151,6 @@ return "MAVLINK_MSG_ID_DISTANCE_SENSOR : " +   "  time_boot_ms="+time_boot_ms
 +  "  quaternion[1]="+format((float)quaternion[1])
 +  "  quaternion[2]="+format((float)quaternion[2])
 +  "  quaternion[3]="+format((float)quaternion[3])
++  "  signal_quality="+signal_quality
 ;}
 }

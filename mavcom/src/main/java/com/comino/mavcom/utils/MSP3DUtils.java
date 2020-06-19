@@ -111,6 +111,11 @@ public class MSP3DUtils {
 		return isFinite(vector);
 	}
 
+	public static boolean convertCurrentState(DataModel model, Vector3D_F64 vector) {
+		vector.set(model.state.l_x, model.state.l_y, model.state.l_z);
+		return isFinite(vector);
+	}
+
 	public static boolean convertTargetState(DataModel model, Vector4D_F32 vector) {
 		vector.set(model.target_state.l_x, model.target_state.l_y, model.target_state.l_z, model.attitude.y);
 		return isFinite(vector);
@@ -145,6 +150,10 @@ public class MSP3DUtils {
 
 	public static boolean isFinite(Vector4D_F32 vector) {
 		return Float.isFinite(vector.x) && Float.isFinite(vector.y) && Float.isFinite(vector.z);
+	}
+
+	public static boolean isFinite(Vector3D_F64 vector) {
+		return Double.isFinite(vector.x) && Double.isFinite(vector.y) && Double.isFinite(vector.z);
 	}
 
 	public static void replaceNaN(Vector4D_F32 target, Vector4D_F32 source) {

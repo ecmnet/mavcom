@@ -487,6 +487,18 @@ public interface MAV_COMPONENT {
      */
     public final static int MAV_COMP_ID_GPS2 = 221;
     /**
+     * Open Drone ID transmitter/receiver (Bluetooth/WiFi/Internet).
+     */
+    public final static int MAV_COMP_ID_ODID_TXRX_1 = 236;
+    /**
+     * Open Drone ID transmitter/receiver (Bluetooth/WiFi/Internet).
+     */
+    public final static int MAV_COMP_ID_ODID_TXRX_2 = 237;
+    /**
+     * Open Drone ID transmitter/receiver (Bluetooth/WiFi/Internet).
+     */
+    public final static int MAV_COMP_ID_ODID_TXRX_3 = 238;
+    /**
      * Component to bridge MAVLink to UDP (i.e. from a UART).
      */
     public final static int MAV_COMP_ID_UDP_BRIDGE = 240;

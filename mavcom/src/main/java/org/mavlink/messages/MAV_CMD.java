@@ -939,7 +939,7 @@ public interface MAV_CMD {
     /**
      * Format a storage medium. Once format is complete, a STORAGE_INFORMATION message is sent. Use the command's target_component to target a specific component's storage.
      * PARAM 1 : Storage ID (1 for first, 2 for second, etc.)
-     * PARAM 2 : 0: No action 1: Format storage
+     * PARAM 2 : Format storage (and reset image log). 0: No action 1: Format storage
      * PARAM 3 : 0: No action 1: Reset Image Count
      * PARAM 4 : Reserved (all remaining params)
      */

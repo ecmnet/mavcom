@@ -5,7 +5,7 @@
 package org.mavlink.messages;
 /**
  * Interface ESTIMATOR_STATUS_FLAGS
- * Flags in EKF_STATUS message
+ * Flags in ESTIMATOR_STATUS message
  **/
 public interface ESTIMATOR_STATUS_FLAGS {
     /**

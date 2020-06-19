@@ -73,4 +73,9 @@ public interface MSP_CMD {
      * PARAM 2 : Y-Pos in video (optional)
      */
     public final static int SET_OPTICAL_TARGET = 79;
+    /**
+     * Select video stream
+     * PARAM 1 : Number of videostream to be selected
+     */
+    public final static int SELECT_VIDEO_STREAM = 80;
 }
