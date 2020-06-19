@@ -588,7 +588,7 @@ Set to 2 to use heading from motion capture</short_desc>
       <short_desc>Critical threshold</short_desc>
       <long_desc>Sets the threshold when the battery will be reported as critically low. This has to be lower than the low threshold. This threshold commonly will trigger RTL.</long_desc>
       <min>0.05</min>
-      <max>0.1</max>
+      <max>0.25</max>
       <unit>norm</unit>
       <decimal>2</decimal>
       <increment>0.01</increment>
@@ -598,7 +598,7 @@ Set to 2 to use heading from motion capture</short_desc>
       <short_desc>Emergency threshold</short_desc>
       <long_desc>Sets the threshold when the battery will be reported as dangerously low. This has to be lower than the critical threshold. This threshold commonly will trigger landing.</long_desc>
       <min>0.03</min>
-      <max>0.07</max>
+      <max>0.1</max>
       <unit>norm</unit>
       <decimal>2</decimal>
       <increment>0.01</increment>
@@ -608,7 +608,7 @@ Set to 2 to use heading from motion capture</short_desc>
       <short_desc>Low threshold</short_desc>
       <long_desc>Sets the threshold when the battery will be reported as low. This has to be higher than the critical threshold.</long_desc>
       <min>0.12</min>
-      <max>0.4</max>
+      <max>0.5</max>
       <unit>norm</unit>
       <decimal>2</decimal>
       <increment>0.01</increment>
@@ -1316,6 +1316,12 @@ See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
       <unit>sec</unit>
       <reboot_required>true</reboot_required>
     </parameter>
+    <parameter default="1" name="COM_POWER_COUNT" type="INT32">
+      <short_desc>Required number of redundant power modules</short_desc>
+      <long_desc>This configures a check to verify the expected number of 5V rail power supplies are present. By default only one is expected. Note: CBRK_SUPPLY_CHK disables all power checks including this one.</long_desc>
+      <min>0</min>
+      <max>4</max>
+    </parameter>
     <parameter default="1" name="COM_PREARM_MODE" type="INT32">
       <short_desc>Condition to enter prearmed mode</short_desc>
       <long_desc>Condition to enter the prearmed state, an intermediate state between disarmed and armed in which non-throttling actuators are active.</long_desc>
@@ -1805,7 +1811,7 @@ Sets the number of standard deviations used by the innovation consistency test</
       <unit>SD</unit>
       <decimal>1</decimal>
     </parameter>
-    <parameter default="0.5" name="EKF2_GPS_V_NOISE" type="FLOAT">
+    <parameter default="0.3" name="EKF2_GPS_V_NOISE" type="FLOAT">
       <short_desc>Measurement noise for gps horizontal velocity</short_desc>
       <min>0.01</min>
       <max>5.0</max>
@@ -4718,8 +4724,8 @@ Setting this parameter to 0 disables the filter</short_desc>
       <unit>m/s</unit>
       <decimal>1</decimal>
     </parameter>
-    <parameter default="2." name="MPC_LAND_VEL_XY" type="FLOAT">
-      <short_desc>Maximum horizontal velocity during landing
+    <parameter default="10.0" name="MPC_LAND_VEL_XY" type="FLOAT">
+      <short_desc>Maximum horizontal position mode velocity when close to ground/home altitude
 Set the value higher than the otherwise expected maximum to disable any slowdown</short_desc>
       <min>0</min>
       <unit>m/s</unit>
@@ -7721,6 +7727,17 @@ default 1.5 turns per second</short_desc>
       </values>
     </parameter>
   </group>
+  <group name="Return To Land">
+    <parameter default="0" name="RTL_PLD_MD" type="INT32">
+      <short_desc>RTL precision land mode</short_desc>
+      <long_desc>Use precision landing when doing an RTL landing phase.</long_desc>
+      <values>
+        <value code="0">No precision landing</value>
+        <value code="1">Opportunistic precision landing</value>
+        <value code="2">Required precision landing</value>
+      </values>
+    </parameter>
+  </group>
   <group name="Roboclaw">
     <parameter default="0" name="RBCLW_SER_CFG" type="INT32">
       <short_desc>Serial Configuration for Roboclaw Driver</short_desc>
@@ -8066,9 +8083,9 @@ to takeoff is reached</short_desc>
     </parameter>
     <parameter default="3" name="SDLOG_PROFILE" type="INT32">
       <short_desc>Logging topic profile (integer bitmask)</short_desc>
-      <long_desc>This integer bitmask controls the set and rates of logged topics. The default allows for general log analysis and estimator replay, while keeping the log file size reasonably small. Enabling multiple sets leads to higher bandwidth requirements and larger log files. Set bits true to enable: 0 : Default set (used for general log analysis) 1 : Full rate estimator (EKF2) replay topics 2 : Topics for thermal calibration (high rate raw IMU and Baro sensor data) 3 : Topics for system identification (high rate actuator control and IMU data) 4 : Full rates for analysis of fast maneuvers (RC, attitude, rates and actuators) 5 : Debugging topics (debug_*.msg topics, for custom code) 6 : Topics for sensor comparison (low rate raw IMU, Baro and Magnetomer data) 7 : Topics for computer vision and collision avoidance</long_desc>
+      <long_desc>This integer bitmask controls the set and rates of logged topics. The default allows for general log analysis and estimator replay, while keeping the log file size reasonably small. Enabling multiple sets leads to higher bandwidth requirements and larger log files. Set bits true to enable: 0 : Default set (used for general log analysis) 1 : Full rate estimator (EKF2) replay topics 2 : Topics for thermal calibration (high rate raw IMU and Baro sensor data) 3 : Topics for system identification (high rate actuator control and IMU data) 4 : Full rates for analysis of fast maneuvers (RC, attitude, rates and actuators) 5 : Debugging topics (debug_*.msg topics, for custom code) 6 : Topics for sensor comparison (low rate raw IMU, Baro and Magnetomer data) 7 : Topics for computer vision and collision avoidance 8 : Raw FIFO high-rate IMU (Gyro) 9 : Raw FIFO high-rate IMU (Accel)</long_desc>
       <min>0</min>
-      <max>255</max>
+      <max>1023</max>
       <reboot_required>true</reboot_required>
       <bitmask>
         <bit index="0">Default set (general log analysis)</bit>
@@ -8079,6 +8096,8 @@ to takeoff is reached</short_desc>
         <bit index="5">Debug</bit>
         <bit index="6">Sensor comparison</bit>
         <bit index="7">Computer Vision and Avoidance</bit>
+        <bit index="8">Raw FIFO high-rate IMU (Gyro)</bit>
+        <bit index="9">Raw FIFO high-rate IMU (Accel)</bit>
       </bitmask>
     </parameter>
     <parameter default="0" name="SDLOG_UTC_OFFSET" type="INT32">
@@ -8125,13 +8144,6 @@ Particularly useful for testing different low-battery behaviour</short_desc>
     <parameter default="0" name="SIM_GPS_BLOCK" type="INT32">
       <short_desc>Simulator block GPS data</short_desc>
       <long_desc>Enable to block the publication of any incoming simulation GPS data.</long_desc>
-    </parameter>
-    <parameter default="0.0" name="SIM_GPS_NOISE_X" type="FLOAT">
-      <short_desc>Simulator GPS noise multiplier</short_desc>
-      <min>0</min>
-      <max>10</max>
-      <unit>%</unit>
-      <increment>0.1</increment>
     </parameter>
     <parameter default="0" name="SIM_GYRO_BLOCK" type="INT32">
       <short_desc>Simulator block gyroscope data</short_desc>
@@ -8685,9 +8697,9 @@ is less than 50% of this value</short_desc>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter default="30.0" name="IMU_DGYRO_CUTOFF" type="FLOAT">
+    <parameter default="0.0" name="IMU_DGYRO_CUTOFF" type="FLOAT">
       <short_desc>Cutoff frequency for angular acceleration (D-Term filter)</short_desc>
-      <long_desc>The cutoff frequency for the 2nd order butterworth filter used on the time derivative of the measured angular velocity, also known as the D-term filter in the rate controller. The D-term uses the derivative of the rate and thus is the most susceptible to noise. Therefore, using a D-term filter allows to decrease the driver-level filtering, which leads to reduced control latency and permits to increase the P gains. A value of 0 disables the filter.</long_desc>
+      <long_desc>The cutoff frequency for the 2nd order butterworth filter used on the time derivative of the measured angular velocity, also known as the D-term filter in the rate controller. The D-term uses the derivative of the rate and thus is the most susceptible to noise. Therefore, using a D-term filter allows to increase IMU_GYRO_CUTOFF, which leads to reduced control latency and permits to increase the P gains. A value of 0 disables the filter.</long_desc>
       <min>0</min>
       <max>1000</max>
       <unit>Hz</unit>
@@ -8695,7 +8707,7 @@ is less than 50% of this value</short_desc>
     </parameter>
     <parameter default="30.0" name="IMU_GYRO_CUTOFF" type="FLOAT">
       <short_desc>Low pass filter cutoff frequency for gyro</short_desc>
-      <long_desc>The cutoff frequency for the 2nd order butterworth filter on the primary gyro. This only affects the angular velocity sent to the controllers, not the estimators. Doesn't apply to the angular acceleration (D-Term filter), see IMU_DGYRO_CUTOFF. A value of 0 disables the filter.</long_desc>
+      <long_desc>The cutoff frequency for the 2nd order butterworth filter on the primary gyro. This only affects the angular velocity sent to the controllers, not the estimators. It applies also to the angular acceleration (D-Term filter), see IMU_DGYRO_CUTOFF. A value of 0 disables the filter.</long_desc>
       <min>0</min>
       <max>1000</max>
       <unit>Hz</unit>
@@ -8735,7 +8747,7 @@ is less than 50% of this value</short_desc>
     </parameter>
     <parameter default="200" name="IMU_INTEG_RATE" type="INT32">
       <short_desc>IMU integration rate</short_desc>
-      <long_desc>The rate at which raw IMU data is integrated to produce delta angles and delta velocities.</long_desc>
+      <long_desc>The rate at which raw IMU data is integrated to produce delta angles and delta velocities. Recommended to set this to a multiple of the estimator update period (currently 10 ms for ekf2).</long_desc>
       <min>100</min>
       <max>1000</max>
       <unit>Hz</unit>
@@ -8942,7 +8954,7 @@ How often the sensor is readout</short_desc>
     <parameter default="0" name="SENS_EN_SF1XX" type="INT32">
       <short_desc>Lightware SF1xx/SF20/LW20 laser rangefinder (i2c)</short_desc>
       <min>0</min>
-      <max>5</max>
+      <max>6</max>
       <reboot_required>true</reboot_required>
       <values>
         <value code="0">Disabled</value>
@@ -8975,6 +8987,10 @@ How often the sensor is readout</short_desc>
         <value code="4">TREvo600Hz</value>
         <value code="5">TREvo3m</value>
       </values>
+    </parameter>
+    <parameter category="System" default="1" name="SENS_EXT_I2C_PRB" type="INT32">
+      <short_desc>External I2C probe</short_desc>
+      <long_desc>Probe for optional external I2C devices.</long_desc>
     </parameter>
     <parameter default="6" name="SENS_FLOW_ROT" type="INT32">
       <short_desc>PX4Flow board rotation</short_desc>
@@ -10041,9 +10057,10 @@ How often the sensor is readout</short_desc>
     </parameter>
     <parameter default="0" name="SYS_HITL" type="INT32">
       <short_desc>Enable HITL/SIH mode on next boot</short_desc>
-      <long_desc>While enabled the system will boot in Hardware-In-The-Loop (HITL) or Simulation-In-Hardware (SIH) mode and not enable all sensors and checks. When disabled the same vehicle can be flown normally.</long_desc>
+      <long_desc>While enabled the system will boot in Hardware-In-The-Loop (HITL) or Simulation-In-Hardware (SIH) mode and not enable all sensors and checks. When disabled the same vehicle can be flown normally. Set to 'external HITL', if the system should perform as if it were a real vehicle (the only difference to a real system is then only the parameter value, which can be used for log analysis).</long_desc>
       <reboot_required>true</reboot_required>
       <values>
+        <value code="-1">external HITL</value>
         <value code="0">HITL and SIH disabled</value>
         <value code="1">HITL enabled</value>
         <value code="2">SIH enabled</value>
@@ -10187,15 +10204,6 @@ How often the sensor is readout</short_desc>
     <parameter category="System" default="0" name="TC_A0_ID" type="INT32">
       <short_desc>ID of Accelerometer that the calibration is for</short_desc>
     </parameter>
-    <parameter category="System" default="1.0" name="TC_A0_SCL_0" type="FLOAT">
-      <short_desc>Accelerometer scale factor - X axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_A0_SCL_1" type="FLOAT">
-      <short_desc>Accelerometer scale factor - Y axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_A0_SCL_2" type="FLOAT">
-      <short_desc>Accelerometer scale factor - Z axis</short_desc>
-    </parameter>
     <parameter category="System" default="100.0" name="TC_A0_TMAX" type="FLOAT">
       <short_desc>Accelerometer calibration maximum temperature</short_desc>
     </parameter>
@@ -10244,15 +10252,6 @@ How often the sensor is readout</short_desc>
     <parameter category="System" default="0" name="TC_A1_ID" type="INT32">
       <short_desc>ID of Accelerometer that the calibration is for</short_desc>
     </parameter>
-    <parameter category="System" default="1.0" name="TC_A1_SCL_0" type="FLOAT">
-      <short_desc>Accelerometer scale factor - X axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_A1_SCL_1" type="FLOAT">
-      <short_desc>Accelerometer scale factor - Y axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_A1_SCL_2" type="FLOAT">
-      <short_desc>Accelerometer scale factor - Z axis</short_desc>
-    </parameter>
     <parameter category="System" default="100.0" name="TC_A1_TMAX" type="FLOAT">
       <short_desc>Accelerometer calibration maximum temperature</short_desc>
     </parameter>
@@ -10300,15 +10299,6 @@ How often the sensor is readout</short_desc>
     </parameter>
     <parameter category="System" default="0" name="TC_A2_ID" type="INT32">
       <short_desc>ID of Accelerometer that the calibration is for</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_A2_SCL_0" type="FLOAT">
-      <short_desc>Accelerometer scale factor - X axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_A2_SCL_1" type="FLOAT">
-      <short_desc>Accelerometer scale factor - Y axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_A2_SCL_2" type="FLOAT">
-      <short_desc>Accelerometer scale factor - Z axis</short_desc>
     </parameter>
     <parameter category="System" default="100.0" name="TC_A2_TMAX" type="FLOAT">
       <short_desc>Accelerometer calibration maximum temperature</short_desc>
@@ -10362,9 +10352,6 @@ How often the sensor is readout</short_desc>
     <parameter category="System" default="0" name="TC_B0_ID" type="INT32">
       <short_desc>ID of Barometer that the calibration is for</short_desc>
     </parameter>
-    <parameter category="System" default="1.0" name="TC_B0_SCL" type="FLOAT">
-      <short_desc>Barometer scale factor - X axis</short_desc>
-    </parameter>
     <parameter category="System" default="75.0" name="TC_B0_TMAX" type="FLOAT">
       <short_desc>Barometer calibration maximum temperature</short_desc>
     </parameter>
@@ -10395,9 +10382,6 @@ How often the sensor is readout</short_desc>
     <parameter category="System" default="0" name="TC_B1_ID" type="INT32">
       <short_desc>ID of Barometer that the calibration is for</short_desc>
     </parameter>
-    <parameter category="System" default="1.0" name="TC_B1_SCL" type="FLOAT">
-      <short_desc>Barometer scale factor - X axis</short_desc>
-    </parameter>
     <parameter category="System" default="75.0" name="TC_B1_TMAX" type="FLOAT">
       <short_desc>Barometer calibration maximum temperature</short_desc>
     </parameter>
@@ -10427,9 +10411,6 @@ How often the sensor is readout</short_desc>
     </parameter>
     <parameter category="System" default="0" name="TC_B2_ID" type="INT32">
       <short_desc>ID of Barometer that the calibration is for</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_B2_SCL" type="FLOAT">
-      <short_desc>Barometer scale factor - X axis</short_desc>
     </parameter>
     <parameter category="System" default="75.0" name="TC_B2_TMAX" type="FLOAT">
       <short_desc>Barometer calibration maximum temperature</short_desc>
@@ -10464,15 +10445,6 @@ How often the sensor is readout</short_desc>
     </parameter>
     <parameter category="System" default="0" name="TC_G0_ID" type="INT32">
       <short_desc>ID of Gyro that the calibration is for</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_G0_SCL_0" type="FLOAT">
-      <short_desc>Gyro scale factor - X axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_G0_SCL_1" type="FLOAT">
-      <short_desc>Gyro scale factor - Y axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_G0_SCL_2" type="FLOAT">
-      <short_desc>Gyro scale factor - Z axis</short_desc>
     </parameter>
     <parameter category="System" default="100.0" name="TC_G0_TMAX" type="FLOAT">
       <short_desc>Gyro calibration maximum temperature</short_desc>
@@ -10522,15 +10494,6 @@ How often the sensor is readout</short_desc>
     <parameter category="System" default="0" name="TC_G1_ID" type="INT32">
       <short_desc>ID of Gyro that the calibration is for</short_desc>
     </parameter>
-    <parameter category="System" default="1.0" name="TC_G1_SCL_0" type="FLOAT">
-      <short_desc>Gyro scale factor - X axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_G1_SCL_1" type="FLOAT">
-      <short_desc>Gyro scale factor - Y axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_G1_SCL_2" type="FLOAT">
-      <short_desc>Gyro scale factor - Z axis</short_desc>
-    </parameter>
     <parameter category="System" default="100.0" name="TC_G1_TMAX" type="FLOAT">
       <short_desc>Gyro calibration maximum temperature</short_desc>
     </parameter>
@@ -10578,15 +10541,6 @@ How often the sensor is readout</short_desc>
     </parameter>
     <parameter category="System" default="0" name="TC_G2_ID" type="INT32">
       <short_desc>ID of Gyro that the calibration is for</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_G2_SCL_0" type="FLOAT">
-      <short_desc>Gyro scale factor - X axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_G2_SCL_1" type="FLOAT">
-      <short_desc>Gyro scale factor - Y axis</short_desc>
-    </parameter>
-    <parameter category="System" default="1.0" name="TC_G2_SCL_2" type="FLOAT">
-      <short_desc>Gyro scale factor - Z axis</short_desc>
     </parameter>
     <parameter category="System" default="100.0" name="TC_G2_TMAX" type="FLOAT">
       <short_desc>Gyro calibration maximum temperature</short_desc>
