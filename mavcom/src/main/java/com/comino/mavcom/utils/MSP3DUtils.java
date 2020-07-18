@@ -49,7 +49,15 @@ public class MSP3DUtils {
 		return (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y));
 	}
 
+	public static double distance2D(Vector3D_F64 t, Vector3D_F64 c) {
+		return (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y));
+	}
+
 	public static float distance3D(Vector3D_F32 t, Vector3D_F32 c) {
+		return (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
+	}
+
+	public static double distance3D(Vector3D_F64 t, Vector3D_F64 c) {
 		return (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
 	}
 
@@ -123,6 +131,11 @@ public class MSP3DUtils {
 
 	public static boolean convertCurrentSpeed(DataModel model, Vector4D_F32 vector) {
 		vector.set(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
+		return isFinite(vector);
+	}
+
+	public static boolean convertCurrentSpeed(DataModel model, Vector3D_F64 vector) {
+		vector.set(model.state.l_vx, model.state.l_vy, model.state.l_vz);
 		return isFinite(vector);
 	}
 
