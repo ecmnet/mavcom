@@ -113,6 +113,7 @@ public class Status extends Segment {
 	public  long    autopilot    	= 0;
 	public  int     px4_status   	= 0;
 	public  int     nav_state       = 0;
+	public  int     est_state       = 0;
 
 	public  int     sensors      	= 0;
 	public  int     status       	= 0;
@@ -146,6 +147,7 @@ public class Status extends Segment {
 
 		px4_status = s.px4_status;
 		nav_state  = s.nav_state;
+		est_state  = s.est_state;
 		autopilot  = s.autopilot;
 
 		t_armed_ms    = s.t_armed_ms;
@@ -268,6 +270,7 @@ public class Status extends Segment {
 		autopilot     = 0;
 		wifi_quality  = 0;
 		msp_temp   	  = 0;
+		est_state     = 0;
 	}
 
 
@@ -275,9 +278,13 @@ public class Status extends Segment {
 		return status;
 	}
 
+	public int getEstStatus() {
+		return est_state;
+	}
+
 
 	public boolean isEqual(Status m) {
-		return (status == m.status)	&& (autopilot == m.autopilot) && (nav_state == m.nav_state) && (sensors == m.sensors);
+		return (status == m.status)	&& (autopilot == m.autopilot) && (nav_state == m.nav_state) && (sensors == m.sensors) && ( est_state == m.est_state);
 	}
 
 

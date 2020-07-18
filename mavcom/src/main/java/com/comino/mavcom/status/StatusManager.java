@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 import com.comino.mavcom.model.DataModel;
+import com.comino.mavcom.model.segment.EstStatus;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.legacy.ExecutorService;
@@ -54,7 +55,7 @@ public class StatusManager implements Runnable {
 	private static final long TIMEOUT_LPOS            = 1000000;
 	private static final long TIMEOUT_GPS             = 2000000;
 	private static final long TIMEOUT_SLAM            = 2000000;
-	private static final long TIMEOUT_FLOW            = 1000000;
+	private static final long TIMEOUT_LIDAR           = 1000000;
 
 	public static final byte  TYPE_ALL             = 0;
 	public static final byte  TYPE_PX4_STATUS      = 1;
@@ -62,6 +63,7 @@ public class StatusManager implements Runnable {
 	public static final byte  TYPE_RESERVED        = 3;
 	public static final byte  TYPE_MSP_AUTOPILOT   = 4;
 	public static final byte  TYPE_MSP_SERVICES    = 5;
+	public static final byte  TYPE_ESTIMATOR       = 6;
 
 	public static final byte  EDGE_BOTH            = 0;
 	public static final byte  EDGE_RISING          = 1;
@@ -72,8 +74,8 @@ public class StatusManager implements Runnable {
 
 	public DataModel model                   = null;
 
-	private  Status status_current 	 = null;
-	private  Status status_old 		 = null;
+	private  Status status_current 	   = null;
+	private  Status status_old 		   = null;
 
 	private List<StatusListenerEntry>  list  = null;
 
@@ -258,6 +260,31 @@ public class StatusManager implements Runnable {
 						entry.last_triggered = System.currentTimeMillis();
 					}
 					break;
+
+				case TYPE_ESTIMATOR:
+
+					switch(entry.state) {
+					case EDGE_BOTH:
+						if((status_current.est_state != entry.mask && status_old.est_state == entry.mask ) ||
+								(status_current.est_state == entry.mask && status_old.est_state != entry.mask )) {
+							update_callback(entry.listener, status_current);
+							entry.last_triggered = System.currentTimeMillis();
+						}
+						break;
+					case EDGE_RISING:
+						if(status_current.est_state == entry.mask && status_old.est_state!=entry.mask) {
+							update_callback(entry.listener, status_current);
+							entry.last_triggered = System.currentTimeMillis();
+						}
+						break;
+					case EDGE_FALLING:
+
+						if(status_current.est_state != entry.mask && status_old.est_state==entry.mask) {
+							update_callback(entry.listener, status_current);
+							entry.last_triggered = System.currentTimeMillis();
+						}
+						break;
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -292,9 +319,8 @@ public class StatusManager implements Runnable {
 			model.sys.setStatus(Status.MSP_GPOS_VALID, false);
 		}
 
-		if (checkTimeOut(model.raw.tms, TIMEOUT_FLOW)) {
-			model.sys.setSensor(Status.MSP_PIX4FLOW_AVAILABILITY, false);
-			model.raw.fq = 0;
+		if (checkTimeOut(model.raw.tms, TIMEOUT_LIDAR)) {
+			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, false);
 		}
 
 		if (checkTimeOut(model.vision.tms, TIMEOUT_VISION)) {

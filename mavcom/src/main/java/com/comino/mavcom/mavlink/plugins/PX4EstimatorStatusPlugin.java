@@ -21,6 +21,7 @@ public class PX4EstimatorStatusPlugin extends MAVLinkPluginBase {
 		model.est.flags    = est.flags;
 		model.est.tasRatio = est.tas_ratio;
 		model.est.velRatio = est.vel_ratio;
+		model.sys.est_state = est.flags;
 
 		model.est.tms = est.time_usec;
 
