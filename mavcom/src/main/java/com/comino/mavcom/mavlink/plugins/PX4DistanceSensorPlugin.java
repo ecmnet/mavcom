@@ -25,6 +25,7 @@ public class PX4DistanceSensorPlugin extends MAVLinkPluginBase {
 			model.sys.setSensor(Status.MSP_SONAR_AVAILABILITY, false);
 			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, true);
 		}
+		model.raw.tms = model.sys.getSynchronizedPX4Time_us();
 
 	}
 }
