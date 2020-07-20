@@ -271,13 +271,13 @@ public class StatusManager implements Runnable {
 							entry.last_triggered = System.currentTimeMillis();
 						}
 						break;
-					case EDGE_RISING:
+					case EDGE_FALLING:
 						if((status_current.est_state & entry.mask) == 0 && (status_old.est_state & entry.mask) != 0 ) {
 							update_callback(entry.listener, status_current);
 							entry.last_triggered = System.currentTimeMillis();
 						}
 						break;
-					case EDGE_FALLING:
+					case EDGE_RISING:
 
 						if((status_current.est_state & entry.mask)!=0 && (status_old.est_state & entry.mask) == 0 ) {
 							update_callback(entry.listener, status_current);
