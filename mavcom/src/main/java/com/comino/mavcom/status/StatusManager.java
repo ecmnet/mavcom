@@ -117,15 +117,15 @@ public class StatusManager implements Runnable {
 	}
 
 	public void addListener(byte type, int box, int edge, IMSPStatusChangedListener listener) {
-		// For NAV State use mask as comparison value
-		if(type == TYPE_PX4_NAVSTATE)
+		// For NAV State / Estimator state use mask as comparison value
+		if(type == TYPE_PX4_NAVSTATE || type == TYPE_ESTIMATOR )
 			addListener(type, box, 0, edge, listener);
 		else
 			addListener(type, 1 << box, 0, edge, listener);
 	}
 
 	public void addListener(byte type, int box, IMSPStatusChangedListener listener) {
-		if(type == TYPE_PX4_NAVSTATE)
+		if(type == TYPE_PX4_NAVSTATE || type == TYPE_ESTIMATOR )
 			addListener(type, box, 0, EDGE_BOTH, listener);
 		else
 			addListener(type, 1 << box, 0, EDGE_BOTH, listener);
@@ -265,21 +265,21 @@ public class StatusManager implements Runnable {
 
 					switch(entry.state) {
 					case EDGE_BOTH:
-						if((status_current.est_state != entry.mask && status_old.est_state == entry.mask ) ||
-								(status_current.est_state == entry.mask && status_old.est_state != entry.mask )) {
+						if(((status_current.est_state & entry.mask) == 0 && (status_old.est_state & entry.mask) != 0 ) ||
+								((status_current.est_state & entry.mask)!=0 && (status_old.est_state & entry.mask) == 0 )) {
 							update_callback(entry.listener, status_current);
 							entry.last_triggered = System.currentTimeMillis();
 						}
 						break;
 					case EDGE_RISING:
-						if(status_current.est_state == entry.mask && status_old.est_state!=entry.mask) {
+						if((status_current.est_state & entry.mask) == 0 && (status_old.est_state & entry.mask) != 0 ) {
 							update_callback(entry.listener, status_current);
 							entry.last_triggered = System.currentTimeMillis();
 						}
 						break;
 					case EDGE_FALLING:
 
-						if(status_current.est_state != entry.mask && status_old.est_state==entry.mask) {
+						if((status_current.est_state & entry.mask)!=0 && (status_old.est_state & entry.mask) == 0 ) {
 							update_callback(entry.listener, status_current);
 							entry.last_triggered = System.currentTimeMillis();
 						}
