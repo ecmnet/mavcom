@@ -23,7 +23,7 @@ public interface MAV_CMD {
      * Loiter around this waypoint an unlimited amount of time
      * PARAM 1 : Empty
      * PARAM 2 : Empty
-     * PARAM 3 : Radius around waypoint. If positive loiter clockwise, else counter-clockwise
+     * PARAM 3 : Loiter radius around waypoint for forward-only moving vehicles (not multicopters). If positive loiter clockwise, else counter-clockwise
      * PARAM 4 : Desired yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
@@ -33,20 +33,20 @@ public interface MAV_CMD {
     /**
      * Loiter around this waypoint for X turns
      * PARAM 1 : Number of turns.
-     * PARAM 2 : Empty
-     * PARAM 3 : Radius around waypoint. If positive loiter clockwise, else counter-clockwise
-     * PARAM 4 : Forward moving aircraft this sets exit xtrack location: 0 for center of loiter wp, 1 for exit location. Else, this is desired yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
+     * PARAM 2 : Leave loiter circle only once heading towards the next waypoint (0 = False)
+     * PARAM 3 : Loiter radius around waypoint for forward-only moving vehicles (not multicopters). If positive loiter clockwise, else counter-clockwise
+     * PARAM 4 : Loiter circle exit location and/or path to next waypoint ("xtrack") for forward-only moving vehicles (not multicopters). 0 for the vehicle to converge towards the center xtrack when it leaves the loiter (the line between the centers of the current and next waypoint), 1 to converge to the direct line between the location that the vehicle exits the loiter radius and the next waypoint. Otherwise the angle (in degrees) between the tangent of the loiter circle and the center xtrack at which the vehicle must leave the loiter (and converge to the center xtrack). NaN to use the current system default xtrack behaviour.
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
      */
     public final static int MAV_CMD_NAV_LOITER_TURNS = 18;
     /**
-     * Loiter at the specified latitude, longitude and altitude for a certain amount of time. Multicopter vehicles stop at the point (within a vehicle-specific acceptance radius). Forward-moving vehicles (e.g. fixed-wing) circle the point with the specified radius/direction. If the Heading Required parameter (2) is non-zero forward moving aircraft will only leave the loiter circle once heading towards the next waypoint.
+     * Loiter at the specified latitude, longitude and altitude for a certain amount of time. Multicopter vehicles stop at the point (within a vehicle-specific acceptance radius). Forward-only moving vehicles (e.g. fixed-wing) circle the point with the specified radius/direction. If the Heading Required parameter (2) is non-zero forward moving aircraft will only leave the loiter circle once heading towards the next waypoint.
      * PARAM 1 : Loiter time (only starts once Lat, Lon and Alt is reached).
      * PARAM 2 : Leave loiter circle only once heading towards the next waypoint (0 = False)
-     * PARAM 3 : Loiter radius around waypoint for forward-moving vehicles. If positive loiter clockwise, else counter-clockwise.
-     * PARAM 4 : For forward-moving aircraft this sets exit xtrack location: 0 for center of loiter wp, 1 for exit location. Else, this is desired yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
+     * PARAM 3 : Loiter radius around waypoint for forward-only moving vehicles (not multicopters). If positive loiter clockwise, else counter-clockwise.
+     * PARAM 4 : Loiter circle exit location and/or path to next waypoint ("xtrack") for forward-only moving vehicles (not multicopters). 0 for the vehicle to converge towards the center xtrack when it leaves the loiter (the line between the centers of the current and next waypoint), 1 to converge to the direct line between the location that the vehicle exits the loiter radius and the next waypoint. Otherwise the angle (in degrees) between the tangent of the loiter circle and the center xtrack at which the vehicle must leave the loiter (and converge to the center xtrack). NaN to use the current system default xtrack behaviour.
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -130,11 +130,11 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_NAV_CONTINUE_AND_CHANGE_ALT = 30;
     /**
-     * Begin loiter at the specified Latitude and Longitude.  If Lat=Lon=0, then loiter at the current position.  Don't consider the navigation command complete (don't leave loiter) until the altitude has been reached.  Additionally, if the Heading Required parameter is non-zero the  aircraft will not leave the loiter until heading toward the next waypoint.
-     * PARAM 1 : Heading Required (0 = False)
-     * PARAM 2 : Radius. If positive loiter clockwise, negative counter-clockwise, 0 means no change to standard loiter.
+     * Begin loiter at the specified Latitude and Longitude.  If Lat=Lon=0, then loiter at the current position.  Don't consider the navigation command complete (don't leave loiter) until the altitude has been reached. Additionally, if the Heading Required parameter is non-zero the aircraft will not leave the loiter until heading toward the next waypoint.
+     * PARAM 1 : Leave loiter circle only once heading towards the next waypoint (0 = False)
+     * PARAM 2 : Loiter radius around waypoint for forward-only moving vehicles (not multicopters). If positive loiter clockwise, negative counter-clockwise, 0 means no change to standard loiter.
      * PARAM 3 : Empty
-     * PARAM 4 : Forward moving aircraft this sets exit xtrack location: 0 for center of loiter wp, 1 for exit location
+     * PARAM 4 : Loiter circle exit location and/or path to next waypoint ("xtrack") for forward-only moving vehicles (not multicopters). 0 for the vehicle to converge towards the center xtrack when it leaves the loiter (the line between the centers of the current and next waypoint), 1 to converge to the direct line between the location that the vehicle exits the loiter radius and the next waypoint. Otherwise the angle (in degrees) between the tangent of the loiter circle and the center xtrack at which the vehicle must leave the loiter (and converge to the center xtrack). NaN to use the current system default xtrack behaviour.
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -284,7 +284,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_CONDITION_DELAY = 112;
     /**
-     * Ascend/descend at rate.  Delay mission state machine until desired altitude reached.
+     * Ascend/descend to target altitude at specified rate. Delay mission state machine until desired altitude reached.
      * PARAM 1 : Descent / Ascend rate.
      * PARAM 2 : Empty
      * PARAM 3 : Empty
@@ -448,6 +448,17 @@ public interface MAV_CMD {
      * PARAM 7 : Empty
      */
     public final static int MAV_CMD_DO_CHANGE_ALTITUDE = 186;
+    /**
+     * Sets actuators (e.g. servos) to a desired value. The actuator numbers are mapped to specific outputs (e.g. on any MAIN or AUX PWM or UAVCAN) using a flight-stack specific mechanism (i.e. a parameter).
+     * PARAM 1 : Actuator 1 value, scaled from [-1 to 1]. NaN to ignore.
+     * PARAM 2 : Actuator 2 value, scaled from [-1 to 1]. NaN to ignore.
+     * PARAM 3 : Actuator 3 value, scaled from [-1 to 1]. NaN to ignore.
+     * PARAM 4 : Actuator 4 value, scaled from [-1 to 1]. NaN to ignore.
+     * PARAM 5 : Actuator 5 value, scaled from [-1 to 1]. NaN to ignore.
+     * PARAM 6 : Actuator 6 value, scaled from [-1 to 1]. NaN to ignore.
+     * PARAM 7 : Index of actuator set (i.e if set to 1, Actuator 1 becomes Actuator 7)
+     */
+    public final static int MAV_CMD_DO_SET_ACTUATOR = 187;
     /**
      * Mission command to perform a landing. This is used as a marker in a mission to tell the autopilot where a sequence of mission items that represents a landing starts. It may also be sent via a COMMAND_LONG to trigger a landing, in which case the nearest (geographically) landing sequence in the mission will be used. The Latitude/Longitude is optional, and may be set to 0 if not needed. If specified then it will be used to help find the closest landing sequence.
      * PARAM 1 : Empty
@@ -642,7 +653,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_FENCE_ENABLE = 207;
     /**
-     * Mission command to trigger a parachute
+     * Mission item/command to release a parachute or enable/disable auto release.
      * PARAM 1 : Action
      * PARAM 2 : Empty
      * PARAM 3 : Empty
@@ -820,10 +831,10 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN = 246;
     /**
-     * Request a target system to start, cancel, or restart upgrade of one (or all) of its components. For example, the command might be sent to a companion computer to cause it to upgrade a connected flight controller. The system doing the upgrade will report progress using the normal command protocol sequence (COMMAND_ACK regularly sent with result=MAV_RESULT_IN_PROGRESS, followed by a final result of MAV_RESULT_ACCEPTED or MAV_RESULT_FAILED). The operation can be cancelled, in which case the updating system would send COMMAND_ACK with MAV_RESULT_ACCEPTED. The operation can be restarted, in which case the updating system should respond with progress updates (as though it had a new message).
+     * Request a target system to start an upgrade of one (or all) of its components. For example, the command might be sent to a companion computer to cause it to upgrade a connected flight controller. The system doing the upgrade will report progress using the normal command protocol sequence for a long running operation. Command protocol information: https://mavlink.io/en/services/command.html.
      * PARAM 1 : Component id of the component to be upgraded. If set to 0, all components should be upgraded.
-     * PARAM 2 : 0: Start component upgrade, 1: Cancel component upgrade, 2: Restart component upgrade.
-     * PARAM 3 : 0: Do not reboot component after the action is executed, 1: Reboot component after the action is executed.
+     * PARAM 2 : 0: Do not reboot component after the action is executed, 1: Reboot component after the action is executed.
+     * PARAM 3 : Reserved
      * PARAM 4 : Reserved
      * PARAM 5 : Reserved
      * PARAM 6 : Reserved
@@ -940,7 +951,7 @@ public interface MAV_CMD {
      * Format a storage medium. Once format is complete, a STORAGE_INFORMATION message is sent. Use the command's target_component to target a specific component's storage.
      * PARAM 1 : Storage ID (1 for first, 2 for second, etc.)
      * PARAM 2 : Format storage (and reset image log). 0: No action 1: Format storage
-     * PARAM 3 : 0: No action 1: Reset Image Count
+     * PARAM 3 : Reset Image Log (without formatting storage medium). This will reset CAMERA_CAPTURE_STATUS.image_count and CAMERA_IMAGE_CAPTURED.image_index. 0: No action 1: Reset Image Log
      * PARAM 4 : Reserved (all remaining params)
      */
     public final static int MAV_CMD_STORAGE_FORMAT = 526;
@@ -1002,14 +1013,14 @@ public interface MAV_CMD {
     public final static int MAV_CMD_DO_JUMP_TAG = 601;
     /**
      * High level setpoint to be sent to a gimbal manager to set a gimbal attitude. It is possible to set combinations of the values below. E.g. an angle as well as a desired angular rate can be used to get to this angle at a certain angular rate, or an angular rate only will result in continuous turning. NaN is to be used to signal unset. Note: a gimbal is never to react to this command but only the gimbal manager.
-     * PARAM 1 : Tilt/pitch angular velocity (positive to point up).
-     * PARAM 2 : Pan/yaw angular velocity (positive to pan to the right).
-     * PARAM 3 : Pitch/tilt angle relative to world horizon (negative is to tilt down, positive to tilt up).
-     * PARAM 4 : Yaw/pan angle (positive is pan to the right, relative to vehicle for PAN mode, absolute to North for HOLD mode) 
+     * PARAM 1 : Tilt/pitch rate (positive to tilt up).
+     * PARAM 2 : Pan/yaw rate (positive to pan to the right).
+     * PARAM 3 : Tilt/pitch angle (positive to tilt up, relative to vehicle for PAN mode, relative to world horizon for HOLD mode).
+     * PARAM 4 : Pan/yaw angle (positive to pan to the right, relative to vehicle for PAN mode, absolute to North for HOLD mode).
      * PARAM 5 : Gimbal manager flags to use.
      * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
      */
-    public final static int MAV_CMD_DO_GIMBAL_MANAGER_ATTITUDE = 1000;
+    public final static int MAV_CMD_DO_GIMBAL_MANAGER_TILTPAN = 1000;
     /**
      * If the gimbal manager supports visual tracking (GIMBAL_MANAGER_CAP_FLAGS_HAS_TRACKING_POINT is set), this command allows to initiate the tracking. Such a tracking gimbal manager would usually be an integrated camera/gimbal, or alternatively a companion computer connected to a camera.
      * PARAM 1 : Point to track x value.
@@ -1272,8 +1283,8 @@ public interface MAV_CMD {
      * PARAM 2 : Desired approach vector in compass heading. A negative value indicates the system can define the approach vector at will.
      * PARAM 3 : Desired ground speed at release time. This can be overridden by the airframe in case it needs to meet minimum airspeed. A negative value indicates the system can define the ground speed at will.
      * PARAM 4 : Minimum altitude clearance to the release position. A negative value indicates the system can define the clearance at will.
-     * PARAM 5 : Latitude unscaled for MISSION_ITEM or in 1e7 degrees for MISSION_ITEM_INT
-     * PARAM 6 : Longitude unscaled for MISSION_ITEM or in 1e7 degrees for MISSION_ITEM_INT
+     * PARAM 5 : Latitude. Note, if used in MISSION_ITEM (deprecated) the units are degrees (unscaled)
+     * PARAM 6 : Longitude. Note, if used in MISSION_ITEM (deprecated) the units are degrees (unscaled)
      * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_PAYLOAD_PREPARE_DEPLOY = 30001;

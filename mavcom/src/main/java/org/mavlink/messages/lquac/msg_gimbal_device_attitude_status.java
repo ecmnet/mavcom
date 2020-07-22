@@ -24,7 +24,7 @@ public class msg_gimbal_device_attitude_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 38;
+    payload_length = 40;
 }
 
   /**
@@ -55,6 +55,14 @@ public class msg_gimbal_device_attitude_status extends MAVLinkMessage {
    * Current gimbal flags set.
    */
   public int flags;
+  /**
+   * System ID
+   */
+  public int target_system;
+  /**
+   * Component ID
+   */
+  public int target_component;
 /**
  * Decode message with raw data
  */
@@ -68,12 +76,14 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   angular_velocity_z = (float)dis.readFloat();
   failure_flags = (int)dis.readInt()&0x00FFFFFFFF;
   flags = (int)dis.readUnsignedShort()&0x00FFFF;
+  target_system = (int)dis.readUnsignedByte()&0x00FF;
+  target_component = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+38];
+  byte[] buffer = new byte[12+40];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -94,15 +104,17 @@ public byte[] encode() throws IOException {
   dos.writeFloat(angular_velocity_z);
   dos.writeInt((int)(failure_flags&0x00FFFFFFFF));
   dos.writeShort(flags&0x00FFFF);
+  dos.writeByte(target_system&0x00FF);
+  dos.writeByte(target_component&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 38);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 40);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[48] = crcl;
-  buffer[49] = crch;
+  buffer[50] = crcl;
+  buffer[51] = crch;
   dos.close();
   return buffer;
 }
@@ -117,5 +129,7 @@ return "MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS : " +   "  time_boot_ms="+t
 +  "  angular_velocity_z="+format((float)angular_velocity_z)
 +  "  failure_flags="+failure_flags
 +  "  flags="+flags
++  "  target_system="+target_system
++  "  target_component="+target_component
 ;}
 }

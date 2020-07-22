@@ -191,9 +191,9 @@ public interface MAV_COMPONENT {
      */
     public final static int MAV_COMP_ID_USER43 = 67;
     /**
-     * Id for a component on privately managed MAVLink network. Can be used for any purpose but may not be published by components outside of the private network.
+     * Telemetry radio (e.g. SiK radio, or other component that emits RADIO_STATUS messages).
      */
-    public final static int MAV_COMP_ID_USER44 = 68;
+    public final static int MAV_COMP_ID_TELEMETRY_RADIO = 68;
     /**
      * Id for a component on privately managed MAVLink network. Can be used for any purpose but may not be published by components outside of the private network.
      */

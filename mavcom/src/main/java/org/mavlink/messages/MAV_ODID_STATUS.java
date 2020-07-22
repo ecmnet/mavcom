@@ -20,4 +20,8 @@ public interface MAV_ODID_STATUS {
      * The UA is in the air.
      */
     public final static int MAV_ODID_STATUS_AIRBORNE = 2;
+    /**
+     * The UA is having an emergency.
+     */
+    public final static int MAV_ODID_STATUS_EMERGENCY = 3;
 }

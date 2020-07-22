@@ -1227,6 +1227,14 @@ Set -1 to disable the check</short_desc>
       <unit>s</unit>
       <increment>0.1</increment>
     </parameter>
+    <parameter default="3.0" name="COM_LKDOWN_TKO" type="FLOAT">
+      <short_desc>Timeout for detecting a failure after takeoff</short_desc>
+      <long_desc>A non-zero, positive value specifies the timeframe in seconds within failure detector is allowed to put the vehicle into a lockdown state if attitude exceeds the limits defined in FD_FAIL_P and FD_FAIL_R. The check is not executed for flight modes that do support acrobatic maneuvers, e.g: Acro (MC/FW), Rattitude and Manual (FW). A zero or negative value means that the check is disabled.</long_desc>
+      <min>-1.0</min>
+      <max>5.0</max>
+      <unit>s</unit>
+      <decimal>3</decimal>
+    </parameter>
     <parameter default="0" name="COM_LOW_BAT_ACT" type="INT32">
       <short_desc>Battery failsafe mode</short_desc>
       <long_desc>Action the system takes at critical battery. See also BAT_CRIT_THR and BAT_EMERGEN_THR for definition of battery states.</long_desc>
@@ -3152,6 +3160,12 @@ Set to 0 to disable heading hold</short_desc>
     </parameter>
   </group>
   <group name="Failure Detector">
+    <parameter default="1" name="FD_ESCS_EN" type="INT32">
+      <short_desc>Enable checks on ESCs that report their arming state.
+If enabled, failure detector will verify that all the ESCs have successfully armed when the vehicle has transitioned to the armed state.
+Timeout for receiving an acknowledgement from the ESCs is 0.3s, if no feedback is received the failure detector will auto disarm the vehicle</short_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
     <parameter default="0" name="FD_EXT_ATS_EN" type="INT32">
       <short_desc>Enable PWM input on AUX5 or MAIN5 (depending on board) for engaging failsafe from an external
 automatic trigger system (ATS)</short_desc>
@@ -3337,13 +3351,14 @@ but also ignore less noise</short_desc>
       <short_desc>Geofence violation action</short_desc>
       <long_desc>Note: Setting this value to 4 enables flight termination, which will kill the vehicle on violation of the fence. Due to the inherent danger of this, this function is disabled using a software circuit breaker, which needs to be reset to 0 to really shut down the system.</long_desc>
       <min>0</min>
-      <max>4</max>
+      <max>5</max>
       <values>
         <value code="0">None</value>
         <value code="1">Warning</value>
         <value code="2">Hold mode</value>
         <value code="3">Return mode</value>
         <value code="4">Terminate</value>
+        <value code="5">Land mode</value>
       </values>
     </parameter>
     <parameter default="0" name="GF_ALTMODE" type="INT32">
@@ -8288,7 +8303,7 @@ Particularly useful for testing different low-battery behaviour</short_desc>
       <short_desc>Rotation of magnetometer 0 relative to airframe</short_desc>
       <long_desc>An internal magnetometer will force a value of -1, so a GCS should only attempt to configure the rotation if the value is greater than or equal to zero.</long_desc>
       <min>-1</min>
-      <max>30</max>
+      <max>45</max>
       <reboot_required>true</reboot_required>
       <values>
         <value code="-1">Internal mag</value>
@@ -8318,6 +8333,26 @@ Particularly useful for testing different low-battery behaviour</short_desc>
         <value code="23">Roll 270°, Yaw 135°</value>
         <value code="24">Pitch 90°</value>
         <value code="25">Pitch 270°</value>
+        <value code="26">Pitch 180°, Yaw 90°</value>
+        <value code="27">Pitch 180°, Yaw 270°</value>
+        <value code="28">Roll 90°, Pitch 90°</value>
+        <value code="29">Roll 180°, Pitch 90°</value>
+        <value code="30">Roll 270°, Pitch 90°</value>
+        <value code="31">Roll 90°, Pitch 180°</value>
+        <value code="32">Roll 270°, Pitch 180°</value>
+        <value code="33">Roll 90°, Pitch 270°</value>
+        <value code="34">Roll 180°, Pitch 270°</value>
+        <value code="35">Roll 270°, Pitch 270°</value>
+        <value code="36">Roll 90°, Pitch 180°, Yaw 90°</value>
+        <value code="37">Roll 90°, Yaw 270°</value>
+        <value code="38">Roll 90°, Pitch 68°, Yaw 293°</value>
+        <value code="39">Pitch 315°</value>
+        <value code="40">Roll 90°, Pitch 315°</value>
+        <value code="41">Roll 270°, Yaw 180°</value>
+        <value code="42">Roll 270°, Yaw 270°</value>
+        <value code="43">Pitch 90°, Yaw 180°</value>
+        <value code="44">Pitch 9°, Yaw 180°</value>
+        <value code="45">Pitch 45°</value>
       </values>
     </parameter>
     <parameter category="System" default="0.0" name="CAL_MAG0_XCOMP" type="FLOAT">
@@ -8369,7 +8404,7 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Rotation of magnetometer 1 relative to airframe</short_desc>
       <long_desc>An internal magnetometer will force a value of -1, so a GCS should only attempt to configure the rotation if the value is greater than or equal to zero.</long_desc>
       <min>-1</min>
-      <max>30</max>
+      <max>45</max>
       <reboot_required>true</reboot_required>
       <values>
         <value code="-1">Internal mag</value>
@@ -8399,6 +8434,26 @@ for current-based compensation [G/kA]</short_desc>
         <value code="23">Roll 270°, Yaw 135°</value>
         <value code="24">Pitch 90°</value>
         <value code="25">Pitch 270°</value>
+        <value code="26">Pitch 180°, Yaw 90°</value>
+        <value code="27">Pitch 180°, Yaw 270°</value>
+        <value code="28">Roll 90°, Pitch 90°</value>
+        <value code="29">Roll 180°, Pitch 90°</value>
+        <value code="30">Roll 270°, Pitch 90°</value>
+        <value code="31">Roll 90°, Pitch 180°</value>
+        <value code="32">Roll 270°, Pitch 180°</value>
+        <value code="33">Roll 90°, Pitch 270°</value>
+        <value code="34">Roll 180°, Pitch 270°</value>
+        <value code="35">Roll 270°, Pitch 270°</value>
+        <value code="36">Roll 90°, Pitch 180°, Yaw 90°</value>
+        <value code="37">Roll 90°, Yaw 270°</value>
+        <value code="38">Roll 90°, Pitch 68°, Yaw 293°</value>
+        <value code="39">Pitch 315°</value>
+        <value code="40">Roll 90°, Pitch 315°</value>
+        <value code="41">Roll 270°, Yaw 180°</value>
+        <value code="42">Roll 270°, Yaw 270°</value>
+        <value code="43">Pitch 90°, Yaw 180°</value>
+        <value code="44">Pitch 9°, Yaw 180°</value>
+        <value code="45">Pitch 45°</value>
       </values>
     </parameter>
     <parameter category="System" default="0.0" name="CAL_MAG1_XCOMP" type="FLOAT">
@@ -8450,7 +8505,7 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Rotation of magnetometer 2 relative to airframe</short_desc>
       <long_desc>An internal magnetometer will force a value of -1, so a GCS should only attempt to configure the rotation if the value is greater than or equal to zero.</long_desc>
       <min>-1</min>
-      <max>30</max>
+      <max>45</max>
       <reboot_required>true</reboot_required>
       <values>
         <value code="-1">Internal mag</value>
@@ -8480,6 +8535,26 @@ for current-based compensation [G/kA]</short_desc>
         <value code="23">Roll 270°, Yaw 135°</value>
         <value code="24">Pitch 90°</value>
         <value code="25">Pitch 270°</value>
+        <value code="26">Pitch 180°, Yaw 90°</value>
+        <value code="27">Pitch 180°, Yaw 270°</value>
+        <value code="28">Roll 90°, Pitch 90°</value>
+        <value code="29">Roll 180°, Pitch 90°</value>
+        <value code="30">Roll 270°, Pitch 90°</value>
+        <value code="31">Roll 90°, Pitch 180°</value>
+        <value code="32">Roll 270°, Pitch 180°</value>
+        <value code="33">Roll 90°, Pitch 270°</value>
+        <value code="34">Roll 180°, Pitch 270°</value>
+        <value code="35">Roll 270°, Pitch 270°</value>
+        <value code="36">Roll 90°, Pitch 180°, Yaw 90°</value>
+        <value code="37">Roll 90°, Yaw 270°</value>
+        <value code="38">Roll 90°, Pitch 68°, Yaw 293°</value>
+        <value code="39">Pitch 315°</value>
+        <value code="40">Roll 90°, Pitch 315°</value>
+        <value code="41">Roll 270°, Yaw 180°</value>
+        <value code="42">Roll 270°, Yaw 270°</value>
+        <value code="43">Pitch 90°, Yaw 180°</value>
+        <value code="44">Pitch 9°, Yaw 180°</value>
+        <value code="45">Pitch 45°</value>
       </values>
     </parameter>
     <parameter category="System" default="0.0" name="CAL_MAG2_XCOMP" type="FLOAT">
@@ -8531,7 +8606,7 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Rotation of magnetometer 2 relative to airframe</short_desc>
       <long_desc>An internal magnetometer will force a value of -1, so a GCS should only attempt to configure the rotation if the value is greater than or equal to zero.</long_desc>
       <min>-1</min>
-      <max>30</max>
+      <max>45</max>
       <reboot_required>true</reboot_required>
       <values>
         <value code="-1">Internal mag</value>
@@ -8561,6 +8636,26 @@ for current-based compensation [G/kA]</short_desc>
         <value code="23">Roll 270°, Yaw 135°</value>
         <value code="24">Pitch 90°</value>
         <value code="25">Pitch 270°</value>
+        <value code="26">Pitch 180°, Yaw 90°</value>
+        <value code="27">Pitch 180°, Yaw 270°</value>
+        <value code="28">Roll 90°, Pitch 90°</value>
+        <value code="29">Roll 180°, Pitch 90°</value>
+        <value code="30">Roll 270°, Pitch 90°</value>
+        <value code="31">Roll 90°, Pitch 180°</value>
+        <value code="32">Roll 270°, Pitch 180°</value>
+        <value code="33">Roll 90°, Pitch 270°</value>
+        <value code="34">Roll 180°, Pitch 270°</value>
+        <value code="35">Roll 270°, Pitch 270°</value>
+        <value code="36">Roll 90°, Pitch 180°, Yaw 90°</value>
+        <value code="37">Roll 90°, Yaw 270°</value>
+        <value code="38">Roll 90°, Pitch 68°, Yaw 293°</value>
+        <value code="39">Pitch 315°</value>
+        <value code="40">Roll 90°, Pitch 315°</value>
+        <value code="41">Roll 270°, Yaw 180°</value>
+        <value code="42">Roll 270°, Yaw 270°</value>
+        <value code="43">Pitch 90°, Yaw 180°</value>
+        <value code="44">Pitch 9°, Yaw 180°</value>
+        <value code="45">Pitch 45°</value>
       </values>
     </parameter>
     <parameter category="System" default="0.0" name="CAL_MAG3_XCOMP" type="FLOAT">
@@ -8752,6 +8847,11 @@ is less than 50% of this value</short_desc>
       <max>1000</max>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
+      <values>
+        <value code="100">100 Hz</value>
+        <value code="200">200 Hz</value>
+        <value code="400">400 Hz</value>
+      </values>
     </parameter>
     <parameter default="18139" name="INA226_CONFIG" type="INT32">
       <short_desc>INA226 Power Monitor Config</short_desc>
@@ -8805,6 +8905,14 @@ How often the sensor is readout</short_desc>
       <min>500</min>
       <max>1500</max>
       <unit>hPa</unit>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter default="20.0" name="SENS_BARO_RATE" type="FLOAT">
+      <short_desc>Baro max rate</short_desc>
+      <long_desc>Barometric air data maximum publication rate. This is an upper bound, actual barometric data rate is still dependant on the sensor.</long_desc>
+      <min>1</min>
+      <max>200</max>
+      <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter default="0" name="SENS_BOARD_ROT" type="INT32">
@@ -10983,9 +11091,8 @@ to fixed wing mode. Zero or negative values will produce an instant throttle ris
       <short_desc>EXFW_ROLL_P</short_desc>
     </parameter>
     <parameter default="0" name="MPC_LAND_RC_HELP" type="INT32">
-      <short_desc>Enable user assisted descent speed for autonomous land routine.
-When enabled, descent speed will be equal to MPC_LAND_SPEED at half throttle,
-MPC_Z_VEL_MAX_DN at zero throttle, and 0.5 * MPC_LAND_SPEED at full throttle</short_desc>
+      <short_desc>Enable user assisted descent speed for autonomous land routine</short_desc>
+      <long_desc>When enabled, descent speed will be: stick full up - 0 stick centered - MPC_LAND_SPEED stick full down - 2 * MPC_LAND_SPEED</long_desc>
       <min>0</min>
       <max>1</max>
       <values>

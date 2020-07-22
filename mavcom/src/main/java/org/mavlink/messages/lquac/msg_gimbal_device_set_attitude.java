@@ -108,9 +108,9 @@ public byte[] encode() throws IOException {
 }
 public String toString() {
 return "MAVLINK_MSG_ID_GIMBAL_DEVICE_SET_ATTITUDE : " +   "  q[0]="+format((float)q[0])
-+  "  q[1]="+format((float)q[1])
-+  "  q[2]="+format((float)q[2])
-+  "  q[3]="+format((float)q[3])
+ + "  q[1]="+format((float)q[1])
+ + "  q[2]="+format((float)q[2])
+ + "  q[3]="+format((float)q[3])
 +  "  angular_velocity_x="+format((float)angular_velocity_x)
 +  "  angular_velocity_y="+format((float)angular_velocity_y)
 +  "  angular_velocity_z="+format((float)angular_velocity_z)

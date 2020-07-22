@@ -26,6 +26,7 @@ import org.mavlink.messages.lquac.msg_high_latency;
 import org.mavlink.messages.lquac.msg_param_ext_request_read;
 import org.mavlink.messages.lquac.msg_camera_image_captured;
 import org.mavlink.messages.lquac.msg_local_position_ned_cov;
+import org.mavlink.messages.lquac.msg_gimbal_manager_set_tiltpan;
 import org.mavlink.messages.lquac.msg_global_position_int;
 import org.mavlink.messages.lquac.msg_logging_data;
 import org.mavlink.messages.lquac.msg_param_ext_set;
@@ -125,6 +126,7 @@ import org.mavlink.messages.lquac.msg_set_mode;
 import org.mavlink.messages.lquac.msg_vibration;
 import org.mavlink.messages.lquac.msg_storage_information;
 import org.mavlink.messages.lquac.msg_wifi_config_ap;
+import org.mavlink.messages.lquac.msg_esc_info;
 import org.mavlink.messages.lquac.msg_scaled_pressure2;
 import org.mavlink.messages.lquac.msg_play_tune_v2;
 import org.mavlink.messages.lquac.msg_scaled_pressure3;
@@ -137,6 +139,7 @@ import org.mavlink.messages.lquac.msg_landing_target;
 import org.mavlink.messages.lquac.msg_command_long;
 import org.mavlink.messages.lquac.msg_change_operator_control_ack;
 import org.mavlink.messages.lquac.msg_terrain_request;
+import org.mavlink.messages.lquac.msg_command_cancel;
 import org.mavlink.messages.lquac.msg_adsb_vehicle;
 import org.mavlink.messages.lquac.msg_memory_vect;
 import org.mavlink.messages.lquac.msg_raw_pressure;
@@ -161,6 +164,7 @@ import org.mavlink.messages.lquac.msg_gps_global_origin;
 import org.mavlink.messages.lquac.msg_trajectory_representation_waypoints;
 import org.mavlink.messages.lquac.msg_follow_target;
 import org.mavlink.messages.lquac.msg_smart_battery_info;
+import org.mavlink.messages.lquac.msg_esc_status;
 import org.mavlink.messages.lquac.msg_mission_request_int;
 import org.mavlink.messages.lquac.msg_manual_setpoint;
 import org.mavlink.messages.lquac.msg_scaled_imu;
@@ -187,6 +191,7 @@ import org.mavlink.messages.lquac.msg_manual_control;
 import org.mavlink.messages.lquac.msg_message_interval;
 import org.mavlink.messages.lquac.msg_hil_state_quaternion;
 import org.mavlink.messages.lquac.msg_statustext;
+import org.mavlink.messages.lquac.msg_cellular_config;
 import org.mavlink.messages.lquac.msg_param_map_rc;
 import org.mavlink.messages.lquac.msg_fence_status;
 import org.mavlink.messages.lquac.msg_gimbal_device_attitude_status;
@@ -220,6 +225,7 @@ import org.mavlink.messages.lquac.msg_high_latency;
 import org.mavlink.messages.lquac.msg_param_ext_request_read;
 import org.mavlink.messages.lquac.msg_camera_image_captured;
 import org.mavlink.messages.lquac.msg_local_position_ned_cov;
+import org.mavlink.messages.lquac.msg_gimbal_manager_set_tiltpan;
 import org.mavlink.messages.lquac.msg_global_position_int;
 import org.mavlink.messages.lquac.msg_logging_data;
 import org.mavlink.messages.lquac.msg_param_ext_set;
@@ -321,6 +327,7 @@ import org.mavlink.messages.lquac.msg_set_mode;
 import org.mavlink.messages.lquac.msg_vibration;
 import org.mavlink.messages.lquac.msg_storage_information;
 import org.mavlink.messages.lquac.msg_wifi_config_ap;
+import org.mavlink.messages.lquac.msg_esc_info;
 import org.mavlink.messages.lquac.msg_scaled_pressure2;
 import org.mavlink.messages.lquac.msg_play_tune_v2;
 import org.mavlink.messages.lquac.msg_scaled_pressure3;
@@ -334,6 +341,7 @@ import org.mavlink.messages.lquac.msg_landing_target;
 import org.mavlink.messages.lquac.msg_command_long;
 import org.mavlink.messages.lquac.msg_change_operator_control_ack;
 import org.mavlink.messages.lquac.msg_terrain_request;
+import org.mavlink.messages.lquac.msg_command_cancel;
 import org.mavlink.messages.lquac.msg_adsb_vehicle;
 import org.mavlink.messages.lquac.msg_memory_vect;
 import org.mavlink.messages.lquac.msg_raw_pressure;
@@ -358,6 +366,7 @@ import org.mavlink.messages.lquac.msg_gps_global_origin;
 import org.mavlink.messages.lquac.msg_trajectory_representation_waypoints;
 import org.mavlink.messages.lquac.msg_follow_target;
 import org.mavlink.messages.lquac.msg_smart_battery_info;
+import org.mavlink.messages.lquac.msg_esc_status;
 import org.mavlink.messages.lquac.msg_mission_request_int;
 import org.mavlink.messages.lquac.msg_manual_setpoint;
 import org.mavlink.messages.lquac.msg_scaled_imu;
@@ -384,6 +393,7 @@ import org.mavlink.messages.lquac.msg_manual_control;
 import org.mavlink.messages.lquac.msg_message_interval;
 import org.mavlink.messages.lquac.msg_hil_state_quaternion;
 import org.mavlink.messages.lquac.msg_statustext;
+import org.mavlink.messages.lquac.msg_cellular_config;
 import org.mavlink.messages.lquac.msg_param_map_rc;
 import org.mavlink.messages.lquac.msg_fence_status;
 import org.mavlink.messages.lquac.msg_gimbal_device_attitude_status;
@@ -482,6 +492,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_LOCAL_POSITION_NED_COV:
       msg = new msg_local_position_ned_cov(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_TILTPAN:
+      msg = new msg_gimbal_manager_set_tiltpan(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
@@ -888,6 +902,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_wifi_config_ap(sysId, componentId);
       msg.decode(dis);
       break;
+  case MAVLINK_MSG_ID_ESC_INFO:
+      msg = new msg_esc_info(sysId, componentId);
+      msg.decode(dis);
+      break;
   case MAVLINK_MSG_ID_SCALED_PRESSURE2:
       msg = new msg_scaled_pressure2(sysId, componentId);
       msg.decode(dis);
@@ -938,6 +956,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_TERRAIN_REQUEST:
       msg = new msg_terrain_request(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_COMMAND_CANCEL:
+      msg = new msg_command_cancel(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_ADSB_VEHICLE:
@@ -1034,6 +1056,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_SMART_BATTERY_INFO:
       msg = new msg_smart_battery_info(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_ESC_STATUS:
+      msg = new msg_esc_status(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_MISSION_REQUEST_INT:
@@ -1138,6 +1164,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_STATUSTEXT:
       msg = new msg_statustext(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_CELLULAR_CONFIG:
+      msg = new msg_cellular_config(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_PARAM_MAP_RC:

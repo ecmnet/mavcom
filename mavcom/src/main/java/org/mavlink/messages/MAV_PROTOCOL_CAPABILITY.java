@@ -17,7 +17,7 @@ public interface MAV_PROTOCOL_CAPABILITY {
      */
     public final static int MAV_PROTOCOL_CAPABILITY_PARAM_FLOAT = 2;
     /**
-     * Autopilot supports MISSION_INT scaled integer message type.
+     * Autopilot supports MISSION_ITEM_INT scaled integer message type.
      */
     public final static int MAV_PROTOCOL_CAPABILITY_MISSION_INT = 4;
     /**

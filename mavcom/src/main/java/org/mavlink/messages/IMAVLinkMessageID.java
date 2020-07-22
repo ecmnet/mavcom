@@ -27,6 +27,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ = 320;
   public static int MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED = 263;
   public static int MAVLINK_MSG_ID_LOCAL_POSITION_NED_COV = 64;
+  public static int MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_TILTPAN = 287;
   public static int MAVLINK_MSG_ID_GLOBAL_POSITION_INT = 33;
   public static int MAVLINK_MSG_ID_LOGGING_DATA = 266;
   public static int MAVLINK_MSG_ID_PARAM_EXT_SET = 323;
@@ -133,6 +134,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_VIBRATION = 241;
   public static int MAVLINK_MSG_ID_STORAGE_INFORMATION = 261;
   public static int MAVLINK_MSG_ID_WIFI_CONFIG_AP = 299;
+  public static int MAVLINK_MSG_ID_ESC_INFO = 290;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE2 = 137;
   public static int MAVLINK_MSG_ID_PLAY_TUNE_V2 = 400;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE3 = 143;
@@ -146,6 +148,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_COMMAND_LONG = 76;
   public static int MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK = 6;
   public static int MAVLINK_MSG_ID_TERRAIN_REQUEST = 133;
+  public static int MAVLINK_MSG_ID_COMMAND_CANCEL = 80;
   public static int MAVLINK_MSG_ID_ADSB_VEHICLE = 246;
   public static int MAVLINK_MSG_ID_MEMORY_VECT = 249;
   public static int MAVLINK_MSG_ID_RAW_PRESSURE = 28;
@@ -170,6 +173,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS = 332;
   public static int MAVLINK_MSG_ID_FOLLOW_TARGET = 144;
   public static int MAVLINK_MSG_ID_SMART_BATTERY_INFO = 370;
+  public static int MAVLINK_MSG_ID_ESC_STATUS = 291;
   public static int MAVLINK_MSG_ID_MISSION_REQUEST_INT = 51;
   public static int MAVLINK_MSG_ID_MANUAL_SETPOINT = 81;
   public static int MAVLINK_MSG_ID_SCALED_IMU = 26;
@@ -198,6 +202,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_OPERATOR_ID = 12905;
   public static int MAVLINK_MSG_ID_HIL_STATE_QUATERNION = 115;
   public static int MAVLINK_MSG_ID_STATUSTEXT = 253;
+  public static int MAVLINK_MSG_ID_CELLULAR_CONFIG = 336;
   public static int MAVLINK_MSG_ID_PARAM_MAP_RC = 50;
   public static int MAVLINK_MSG_ID_FENCE_STATUS = 162;
   public static int MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS = 285;

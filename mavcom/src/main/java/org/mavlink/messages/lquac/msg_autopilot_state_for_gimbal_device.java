@@ -24,7 +24,7 @@ public class msg_autopilot_state_for_gimbal_device extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 50;
+    payload_length = 53;
 }
 
   /**
@@ -60,6 +60,10 @@ public class msg_autopilot_state_for_gimbal_device extends MAVLinkMessage {
    */
   public float feed_forward_angular_velocity_z;
   /**
+   * Bitmap indicating which estimator outputs are valid.
+   */
+  public int estimator_status;
+  /**
    * System ID
    */
   public int target_system;
@@ -67,6 +71,10 @@ public class msg_autopilot_state_for_gimbal_device extends MAVLinkMessage {
    * Component ID
    */
   public int target_component;
+  /**
+   * The landed state. Is set to MAV_LANDED_STATE_UNDEFINED if landed state is unknown.
+   */
+  public int landed_state;
 /**
  * Decode message with raw data
  */
@@ -81,14 +89,16 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   vz = (float)dis.readFloat();
   v_estimated_delay_us = (int)dis.readInt()&0x00FFFFFFFF;
   feed_forward_angular_velocity_z = (float)dis.readFloat();
+  estimator_status = (int)dis.readUnsignedShort()&0x00FFFF;
   target_system = (int)dis.readUnsignedByte()&0x00FF;
   target_component = (int)dis.readUnsignedByte()&0x00FF;
+  landed_state = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+50];
+  byte[] buffer = new byte[12+53];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -110,17 +120,19 @@ public byte[] encode() throws IOException {
   dos.writeFloat(vz);
   dos.writeInt((int)(v_estimated_delay_us&0x00FFFFFFFF));
   dos.writeFloat(feed_forward_angular_velocity_z);
+  dos.writeShort(estimator_status&0x00FFFF);
   dos.writeByte(target_system&0x00FF);
   dos.writeByte(target_component&0x00FF);
+  dos.writeByte(landed_state&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 50);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 53);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[60] = crcl;
-  buffer[61] = crch;
+  buffer[63] = crcl;
+  buffer[64] = crch;
   dos.close();
   return buffer;
 }
@@ -136,7 +148,9 @@ return "MAVLINK_MSG_ID_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE : " +   "  time_boot_us
 +  "  vz="+format((float)vz)
 +  "  v_estimated_delay_us="+v_estimated_delay_us
 +  "  feed_forward_angular_velocity_z="+format((float)feed_forward_angular_velocity_z)
++  "  estimator_status="+estimator_status
 +  "  target_system="+target_system
 +  "  target_component="+target_component
++  "  landed_state="+landed_state
 ;}
 }

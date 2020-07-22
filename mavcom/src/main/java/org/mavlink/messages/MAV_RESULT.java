@@ -29,7 +29,11 @@ public interface MAV_RESULT {
      */
     public final static int MAV_RESULT_FAILED = 4;
     /**
-     * Command is valid and is being executed. This will be followed by further progress updates, i.e. the component may send further COMMAND_ACK messages with result MAV_RESULT_IN_PROGRESS (at a rate decided by the implementation), and must terminate by sending a COMMAND_ACK message with final result of the operation. The COMMAND_ACK.progress field can be used to indicate the progress of the operation. There is no need for the sender to retry the command, but if done during execution, the component will return MAV_RESULT_IN_PROGRESS with an updated progress.
+     * Command is valid and is being executed. This will be followed by further progress updates, i.e. the component may send further COMMAND_ACK messages with result MAV_RESULT_IN_PROGRESS (at a rate decided by the implementation), and must terminate by sending a COMMAND_ACK message with final result of the operation. The COMMAND_ACK.progress field can be used to indicate the progress of the operation.
      */
     public final static int MAV_RESULT_IN_PROGRESS = 5;
+    /**
+     * Command has been cancelled (as a result of receiving a COMMAND_CANCEL message).
+     */
+    public final static int MAV_RESULT_CANCELLED = 6;
 }

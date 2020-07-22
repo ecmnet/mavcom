@@ -17,6 +17,9 @@ public class PX4HeartBeatPlugin extends MAVLinkPluginBase {
 	public void received(Object o) {
 		msg_heartbeat hb = (msg_heartbeat) o;
 
+		if (hb.autopilot == 0)
+			return;
+
 		model.sys.px4_status = hb.system_status;
 	//	model.sys.nav_state  = Status.NAVIGATION_STATE_MANUAL;
 
