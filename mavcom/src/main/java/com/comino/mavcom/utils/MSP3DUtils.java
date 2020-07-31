@@ -153,6 +153,12 @@ public class MSP3DUtils {
 		vector.set(Float.NaN,Float.NaN,Float.NaN,Float.NaN);
 	}
 
+	public static void setNaN(Se3_F64 s) {
+		s.T.set(Double.NaN,Double.NaN,Double.NaN);
+		for(int i=0;i<s.R.getNumElements();i++)
+			s.R.set(i, Double.NaN);
+	}
+
 	public static boolean hasNaN(Vector4D_F32 vector) {
 		return Float.isNaN(vector.x) || Float.isNaN(vector.y) || Float.isNaN(vector.z);
 	}
