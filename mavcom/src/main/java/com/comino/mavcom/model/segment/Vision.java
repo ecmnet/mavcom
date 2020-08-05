@@ -41,6 +41,7 @@ public class Vision extends Segment {
 
 	public static final int MOCAP_VALID = 1;
 	public static final int MOCAP_COLLISION_WARNING = 2;
+	public static final int MOCAP_FIDUCIAL = 3;
 
 	public float x = Float.NaN;
 	public float y = Float.NaN;
