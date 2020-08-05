@@ -186,8 +186,13 @@ public class Status extends Segment {
 		return true;
 	}
 
-	public boolean isSensorChanged(Status old, int ...box) {
-		return old.isSensorAvailable(box) ^ isSensorAvailable(box);
+//	public boolean isSensorChanged(Status old, int ...box) {
+//		return old.isSensorAvailable(box) != isSensorAvailable(box);
+//	}
+
+	public boolean isSensorChanged(Status old, int mask) {
+		return ((old.sensors & mask) != (sensors & mask) && ((sensors & mask) == mask))
+		    || ((old.sensors & mask) != (sensors & mask) && ((sensors & mask) == 0));
 	}
 
 	public boolean isSensorChanged(Status old, int mask, boolean edge) {

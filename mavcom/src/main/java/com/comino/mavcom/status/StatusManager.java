@@ -233,9 +233,9 @@ public class StatusManager implements Runnable {
 
 					switch(entry.state) {
 					case EDGE_BOTH:
-						if(status_current.isSensorChanged(status_old, entry.mask)) {
-							update_callback(entry.listener, status_current);
-							entry.last_triggered = System.currentTimeMillis();
+						if(status_current.isSensorChanged(status_old, entry.mask) ) {
+							  update_callback(entry.listener, status_current);
+							  entry.last_triggered = System.currentTimeMillis();
 						}
 						break;
 					case EDGE_RISING:
