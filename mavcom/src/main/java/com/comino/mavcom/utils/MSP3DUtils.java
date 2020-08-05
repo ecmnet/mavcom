@@ -189,6 +189,10 @@ public class MSP3DUtils {
 		convertToSe3_F64(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.r, model.attitude.p, model.attitude.y, state);
 	}
 
+	public static void convertModel90ToSe3_F64(DataModel model, Se3_F64 state) {
+		convertToSe3_F64(model.state.l_y, model.state.l_x, model.state.l_z, model.attitude.p, model.attitude.r, model.attitude.y, state);
+	}
+
 	public static void convertModelRotationToSe3_F64(DataModel model, Se3_F64 state) {
 		ConvertRotation3D_F64.eulerToMatrix(EulerType.XYZ,model.attitude.r, model.attitude.p, model.attitude.y, state.R);
 	}
