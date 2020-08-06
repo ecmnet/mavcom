@@ -153,6 +153,10 @@ public class MSP3DUtils {
 		vector.set(Float.NaN,Float.NaN,Float.NaN,Float.NaN);
 	}
 
+	public static void setNaN(Vector3D_F64 vector) {
+		vector.set(Double.NaN,Double.NaN,Double.NaN);
+	}
+
 	public static void setNaN(Se3_F64 s) {
 		s.T.set(Double.NaN,Double.NaN,Double.NaN);
 		for(int i=0;i<s.R.getNumElements();i++)
