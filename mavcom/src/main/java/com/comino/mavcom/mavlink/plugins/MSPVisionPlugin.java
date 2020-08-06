@@ -1,5 +1,7 @@
 package com.comino.mavcom.mavlink.plugins;
 
+
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_msp_vision;
 
 import com.comino.mavcom.model.segment.Status;
@@ -24,6 +26,10 @@ public class MSPVisionPlugin extends MAVLinkPluginBase {
 		model.vision.gy = vision.gy;
 		model.vision.gz = vision.gz;
 
+		model.vision.px = vision.px;
+		model.vision.py = vision.py;
+		model.vision.pz = vision.pz;
+
 		model.vision.x = vision.x;
 		model.vision.y = vision.y;
 		model.vision.z = vision.z;
@@ -43,4 +49,5 @@ public class MSPVisionPlugin extends MAVLinkPluginBase {
 			model.sys.setSensor(Status.MSP_OPCV_AVAILABILITY, true);
 		}
 	}
+
 }

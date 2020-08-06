@@ -52,7 +52,7 @@ public class msg_camera_image_captured extends MAVLinkMessage {
    */
   public long relative_alt;
   /**
-   * Quaternion of camera orientation (w, x, y, z order, zero-rotation is 0, 0, 0, 0)
+   * Quaternion of camera orientation (w, x, y, z order, zero-rotation is 1, 0, 0, 0)
    */
   public float[] q = new float[4];
   /**
@@ -60,7 +60,7 @@ public class msg_camera_image_captured extends MAVLinkMessage {
    */
   public long image_index;
   /**
-   * Camera ID (1 for first, 2 for second, etc.)
+   * Deprecated/unused. Component IDs are used to differentiate multiple cameras.
    */
   public int camera_id;
   /**

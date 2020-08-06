@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_terrain_report
- * Response from a TERRAIN_CHECK request
+ * Streamed from drone to report progress of terrain map download (or response from a TERRAIN_CHECK request - deprecated). See terrain protocol docs: https://mavlink.io/en/services/terrain.html
  **/
 public class msg_terrain_report extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_TERRAIN_REPORT = 136;

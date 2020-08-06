@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_terrain_request
- * Request for terrain data and terrain status
+ * Request for terrain data and terrain status. See terrain protocol docs: https://mavlink.io/en/services/terrain.html
  **/
 public class msg_terrain_request extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_TERRAIN_REQUEST = 133;

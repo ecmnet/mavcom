@@ -1,5 +1,5 @@
 /**
- * Generated class : msg_param_set
+ * Generated class : msg_param_ack_transaction
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
@@ -11,36 +11,36 @@ import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
- * Class msg_param_set
- * Set a parameter value (write new value to permanent storage). Within a transaction the recieving componenent should respond with PARAM_ACK_TRANSACTION to the setter component. IMPORTANT: If sent outside a transaction the receiving component should acknowledge the new parameter value by broadcasting a PARAM_VALUE message to all communication partners (broadcasting ensures that multiple GCS all have an up-to-date list of all parameters). If the sending GCS did not receive a PARAM_VALUE or PARAM_ACK_TRANSACTION message within its timeout time, it should re-send the PARAM_SET message. The parameter microservice is documented at https://mavlink.io/en/services/parameter.html
+ * Class msg_param_ack_transaction
+ * Response from a PARAM_SET message when it is used in a transaction.
  **/
-public class msg_param_set extends MAVLinkMessage {
-  public static final int MAVLINK_MSG_ID_PARAM_SET = 23;
-  private static final long serialVersionUID = MAVLINK_MSG_ID_PARAM_SET;
-  public msg_param_set() {
+public class msg_param_ack_transaction extends MAVLinkMessage {
+  public static final int MAVLINK_MSG_ID_PARAM_ACK_TRANSACTION = 19;
+  private static final long serialVersionUID = MAVLINK_MSG_ID_PARAM_ACK_TRANSACTION;
+  public msg_param_ack_transaction() {
     this(1,1);
 }
-  public msg_param_set(int sysId, int componentId) {
-    messageType = MAVLINK_MSG_ID_PARAM_SET;
+  public msg_param_ack_transaction(int sysId, int componentId) {
+    messageType = MAVLINK_MSG_ID_PARAM_ACK_TRANSACTION;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 23;
+    payload_length = 24;
 }
 
   /**
-   * Onboard parameter value
+   * Parameter value (new value if PARAM_ACCEPTED, current value otherwise)
    */
   public float param_value;
   /**
-   * System ID
+   * Id of system that sent PARAM_SET message.
    */
   public int target_system;
   /**
-   * Component ID
+   * Id of system that sent PARAM_SET message.
    */
   public int target_component;
   /**
-   * Onboard parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
+   * Parameter id, terminated by NULL if the length is less than 16 human-readable chars and WITHOUT null termination (NULL) byte if the length is exactly 16 chars - applications have to provide 16+1 bytes storage if the ID is stored as string
    */
   public char[] param_id = new char[16];
   public void setParam_id(String tmp) {
@@ -60,9 +60,13 @@ public class msg_param_set extends MAVLinkMessage {
     return result;
   }
   /**
-   * Onboard parameter type.
+   * Parameter type.
    */
   public int param_type;
+  /**
+   * Result code.
+   */
+  public int param_result;
 /**
  * Decode message with raw data
  */
@@ -74,12 +78,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
     param_id[i] = (char)dis.readByte();
   }
   param_type = (int)dis.readUnsignedByte()&0x00FF;
+  param_result = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+23];
+  byte[] buffer = new byte[12+24];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -98,23 +103,25 @@ public byte[] encode() throws IOException {
     dos.writeByte(param_id[i]);
   }
   dos.writeByte(param_type&0x00FF);
+  dos.writeByte(param_result&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 23);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 24);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[33] = crcl;
-  buffer[34] = crch;
+  buffer[34] = crcl;
+  buffer[35] = crch;
   dos.close();
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_PARAM_SET : " +   "  param_value="+format((float)param_value)
+return "MAVLINK_MSG_ID_PARAM_ACK_TRANSACTION : " +   "  param_value="+format((float)param_value)
 +  "  target_system="+target_system
 +  "  target_component="+target_component
 +  "  param_id="+getParam_id()
 +  "  param_type="+param_type
++  "  param_result="+param_result
 ;}
 }

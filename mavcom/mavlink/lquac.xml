@@ -208,6 +208,9 @@
                <field type="float"         name="gx">X GroundTruth</field>
                <field type="float"         name="gy">Y GroundTruth</field>
                <field type="float"         name="gz">Z GroundTruth</field>
+               <field type="float"         name="px">X PrecisionOffset</field>
+               <field type="float"         name="py">Y PrecisionOffset</field>
+               <field type="float"         name="pz">Z PrecisionOffset</field>
                <field type="uint8_t"       name="quality">Quality of estimation</field>
                <field type="float"         name="fps">FPS of mocap system</field>
                <field type="uint64_t"      name="tms">Timestamp</field>

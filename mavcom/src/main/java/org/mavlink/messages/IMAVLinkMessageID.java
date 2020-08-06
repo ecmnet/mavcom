@@ -84,11 +84,14 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_LOGGING_ACK = 268;
   public static int MAVLINK_MSG_ID_OPTICAL_FLOW_RAD = 106;
   public static int MAVLINK_MSG_ID_SET_POSITION_TARGET_LOCAL_NED = 84;
+  public static int MAVLINK_MSG_ID_CAMERA_FOV_STATUS = 271;
   public static int MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE = 130;
   public static int MAVLINK_MSG_ID_NAMED_VALUE_INT = 252;
   public static int MAVLINK_MSG_ID_HEARTBEAT = 0;
   public static int MAVLINK_MSG_ID_MISSION_REQUEST_LIST = 43;
   public static int MAVLINK_MSG_ID_GPS_STATUS = 25;
+  public static int MAVLINK_MSG_ID_WINCH_STATUS = 9005;
+  public static int MAVLINK_MSG_ID_PARAM_ACK_TRANSACTION = 19;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE = 29;
   public static int MAVLINK_MSG_ID_HIL_OPTICAL_FLOW = 114;
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_LOCATION = 12901;
@@ -130,6 +133,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_HIL_STATE = 90;
   public static int MAVLINK_MSG_ID_FILE_TRANSFER_PROTOCOL = 110;
   public static int MAVLINK_MSG_ID_MISSION_COUNT = 44;
+  public static int MAVLINK_MSG_ID_PARAM_V3_VALUE = 325;
   public static int MAVLINK_MSG_ID_SET_MODE = 11;
   public static int MAVLINK_MSG_ID_VIBRATION = 241;
   public static int MAVLINK_MSG_ID_STORAGE_INFORMATION = 261;
@@ -168,6 +172,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_ATTITUDE = 30;
   public static int MAVLINK_MSG_ID_LOGGING_DATA_ACKED = 267;
   public static int MAVLINK_MSG_ID_SIM_STATE = 108;
+  public static int MAVLINK_MSG_ID_PARAM_START_TRANSACTION = 328;
   public static int MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA = 55;
   public static int MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN = 49;
   public static int MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS = 332;
@@ -181,6 +186,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV = 63;
   public static int MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE = 103;
   public static int MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE = 70;
+  public static int MAVLINK_MSG_ID_PARAM_V3_ACK = 327;
   public static int MAVLINK_MSG_ID_VFR_HUD = 74;
   public static int MAVLINK_MSG_ID_LOG_ENTRY = 118;
   public static int MAVLINK_MSG_ID_LINK_NODE_STATUS = 8;
@@ -194,6 +200,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_MISSION_ACK = 47;
   public static int MAVLINK_MSG_ID_PLAY_TUNE = 258;
   public static int MAVLINK_MSG_ID_PARAM_SET = 23;
+  public static int MAVLINK_MSG_ID_PARAM_V3_SET = 326;
   public static int MAVLINK_MSG_ID_SET_POSITION_TARGET_GLOBAL_INT = 86;
   public static int MAVLINK_MSG_ID_HIL_ACTUATOR_CONTROLS = 93;
   public static int MAVLINK_MSG_ID_SMART_BATTERY_STATUS = 371;
@@ -215,6 +222,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_PARAM_REQUEST_READ = 20;
   public static int MAVLINK_MSG_ID_COMMAND_INT = 75;
   public static int MAVLINK_MSG_ID_GPS_INPUT = 232;
+  public static int MAVLINK_MSG_ID_PARAM_COMMIT_TRANSACTION = 329;
   public static int MAVLINK_MSG_ID_MISSION_SET_CURRENT = 41;
   public static int MAVLINK_MSG_ID_RC_CHANNELS = 65;
   public static int MAVLINK_MSG_ID_GPS_INJECT_DATA = 123;

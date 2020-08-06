@@ -24,7 +24,7 @@ public class msg_scaled_pressure extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_SCALED_PRESSURE;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 14;
+    payload_length = 16;
 }
 
   /**
@@ -40,9 +40,13 @@ public class msg_scaled_pressure extends MAVLinkMessage {
    */
   public float press_diff;
   /**
-   * Temperature
+   * Absolute pressure temperature
    */
   public int temperature;
+  /**
+   * Differential pressure temperature (UINT16_MAX, if not available)
+   */
+  public int temperature_press_diff;
 /**
  * Decode message with raw data
  */
@@ -51,12 +55,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   press_abs = (float)dis.readFloat();
   press_diff = (float)dis.readFloat();
   temperature = (int)dis.readShort();
+  temperature_press_diff = (int)dis.readShort();
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+14];
+  byte[] buffer = new byte[12+16];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -72,15 +77,16 @@ public byte[] encode() throws IOException {
   dos.writeFloat(press_abs);
   dos.writeFloat(press_diff);
   dos.writeShort(temperature&0x00FFFF);
+  dos.writeShort(temperature_press_diff&0x00FFFF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 14);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 16);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[24] = crcl;
-  buffer[25] = crch;
+  buffer[26] = crcl;
+  buffer[27] = crch;
   dos.close();
   return buffer;
 }
@@ -89,5 +95,6 @@ return "MAVLINK_MSG_ID_SCALED_PRESSURE : " +   "  time_boot_ms="+time_boot_ms
 +  "  press_abs="+format((float)press_abs)
 +  "  press_diff="+format((float)press_diff)
 +  "  temperature="+temperature
++  "  temperature_press_diff="+temperature_press_diff
 ;}
 }
