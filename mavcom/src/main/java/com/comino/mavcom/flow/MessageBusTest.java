@@ -34,6 +34,12 @@ public class MessageBusTest {
 
 		bus.subscribe(subscribe2);
 
+		ModelSubscriber<Battery> subscribe3 = new ModelSubscriber<Battery>(Battery.class,(n) -> {
+			System.out.println("received B2: "+n.a0);
+		});
+
+		bus.subscribe(subscribe3);
+
 		bus.publish(v2);
 
 

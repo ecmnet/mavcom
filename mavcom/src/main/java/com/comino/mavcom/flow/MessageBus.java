@@ -11,8 +11,10 @@ public class MessageBus{
 	private Map<Class<?>, SubmissionPublisher<?>> streams = new HashMap<Class<?>, SubmissionPublisher<?>>();
 
 	public static MessageBus getInstance() {
-		if(instance==null)
+		if(instance==null) {
 			instance = new MessageBus();
+			System.out.println("MessageBus instantiated");
+		}
 		return instance;
 	}
 
@@ -29,7 +31,7 @@ public class MessageBus{
 	public <T> void publish(T data) {
 		@SuppressWarnings("unchecked")
 		SubmissionPublisher<T> p = (SubmissionPublisher<T>) streams.get(data.getClass());
-		if(p!=null)
+		if(p!=null && p.hasSubscribers())
 			p.submit(data);
 
 	}
