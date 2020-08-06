@@ -35,6 +35,8 @@ package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
 
+import georegression.struct.point.Vector3D_F64;
+
 public class Vision extends Segment {
 
 	private static final long serialVersionUID = 270248566309263309L;
@@ -43,22 +45,32 @@ public class Vision extends Segment {
 	public static final int MOCAP_COLLISION_WARNING = 2;
 	public static final int MOCAP_FIDUCIAL = 3;
 
+	// Vision position
 	public float x = Float.NaN;
 	public float y = Float.NaN;
 	public float z = Float.NaN;
 
+	// Ground truth
 	public float gx = Float.NaN;
 	public float gy = Float.NaN;
 	public float gz = Float.NaN;
 
+	// Fiducial offset
+	public float px = Float.NaN;
+	public float py = Float.NaN;
+	public float pz = Float.NaN;
+
+	// Covariance
 	public float cov_px = Float.NaN;
 	public float cov_py = Float.NaN;
 	public float cov_pz = Float.NaN;
 
+	// Speed
 	public float vx = Float.NaN;
 	public float vy = Float.NaN;
 	public float vz = Float.NaN;
 
+	// Covariance speed
 	public float cov_vx = Float.NaN;
 	public float cov_vy = Float.NaN;
 	public float cov_vz = Float.NaN;
@@ -82,6 +94,10 @@ public class Vision extends Segment {
 		gx  = a.gx;
 		gy  = a.gy;
 		gz  = a.gz;
+
+		px  = a.px;
+		py  = a.py;
+		pz  = a.pz;
 
 		cov_px  = a.cov_px;
 		cov_py  = a.cov_py;
@@ -108,36 +124,7 @@ public class Vision extends Segment {
 
 	public Vision clone() {
 		Vision a = new Vision();
-
-		a.x  = x;
-		a.y  = y;
-		a.z  = z;
-
-		a.gx  = gx;
-		a.gy  = gy;
-		a.gz  = gz;
-
-		a.cov_px  = cov_px;
-		a.cov_py  = cov_py;
-		a.cov_pz  = cov_pz;
-
-		a.vx = vx;
-		a.vy = vy;
-		a.vz = vz;
-
-		a.cov_vx  = cov_vx;
-		a.cov_vy  = cov_vy;
-		a.cov_vz  = cov_vz;
-
-		a.errors = errors;
-
-		a.h = h;
-		a.p = p;
-		a.r = r;
-		a.qual = qual;
-
-		a.flags = flags;
-		a.fps = fps;
+        a.set(this);
 		return a;
 	}
 
@@ -185,6 +172,30 @@ public class Vision extends Segment {
 		  if((flags & (1<<b))==0)
             return false;
 		return true;
+	}
+
+	public void setPosition(Vector3D_F64 v) {
+		this.x = (float)v.x;
+		this.y = (float)v.y;
+		this.z = (float)v.z;
+	}
+
+	public void setSpeed(Vector3D_F64 v) {
+		this.vx = (float)v.x;
+		this.vy = (float)v.y;
+		this.vz = (float)v.z;
+	}
+
+	public void setPrecisionOffset(Vector3D_F64 v) {
+		this.px = (float)v.x;
+		this.py = (float)v.y;
+		this.pz = (float)v.z;
+	}
+
+	public void setGroundTruth(Vector3D_F64 v) {
+		this.gx = (float)v.x;
+		this.gy = (float)v.y;
+		this.gz = (float)v.z;
 	}
 
 
