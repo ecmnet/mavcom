@@ -34,6 +34,7 @@
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
+import com.comino.mavcom.struct.Attitude3D_F64;
 
 import georegression.struct.point.Vector3D_F64;
 
@@ -196,6 +197,12 @@ public class Vision extends Segment {
 		this.gx = (float)v.x;
 		this.gy = (float)v.y;
 		this.gz = (float)v.z;
+	}
+
+	public void setAttitude(Attitude3D_F64 a) {
+		this.r = (float)a.getRoll();
+		this.p = (float)a.getPitch();
+		this.h = (float)a.getYaw();
 	}
 
 
