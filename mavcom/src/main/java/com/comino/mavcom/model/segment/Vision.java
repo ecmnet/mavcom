@@ -42,9 +42,8 @@ public class Vision extends Segment {
 
 	private static final long serialVersionUID = 270248566309263309L;
 
-	public static final int MOCAP_VALID = 1;
-	public static final int MOCAP_COLLISION_WARNING = 2;
-	public static final int MOCAP_FIDUCIAL = 3;
+	public static final int POS_VALID        = 1;
+	public static final int FIDUCIAL_ACTIVE  = 2;
 
 	// Vision position
 	public float x = Float.NaN;
