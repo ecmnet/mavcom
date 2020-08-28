@@ -42,8 +42,11 @@ public class Vision extends Segment {
 
 	private static final long serialVersionUID = 270248566309263309L;
 
-	public static final int POS_VALID        = 1;
-	public static final int FIDUCIAL_ACTIVE  = 2;
+	public static final int RESETTING           = 1;
+	public static final int POS_VALID           = 2;
+	public static final int FIDUCIAL_ACTIVE     = 3;
+	public static final int FIDUCIAL_LOCKED     = 4;
+
 
 	// Vision position
 	public float x = Float.NaN;
@@ -197,6 +200,7 @@ public class Vision extends Segment {
 		this.gy = (float)v.y;
 		this.gz = (float)v.z;
 	}
+
 
 	public void setAttitude(Attitude3D_F64 a) {
 		this.r = (float)a.getRoll();
