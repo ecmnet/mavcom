@@ -53,6 +53,10 @@ public interface MSP_AUTOCONTROL_ACTION {
      */
     public final static int LAND = 27;
     /**
+     * Offboard precision lock
+     */
+    public final static int LOCK = 28;
+    /**
      * Applies a map filter to the current map
      */
     public final static int APPLY_MAP_FILTER = 60;
