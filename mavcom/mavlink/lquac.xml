@@ -150,6 +150,9 @@
               <entry value="27" name="LAND">
                   <description>Offboard landing</description>
               </entry>
+              <entry value="28" name="LOCK">
+                  <description>Offboard precision lock</description>
+              </entry>
               <entry value="60" name="APPLY_MAP_FILTER">
                   <description>Applies a map filter to the current map </description>
               </entry>
