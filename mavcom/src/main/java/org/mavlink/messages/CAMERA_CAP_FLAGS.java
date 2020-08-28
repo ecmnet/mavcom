@@ -44,4 +44,16 @@ public interface CAMERA_CAP_FLAGS {
      * Camera has video streaming capabilities (request VIDEO_STREAM_INFORMATION with MAV_CMD_REQUEST_MESSAGE for video streaming info)
      */
     public final static int CAMERA_CAP_FLAGS_HAS_VIDEO_STREAM = 256;
+    /**
+     * Camera supports tracking of a point on the camera view.
+     */
+    public final static int CAMERA_CAP_FLAGS_HAS_TRACKING_POINT = 512;
+    /**
+     * Camera supports tracking of a selection rectangle on the camera view.
+     */
+    public final static int CAMERA_CAP_FLAGS_HAS_TRACKING_RECTANGLE = 1024;
+    /**
+     * Camera supports tracking geo status (CAMERA_TRACKING_GEO_STATUS).
+     */
+    public final static int CAMERA_CAP_FLAGS_HAS_TRACKING_GEO_STATUS = 2048;
 }

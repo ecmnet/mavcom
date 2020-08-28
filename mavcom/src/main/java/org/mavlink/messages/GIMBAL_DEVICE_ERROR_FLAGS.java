@@ -40,4 +40,8 @@ public interface GIMBAL_DEVICE_ERROR_FLAGS {
      * There is an error with the gimbal's communication.
      */
     public final static int GIMBAL_DEVICE_ERROR_FLAGS_COMMS_ERROR = 128;
+    /**
+     * Gimbal is currently calibrating.
+     */
+    public final static int GIMBAL_DEVICE_ERROR_FLAGS_CALIBRATION_RUNNING = 256;
 }

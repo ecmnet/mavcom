@@ -25,7 +25,7 @@ public class msg_hil_gps extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_HIL_GPS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 37;
+    payload_length = 39;
 }
 
   /**
@@ -81,6 +81,10 @@ public class msg_hil_gps extends MAVLinkMessage {
    */
   public int satellites_visible;
   /**
+   * Yaw of vehicle relative to Earth's North, zero means not available, use 36000 for north
+   */
+  public int yaw;
+  /**
    * GPS ID (zero indexed). Used for multiple GPS inputs
    */
   public int id;
@@ -101,13 +105,14 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   cog = (int)dis.readUnsignedShort()&0x00FFFF;
   fix_type = (int)dis.readUnsignedByte()&0x00FF;
   satellites_visible = (int)dis.readUnsignedByte()&0x00FF;
+  yaw = (int)dis.readUnsignedShort()&0x00FFFF;
   id = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+37];
+  byte[] buffer = new byte[12+39];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -132,16 +137,17 @@ public byte[] encode() throws IOException {
   dos.writeShort(cog&0x00FFFF);
   dos.writeByte(fix_type&0x00FF);
   dos.writeByte(satellites_visible&0x00FF);
+  dos.writeShort(yaw&0x00FFFF);
   dos.writeByte(id&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 37);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 39);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[47] = crcl;
-  buffer[48] = crch;
+  buffer[49] = crcl;
+  buffer[50] = crch;
   dos.close();
   return buffer;
 }
@@ -159,6 +165,7 @@ return "MAVLINK_MSG_ID_HIL_GPS : " +   "  time_usec="+time_usec
 +  "  cog="+cog
 +  "  fix_type="+fix_type
 +  "  satellites_visible="+satellites_visible
++  "  yaw="+yaw
 +  "  id="+id
 ;}
 }

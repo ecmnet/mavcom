@@ -686,6 +686,17 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_INVERTED_FLIGHT = 210;
     /**
+     * Mission command to operate a gripper.
+     * PARAM 1 : Gripper instance number.
+     * PARAM 2 : Gripper action to perform.
+     * PARAM 3 : Empty
+     * PARAM 4 : Empty
+     * PARAM 5 : Empty
+     * PARAM 6 : Empty
+     * PARAM 7 : Empty
+     */
+    public final static int MAV_CMD_DO_GRIPPER = 211;
+    /**
      * Sets a desired vehicle turn angle and speed change.
      * PARAM 1 : Yaw angle to adjust steering by.
      * PARAM 2 : Speed.
@@ -1012,6 +1023,13 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_JUMP_TAG = 601;
     /**
+     * Request to start or end a parameter transaction. Multiple kinds of transport layers can be used to exchange parameters in the transaction (param, param_ext and mavftp). The command response can either be a success/failure or an in progress in case the receiving side takes some time to apply the parameters.
+     * PARAM 1 : Action to be performed (start, commit, cancel, etc.)
+     * PARAM 2 : Possible transport layers to set and get parameters via mavlink during a parameter transaction.
+     * PARAM 3 : Identifier for a specific transaction.
+     */
+    public final static int MAV_CMD_PARAM_TRANSACTION = 900;
+    /**
      * High level setpoint to be sent to a gimbal manager to set a gimbal attitude. It is possible to set combinations of the values below. E.g. an angle as well as a desired angular rate can be used to get to this angle at a certain angular rate, or an angular rate only will result in continuous turning. NaN is to be used to signal unset. Note: a gimbal is never to react to this command but only the gimbal manager.
      * PARAM 1 : Tilt/pitch rate (positive to tilt up).
      * PARAM 2 : Pan/yaw rate (positive to pan to the right).
@@ -1021,22 +1039,6 @@ public interface MAV_CMD {
      * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
      */
     public final static int MAV_CMD_DO_GIMBAL_MANAGER_TILTPAN = 1000;
-    /**
-     * If the gimbal manager supports visual tracking (GIMBAL_MANAGER_CAP_FLAGS_HAS_TRACKING_POINT is set), this command allows to initiate the tracking. Such a tracking gimbal manager would usually be an integrated camera/gimbal, or alternatively a companion computer connected to a camera.
-     * PARAM 1 : Point to track x value.
-     * PARAM 2 : Point to track y value.
-     * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
-     */
-    public final static int MAV_CMD_DO_GIMBAL_MANAGER_TRACK_POINT = 1001;
-    /**
-     * If the gimbal supports visual tracking (GIMBAL_MANAGER_CAP_FLAGS_HAS_TRACKING_RECTANGLE is set), this command allows to initiate the tracking. Such a tracking gimbal manager would usually be an integrated camera/gimbal, or alternatively a companion computer connected to a camera.
-     * PARAM 1 : Top left corner of rectangle x value (normalized 0..1, 0 is left, 1 is right).
-     * PARAM 2 : Top left corner of rectangle y value (normalized 0..1, 0 is top, 1 is bottom).
-     * PARAM 3 : Bottom right corner of rectangle x value (normalized 0..1, 0 is left, 1 is right).
-     * PARAM 4 : Bottom right corner of rectangle y value (normalized 0..1, 0 is top, 1 is bottom).
-     * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
-     */
-    public final static int MAV_CMD_DO_GIMBAL_MANAGER_TRACK_RECTANGLE = 1002;
     /**
      * Start image capture sequence. Sends CAMERA_IMAGE_CAPTURED after each capture. Use NaN for reserved values.
      * PARAM 1 : Reserved (Set to 0)
@@ -1071,6 +1073,25 @@ public interface MAV_CMD {
      * PARAM 3 : 1 to pause triggering, but without switching the camera off or retracting it. -1 to ignore
      */
     public final static int MAV_CMD_DO_TRIGGER_CONTROL = 2003;
+    /**
+     * If the camera supports point visual tracking (CAMERA_CAP_FLAGS_HAS_TRACKING_POINT is set), this command allows to initiate the tracking.
+     * PARAM 1 : Point to track x value (normalized 0..1, 0 is left, 1 is right).
+     * PARAM 2 : Point to track y value (normalized 0..1, 0 is top, 1 is bottom).
+     * PARAM 3 : Point radius (normalized 0..1, 0 is image left, 1 is image right).
+     */
+    public final static int MAV_CMD_CAMERA_TRACK_POINT = 2004;
+    /**
+     * If the camera supports rectangle visual tracking (CAMERA_CAP_FLAGS_HAS_TRACKING_RECTANGLE is set), this command allows to initiate the tracking.
+     * PARAM 1 : Top left corner of rectangle x value (normalized 0..1, 0 is left, 1 is right).
+     * PARAM 2 : Top left corner of rectangle y value (normalized 0..1, 0 is top, 1 is bottom).
+     * PARAM 3 : Bottom right corner of rectangle x value (normalized 0..1, 0 is left, 1 is right).
+     * PARAM 4 : Bottom right corner of rectangle y value (normalized 0..1, 0 is top, 1 is bottom).
+     */
+    public final static int MAV_CMD_CAMERA_TRACK_RECTANGLE = 2005;
+    /**
+     * Stops ongoing tracking.
+     */
+    public final static int MAV_CMD_CAMERA_STOP_TRACKING = 2010;
     /**
      * Starts video capture (recording).
      * PARAM 1 : Video Stream ID (0 for all streams)
@@ -1299,6 +1320,17 @@ public interface MAV_CMD {
      * PARAM 7 : Reserved
      */
     public final static int MAV_CMD_PAYLOAD_CONTROL_DEPLOY = 30002;
+    /**
+     * Command to operate winch.
+     * PARAM 1 : Winch instance number.
+     * PARAM 2 : Action to perform.
+     * PARAM 3 : Length of cable to release (negative to wind).
+     * PARAM 4 : Release rate (negative to wind).
+     * PARAM 5 : Empty.
+     * PARAM 6 : Empty.
+     * PARAM 7 : Empty.
+     */
+    public final static int MAV_CMD_DO_WINCH = 42600;
     /**
      * User defined waypoint item. Ground Station will show the Vehicle as flying through this item.
      * PARAM 1 : User defined

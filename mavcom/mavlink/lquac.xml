@@ -110,6 +110,9 @@
               <entry value="10" name="TAKEOFF_PROCEDURE">
                   <description>Takeoff procedure</description>
               </entry>
+               <entry value="11" name="PRECISION_LOCK">
+                  <description>Precision locking</description>
+              </entry>
            </enum>
 
            <enum name="MSP_AUTOCONTROL_ACTION">

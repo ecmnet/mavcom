@@ -65,14 +65,6 @@ public interface GIMBAL_MANAGER_CAP_FLAGS {
      */
     public final static int GIMBAL_MANAGER_CAP_FLAGS_CAN_POINT_LOCATION_GLOBAL = 131072;
     /**
-     * Gimbal manager supports tracking of a point on the camera.
-     */
-    public final static int GIMBAL_MANAGER_CAP_FLAGS_HAS_TRACKING_POINT = 262144;
-    /**
-     * Gimbal manager supports tracking of a point on the camera.
-     */
-    public final static int GIMBAL_MANAGER_CAP_FLAGS_HAS_TRACKING_RECTANGLE = 524288;
-    /**
      * Gimbal manager supports pitching and yawing at an angular velocity scaled by focal length (the more zoomed in, the slower the movement).
      */
     public final static int GIMBAL_MANAGER_CAP_FLAGS_SUPPORTS_FOCAL_LENGTH_SCALE = 1048576;

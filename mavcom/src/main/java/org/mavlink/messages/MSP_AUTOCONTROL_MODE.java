@@ -40,4 +40,8 @@ public interface MSP_AUTOCONTROL_MODE {
      * Takeoff procedure
      */
     public final static int TAKEOFF_PROCEDURE = 10;
+    /**
+     * Precision locking
+     */
+    public final static int PRECISION_LOCK = 11;
 }
