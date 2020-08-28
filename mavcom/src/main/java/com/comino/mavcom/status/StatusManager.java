@@ -55,7 +55,7 @@ public class StatusManager implements Runnable {
 	private static final long TIMEOUT_LPOS            = 1000000;
 	private static final long TIMEOUT_GPS             = 2000000;
 	private static final long TIMEOUT_SLAM            = 2000000;
-	private static final long TIMEOUT_LIDAR           = 1000000;
+	private static final long TIMEOUT_LIDAR           = 1500000;
 
 	public static final byte  TYPE_ALL             = 0;
 	public static final byte  TYPE_PX4_STATUS      = 1;
@@ -320,6 +320,7 @@ public class StatusManager implements Runnable {
 		}
 
 		if (checkTimeOut(model.raw.tms, TIMEOUT_LIDAR)) {
+			//System.out.println("LIDAR timeout");
 			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, false);
 		}
 
