@@ -144,8 +144,8 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_ESC_INFO = 290;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE2 = 137;
   public static int MAVLINK_MSG_ID_PLAY_TUNE_V2 = 400;
-  public static int MAVLINK_MSG_ID_SCALED_PRESSURE3 = 143;
   public static int MAVLINK_MSG_ID_PROTOCOL_VERSION = 300;
+  public static int MAVLINK_MSG_ID_SCALED_PRESSURE3 = 143;
   public static int MAVLINK_MSG_ID_PING = 4;
   public static int MAVLINK_MSG_ID_HOME_POSITION = 242;
   public static int MAVLINK_MSG_ID_RAW_IMU = 27;
@@ -187,6 +187,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_SCALED_IMU = 26;
   public static int MAVLINK_MSG_ID_MISSION_REQUEST_PARTIAL_LIST = 37;
   public static int MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV = 63;
+  public static int MAVLINK_MSG_ID_MAG_CAL_REPORT = 192;
   public static int MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE = 103;
   public static int MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE = 70;
   public static int MAVLINK_MSG_ID_VFR_HUD = 74;

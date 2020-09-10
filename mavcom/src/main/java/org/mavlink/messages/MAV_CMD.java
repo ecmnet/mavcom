@@ -9,6 +9,23 @@ package org.mavlink.messages;
  **/
 public interface MAV_CMD {
     /**
+     * Request the target system(s) emit a single instance of a specified message (i.e. a "one-shot" version of MAV_CMD_SET_MESSAGE_INTERVAL).
+     * PARAM 1 : The MAVLink message ID of the requested message.
+     * PARAM 2 : Use for index ID, if required. Otherwise, the use of this parameter (if any) must be defined in the requested message. By default assumed not used (0).
+     * PARAM 3 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 4 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 5 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 6 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 7 : Target address for requested message (if message has target address fields). 0: Flight-stack default, 1: address of requestor, 2: broadcast.
+     */
+    public final static int MAV_CMD_REQUEST_MESSAGE = 512;
+    /**
+     * Request MAVLink protocol version compatibility. All receivers should ACK the command and then emit their capabilities in an PROTOCOL_VERSION message
+     * PARAM 1 : 1: Request supported protocol versions by all nodes on the network
+     * PARAM 2 : Reserved (all remaining params)
+     */
+    public final static int MAV_CMD_REQUEST_PROTOCOL_VERSION = 519;
+    /**
      * Navigate to waypoint.
      * PARAM 1 : Hold time. (ignored by fixed wing, time to stay at waypoint for rotary wing)
      * PARAM 2 : Acceptance radius (if the sphere with this radius is hit, the waypoint counts as reached)
@@ -917,23 +934,6 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_SET_MESSAGE_INTERVAL = 511;
     /**
-     * Request the target system(s) emit a single instance of a specified message (i.e. a "one-shot" version of MAV_CMD_SET_MESSAGE_INTERVAL).
-     * PARAM 1 : The MAVLink message ID of the requested message.
-     * PARAM 2 : Use for index ID, if required. Otherwise, the use of this parameter (if any) must be defined in the requested message. By default assumed not used (0).
-     * PARAM 3 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
-     * PARAM 4 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
-     * PARAM 5 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
-     * PARAM 6 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
-     * PARAM 7 : Target address for requested message (if message has target address fields). 0: Flight-stack default, 1: address of requestor, 2: broadcast.
-     */
-    public final static int MAV_CMD_REQUEST_MESSAGE = 512;
-    /**
-     * Request MAVLink protocol version compatibility. All receivers should ACK the command and then emit their capabilities in an PROTOCOL_VERSION message
-     * PARAM 1 : 1: Request supported protocol versions by all nodes on the network
-     * PARAM 2 : Reserved (all remaining params)
-     */
-    public final static int MAV_CMD_REQUEST_PROTOCOL_VERSION = 519;
-    /**
      * Request autopilot capabilities. The receiver should ACK the command and then emit its capabilities in an AUTOPILOT_VERSION message
      * PARAM 1 : 1: Request autopilot version
      * PARAM 2 : Reserved (all remaining params)
@@ -1320,6 +1320,17 @@ public interface MAV_CMD {
      * PARAM 7 : Reserved
      */
     public final static int MAV_CMD_PAYLOAD_CONTROL_DEPLOY = 30002;
+    /**
+     * Magnetometer calibration based on provided known yaw. This allows for fast calibration using WMM field tables in the vehicle, given only the known yaw of the vehicle. If Latitude and longitude are both zero then use the current vehicle location.
+     * PARAM 1 : Yaw of vehicle in earth frame.
+     * PARAM 2 : CompassMask, 0 for all.
+     * PARAM 3 : Latitude.
+     * PARAM 4 : Longitude.
+     * PARAM 5 : Empty.
+     * PARAM 6 : Empty.
+     * PARAM 7 : Empty.
+     */
+    public final static int MAV_CMD_FIXED_MAG_CAL_YAW = 42006;
     /**
      * Command to operate winch.
      * PARAM 1 : Winch instance number.

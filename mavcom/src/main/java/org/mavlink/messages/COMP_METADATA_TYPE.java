@@ -16,4 +16,8 @@ public interface COMP_METADATA_TYPE {
      * Parameter meta data.
      */
     public final static int COMP_METADATA_TYPE_PARAMETER = 1;
+    /**
+     * Meta data which specifies the commands the vehicle supports. (WIP)
+     */
+    public final static int COMP_METADATA_TYPE_COMMANDS = 2;
 }

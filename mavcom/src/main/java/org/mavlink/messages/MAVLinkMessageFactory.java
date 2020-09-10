@@ -8,6 +8,8 @@ import org.mavlink.IMAVLinkMessage;
 import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import java.io.ByteArrayInputStream;
+import org.mavlink.messages.lquac.msg_protocol_version;
+import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_request_data_stream;
 import org.mavlink.messages.lquac.msg_gps_rtk;
 import org.mavlink.messages.lquac.msg_position_target_local_ned;
@@ -136,8 +138,8 @@ import org.mavlink.messages.lquac.msg_wifi_config_ap;
 import org.mavlink.messages.lquac.msg_esc_info;
 import org.mavlink.messages.lquac.msg_scaled_pressure2;
 import org.mavlink.messages.lquac.msg_play_tune_v2;
-import org.mavlink.messages.lquac.msg_scaled_pressure3;
 import org.mavlink.messages.lquac.msg_protocol_version;
+import org.mavlink.messages.lquac.msg_scaled_pressure3;
 import org.mavlink.messages.lquac.msg_ping;
 import org.mavlink.messages.lquac.msg_home_position;
 import org.mavlink.messages.lquac.msg_raw_imu;
@@ -178,6 +180,7 @@ import org.mavlink.messages.lquac.msg_manual_setpoint;
 import org.mavlink.messages.lquac.msg_scaled_imu;
 import org.mavlink.messages.lquac.msg_mission_request_partial_list;
 import org.mavlink.messages.lquac.msg_global_position_int_cov;
+import org.mavlink.messages.lquac.msg_mag_cal_report;
 import org.mavlink.messages.lquac.msg_vision_speed_estimate;
 import org.mavlink.messages.lquac.msg_rc_channels_override;
 import org.mavlink.messages.lquac.msg_vfr_hud;
@@ -345,8 +348,8 @@ import org.mavlink.messages.lquac.msg_wifi_config_ap;
 import org.mavlink.messages.lquac.msg_esc_info;
 import org.mavlink.messages.lquac.msg_scaled_pressure2;
 import org.mavlink.messages.lquac.msg_play_tune_v2;
-import org.mavlink.messages.lquac.msg_scaled_pressure3;
 import org.mavlink.messages.lquac.msg_protocol_version;
+import org.mavlink.messages.lquac.msg_scaled_pressure3;
 import org.mavlink.messages.lquac.msg_ping;
 import org.mavlink.messages.lquac.msg_home_position;
 import org.mavlink.messages.lquac.msg_raw_imu;
@@ -388,6 +391,7 @@ import org.mavlink.messages.lquac.msg_manual_setpoint;
 import org.mavlink.messages.lquac.msg_scaled_imu;
 import org.mavlink.messages.lquac.msg_mission_request_partial_list;
 import org.mavlink.messages.lquac.msg_global_position_int_cov;
+import org.mavlink.messages.lquac.msg_mag_cal_report;
 import org.mavlink.messages.lquac.msg_vision_speed_estimate;
 import org.mavlink.messages.lquac.msg_rc_channels_override;
 import org.mavlink.messages.lquac.msg_vfr_hud;
@@ -958,12 +962,12 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_play_tune_v2(sysId, componentId);
       msg.decode(dis);
       break;
-  case MAVLINK_MSG_ID_SCALED_PRESSURE3:
-      msg = new msg_scaled_pressure3(sysId, componentId);
-      msg.decode(dis);
-      break;
   case MAVLINK_MSG_ID_PROTOCOL_VERSION:
       msg = new msg_protocol_version(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_SCALED_PRESSURE3:
+      msg = new msg_scaled_pressure3(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_PING:
@@ -1128,6 +1132,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV:
       msg = new msg_global_position_int_cov(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_MAG_CAL_REPORT:
+      msg = new msg_mag_cal_report(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE:

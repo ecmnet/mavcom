@@ -24,7 +24,7 @@ public class msg_hil_sensor extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_HIL_SENSOR;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 64;
+    payload_length = 65;
 }
 
   /**
@@ -87,6 +87,10 @@ public class msg_hil_sensor extends MAVLinkMessage {
    * Bitmap for fields that have updated since last message, bit 0 = xacc, bit 12: temperature, bit 31: full reset of attitude/position/velocities/etc was performed in sim.
    */
   public long fields_updated;
+  /**
+   * Sensor ID (zero indexed). Used for multiple sensor inputs
+   */
+  public int id;
 /**
  * Decode message with raw data
  */
@@ -106,12 +110,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   pressure_alt = (float)dis.readFloat();
   temperature = (float)dis.readFloat();
   fields_updated = (int)dis.readInt()&0x00FFFFFFFF;
+  id = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+64];
+  byte[] buffer = new byte[12+65];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -138,15 +143,16 @@ public byte[] encode() throws IOException {
   dos.writeFloat(pressure_alt);
   dos.writeFloat(temperature);
   dos.writeInt((int)(fields_updated&0x00FFFFFFFF));
+  dos.writeByte(id&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 64);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 65);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[74] = crcl;
-  buffer[75] = crch;
+  buffer[75] = crcl;
+  buffer[76] = crch;
   dos.close();
   return buffer;
 }
@@ -166,5 +172,6 @@ return "MAVLINK_MSG_ID_HIL_SENSOR : " +   "  time_usec="+time_usec
 +  "  pressure_alt="+format((float)pressure_alt)
 +  "  temperature="+format((float)temperature)
 +  "  fields_updated="+fields_updated
++  "  id="+id
 ;}
 }
