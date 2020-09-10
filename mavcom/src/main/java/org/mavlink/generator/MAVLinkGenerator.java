@@ -364,7 +364,7 @@ public class MAVLinkGenerator {
 
 							case MAVLinkDataType.FLOAT:
 							case MAVLinkDataType.DOUBLE:
-								forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName()+"["+i+"]"  + "=\"+"
+								forToString = forToString + (j != 0 || i > 0 ? "+" : "") + "  \"  " + field.getName()+"["+i+"]"  + "=\"+"
 										+ "format((float)"+field.getName()+"["+i+"])"
 										+"\n";
 								break;
