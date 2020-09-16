@@ -160,7 +160,7 @@ public class MAVLinkReader {
 
 
 	private int c = 0;
-	private synchronized boolean readMavLinkMessageFromBuffer(int v) {
+	private boolean readMavLinkMessageFromBuffer(int v) {
 		try {
 
 			c = (v & 0x00FF);
@@ -282,7 +282,9 @@ public class MAVLinkReader {
 						msg.isValid = true;
 						msg.packet = rxmsg.packet;
 						packets.addElement(msg);
+						synchronized(this ) {
 						notify();
+						}
 						//	System.out.println("added: "+rxmsg.packet+":"+msg);
 					} else {
 						packet_lost++;
@@ -306,7 +308,9 @@ public class MAVLinkReader {
 						if(msg!=null && checkPacket(rxmsg.sysId,rxmsg.packet)) {
 							msg.packet = rxmsg.packet;
 							packets.addElement(msg);
-							notify();
+							synchronized(this ) {
+							 notify();
+							}
 							//							System.out.println("added: "+rxmsg.packet+":"+msg);
 						} else {
 							packet_lost++;

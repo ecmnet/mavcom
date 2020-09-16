@@ -96,6 +96,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		this.bindPort = new InetSocketAddress(bPort);
 		this.reader = new MAVLinkBlockingReader(2, parser);
 
+
 		System.out.println("Vehicle (NIO3): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
 
 	}
@@ -132,9 +133,6 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 			t.setName("MAVLink parser");
 			t.setDaemon(true);
 			t.start();
-
-			//			ExecutorService.submit(this);
-
 
 		} catch(Exception e) {
 			//e.printStackTrace();
