@@ -163,9 +163,11 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 		if(channel.isConnected()) {
 			isConnected = true;
+
 			msg_heartbeat hb = new msg_heartbeat(255,1);
 			hb.isValid = true;
 			try {
+				for(int i=0;i<10;i++)
 				write(hb);
 			} catch(Exception e) { }
 		} else
