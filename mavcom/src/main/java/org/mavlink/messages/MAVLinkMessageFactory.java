@@ -184,6 +184,7 @@ import org.mavlink.messages.lquac.msg_mag_cal_report;
 import org.mavlink.messages.lquac.msg_vision_speed_estimate;
 import org.mavlink.messages.lquac.msg_rc_channels_override;
 import org.mavlink.messages.lquac.msg_vfr_hud;
+import org.mavlink.messages.lquac.msg_efi_status;
 import org.mavlink.messages.lquac.msg_log_entry;
 import org.mavlink.messages.lquac.msg_link_node_status;
 import org.mavlink.messages.lquac.msg_set_home_position;
@@ -395,6 +396,7 @@ import org.mavlink.messages.lquac.msg_mag_cal_report;
 import org.mavlink.messages.lquac.msg_vision_speed_estimate;
 import org.mavlink.messages.lquac.msg_rc_channels_override;
 import org.mavlink.messages.lquac.msg_vfr_hud;
+import org.mavlink.messages.lquac.msg_efi_status;
 import org.mavlink.messages.lquac.msg_log_entry;
 import org.mavlink.messages.lquac.msg_link_node_status;
 import org.mavlink.messages.lquac.msg_set_home_position;
@@ -1148,6 +1150,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_VFR_HUD:
       msg = new msg_vfr_hud(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_EFI_STATUS:
+      msg = new msg_efi_status(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_LOG_ENTRY:

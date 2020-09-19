@@ -283,7 +283,7 @@ public class MAVLinkReader {
 						msg.packet = rxmsg.packet;
 						packets.addElement(msg);
 						synchronized(this ) {
-						notify();
+							notify();
 						}
 						//	System.out.println("added: "+rxmsg.packet+":"+msg);
 					} else {
@@ -309,7 +309,7 @@ public class MAVLinkReader {
 							msg.packet = rxmsg.packet;
 							packets.addElement(msg);
 							synchronized(this ) {
-							 notify();
+								notify();
 							}
 							//							System.out.println("added: "+rxmsg.packet+":"+msg);
 						} else {
@@ -421,6 +421,7 @@ public class MAVLinkReader {
 			signature_wait = MAVLINK_SIGNATURE_BLOCK_LEN;
 			msg_received = mavlink_framing_t.MAVLINK_FRAMING_INCOMPLETE;
 			crc= MAVLinkCRC.crc_init();
+			Arrays.fill(rawData, (byte)0x00);
 		}
 
 		public String toString() {

@@ -119,7 +119,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 			channel.socket().setTrafficClass(0x04);
 			//	channel.socket().setBroadcast(true);
 			channel.socket().setReceiveBufferSize(16*1024);
-			channel.socket().setSendBufferSize(2*1024);
+			channel.socket().setSendBufferSize(16*1024);
 			channel.connect(peerPort);
 			channel.configureBlocking(false);
 			selector = Selector.open();

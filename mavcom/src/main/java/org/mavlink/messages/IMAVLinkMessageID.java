@@ -191,6 +191,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE = 103;
   public static int MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE = 70;
   public static int MAVLINK_MSG_ID_VFR_HUD = 74;
+  public static int MAVLINK_MSG_ID_EFI_STATUS = 225;
   public static int MAVLINK_MSG_ID_LOG_ENTRY = 118;
   public static int MAVLINK_MSG_ID_LINK_NODE_STATUS = 8;
   public static int MAVLINK_MSG_ID_SET_HOME_POSITION = 243;

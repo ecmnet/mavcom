@@ -826,8 +826,8 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_PREFLIGHT_SET_SENSOR_OFFSETS = 242;
     /**
-     * Trigger UAVCAN config. This command will be only accepted if in pre-flight mode.
-     * PARAM 1 : 1: Trigger actuator ID assignment and direction mapping.
+     * Trigger UAVCAN configuration (actuator ID assignment and direction mapping). Note that this maps to the legacy UAVCAN v0 function UAVCAN_ENUMERATE, which is intended to be executed just once during initial vehicle configuration (it is not a normal pre-flight command and has been poorly named).
+     * PARAM 1 : 1: Trigger actuator ID assignment and direction mapping. 0: Cancel command.
      * PARAM 2 : Reserved
      * PARAM 3 : Reserved
      * PARAM 4 : Reserved
@@ -1044,8 +1044,10 @@ public interface MAV_CMD {
      * PARAM 1 : Reserved (Set to 0)
      * PARAM 2 : Desired elapsed time between two consecutive pictures (in seconds). Minimum values depend on hardware (typically greater than 2 seconds).
      * PARAM 3 : Total number of images to capture. 0 to capture forever/until MAV_CMD_IMAGE_STOP_CAPTURE.
-     * PARAM 4 : Capture sequence number starting from 1. This is only valid for single-capture (param3 == 1). Increment the capture ID for each capture command to prevent double captures when a command is re-transmitted. Use 0 to ignore it.
-     * PARAM 5 : Reserved (all remaining params)
+     * PARAM 4 : Capture sequence number starting from 1. This is only valid for single-capture (param3 == 1), otherwise set to 0. Increment the capture ID for each capture command to prevent double captures when a command is re-transmitted.
+     * PARAM 5 : 
+     * PARAM 6 : 
+     * PARAM 7 : 
      */
     public final static int MAV_CMD_IMAGE_START_CAPTURE = 2000;
     /**
