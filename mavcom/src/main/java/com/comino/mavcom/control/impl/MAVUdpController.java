@@ -89,6 +89,9 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 
 	@Override
 	public void run() {
+		
+		final msg_heartbeat beat = new msg_heartbeat(255,1);
+		beat.type = MAV_TYPE.MAV_TYPE_GCS;
 
 		// If not checked here, the thread is started twice (not by connect) ??
 		if(connect)
@@ -103,8 +106,6 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 				 comm.open();
 				}
 				model.sys.setStatus(Status.MSP_SITL, isSimulation());
-				msg_heartbeat beat = new msg_heartbeat(255,1);
-				beat.type = MAV_TYPE.MAV_TYPE_GCS;
 				comm.write(beat);
 				Thread.sleep(500);
 			} catch (Exception e) {  }
