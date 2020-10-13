@@ -35,12 +35,14 @@
 package com.comino.mavcom.comm.serial;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_timesync;
 
 import com.comino.mavcom.comm.IMAVComm;
+import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
@@ -68,7 +70,8 @@ public class MAVSerialComm implements IMAVComm {
 	private MAVLinkToModelParser  parser = null;
 	private MAVLinkBlockingReader reader;
 
-	private static IMAVComm com = null;
+	private static   IMAVComm com = null;
+	private MAVUdpProxyNIO byteListener = null;
 
 	private int baudrate = 921600;
 
@@ -205,6 +208,8 @@ public class MAVSerialComm implements IMAVComm {
 					try {
 						avail = serialPort.bytesAvailable();
 						serialPort.readBytes(buf, avail);
+						if(byteListener != null)
+							byteListener.write(buf, avail);
 						reader.put(buf, avail);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -368,6 +373,13 @@ public class MAVSerialComm implements IMAVComm {
 	public long getTransferRate() {
 
 		return 0;
+	}
+
+
+	@Override
+	public void setProxyListener(MAVUdpProxyNIO listener) {
+	this.byteListener = listener;
+		
 	}
 
 

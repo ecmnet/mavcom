@@ -88,8 +88,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	private static final int BAUDRATE_15  = 1500000;
 	private static final int BAUDRATE_20  = 2000000;
 
-	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_AUTOPILOT1);
-	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1,MAV_COMPONENT.MAV_COMP_ID_AUTOPILOT1);
+	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
+	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1,MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
 
 	private StatusManager 				status_manager 	= null;
 	private List<IMAVMessageListener> 	messageListener = null;
@@ -184,7 +184,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		}
 
-		comm.addMAVLinkListener(proxy);
+//		comm.addMAVLinkListener(proxy);
+		// Direct byte based proxy
+		comm.setProxyListener(proxy);
 
 
 		// Register processing of PING sent by MAVGCL
@@ -295,7 +297,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		if(comm.isConnected()) {
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES, 1);
 		}
-		future = ExecutorService.get().scheduleAtFixedRate(this, 1, 333, TimeUnit.MILLISECONDS);
+		future = ExecutorService.get().scheduleAtFixedRate(this, 1, 1000, TimeUnit.MILLISECONDS);
 		return true;
 	}
 
@@ -414,10 +416,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		} else
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
 
-		if(!proxy.isProxyEnabled()) {
-			sendMAVLinkMessage(beat_gcs);
-		}
-
+//		if(!proxy.isProxyEnabled()) {
+//			sendMAVLinkMessage(beat_gcs);
+//		}
+//
 		sendMAVLinkMessage(beat_px4);
 	}
 

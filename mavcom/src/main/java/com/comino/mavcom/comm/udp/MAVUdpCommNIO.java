@@ -50,6 +50,7 @@ import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_heartbeat;
 
 import com.comino.mavcom.comm.IMAVComm;
+import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
@@ -79,9 +80,11 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 	private Selector selector;
 
-	private static MAVUdpCommNIO com = null;
+	private static MAVUdpCommNIO com       = null;
+	private MAVUdpProxyNIO byteListener    = null;
 
-	private ByteBuffer rxBuffer = ByteBuffer.allocate(4096);
+	private ByteBuffer rxBuffer    = ByteBuffer.allocate(4096);
+	private byte[]    proxyBuffer  = new byte[512];
 
 	public static MAVUdpCommNIO getInstance(DataModel model, String peerAddress, int peerPort, int bindPort) {
 		if(com==null)
@@ -157,7 +160,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	public void run() {
 		SelectionKey key = null;
 		Iterator<?> selectedKeys = null;
-		long bcount = 0; long start;
+		long bcount = 0; int msg_length; long start; byte b;
 
 		bcount = 0;
 
@@ -180,8 +183,8 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 			try {
 
-				if(selector.select(1000)==0)
-					throw new IOException("UDP NIO Timeout");
+				if(selector.select(2000)==0)
+					continue;
 
 				selectedKeys = selector.selectedKeys().iterator();
 
@@ -194,11 +197,16 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 					if (key.isReadable()) {
 						if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
 							((Buffer)rxBuffer).flip();
+							msg_length = 0;
 							while(rxBuffer.hasRemaining()) {
-								reader.put(rxBuffer.get());
-								bcount++;
+								proxyBuffer[msg_length++] = rxBuffer.get();
 							}
 							rxBuffer.compact();
+							
+							if(byteListener !=null)
+								byteListener.write(proxyBuffer, msg_length);
+							reader.put(proxyBuffer, msg_length);
+							bcount = bcount + msg_length;
 						}
 						if((System.currentTimeMillis() - start) > 200) {
 							transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
@@ -340,6 +348,13 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	@Override
 	public long getTransferRate() {
 		return transfer_speed;
+	}
+
+
+	@Override
+	public void setProxyListener(MAVUdpProxyNIO listener) {
+		this.byteListener = listener;
+		
 	}
 
 }

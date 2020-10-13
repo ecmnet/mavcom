@@ -208,15 +208,15 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			bcount = 0;
 
 			if(comm.isConnected()) {
-				msg_heartbeat hb = new msg_heartbeat(255,1);
-				hb.isValid = true;
-				comm.write(hb);
+				//				msg_heartbeat hb = new msg_heartbeat(2,1);
+				//				hb.isValid = true;
+				//				comm.write(hb);
 			} else {
 				isConnected = false;
 				return;
 			}
 
-            start = System.currentTimeMillis();
+			start = System.currentTimeMillis();
 			while(isConnected) {
 
 				if(selector.select(1000)==0)
@@ -293,6 +293,14 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 	public long getTransferRate() {
 		return transfer_speed;
+	}
+
+	public void write(byte[] buffer, int length) {
+		if(channel != null && channel.isConnected() && channel.isOpen() && isConnected ) {
+			try {
+				channel.write(ByteBuffer.wrap(buffer,0,length));
+			} catch (IOException e) {}
+		}
 	}
 
 }
