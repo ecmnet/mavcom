@@ -47,8 +47,8 @@ public class StatusManager implements Runnable {
 
 	private static final long TIMEOUT_IMU             = 5000000;
 	private static final long TIMEOUT_VISION          = 2000000;
-	private static final long TIMEOUT_CONNECTED       = 1000000;
-	private static final long TIMEOUT_GCL_CONNECTED   = 2000000;
+	private static final long TIMEOUT_CONNECTED       = 9000000;
+	private static final long TIMEOUT_GCL_CONNECTED   = 5000000;
 	private static final long TIMEOUT_RC_ATTACHED     = 5000000;
 	private static final long TIMEOUT_JOY_ATTACHED    = 1000000;
 	private static final long TIMEOUT_GPOS            = 1000000;
@@ -340,6 +340,7 @@ public class StatusManager implements Runnable {
 		}
 
 		if (checkTimeOut(model.sys.gcl_tms, TIMEOUT_GCL_CONNECTED)) {
+			//System.out.println((model.sys.gcl_tms - model.sys.getSynchronizedPX4Time_us()));
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, (false));
 		}
 
@@ -351,6 +352,7 @@ public class StatusManager implements Runnable {
 		}
 
 		if (checkTimeOut(model.sys.tms, TIMEOUT_CONNECTED) && model.sys.isStatus(Status.MSP_CONNECTED)) {
+			//System.out.println(model.sys.tms+" / "+  model.sys.getSynchronizedPX4Time_us());
 			model.sys.setStatus(Status.MSP_CONNECTED, false);
 			System.out.println("..Connection timeout");
 			//	model.sys.setStatus(Status.MSP_ACTIVE, false);
