@@ -83,8 +83,8 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	private static MAVUdpCommNIO com       = null;
 	private MAVUdpProxyNIO byteListener    = null;
 
-	private ByteBuffer rxBuffer    = ByteBuffer.allocate(4096);
-	private byte[]    proxyBuffer  = new byte[512];
+	private ByteBuffer rxBuffer    = ByteBuffer.allocate(16384);
+	private byte[]    proxyBuffer  = new byte[rxBuffer.capacity()];
 
 	public static MAVUdpCommNIO getInstance(DataModel model, String peerAddress, int peerPort, int bindPort) {
 		if(com==null)
@@ -216,6 +216,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 					}
 				}
 			} catch(Exception e) {
+				e.printStackTrace();
 				((Buffer)rxBuffer).clear();
 				model.sys.setStatus(Status.MSP_CONNECTED,false);
 				try { channel.close(); } catch (IOException e1) { 	}
@@ -284,7 +285,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 
 	public static void main(String[] args) {
-		MAVUdpCommNIO comm = new MAVUdpCommNIO(new DataModel(), "127.0.0.1", 14556, 14550);
+		MAVUdpCommNIO comm = new MAVUdpCommNIO(new DataModel(), "172.168.178.1", 14555, 14550);
 		//	MAVUdpComm comm = new MAVUdpComm(new DataModel(), "192.168.4.1", 14555,"0.0.0.0",14550);
 
 		comm.open();
@@ -306,7 +307,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 				if(comm.isConnected)
 					System.out.println("ANGLEX="+comm.model.hud.aX+" ANGLEY="+comm.model.hud.aY+" "+comm.model.sys.toString());
 
-				Thread.sleep(1000);
+				Thread.sleep(100);
 
 
 			}
