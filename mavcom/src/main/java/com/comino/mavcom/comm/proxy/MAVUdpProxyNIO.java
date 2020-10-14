@@ -219,8 +219,9 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			start = System.currentTimeMillis();
 			while(isConnected) {
 
-				if(selector.select(1000)==0)
+				if(selector.select(2000)==0) {
 					continue;
+				}
 
 				selectedKeys = selector.selectedKeys().iterator();
 
@@ -258,12 +259,13 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 									}
 								}
 							}
-						} catch(Exception io) { }
+						} catch(Exception io) { io.printStackTrace(); }
 					}
 				}
 			}
 			close();
 		} catch(Exception e) {
+			e.printStackTrace();
 			close();
 			isConnected = false;
 		}
@@ -298,8 +300,9 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	public void write(byte[] buffer, int length) {
 		if(channel != null && channel.isConnected() && channel.isOpen() && isConnected ) {
 			try {
-				channel.write(ByteBuffer.wrap(buffer,0,length));
-			} catch (IOException e) {}
+				if(length > 0)
+				  channel.write(ByteBuffer.wrap(buffer,0,length));
+			} catch (Exception e) { e.printStackTrace(); }
 		}
 	}
 

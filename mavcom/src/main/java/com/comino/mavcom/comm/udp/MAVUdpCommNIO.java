@@ -84,7 +84,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	private MAVUdpProxyNIO byteListener    = null;
 
 	private ByteBuffer rxBuffer    = ByteBuffer.allocate(16384);
-	private byte[]    proxyBuffer  = new byte[rxBuffer.capacity()];
+	private byte[]    proxyBuffer  = new byte[16384];
 
 	public static MAVUdpCommNIO getInstance(DataModel model, String peerAddress, int peerPort, int bindPort) {
 		if(com==null)
@@ -216,7 +216,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 					}
 				}
 			} catch(Exception e) {
-				e.printStackTrace();
+				
 				((Buffer)rxBuffer).clear();
 				model.sys.setStatus(Status.MSP_CONNECTED,false);
 				try { channel.close(); } catch (IOException e1) { 	}
