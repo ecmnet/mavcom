@@ -259,13 +259,13 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 									}
 								}
 							}
-						} catch(Exception io) { io.printStackTrace(); }
+						} catch(Exception io) {  }
 					}
 				}
 			}
 			close();
 		} catch(Exception e) {
-			e.printStackTrace();
+			
 			close();
 			isConnected = false;
 		}
@@ -302,7 +302,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			try {
 				if(length > 0)
 				  channel.write(ByteBuffer.wrap(buffer,0,length));
-			} catch (Exception e) { e.printStackTrace(); }
+			} catch (Exception e) {  }
 		}
 	}
 

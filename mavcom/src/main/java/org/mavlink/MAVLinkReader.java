@@ -451,7 +451,7 @@ public class MAVLinkReader {
 	 * @return Payload bytes
 	 * @throws IOException
 	 */
-	private byte[] buffer = new byte[256];
+	private byte[] buffer = new byte[512];
 	protected byte[] readRawData(int nb) throws IOException {
 		Arrays.fill(buffer,(byte)0);
 		int index = 0;
