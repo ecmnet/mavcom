@@ -24,7 +24,7 @@ public class msg_gimbal_manager_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 9;
+    payload_length = 13;
 }
 
   /**
@@ -39,6 +39,22 @@ public class msg_gimbal_manager_status extends MAVLinkMessage {
    * Gimbal device ID that this gimbal manager is responsible for.
    */
   public int gimbal_device_id;
+  /**
+   * System ID of MAVLink component with primary control, 0 for none.
+   */
+  public int primary_control_sysid;
+  /**
+   * Component ID of MAVLink component with primary control, 0 for none.
+   */
+  public int primary_control_compid;
+  /**
+   * System ID of MAVLink component with secondary control, 0 for none.
+   */
+  public int secondary_control_sysid;
+  /**
+   * Component ID of MAVLink component with secondary control, 0 for none.
+   */
+  public int secondary_control_compid;
 /**
  * Decode message with raw data
  */
@@ -46,12 +62,16 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   time_boot_ms = (int)dis.readInt()&0x00FFFFFFFF;
   flags = (int)dis.readInt()&0x00FFFFFFFF;
   gimbal_device_id = (int)dis.readUnsignedByte()&0x00FF;
+  primary_control_sysid = (int)dis.readUnsignedByte()&0x00FF;
+  primary_control_compid = (int)dis.readUnsignedByte()&0x00FF;
+  secondary_control_sysid = (int)dis.readUnsignedByte()&0x00FF;
+  secondary_control_compid = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+9];
+  byte[] buffer = new byte[12+13];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -66,15 +86,19 @@ public byte[] encode() throws IOException {
   dos.writeInt((int)(time_boot_ms&0x00FFFFFFFF));
   dos.writeInt((int)(flags&0x00FFFFFFFF));
   dos.writeByte(gimbal_device_id&0x00FF);
+  dos.writeByte(primary_control_sysid&0x00FF);
+  dos.writeByte(primary_control_compid&0x00FF);
+  dos.writeByte(secondary_control_sysid&0x00FF);
+  dos.writeByte(secondary_control_compid&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 9);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 13);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[19] = crcl;
-  buffer[20] = crch;
+  buffer[23] = crcl;
+  buffer[24] = crch;
   dos.close();
   return buffer;
 }
@@ -82,5 +106,9 @@ public String toString() {
 return "MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS : " +   "  time_boot_ms="+time_boot_ms
 +  "  flags="+flags
 +  "  gimbal_device_id="+gimbal_device_id
++  "  primary_control_sysid="+primary_control_sysid
++  "  primary_control_compid="+primary_control_compid
++  "  secondary_control_sysid="+secondary_control_sysid
++  "  secondary_control_compid="+secondary_control_compid
 ;}
 }

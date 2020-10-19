@@ -76,7 +76,7 @@ public class msg_command_int extends MAVLinkMessage {
    */
   public int current;
   /**
-   * autocontinue to next wp
+   * Not used (set 0).
    */
   public int autocontinue;
 /**

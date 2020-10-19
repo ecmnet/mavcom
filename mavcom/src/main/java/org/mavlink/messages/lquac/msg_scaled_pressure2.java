@@ -44,7 +44,7 @@ public class msg_scaled_pressure2 extends MAVLinkMessage {
    */
   public int temperature;
   /**
-   * Differential pressure temperature (UINT16_MAX, if not available)
+   * Differential pressure temperature (0, if not available). Report values of 0 (or 1) as 1 cdegC.
    */
   public int temperature_press_diff;
 /**

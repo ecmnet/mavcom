@@ -28,7 +28,6 @@ import org.mavlink.messages.lquac.msg_high_latency;
 import org.mavlink.messages.lquac.msg_param_ext_request_read;
 import org.mavlink.messages.lquac.msg_camera_image_captured;
 import org.mavlink.messages.lquac.msg_local_position_ned_cov;
-import org.mavlink.messages.lquac.msg_gimbal_manager_set_tiltpan;
 import org.mavlink.messages.lquac.msg_global_position_int;
 import org.mavlink.messages.lquac.msg_logging_data;
 import org.mavlink.messages.lquac.msg_param_ext_set;
@@ -36,6 +35,7 @@ import org.mavlink.messages.lquac.msg_hil_controls;
 import org.mavlink.messages.lquac.msg_rc_channels_raw;
 import org.mavlink.messages.lquac.msg_tunnel;
 import org.mavlink.messages.lquac.msg_encapsulated_data;
+import org.mavlink.messages.lquac.msg_gimbal_manager_set_manual_control;
 import org.mavlink.messages.lquac.msg_param_ext_ack;
 import org.mavlink.messages.lquac.msg_orbit_execution_status;
 import org.mavlink.messages.lquac.msg_system_time;
@@ -171,6 +171,7 @@ import org.mavlink.messages.lquac.msg_logging_data_acked;
 import org.mavlink.messages.lquac.msg_sim_state;
 import org.mavlink.messages.lquac.msg_safety_allowed_area;
 import org.mavlink.messages.lquac.msg_gps_global_origin;
+import org.mavlink.messages.lquac.msg_gimbal_manager_set_pitchyaw;
 import org.mavlink.messages.lquac.msg_trajectory_representation_waypoints;
 import org.mavlink.messages.lquac.msg_follow_target;
 import org.mavlink.messages.lquac.msg_smart_battery_info;
@@ -198,7 +199,6 @@ import org.mavlink.messages.lquac.msg_play_tune;
 import org.mavlink.messages.lquac.msg_param_set;
 import org.mavlink.messages.lquac.msg_set_position_target_global_int;
 import org.mavlink.messages.lquac.msg_hil_actuator_controls;
-import org.mavlink.messages.lquac.msg_smart_battery_status;
 import org.mavlink.messages.lquac.msg_manual_control;
 import org.mavlink.messages.lquac.msg_message_interval;
 import org.mavlink.messages.lquac.msg_hil_state_quaternion;
@@ -237,7 +237,6 @@ import org.mavlink.messages.lquac.msg_high_latency;
 import org.mavlink.messages.lquac.msg_param_ext_request_read;
 import org.mavlink.messages.lquac.msg_camera_image_captured;
 import org.mavlink.messages.lquac.msg_local_position_ned_cov;
-import org.mavlink.messages.lquac.msg_gimbal_manager_set_tiltpan;
 import org.mavlink.messages.lquac.msg_global_position_int;
 import org.mavlink.messages.lquac.msg_logging_data;
 import org.mavlink.messages.lquac.msg_param_ext_set;
@@ -245,6 +244,7 @@ import org.mavlink.messages.lquac.msg_hil_controls;
 import org.mavlink.messages.lquac.msg_rc_channels_raw;
 import org.mavlink.messages.lquac.msg_tunnel;
 import org.mavlink.messages.lquac.msg_encapsulated_data;
+import org.mavlink.messages.lquac.msg_gimbal_manager_set_manual_control;
 import org.mavlink.messages.lquac.msg_param_ext_ack;
 import org.mavlink.messages.lquac.msg_orbit_execution_status;
 import org.mavlink.messages.lquac.msg_system_time;
@@ -383,6 +383,7 @@ import org.mavlink.messages.lquac.msg_logging_data_acked;
 import org.mavlink.messages.lquac.msg_sim_state;
 import org.mavlink.messages.lquac.msg_safety_allowed_area;
 import org.mavlink.messages.lquac.msg_gps_global_origin;
+import org.mavlink.messages.lquac.msg_gimbal_manager_set_pitchyaw;
 import org.mavlink.messages.lquac.msg_trajectory_representation_waypoints;
 import org.mavlink.messages.lquac.msg_follow_target;
 import org.mavlink.messages.lquac.msg_smart_battery_info;
@@ -410,7 +411,6 @@ import org.mavlink.messages.lquac.msg_play_tune;
 import org.mavlink.messages.lquac.msg_param_set;
 import org.mavlink.messages.lquac.msg_set_position_target_global_int;
 import org.mavlink.messages.lquac.msg_hil_actuator_controls;
-import org.mavlink.messages.lquac.msg_smart_battery_status;
 import org.mavlink.messages.lquac.msg_manual_control;
 import org.mavlink.messages.lquac.msg_message_interval;
 import org.mavlink.messages.lquac.msg_hil_state_quaternion;
@@ -516,10 +516,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_local_position_ned_cov(sysId, componentId);
       msg.decode(dis);
       break;
-  case MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_TILTPAN:
-      msg = new msg_gimbal_manager_set_tiltpan(sysId, componentId);
-      msg.decode(dis);
-      break;
   case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
       msg = new msg_global_position_int(sysId, componentId);
       msg.decode(dis);
@@ -546,6 +542,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_ENCAPSULATED_DATA:
       msg = new msg_encapsulated_data(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_MANUAL_CONTROL:
+      msg = new msg_gimbal_manager_set_manual_control(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_PARAM_EXT_ACK:
@@ -1100,6 +1100,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_gps_global_origin(sysId, componentId);
       msg.decode(dis);
       break;
+  case MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_PITCHYAW:
+      msg = new msg_gimbal_manager_set_pitchyaw(sysId, componentId);
+      msg.decode(dis);
+      break;
   case MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS:
       msg = new msg_trajectory_representation_waypoints(sysId, componentId);
       msg.decode(dis);
@@ -1206,10 +1210,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_HIL_ACTUATOR_CONTROLS:
       msg = new msg_hil_actuator_controls(sysId, componentId);
-      msg.decode(dis);
-      break;
-  case MAVLINK_MSG_ID_SMART_BATTERY_STATUS:
-      msg = new msg_smart_battery_status(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_MANUAL_CONTROL:

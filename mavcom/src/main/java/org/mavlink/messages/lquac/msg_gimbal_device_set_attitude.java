@@ -32,15 +32,15 @@ public class msg_gimbal_device_set_attitude extends MAVLinkMessage {
    */
   public float[] q = new float[4];
   /**
-   * X component of angular velocity, positive is banking to the right, NaN to be ignored.
+   * X component of angular velocity, positive is rolling to the right, NaN to be ignored.
    */
   public float angular_velocity_x;
   /**
-   * Y component of angular velocity, positive is tilting up, NaN to be ignored.
+   * Y component of angular velocity, positive is pitching up, NaN to be ignored.
    */
   public float angular_velocity_y;
   /**
-   * Z component of angular velocity, positive is panning to the right, NaN to be ignored.
+   * Z component of angular velocity, positive is yawing to the right, NaN to be ignored.
    */
   public float angular_velocity_z;
   /**

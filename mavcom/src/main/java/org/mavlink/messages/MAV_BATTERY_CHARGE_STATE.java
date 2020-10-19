@@ -29,11 +29,11 @@ public interface MAV_BATTERY_CHARGE_STATE {
      */
     public final static int MAV_BATTERY_CHARGE_STATE_EMERGENCY = 4;
     /**
-     * Battery failed, damage unavoidable.
+     * Battery failed, damage unavoidable. Possible causes (faults) are listed in MAV_BATTERY_FAULT.
      */
     public final static int MAV_BATTERY_CHARGE_STATE_FAILED = 5;
     /**
-     * Battery is diagnosed to be defective or an error occurred, usage is discouraged / prohibited.
+     * Battery is diagnosed to be defective or an error occurred, usage is discouraged / prohibited. Possible causes (faults) are listed in MAV_BATTERY_FAULT.
      */
     public final static int MAV_BATTERY_CHARGE_STATE_UNHEALTHY = 6;
     /**

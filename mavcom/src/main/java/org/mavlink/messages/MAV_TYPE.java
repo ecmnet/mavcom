@@ -148,4 +148,8 @@ public interface MAV_TYPE {
      * Open Drone ID. See https://mavlink.io/en/services/opendroneid.html.
      */
     public final static int MAV_TYPE_ODID = 34;
+    /**
+     * Decarotor
+     */
+    public final static int MAV_TYPE_DECAROTOR = 35;
 }

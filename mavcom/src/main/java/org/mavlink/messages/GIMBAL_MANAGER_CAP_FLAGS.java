@@ -64,16 +64,4 @@ public interface GIMBAL_MANAGER_CAP_FLAGS {
      * Gimbal manager supports to point to a global latitude, longitude, altitude position.
      */
     public final static int GIMBAL_MANAGER_CAP_FLAGS_CAN_POINT_LOCATION_GLOBAL = 131072;
-    /**
-     * Gimbal manager supports pitching and yawing at an angular velocity scaled by focal length (the more zoomed in, the slower the movement).
-     */
-    public final static int GIMBAL_MANAGER_CAP_FLAGS_SUPPORTS_FOCAL_LENGTH_SCALE = 1048576;
-    /**
-     * Gimbal manager supports nudging when pointing to a location or tracking.
-     */
-    public final static int GIMBAL_MANAGER_CAP_FLAGS_SUPPORTS_NUDGING = 2097152;
-    /**
-     * Gimbal manager supports overriding when pointing to a location or tracking.
-     */
-    public final static int GIMBAL_MANAGER_CAP_FLAGS_SUPPORTS_OVERRIDE = 4194304;
 }

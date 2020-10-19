@@ -144,7 +144,7 @@ public class MAVSerialComm implements IMAVComm {
 				Thread.sleep(10);
 			} catch (Exception e) {	}
 		}
-		System.out.println("Serial port "+this.getClass().getSimpleName()+" opened: "+port);
+		System.out.println("Serial port "+this.getClass().getSimpleName()+" opened: "+port+": "+baudrate+" baud");
 		System.out.println(serialPort.getPortDescription());
 		return true;
 	}

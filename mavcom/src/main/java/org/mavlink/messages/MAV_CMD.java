@@ -20,12 +20,6 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_REQUEST_MESSAGE = 512;
     /**
-     * Request MAVLink protocol version compatibility. All receivers should ACK the command and then emit their capabilities in an PROTOCOL_VERSION message
-     * PARAM 1 : 1: Request supported protocol versions by all nodes on the network
-     * PARAM 2 : Reserved (all remaining params)
-     */
-    public final static int MAV_CMD_REQUEST_PROTOCOL_VERSION = 519;
-    /**
      * Navigate to waypoint.
      * PARAM 1 : Hold time. (ignored by fixed wing, time to stay at waypoint for rotary wing)
      * PARAM 2 : Acceptance radius (if the sphere with this radius is hit, the waypoint counts as reached)
@@ -261,7 +255,7 @@ public interface MAV_CMD {
      * PARAM 1 : Delay (-1 to enable time-of-day fields)
      * PARAM 2 : hour (24h format, UTC, -1 to ignore)
      * PARAM 3 : minute (24h format, UTC, -1 to ignore)
-     * PARAM 4 : second (24h format, UTC)
+     * PARAM 4 : second (24h format, UTC, -1 to ignore)
      * PARAM 5 : Empty
      * PARAM 6 : Empty
      * PARAM 7 : Empty
@@ -544,7 +538,7 @@ public interface MAV_CMD {
     public final static int MAV_CMD_DO_SET_REVERSE = 194;
     /**
      * Sets the region of interest (ROI) to a location. This can then be used by the vehicle's control system to control the vehicle attitude and the attitude of various sensors such as cameras. This command can be sent to a gimbal manager but not to a gimbal device. A gimbal is not to react to this message.
-     * PARAM 1 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
+     * PARAM 1 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. Send command multiple times for more than one gimbal (but not all gimbals).
      * PARAM 2 : Empty
      * PARAM 3 : Empty
      * PARAM 4 : Empty
@@ -555,18 +549,18 @@ public interface MAV_CMD {
     public final static int MAV_CMD_DO_SET_ROI_LOCATION = 195;
     /**
      * Sets the region of interest (ROI) to be toward next waypoint, with optional pitch/roll/yaw offset. This can then be used by the vehicle's control system to control the vehicle attitude and the attitude of various sensors such as cameras. This command can be sent to a gimbal manager but not to a gimbal device. A gimbal device is not to react to this message.
-     * PARAM 1 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
+     * PARAM 1 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. Send command multiple times for more than one gimbal (but not all gimbals).
      * PARAM 2 : Empty
      * PARAM 3 : Empty
      * PARAM 4 : Empty
-     * PARAM 5 : Pitch offset from next waypoint, positive tilting up
-     * PARAM 6 : roll offset from next waypoint, positive banking to the right
-     * PARAM 7 : yaw offset from next waypoint, positive panning to the right
+     * PARAM 5 : Pitch offset from next waypoint, positive pitching up
+     * PARAM 6 : roll offset from next waypoint, positive rolling to the right
+     * PARAM 7 : yaw offset from next waypoint, positive yawing to the right
      */
     public final static int MAV_CMD_DO_SET_ROI_WPNEXT_OFFSET = 196;
     /**
      * Cancels any previous ROI command returning the vehicle/sensors to default flight characteristics. This can then be used by the vehicle's control system to control the vehicle attitude and the attitude of various sensors such as cameras. This command can be sent to a gimbal manager but not to a gimbal device. A gimbal device is not to react to this message. After this command the gimbal manager should go back to manual input if available, and otherwise assume a neutral position.
-     * PARAM 1 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
+     * PARAM 1 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. Send command multiple times for more than one gimbal (but not all gimbals).
      * PARAM 2 : Empty
      * PARAM 3 : Empty
      * PARAM 4 : Empty
@@ -578,7 +572,7 @@ public interface MAV_CMD {
     /**
      * Mount tracks system with specified system ID. Determination of target vehicle position may be done with GLOBAL_POSITION_INT or any other means. This command can be sent to a gimbal manager but not to a gimbal device. A gimbal device is not to react to this message.
      * PARAM 1 : System ID
-     * PARAM 2 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
+     * PARAM 2 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. Send command multiple times for more than one gimbal (but not all gimbals).
      */
     public final static int MAV_CMD_DO_SET_ROI_SYSID = 198;
     /**
@@ -934,6 +928,12 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_SET_MESSAGE_INTERVAL = 511;
     /**
+     * Request MAVLink protocol version compatibility. All receivers should ACK the command and then emit their capabilities in an PROTOCOL_VERSION message
+     * PARAM 1 : 1: Request supported protocol versions by all nodes on the network
+     * PARAM 2 : Reserved (all remaining params)
+     */
+    public final static int MAV_CMD_REQUEST_PROTOCOL_VERSION = 519;
+    /**
      * Request autopilot capabilities. The receiver should ACK the command and then emit its capabilities in an AUTOPILOT_VERSION message
      * PARAM 1 : 1: Request autopilot version
      * PARAM 2 : Reserved (all remaining params)
@@ -1031,14 +1031,23 @@ public interface MAV_CMD {
     public final static int MAV_CMD_PARAM_TRANSACTION = 900;
     /**
      * High level setpoint to be sent to a gimbal manager to set a gimbal attitude. It is possible to set combinations of the values below. E.g. an angle as well as a desired angular rate can be used to get to this angle at a certain angular rate, or an angular rate only will result in continuous turning. NaN is to be used to signal unset. Note: a gimbal is never to react to this command but only the gimbal manager.
-     * PARAM 1 : Tilt/pitch rate (positive to tilt up).
-     * PARAM 2 : Pan/yaw rate (positive to pan to the right).
-     * PARAM 3 : Tilt/pitch angle (positive to tilt up, relative to vehicle for PAN mode, relative to world horizon for HOLD mode).
-     * PARAM 4 : Pan/yaw angle (positive to pan to the right, relative to vehicle for PAN mode, absolute to North for HOLD mode).
+     * PARAM 1 : Pitch angle (positive to pitch up, relative to vehicle for FOLLOW mode, relative to world horizon for LOCK mode).
+     * PARAM 2 : Yaw angle (positive to yaw to the right, relative to vehicle for FOLLOW mode, absolute to North for LOCK mode).
+     * PARAM 3 : Pitch rate (positive to pitch up).
+     * PARAM 4 : Yaw rate (positive to yaw to the right).
      * PARAM 5 : Gimbal manager flags to use.
-     * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. (Send command multiple times for more than one but not all gimbals.)
+     * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. Send command multiple times for more than one gimbal (but not all gimbals).
      */
-    public final static int MAV_CMD_DO_GIMBAL_MANAGER_TILTPAN = 1000;
+    public final static int MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW = 1000;
+    /**
+     * Gimbal configuration to set which sysid/compid is in primary and secondary control.
+     * PARAM 1 : Sysid for primary control (0: no one in control).
+     * PARAM 2 : Compid for primary control (0: no one in control).
+     * PARAM 3 : Sysid for secondary control (0: no one in control).
+     * PARAM 4 : Compid for secondary control (0: no one in control).
+     * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. Send command multiple times for more than one gimbal (but not all gimbals).
+     */
+    public final static int MAV_CMD_DO_GIMBAL_MANAGER_CONFIGURE = 1001;
     /**
      * Start image capture sequence. Sends CAMERA_IMAGE_CAPTURED after each capture. Use NaN for reserved values.
      * PARAM 1 : Reserved (Set to 0)

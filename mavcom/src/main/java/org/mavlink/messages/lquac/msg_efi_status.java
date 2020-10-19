@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_efi_status
- * EFI Status Output
+ * EFI status output
  **/
 public class msg_efi_status extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_EFI_STATUS = 225;
@@ -24,11 +24,11 @@ public class msg_efi_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_EFI_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 53;
+    payload_length = 65;
 }
 
   /**
-   * ECU Index
+   * ECU index
    */
   public float ecu_index;
   /**
@@ -36,51 +36,63 @@ public class msg_efi_status extends MAVLinkMessage {
    */
   public float rpm;
   /**
-   * Fuel Consumed (grams)
+   * Fuel consumed
    */
   public float fuel_consumed;
   /**
-   * Fuel Flow Rate (g/min)
+   * Fuel flow rate
    */
   public float fuel_flow;
   /**
-   * Engine Load (%)
+   * Engine load
    */
   public float engine_load;
   /**
-   * Throttle Position (%)
+   * Throttle position
    */
   public float throttle_position;
   /**
-   * Spark Dwell Time (ms)
+   * Spark dwell time
    */
   public float spark_dwell_time;
   /**
-   * Barometric Pressure (kPa)
+   * Barometric pressure
    */
   public float barometric_pressure;
   /**
-   * Intake Manifold Pressure (kPa)(
+   * Intake manifold pressure(
    */
   public float intake_manifold_pressure;
   /**
-   * Intake Manifold Temperature (degC)
+   * Intake manifold temperature
    */
   public float intake_manifold_temperature;
   /**
-   * cylinder_head_temperature (degC)
+   * Cylinder head temperature
    */
   public float cylinder_head_temperature;
   /**
-   * Ignition timing for cylinder i (Crank Angle degrees)
+   * Ignition timing (Crank angle degrees)
    */
   public float ignition_timing;
   /**
-   * Injection time for injector i (ms)
+   * Injection time
    */
   public float injection_time;
   /**
-   * EFI Health status
+   * Exhaust gas temperature
+   */
+  public float exhaust_gas_temperature;
+  /**
+   * Output throttle
+   */
+  public float throttle_out;
+  /**
+   * Pressure/temperature compensation
+   */
+  public float pt_compensation;
+  /**
+   * EFI health status
    */
   public int health;
 /**
@@ -100,13 +112,16 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   cylinder_head_temperature = (float)dis.readFloat();
   ignition_timing = (float)dis.readFloat();
   injection_time = (float)dis.readFloat();
+  exhaust_gas_temperature = (float)dis.readFloat();
+  throttle_out = (float)dis.readFloat();
+  pt_compensation = (float)dis.readFloat();
   health = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+53];
+  byte[] buffer = new byte[12+65];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -131,16 +146,19 @@ public byte[] encode() throws IOException {
   dos.writeFloat(cylinder_head_temperature);
   dos.writeFloat(ignition_timing);
   dos.writeFloat(injection_time);
+  dos.writeFloat(exhaust_gas_temperature);
+  dos.writeFloat(throttle_out);
+  dos.writeFloat(pt_compensation);
   dos.writeByte(health&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 53);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 65);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[63] = crcl;
-  buffer[64] = crch;
+  buffer[75] = crcl;
+  buffer[76] = crch;
   dos.close();
   return buffer;
 }
@@ -158,6 +176,9 @@ return "MAVLINK_MSG_ID_EFI_STATUS : " +   "  ecu_index="+format((float)ecu_index
 +  "  cylinder_head_temperature="+format((float)cylinder_head_temperature)
 +  "  ignition_timing="+format((float)ignition_timing)
 +  "  injection_time="+format((float)injection_time)
++  "  exhaust_gas_temperature="+format((float)exhaust_gas_temperature)
++  "  throttle_out="+format((float)throttle_out)
++  "  pt_compensation="+format((float)pt_compensation)
 +  "  health="+health
 ;}
 }

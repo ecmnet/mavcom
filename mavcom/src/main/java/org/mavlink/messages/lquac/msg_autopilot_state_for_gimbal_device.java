@@ -32,7 +32,7 @@ public class msg_autopilot_state_for_gimbal_device extends MAVLinkMessage {
    */
   public long time_boot_us;
   /**
-   * Quaternion components of autopilot attitude: w, x, y, z (1 0 0 0 is the null-rotation, Hamiltonian convention).
+   * Quaternion components of autopilot attitude: w, x, y, z (1 0 0 0 is the null-rotation, Hamilton convention).
    */
   public float[] q = new float[4];
   /**

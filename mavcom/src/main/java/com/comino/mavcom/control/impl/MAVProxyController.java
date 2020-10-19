@@ -87,6 +87,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	private static final int BAUDRATE_9   = 921600;
 	private static final int BAUDRATE_15  = 1500000;
 	private static final int BAUDRATE_20  = 2000000;
+	private static final int BAUDRATE_30  = 3000000;
 
 	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
 	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1,MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
@@ -139,7 +140,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		switch(mode) {
 		case MAVController.MODE_NORMAL:
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }

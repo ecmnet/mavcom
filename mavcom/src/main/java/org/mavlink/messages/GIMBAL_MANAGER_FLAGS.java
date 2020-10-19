@@ -29,19 +29,7 @@ public interface GIMBAL_MANAGER_FLAGS {
      */
     public final static int GIMBAL_MANAGER_FLAGS_YAW_LOCK = 16;
     /**
-     * Scale angular velocity relative to focal length. This means the gimbal moves slower if it is zoomed in.
+     * This flag can be set to give up control previously set using MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW. This flag must not be combined with other flags.
      */
-    public final static int GIMBAL_MANAGER_FLAGS_ANGULAR_VELOCITY_RELATIVE_TO_FOCAL_LENGTH = 1048576;
-    /**
-     * Interpret attitude control on top of pointing to a location or tracking. If this flag is set, the quaternion is relative to the existing tracking angle.
-     */
-    public final static int GIMBAL_MANAGER_FLAGS_NUDGE = 2097152;
-    /**
-     * Completely override pointing to a location or tracking. If this flag is set, the quaternion is (as usual) according to GIMBAL_MANAGER_FLAGS_YAW_LOCK.
-     */
-    public final static int GIMBAL_MANAGER_FLAGS_OVERRIDE = 4194304;
-    /**
-     * This flag can be set to give up control previously set using MAV_CMD_DO_GIMBAL_MANAGER_ATTITUDE. This flag must not be combined with other flags.
-     */
-    public final static int GIMBAL_MANAGER_FLAGS_NONE = 8388608;
+    public final static int GIMBAL_MANAGER_FLAGS_NONE = 1048576;
 }

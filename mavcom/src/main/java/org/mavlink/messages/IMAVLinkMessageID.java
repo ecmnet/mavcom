@@ -27,7 +27,6 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ = 320;
   public static int MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED = 263;
   public static int MAVLINK_MSG_ID_LOCAL_POSITION_NED_COV = 64;
-  public static int MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_TILTPAN = 287;
   public static int MAVLINK_MSG_ID_GLOBAL_POSITION_INT = 33;
   public static int MAVLINK_MSG_ID_LOGGING_DATA = 266;
   public static int MAVLINK_MSG_ID_PARAM_EXT_SET = 323;
@@ -36,6 +35,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_RC_CHANNELS_RAW = 35;
   public static int MAVLINK_MSG_ID_TUNNEL = 385;
   public static int MAVLINK_MSG_ID_ENCAPSULATED_DATA = 131;
+  public static int MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_MANUAL_CONTROL = 288;
   public static int MAVLINK_MSG_ID_PARAM_EXT_ACK = 324;
   public static int MAVLINK_MSG_ID_ORBIT_EXECUTION_STATUS = 360;
   public static int MAVLINK_MSG_ID_SYSTEM_TIME = 2;
@@ -178,6 +178,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_SIM_STATE = 108;
   public static int MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA = 55;
   public static int MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN = 49;
+  public static int MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_PITCHYAW = 287;
   public static int MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS = 332;
   public static int MAVLINK_MSG_ID_FOLLOW_TARGET = 144;
   public static int MAVLINK_MSG_ID_SMART_BATTERY_INFO = 370;
@@ -206,7 +207,6 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_PARAM_SET = 23;
   public static int MAVLINK_MSG_ID_SET_POSITION_TARGET_GLOBAL_INT = 86;
   public static int MAVLINK_MSG_ID_HIL_ACTUATOR_CONTROLS = 93;
-  public static int MAVLINK_MSG_ID_SMART_BATTERY_STATUS = 371;
   public static int MAVLINK_MSG_ID_MANUAL_CONTROL = 69;
   public static int MAVLINK_MSG_ID_MESSAGE_INTERVAL = 244;
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_OPERATOR_ID = 12905;

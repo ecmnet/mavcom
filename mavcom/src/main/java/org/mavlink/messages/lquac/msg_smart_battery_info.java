@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_smart_battery_info
- * Smart Battery information (static/infrequent update). Use for updates from: smart battery to flight stack, flight stack to GCS. Use instead of BATTERY_STATUS for smart batteries.
+ * Smart Battery information (static/infrequent update). Use for updates from: smart battery to flight stack, flight stack to GCS. Use BATTERY_STATUS for smart battery frequent updates.
  **/
 public class msg_smart_battery_info extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_SMART_BATTERY_INFO = 370;
@@ -24,7 +24,7 @@ public class msg_smart_battery_info extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_SMART_BATTERY_INFO;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 73;
+    payload_length = 75;
 }
 
   /**
@@ -64,6 +64,14 @@ public class msg_smart_battery_info extends MAVLinkMessage {
    */
   public int id;
   /**
+   * Function of the battery
+   */
+  public int battery_function;
+  /**
+   * Type (chemistry) of the battery
+   */
+  public int type;
+  /**
    * Static device name. Encode as manufacturer and product names separated using an underscore.
    */
   public char[] device_name = new char[50];
@@ -96,6 +104,8 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   charging_minimum_voltage = (int)dis.readUnsignedShort()&0x00FFFF;
   resting_minimum_voltage = (int)dis.readUnsignedShort()&0x00FFFF;
   id = (int)dis.readUnsignedByte()&0x00FF;
+  battery_function = (int)dis.readUnsignedByte()&0x00FF;
+  type = (int)dis.readUnsignedByte()&0x00FF;
   for (int i=0; i<50; i++) {
     device_name[i] = (char)dis.readByte();
   }
@@ -104,7 +114,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+73];
+  byte[] buffer = new byte[12+75];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -125,18 +135,20 @@ public byte[] encode() throws IOException {
   dos.writeShort(charging_minimum_voltage&0x00FFFF);
   dos.writeShort(resting_minimum_voltage&0x00FFFF);
   dos.writeByte(id&0x00FF);
+  dos.writeByte(battery_function&0x00FF);
+  dos.writeByte(type&0x00FF);
   for (int i=0; i<50; i++) {
     dos.writeByte(device_name[i]);
   }
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 73);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 75);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[83] = crcl;
-  buffer[84] = crch;
+  buffer[85] = crcl;
+  buffer[86] = crch;
   dos.close();
   return buffer;
 }
@@ -150,6 +162,8 @@ return "MAVLINK_MSG_ID_SMART_BATTERY_INFO : " +   "  capacity_full_specification
 +  "  charging_minimum_voltage="+charging_minimum_voltage
 +  "  resting_minimum_voltage="+resting_minimum_voltage
 +  "  id="+id
++  "  battery_function="+battery_function
++  "  type="+type
 +  "  device_name="+getDevice_name()
 ;}
 }

@@ -36,29 +36,29 @@ public class msg_gimbal_manager_information extends MAVLinkMessage {
    */
   public long cap_flags;
   /**
-   * Maximum tilt/pitch angle (positive: up, negative: down)
+   * Minimum hardware roll angle (positive: rolling to the right, negative: rolling to the left)
    */
-  public float tilt_max;
+  public float roll_min;
   /**
-   * Minimum tilt/pitch angle (positive: up, negative: down)
+   * Maximum hardware roll angle (positive: rolling to the right, negative: rolling to the left)
    */
-  public float tilt_min;
+  public float roll_max;
   /**
-   * Maximum tilt/pitch angular rate (positive: up, negative: down)
+   * Minimum pitch angle (positive: up, negative: down)
    */
-  public float tilt_rate_max;
+  public float pitch_min;
   /**
-   * Maximum pan/yaw angle (positive: to the right, negative: to the left)
+   * Maximum pitch angle (positive: up, negative: down)
    */
-  public float pan_max;
+  public float pitch_max;
   /**
-   * Minimum pan/yaw angle (positive: to the right, negative: to the left)
+   * Minimum yaw angle (positive: to the right, negative: to the left)
    */
-  public float pan_min;
+  public float yaw_min;
   /**
-   * Minimum pan/yaw angular rate (positive: to the right, negative: to the left)
+   * Maximum yaw angle (positive: to the right, negative: to the left)
    */
-  public float pan_rate_max;
+  public float yaw_max;
   /**
    * Gimbal device ID that this gimbal manager is responsible for.
    */
@@ -69,12 +69,12 @@ public class msg_gimbal_manager_information extends MAVLinkMessage {
 public void decode(LittleEndianDataInputStream dis) throws IOException {
   time_boot_ms = (int)dis.readInt()&0x00FFFFFFFF;
   cap_flags = (int)dis.readInt()&0x00FFFFFFFF;
-  tilt_max = (float)dis.readFloat();
-  tilt_min = (float)dis.readFloat();
-  tilt_rate_max = (float)dis.readFloat();
-  pan_max = (float)dis.readFloat();
-  pan_min = (float)dis.readFloat();
-  pan_rate_max = (float)dis.readFloat();
+  roll_min = (float)dis.readFloat();
+  roll_max = (float)dis.readFloat();
+  pitch_min = (float)dis.readFloat();
+  pitch_max = (float)dis.readFloat();
+  yaw_min = (float)dis.readFloat();
+  yaw_max = (float)dis.readFloat();
   gimbal_device_id = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
@@ -95,12 +95,12 @@ public byte[] encode() throws IOException {
   dos.writeByte((messageType >> 16) & 0x00FF);
   dos.writeInt((int)(time_boot_ms&0x00FFFFFFFF));
   dos.writeInt((int)(cap_flags&0x00FFFFFFFF));
-  dos.writeFloat(tilt_max);
-  dos.writeFloat(tilt_min);
-  dos.writeFloat(tilt_rate_max);
-  dos.writeFloat(pan_max);
-  dos.writeFloat(pan_min);
-  dos.writeFloat(pan_rate_max);
+  dos.writeFloat(roll_min);
+  dos.writeFloat(roll_max);
+  dos.writeFloat(pitch_min);
+  dos.writeFloat(pitch_max);
+  dos.writeFloat(yaw_min);
+  dos.writeFloat(yaw_max);
   dos.writeByte(gimbal_device_id&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
@@ -117,12 +117,12 @@ public byte[] encode() throws IOException {
 public String toString() {
 return "MAVLINK_MSG_ID_GIMBAL_MANAGER_INFORMATION : " +   "  time_boot_ms="+time_boot_ms
 +  "  cap_flags="+cap_flags
-+  "  tilt_max="+format((float)tilt_max)
-+  "  tilt_min="+format((float)tilt_min)
-+  "  tilt_rate_max="+format((float)tilt_rate_max)
-+  "  pan_max="+format((float)pan_max)
-+  "  pan_min="+format((float)pan_min)
-+  "  pan_rate_max="+format((float)pan_rate_max)
++  "  roll_min="+format((float)roll_min)
++  "  roll_max="+format((float)roll_max)
++  "  pitch_min="+format((float)pitch_min)
++  "  pitch_max="+format((float)pitch_max)
++  "  yaw_min="+format((float)yaw_min)
++  "  yaw_max="+format((float)yaw_max)
 +  "  gimbal_device_id="+gimbal_device_id
 ;}
 }

@@ -40,15 +40,15 @@ public class msg_command_ack extends MAVLinkMessage {
    */
   public long result_param2;
   /**
-   * WIP: Also used as result_param1, it can be set with a enum containing the errors reasons of why the command was denied or the progress percentage or 255 if unknown the progress when result is MAV_RESULT_IN_PROGRESS.
+   * WIP: Also used as result_param1, it can be set with an enum containing the errors reasons of why the command was denied, or the progress percentage when result is MAV_RESULT_IN_PROGRESS (255 if the progress is unknown).
    */
   public int progress;
   /**
-   * WIP: System which requested the command to be executed
+   * WIP: System ID of the target recipient. This is the ID of the system that sent the command for which this COMMAND_ACK is an acknowledgement.
    */
   public int target_system;
   /**
-   * WIP: Component which requested the command to be executed
+   * WIP: Component ID of the target recipient. This is the ID of the system that sent the command for which this COMMAND_ACK is an acknowledgement.
    */
   public int target_component;
 /**

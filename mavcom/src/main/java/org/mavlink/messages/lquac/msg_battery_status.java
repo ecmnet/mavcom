@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_battery_status
- * Battery information. Updates GCS with flight controller battery status. Use SMART_BATTERY_* messages instead for smart batteries.
+ * Battery information. Updates GCS with flight controller battery status. Smart batteries also use this message, but may additionally send SMART_BATTERY_INFO.
  **/
 public class msg_battery_status extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_BATTERY_STATUS = 147;
@@ -24,7 +24,7 @@ public class msg_battery_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_BATTERY_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 49;
+    payload_length = 54;
 }
 
   /**
@@ -68,6 +68,10 @@ public class msg_battery_status extends MAVLinkMessage {
    */
   public long time_remaining;
   /**
+   * Fault/health indications. These should be set when charge_state is MAV_BATTERY_CHARGE_STATE_FAILED or MAV_BATTERY_CHARGE_STATE_UNHEALTHY (if not, fault reporting is not supported).
+   */
+  public long fault_bitmask;
+  /**
    * Battery voltages for cells 11 to 14. Cells above the valid cell count for this battery should have a value of 0, where zero indicates not supported (note, this is different than for the voltages field and allows empty byte truncation). If the measured value is 0 then 1 should be sent instead.
    */
   public int[] voltages_ext = new int[4];
@@ -75,6 +79,10 @@ public class msg_battery_status extends MAVLinkMessage {
    * State for extent of discharge, provided by autopilot for warning or external reactions
    */
   public int charge_state;
+  /**
+   * Battery mode. Default (0) is that battery mode reporting is not supported or battery is in normal-use mode.
+   */
+  public int mode;
 /**
  * Decode message with raw data
  */
@@ -91,16 +99,18 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   type = (int)dis.readUnsignedByte()&0x00FF;
   battery_remaining = (int)dis.readByte();
   time_remaining = (int)dis.readInt();
+  fault_bitmask = (int)dis.readInt()&0x00FFFFFFFF;
   for (int i=0; i<4; i++) {
     voltages_ext[i] = (int)dis.readUnsignedShort()&0x00FFFF;
   }
   charge_state = (int)dis.readUnsignedByte()&0x00FF;
+  mode = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+49];
+  byte[] buffer = new byte[12+54];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -124,19 +134,21 @@ public byte[] encode() throws IOException {
   dos.writeByte(type&0x00FF);
   dos.write(battery_remaining&0x00FF);
   dos.writeInt((int)(time_remaining&0x00FFFFFFFF));
+  dos.writeInt((int)(fault_bitmask&0x00FFFFFFFF));
   for (int i=0; i<4; i++) {
     dos.writeShort(voltages_ext[i]&0x00FFFF);
   }
   dos.writeByte(charge_state&0x00FF);
+  dos.writeByte(mode&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 49);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 54);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[59] = crcl;
-  buffer[60] = crch;
+  buffer[64] = crcl;
+  buffer[65] = crch;
   dos.close();
   return buffer;
 }
@@ -160,10 +172,12 @@ return "MAVLINK_MSG_ID_BATTERY_STATUS : " +   "  current_consumed="+current_cons
 +  "  type="+type
 +  "  battery_remaining="+battery_remaining
 +  "  time_remaining="+time_remaining
++  "  fault_bitmask="+fault_bitmask
 +  "  voltages_ext[0]="+voltages_ext[0]
 +  "  voltages_ext[1]="+voltages_ext[1]
 +  "  voltages_ext[2]="+voltages_ext[2]
 +  "  voltages_ext[3]="+voltages_ext[3]
 +  "  charge_state="+charge_state
++  "  mode="+mode
 ;}
 }
