@@ -18,6 +18,10 @@ public class PX4OdometryPlugin extends MAVLinkPluginBase {
 		model.vision.cov_px = odom.pose_covariance[MAV_COV.VIS_COV_X];
 		model.vision.cov_py = odom.pose_covariance[MAV_COV.VIS_COV_Y];
 		model.vision.cov_pz = odom.pose_covariance[MAV_COV.VIS_COV_Z];
+		
+		model.vision.ox = odom.x;
+		model.vision.oy = odom.y;
+		model.vision.oz = odom.z;
 
 //		model.vision.cov_vx = odom.velocity_covariance[MAV_COV.VIS_COV_VX];
 //		model.vision.cov_vy = odom.velocity_covariance[MAV_COV.VIS_COV_VY];
