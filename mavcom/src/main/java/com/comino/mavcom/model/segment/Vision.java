@@ -52,11 +52,6 @@ public class Vision extends Segment {
 	public float x = Float.NaN;
 	public float y = Float.NaN;
 	public float z = Float.NaN;
-	
-	// Odometry position
-	public float ox = Float.NaN;
-	public float oy = Float.NaN;
-	public float oz = Float.NaN;
 
 	// Ground truth
 	public float gx = Float.NaN;
@@ -106,10 +101,6 @@ public class Vision extends Segment {
 		px  = a.px;
 		py  = a.py;
 		pz  = a.pz;
-		
-		ox  = a.ox;
-		oy  = a.oy;
-		oz  = a.oz;
 
 		cov_px  = a.cov_px;
 		cov_py  = a.cov_py;
@@ -154,10 +145,6 @@ public class Vision extends Segment {
 		py  = Float.NaN;
 		pz  = Float.NaN;
 		
-		ox  = Float.NaN;
-		oy  = Float.NaN;
-		oz  = Float.NaN;
-
 		cov_px  = Float.NaN;
 		cov_py  = Float.NaN;
 		cov_pz  = Float.NaN;
