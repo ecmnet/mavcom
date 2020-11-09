@@ -112,6 +112,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 					channel.socket().setSendBufferSize(16*1024);
 					channel.socket().setReceiveBufferSize(16*1024);
 					channel.configureBlocking(false);
+					
 
 					Thread.sleep(100);
 
@@ -167,6 +168,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			if(selector!=null)
 				selector.close();
 			if (channel != null) {
+				channel.disconnect();
 				channel.close();
 			}
 		} catch(Exception e) {

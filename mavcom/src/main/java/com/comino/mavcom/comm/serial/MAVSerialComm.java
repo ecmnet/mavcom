@@ -189,7 +189,6 @@ public class MAVSerialComm implements IMAVComm {
 			return true;
 
 		try {
-
 			serialPort.setComPortParameters(baudRate, dataBits, stopBits, parity);
 			serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0,0);
 			serialPort.addDataListener(new SerialPortDataListener() {
@@ -381,6 +380,7 @@ public class MAVSerialComm implements IMAVComm {
 	this.byteListener = listener;
 		
 	}
+
 
 
 
