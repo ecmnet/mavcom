@@ -46,7 +46,7 @@ import com.comino.mavutils.legacy.ExecutorService;
 public class StatusManager implements Runnable {
 
 	private static final long TIMEOUT_IMU             = 5000000;
-	private static final long TIMEOUT_VISION          = 2000000;
+	private static final long TIMEOUT_VISION          = 3000000;
 	private static final long TIMEOUT_CONNECTED       = 9000000;
 	private static final long TIMEOUT_GCL_CONNECTED   = 5000000;
 	private static final long TIMEOUT_RC_ATTACHED     = 5000000;
