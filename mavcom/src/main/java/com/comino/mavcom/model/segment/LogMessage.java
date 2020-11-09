@@ -73,14 +73,14 @@ public class LogMessage extends Segment {
 		this.tms = m.tms;
 	}
 
-	public boolean isEqual(LogMessage m) {
-		if(m.text==null)
-			return false;
-		return m.filter(this.text) || (m.tms - this.tms) > 500 ;
+	public boolean isNew(LogMessage m) {
+		if(m== null || m.text==null)
+			return true;
+		return !m.filter(this.text) || (m.tms - this.tms) > 500 ;
 	}
 
 	public boolean filter(String filter) {
-		return this.text.contains(filter);
+		return this.text.contains(filter.substring(15));
 	}
 
 	public void clear() {
