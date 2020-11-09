@@ -34,6 +34,7 @@
 
 package com.comino.mavcom.control.impl;
 
+import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.lquac.msg_heartbeat;
 
@@ -92,6 +93,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 		
 		final msg_heartbeat beat = new msg_heartbeat(255,1);
 		beat.type = MAV_TYPE.MAV_TYPE_GCS;
+		beat.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 
 		// If not checked here, the thread is started twice (not by connect) ??
 		if(connect)
