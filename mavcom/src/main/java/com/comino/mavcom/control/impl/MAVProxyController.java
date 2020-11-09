@@ -45,6 +45,7 @@ import org.mavlink.messages.IMAVLinkMessageID;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAV_CMD;
 import org.mavlink.messages.MAV_COMPONENT;
+import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.SERIAL_CONTROL_DEV;
 import org.mavlink.messages.SERIAL_CONTROL_FLAG;
@@ -91,6 +92,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
 	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1,MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
+	private static final msg_heartbeat beat_obs = new msg_heartbeat(1,MAV_COMPONENT.MAV_COMP_ID_OBSTACLE_AVOIDANCE);
 
 	private StatusManager 				status_manager 	= null;
 	private List<IMAVMessageListener> 	messageListener = null;
@@ -198,9 +200,13 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		});
 
 		beat_gcs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
+		beat_gcs.system_status = MAV_STATE.MAV_STATE_ACTIVE;
+		
 		beat_px4.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
-
-
+		beat_px4.system_status = MAV_STATE.MAV_STATE_ACTIVE;
+		
+		beat_obs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
+		beat_obs.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 	}
 
 	@Override
@@ -428,6 +434,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 //		}
 //
 		sendMAVLinkMessage(beat_px4);
+		
+		sendMAVLinkMessage(beat_obs);
 	}
 
 	@Override
