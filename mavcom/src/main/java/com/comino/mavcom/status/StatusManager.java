@@ -105,6 +105,10 @@ public class StatusManager implements Runnable {
 		isRunning = false;
 		task.cancel(false);
 	}
+	
+	public int getSize() {
+		return list.size();
+	}
 
 
 	private void addListener(byte type, int mask, int timeout_ms, int edge, IMSPStatusChangedListener listener) {
@@ -305,9 +309,7 @@ public class StatusManager implements Runnable {
 	private void update_callback(final IMSPStatusChangedListener listener, final Status current ) {
 
 		ExecutorService.get().execute(() -> {
-
 			listener.update(current);
-
 		});
 
 	}
