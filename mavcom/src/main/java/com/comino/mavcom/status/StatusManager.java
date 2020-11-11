@@ -64,6 +64,7 @@ public class StatusManager implements Runnable {
 	public static final byte  TYPE_MSP_AUTOPILOT   = 4;
 	public static final byte  TYPE_MSP_SERVICES    = 5;
 	public static final byte  TYPE_ESTIMATOR       = 6;
+	public static final byte  TYPE_BATTERY         = 7;
 
 	public static final byte  EDGE_BOTH            = 0;
 	public static final byte  EDGE_RISING          = 1;
@@ -118,14 +119,14 @@ public class StatusManager implements Runnable {
 
 	public void addListener(byte type, int box, int edge, IMSPStatusChangedListener listener) {
 		// For NAV State / Estimator state use mask as comparison value
-		if(type == TYPE_PX4_NAVSTATE || type == TYPE_ESTIMATOR )
+		if(type == TYPE_PX4_NAVSTATE || type == TYPE_ESTIMATOR || type == TYPE_BATTERY)
 			addListener(type, box, 0, edge, listener);
 		else
 			addListener(type, 1 << box, 0, edge, listener);
 	}
 
 	public void addListener(byte type, int box, IMSPStatusChangedListener listener) {
-		if(type == TYPE_PX4_NAVSTATE || type == TYPE_ESTIMATOR )
+		if(type == TYPE_PX4_NAVSTATE || type == TYPE_ESTIMATOR || type == TYPE_BATTERY )
 			addListener(type, box, 0, EDGE_BOTH, listener);
 		else
 			addListener(type, 1 << box, 0, EDGE_BOTH, listener);
@@ -285,6 +286,12 @@ public class StatusManager implements Runnable {
 						}
 						break;
 					}
+					break;
+				case TYPE_BATTERY:
+					if(status_current.bat_state != status_old.bat_state && status_current.bat_state == entry.mask) {
+						update_callback(entry.listener, status_current);
+						entry.last_triggered = System.currentTimeMillis();
+					}			
 				}
 			}
 		} catch (Exception e) {

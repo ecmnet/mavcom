@@ -31,6 +31,7 @@ public class PX4BatteryStatusPlugin extends MAVLinkPluginBase {
 				if(bat.voltages[i] < 65535)
 					model.battery.b0 += bat.voltages[i];
 			}
+			model.sys.bat_state = (int)bat.fault_bitmask;
 			model.battery.b0 = model.battery.b0 / 1000f;
 			model.battery.tms = System.currentTimeMillis() * 1000;
 		}

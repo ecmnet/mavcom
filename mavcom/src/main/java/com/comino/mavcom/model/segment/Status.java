@@ -115,6 +115,7 @@ public class Status extends Segment {
 	public  int     px4_status   	= 0;
 	public  int     nav_state       = 0;
 	public  int     est_state       = 0;
+	public  int     bat_state       = 0;
 
 	public  int     sensors      	= 0;
 	public  int     status       	= 0;
@@ -149,6 +150,7 @@ public class Status extends Segment {
 		px4_status = s.px4_status;
 		nav_state  = s.nav_state;
 		est_state  = s.est_state;
+		bat_state  = s.bat_state;
 		autopilot  = s.autopilot;
 
 		t_armed_ms    = s.t_armed_ms;
@@ -246,6 +248,10 @@ public class Status extends Segment {
 			return ((old.status & mask) != (status & mask) && ((status & mask) == mask));
 		return ((old.status & mask) != (status & mask) && ((status & mask) == 0));
 	}
+	
+	public boolean isBatStateChanged(Status old, int state) {
+		return (old.bat_state != bat_state &&  bat_state == state);
+	}
 
 	public boolean isAutopilotModeChanged(Status old,int mask) {
 		return ((old.autopilot & mask) != (autopilot & mask));
@@ -277,6 +283,7 @@ public class Status extends Segment {
 		wifi_quality  = 0;
 		msp_temp   	  = 0;
 		est_state     = 0;
+		bat_state     = 0;
 	}
 
 
@@ -290,7 +297,8 @@ public class Status extends Segment {
 
 
 	public boolean isEqual(Status m) {
-		return (status == m.status)	&& (autopilot == m.autopilot) && (nav_state == m.nav_state) && (sensors == m.sensors) && ( est_state == m.est_state);
+		return (status == m.status)	&& (autopilot == m.autopilot) && (nav_state == m.nav_state) && (sensors == m.sensors) && 
+			   (est_state == m.est_state) && (bat_state == m.bat_state);
 	}
 
 
