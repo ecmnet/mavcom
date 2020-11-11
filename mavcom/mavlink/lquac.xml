@@ -11,6 +11,9 @@
               <entry value="99" name="MSP_CMD_RESTART">
                   <description>Reboot the MSP companion</description>
               </entry>
+              <entry value="98" name="MSP_CMD_SHUTDOWN">
+                  <description>Shutdown the MSP companion</description>
+              </entry>
               <entry value="70" name="MSP_CMD_OFFBOARD">
                   <description>Control offboard updater</description>
                   <param index="1">component command</param>
