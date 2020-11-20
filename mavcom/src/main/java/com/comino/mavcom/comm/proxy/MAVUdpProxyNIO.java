@@ -43,6 +43,7 @@ import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -71,7 +72,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	private boolean 				isConnected   = false;
 	private boolean					proxy_enabled = false;
 
-	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(16384);
+	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(4096);
 
 	private List<IMAVLinkListener> listener_list = null;
 	private long                   transfer_speed = 0;
@@ -98,6 +99,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			return true;
 		}
 
+		((Buffer)rxBuffer).clear(); 
 
 		while(!isConnected) {
 			try {
@@ -107,13 +109,11 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				try {
 					channel = DatagramChannel.open();
 					channel.socket().bind(bindPort);
-					channel.socket().setTrafficClass(0x04);
-					//		channel.socket().setBroadcast(true);
-					channel.socket().setSendBufferSize(16*1024);
-					channel.socket().setReceiveBufferSize(16*1024);
+					channel.socket().setTrafficClass(0x10);
+					channel.socket().setSendBufferSize(4*1024);
+					channel.socket().setReceiveBufferSize(4*1024);
 					channel.configureBlocking(false);
 					
-
 					Thread.sleep(100);
 
 				} catch(java.net.BindException b) {

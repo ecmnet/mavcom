@@ -24,7 +24,7 @@ public class msg_msp_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 63;
+    payload_length = 64;
 }
 
   /**
@@ -71,6 +71,10 @@ public class msg_msp_status extends MAVLinkMessage {
    * CPU Temperature
    */
   public int cpu_temp;
+  /**
+   * Battery Temperature
+   */
+  public int bat_temp;
   /**
    * MSP software build
    */
@@ -126,6 +130,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   threads = (int)dis.readUnsignedByte()&0x00FF;
   wifi_quality = (int)dis.readUnsignedByte()&0x00FF;
   cpu_temp = (int)dis.readUnsignedByte()&0x00FF;
+  bat_temp = (int)dis.readUnsignedByte()&0x00FF;
   for (int i=0; i<16; i++) {
     version[i] = (char)dis.readByte();
   }
@@ -137,7 +142,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+63];
+  byte[] buffer = new byte[12+64];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -160,6 +165,7 @@ public byte[] encode() throws IOException {
   dos.writeByte(threads&0x00FF);
   dos.writeByte(wifi_quality&0x00FF);
   dos.writeByte(cpu_temp&0x00FF);
+  dos.writeByte(bat_temp&0x00FF);
   for (int i=0; i<16; i++) {
     dos.writeByte(version[i]);
   }
@@ -169,12 +175,12 @@ public byte[] encode() throws IOException {
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 63);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 64);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[73] = crcl;
-  buffer[74] = crch;
+  buffer[74] = crcl;
+  buffer[75] = crch;
   dos.close();
   return buffer;
 }
@@ -190,6 +196,7 @@ return "MAVLINK_MSG_ID_MSP_STATUS : " +   "  uptime_ms="+uptime_ms
 +  "  threads="+threads
 +  "  wifi_quality="+wifi_quality
 +  "  cpu_temp="+cpu_temp
++  "  bat_temp="+bat_temp
 +  "  version="+getVersion()
 +  "  arch="+getArch()
 ;}

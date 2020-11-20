@@ -42,6 +42,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.locks.LockSupport;
@@ -83,8 +84,8 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	private static MAVUdpCommNIO com       = null;
 	private MAVUdpProxyNIO byteListener    = null;
 
-	private ByteBuffer rxBuffer    = ByteBuffer.allocate(16384);
-	private byte[]    proxyBuffer  = new byte[16384];
+	private ByteBuffer rxBuffer    = ByteBuffer.allocate(4096);
+	private byte[]    proxyBuffer  = new byte[4096];
 
 	public static MAVUdpCommNIO getInstance(DataModel model, String peerAddress, int peerPort, int bindPort) {
 		if(com==null)
@@ -109,7 +110,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		if(isConnected)
 			return true;
 
-		parser.reset(); ((Buffer)rxBuffer).clear();
+		parser.reset(); ((Buffer)rxBuffer).clear(); Arrays.fill(proxyBuffer, (byte)0);
 
 		if(channel!=null && channel.isOpen() && parser.isConnected()) {
 			isConnected = true;
@@ -119,10 +120,9 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		try {
 			channel = DatagramChannel.open();
 			channel.bind(bindPort);
-			channel.socket().setTrafficClass(0x04);
-			//	channel.socket().setBroadcast(true);
-			channel.socket().setReceiveBufferSize(16*1024);
-			channel.socket().setSendBufferSize(16*1024);
+			channel.socket().setTrafficClass(0x10);
+			channel.socket().setReceiveBufferSize(1024);
+			channel.socket().setSendBufferSize(1024);
 			channel.connect(peerPort);
 			channel.configureBlocking(false);
 			selector = Selector.open();

@@ -708,6 +708,17 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_GRIPPER = 211;
     /**
+     * Enable/disable autotune.
+     * PARAM 1 : Enable (1: enable, 0:disable).
+     * PARAM 2 : Empty.
+     * PARAM 3 : Empty.
+     * PARAM 4 : Empty.
+     * PARAM 5 : Empty.
+     * PARAM 6 : Empty.
+     * PARAM 7 : Empty.
+     */
+    public final static int MAV_CMD_DO_AUTOTUNE_ENABLE = 212;
+    /**
      * Sets a desired vehicle turn angle and speed change.
      * PARAM 1 : Yaw angle to adjust steering by.
      * PARAM 2 : Speed.
@@ -875,6 +886,17 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_OVERRIDE_GOTO = 252;
     /**
+     * Mission command to set a Camera Auto Mount Pivoting Oblique Survey (Replaces CAM_TRIGG_DIST for this purpose). The camera is triggered each time this distance is exceeded, then the mount moves to the next position. Params 4~6 set-up the angle limits and number of positions for oblique survey, where mount-enabled vehicles automatically roll the camera between shots to emulate an oblique camera setup (providing an increased HFOV). This command can also be used to set the shutter integration time for the camera.
+     * PARAM 1 : Camera trigger distance. 0 to stop triggering.
+     * PARAM 2 : Camera shutter integration time. 0 to ignore
+     * PARAM 3 : The minimum interval in which the camera is capable of taking subsequent pictures repeatedly. 0 to ignore.
+     * PARAM 4 : Total number of roll positions at which the camera will capture photos (images captures spread evenly across the limits defined by param5).
+     * PARAM 5 : Angle limits that the camera can be rolled to left and right of center.
+     * PARAM 6 : Fixed pitch angle that the camera will hold in oblique mode if the mount is actuated in the pitch axis.
+     * PARAM 7 : Empty
+     */
+    public final static int MAV_CMD_OBLIQUE_SURVEY = 260;
+    /**
      * start running a mission
      * PARAM 1 : first_item: the first mission item to run
      * PARAM 2 : last_item:  the last mission item to run (after this item is run, the mission ends)
@@ -1041,10 +1063,10 @@ public interface MAV_CMD {
     public final static int MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW = 1000;
     /**
      * Gimbal configuration to set which sysid/compid is in primary and secondary control.
-     * PARAM 1 : Sysid for primary control (0: no one in control).
-     * PARAM 2 : Compid for primary control (0: no one in control).
-     * PARAM 3 : Sysid for secondary control (0: no one in control).
-     * PARAM 4 : Compid for secondary control (0: no one in control).
+     * PARAM 1 : Sysid for primary control (0: no one in control, -1: leave unchanged, -2: set itself in control (for missions where the own sysid is still unknown), -3: remove control if currently in control).
+     * PARAM 2 : Compid for primary control (0: no one in control, -1: leave unchanged, -2: set itself in control (for missions where the own sysid is still unknown), -3: remove control if currently in control).
+     * PARAM 3 : Sysid for secondary control (0: no one in control, -1: leave unchanged, -2: set itself in control (for missions where the own sysid is still unknown), -3: remove control if currently in control).
+     * PARAM 4 : Compid for secondary control (0: no one in control, -1: leave unchanged, -2: set itself in control (for missions where the own sysid is still unknown), -3: remove control if currently in control).
      * PARAM 7 : Component ID of gimbal device to address (or 1-6 for non-MAVLink gimbal), 0 for all gimbal device components. Send command multiple times for more than one gimbal (but not all gimbals).
      */
     public final static int MAV_CMD_DO_GIMBAL_MANAGER_CONFIGURE = 1001;

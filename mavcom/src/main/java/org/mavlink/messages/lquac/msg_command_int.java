@@ -72,7 +72,7 @@ public class msg_command_int extends MAVLinkMessage {
    */
   public int frame;
   /**
-   * false:0, true:1
+   * Not used.
    */
   public int current;
   /**

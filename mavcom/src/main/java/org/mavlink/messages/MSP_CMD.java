@@ -13,6 +13,10 @@ public interface MSP_CMD {
      */
     public final static int MSP_CMD_RESTART = 99;
     /**
+     * Shutdown the MSP companion
+     */
+    public final static int MSP_CMD_SHUTDOWN = 98;
+    /**
      * Control offboard updater
      * PARAM 1 : component command
      */

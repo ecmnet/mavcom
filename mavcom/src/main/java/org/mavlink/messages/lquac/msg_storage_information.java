@@ -24,7 +24,7 @@ public class msg_storage_information extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_STORAGE_INFORMATION;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 27;
+    payload_length = 60;
 }
 
   /**
@@ -63,6 +63,30 @@ public class msg_storage_information extends MAVLinkMessage {
    * Status of storage
    */
   public int status;
+  /**
+   * Type of storage
+   */
+  public int type;
+  /**
+   * Textual storage name to be used in UI (microSD 1, Internal Memory, etc.) This is a NULL terminated string. If it is exactly 32 characters long, add a terminating NULL. If this string is empty, the generic type is shown to the user.
+   */
+  public char[] name = new char[32];
+  public void setName(String tmp) {
+    int len = Math.min(tmp.length(), 32);
+    for (int i=0; i<len; i++) {
+      name[i] = tmp.charAt(i);
+    }
+    for (int i=len; i<32; i++) {
+      name[i] = 0;
+    }
+  }
+  public String getName() {
+    String result="";
+    for (int i=0; i<32; i++) {
+      if (name[i] != 0) result=result+name[i]; else break;
+    }
+    return result;
+  }
 /**
  * Decode message with raw data
  */
@@ -76,12 +100,16 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   storage_id = (int)dis.readUnsignedByte()&0x00FF;
   storage_count = (int)dis.readUnsignedByte()&0x00FF;
   status = (int)dis.readUnsignedByte()&0x00FF;
+  type = (int)dis.readUnsignedByte()&0x00FF;
+  for (int i=0; i<32; i++) {
+    name[i] = (char)dis.readByte();
+  }
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+27];
+  byte[] buffer = new byte[12+60];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -102,15 +130,19 @@ public byte[] encode() throws IOException {
   dos.writeByte(storage_id&0x00FF);
   dos.writeByte(storage_count&0x00FF);
   dos.writeByte(status&0x00FF);
+  dos.writeByte(type&0x00FF);
+  for (int i=0; i<32; i++) {
+    dos.writeByte(name[i]);
+  }
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 27);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 60);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[37] = crcl;
-  buffer[38] = crch;
+  buffer[70] = crcl;
+  buffer[71] = crch;
   dos.close();
   return buffer;
 }
@@ -124,5 +156,7 @@ return "MAVLINK_MSG_ID_STORAGE_INFORMATION : " +   "  time_boot_ms="+time_boot_m
 +  "  storage_id="+storage_id
 +  "  storage_count="+storage_count
 +  "  status="+status
++  "  type="+type
++  "  name="+getName()
 ;}
 }
