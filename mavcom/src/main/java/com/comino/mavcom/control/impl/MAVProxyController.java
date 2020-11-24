@@ -148,7 +148,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
 
-			proxy = new MAVUdpProxyNIO("172.168.178.2",14550,"172.168.178.1",14555,comm);
+			proxy = new MAVUdpProxyNIO(model,"172.168.178.2",14550,"172.168.178.1",14555,comm);
 			peerAddress = "172.168.178.1";
 			System.out.println("Proxy Controller loaded: "+peerAddress);
 			model.sys.setStatus(Status.MSP_SITL,false);
@@ -157,7 +157,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		case MAVController.MODE_SITL:
 			model.sys.setStatus(Status.MSP_SITL,true);
 			comm = MAVUdpCommNIO.getInstance(model, "127.0.0.1",14580, 14540);
-			proxy = new MAVUdpProxyNIO("127.0.0.1",14650,"0.0.0.0",14656,comm);
+			proxy = new MAVUdpProxyNIO(model,"127.0.0.1",14650,"0.0.0.0",14656,comm);
 			peerAddress = "127.0.0.1";
 			System.out.println("Proxy Controller (SITL mode) loaded");
 			break;
@@ -167,7 +167,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
-			proxy = new MAVUdpProxyNIO("127.0.0.1",14650,"0.0.0.0",14656,comm);
+			proxy = new MAVUdpProxyNIO(model,"127.0.0.1",14650,"0.0.0.0",14656,comm);
 			peerAddress = "127.0.0.1";
 			System.out.println("Proxy Controller (serial mode) loaded: "+peerAddress);
 			model.sys.setStatus(Status.MSP_SITL,false);
@@ -182,7 +182,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 			comm = MAVUdpCommNIO.getInstance(model, "172.168.178.2",14580, 14540);
 			//			comm = MAVUdpCommNIO.getInstance(model, "172.168.178.2",14280, 14030);
-			proxy = new MAVUdpProxyNIO("172.168.178.2",14650,"172.168.178.22",14656,comm);
+			proxy = new MAVUdpProxyNIO(model,"172.168.178.2",14650,"172.168.178.22",14656,comm);
 			peerAddress = "172.168.178.22";
 			System.out.println("Proxy Controller loaded (Server): "+peerAddress);
 			break;

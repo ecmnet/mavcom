@@ -65,7 +65,7 @@ import com.comino.mavutils.legacy.ExecutorService;
 
 public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	
-	private static final int BUFFER = 256;
+	private static final int BUFFER = 512;
 
 
 	private DataModel 				model = null;
@@ -86,7 +86,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	private static MAVUdpCommNIO com       = null;
 	private MAVUdpProxyNIO byteListener    = null;
 
-	private final ByteBuffer rxBuffer    = ByteBuffer.allocate(16*1024);
+	private final ByteBuffer rxBuffer    = ByteBuffer.allocate(BUFFER*1024);
 	private final byte[]    proxyBuffer  = new byte[rxBuffer.capacity()];
 
 	public static MAVUdpCommNIO getInstance(DataModel model, String peerAddress, int peerPort, int bindPort) {
@@ -124,7 +124,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 			channel.bind(bindPort);
 			channel.socket().setTrafficClass(0x08);
 			channel.socket().setReceiveBufferSize(BUFFER*1024);
-			channel.socket().setSendBufferSize(BUFFER*1024);
+			channel.socket().setSendBufferSize(16*1024);
 			channel.connect(peerPort);
 			channel.configureBlocking(false);
 			selector = Selector.open();

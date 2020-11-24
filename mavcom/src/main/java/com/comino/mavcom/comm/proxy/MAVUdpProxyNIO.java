@@ -52,6 +52,8 @@ import org.mavlink.messages.MAVLinkMessage;
 import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVLinkReader;
+import com.comino.mavcom.model.DataModel;
+import com.comino.mavcom.model.segment.Status;
 
 
 public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
@@ -76,14 +78,17 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	private List<IMAVLinkListener> listener_list = null;
 	private long                   transfer_speed = 0;
 
+	private DataModel model;
 
-	public MAVUdpProxyNIO(String peerAddress, int pPort, String bindAddress, int bPort, IMAVComm comm) {
+
+	public MAVUdpProxyNIO(DataModel model,String peerAddress, int pPort, String bindAddress, int bPort, IMAVComm comm) {
 
 		peerPort = new InetSocketAddress(peerAddress, pPort);
 		bindPort = new InetSocketAddress(bindAddress, bPort);
 		reader = new MAVLinkReader(1);
 
 		this.comm = comm;
+		this.model = model;
 
 		listeners = new HashMap<Class<?>,List<IMAVLinkListener>>();
 
@@ -299,12 +304,15 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	}
 
 	public void write(byte[] buffer, int length) {
-		if(channel != null && channel.isConnected() && channel.isOpen() && isConnected ) {
+		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
+			return;
+		
+		if(channel != null && channel.socket().isConnected() && isConnected) {
 			try {
 				if(length > 0)
 				  channel.write(ByteBuffer.wrap(buffer,0,length));
 			} catch (Exception e) {  }
-		}
+		} 
 	}
 
 }
