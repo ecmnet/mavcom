@@ -143,7 +143,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		switch(mode) {
 		case MAVController.MODE_NORMAL:
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_30, false);
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }

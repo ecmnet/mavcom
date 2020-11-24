@@ -43,21 +43,20 @@ import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.mavlink.messages.MAVLinkMessage;
-import org.mavlink.messages.lquac.msg_heartbeat;
 
 import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVLinkReader;
-import com.comino.mavutils.legacy.ExecutorService;
 
 
 public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
+	
+	private static final int BUFFER = 64;
 
 	private SocketAddress 			bindPort = null;
 	private SocketAddress 			peerPort;
@@ -72,7 +71,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	private boolean 				isConnected   = false;
 	private boolean					proxy_enabled = false;
 
-	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(4096);
+	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(8*1024);
 
 	private List<IMAVLinkListener> listener_list = null;
 	private long                   transfer_speed = 0;
@@ -109,9 +108,9 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				try {
 					channel = DatagramChannel.open();
 					channel.socket().bind(bindPort);
-					channel.socket().setTrafficClass(0x10);
-					channel.socket().setSendBufferSize(4*1024);
-					channel.socket().setReceiveBufferSize(4*1024);
+					channel.socket().setTrafficClass(0x08);
+					channel.socket().setSendBufferSize(BUFFER*1024);
+					channel.socket().setReceiveBufferSize(BUFFER*1024);
 					channel.configureBlocking(false);
 					
 					Thread.sleep(100);

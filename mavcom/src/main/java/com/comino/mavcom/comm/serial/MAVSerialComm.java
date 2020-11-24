@@ -60,6 +60,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	private static final int TEST  = 57600;
 
+	private static final int BUFFER = 32;
 
 	private SerialPort 			serialPort;
 	private String	            port;
@@ -180,7 +181,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	private boolean open(String portName, int baudRate, int dataBits, int stopBits, int parity) {
 
-		byte[] buf = new byte[16384];
+		byte[] buf = new byte[BUFFER*1024];
 
 		if(serialPort==null)
 			return false;
