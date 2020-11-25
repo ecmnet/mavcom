@@ -293,6 +293,20 @@ public class MAVSerialComm implements IMAVComm {
 	}
 
 
+	@Override
+	public long getTransferRate() {
+
+		return 0;
+	}
+
+
+	@Override
+	public void setProxyListener(MAVUdpProxyNIO listener) {
+	this.byteListener = listener;
+		
+	}
+
+
 
 
 
@@ -368,20 +382,6 @@ public class MAVSerialComm implements IMAVComm {
 
 
 	}
-
-	@Override
-	public long getTransferRate() {
-
-		return 0;
-	}
-
-
-	@Override
-	public void setProxyListener(MAVUdpProxyNIO listener) {
-	this.byteListener = listener;
-		
-	}
-
 
 
 

@@ -73,7 +73,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	private boolean 				isConnected   = false;
 	private boolean					proxy_enabled = false;
 
-	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(8*1024);
+	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(16*1024);
 
 	private List<IMAVLinkListener> listener_list = null;
 	private long                   transfer_speed = 0;
@@ -283,6 +283,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	}
 
 	public void write(MAVLinkMessage msg)  {
+		
 		if(msg!=null && channel!=null && channel.isConnected() && isConnected) {
 			try {
 				channel.write(ByteBuffer.wrap(msg.encode()));
@@ -302,8 +303,11 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	public long getTransferRate() {
 		return transfer_speed;
 	}
+	
 
 	public void write(byte[] buffer, int length) {
+		
+		// Dio not foreward data if GCL is not connected
 		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
 			return;
 		

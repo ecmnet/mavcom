@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.mavlink.IMAVLinkMessage;
 import org.mavlink.messages.IMAVLinkMessageID;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAV_CMD;
@@ -143,7 +144,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		switch(mode) {
 		case MAVController.MODE_NORMAL:
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_30, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
@@ -193,10 +194,17 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		comm.setProxyListener(proxy);
 
 
-		// Register processing of PING sent by MAVGCL
+		// Register processing of PING sent by GCL
 		proxy.registerListener(msg_heartbeat.class, (o) -> {
 			model.sys.gcl_tms = model.sys.getSynchronizedPX4Time_us();
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
+		});
+		
+		// FWD PX4 heartbeat messages to GCL when not connected
+		comm.addMAVLinkListener((o) -> {
+			if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && o instanceof msg_heartbeat) {
+				proxy.write((MAVLinkMessage)o);
+			}
 		});
 
 		beat_gcs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
@@ -436,6 +444,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		sendMAVLinkMessage(beat_px4);
 		
 		sendMAVLinkMessage(beat_obs);
+		
+		
 	}
 
 	@Override
