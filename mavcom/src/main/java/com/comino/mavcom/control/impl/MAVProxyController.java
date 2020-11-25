@@ -437,10 +437,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		} else
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
 
-//		if(!proxy.isProxyEnabled()) {
-//			sendMAVLinkMessage(beat_gcs);
-//		}
-//
 		sendMAVLinkMessage(beat_px4);
 		
 		sendMAVLinkMessage(beat_obs);
