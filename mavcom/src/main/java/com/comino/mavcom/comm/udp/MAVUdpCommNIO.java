@@ -65,7 +65,7 @@ import com.comino.mavutils.legacy.ExecutorService;
 
 public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	
-	private static final int BUFFER = 512;
+	private static final int BUFFER = 256;
 
 
 	private DataModel 				model = null;
