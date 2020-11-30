@@ -1268,7 +1268,7 @@ public interface MAV_CMD {
     /**
      * Fence vertex for an inclusion polygon (the polygon must not be self-intersecting). The vehicle must stay within this area. Minimum of 3 vertices required.
      * PARAM 1 : Polygon vertex count
-     * PARAM 2 : Reserved
+     * PARAM 2 : Vehicle must be inside ALL inclusion zones in a single group, vehicle must be inside at least one group, must be the same for all points in each polygon
      * PARAM 3 : Reserved
      * PARAM 4 : Reserved
      * PARAM 5 : Latitude
@@ -1290,7 +1290,7 @@ public interface MAV_CMD {
     /**
      * Circular fence area. The vehicle must stay inside this area.
      * PARAM 1 : Radius.
-     * PARAM 2 : Reserved
+     * PARAM 2 : Vehicle must be inside ALL inclusion zones in a single group, vehicle must be inside at least one group
      * PARAM 3 : Reserved
      * PARAM 4 : Reserved
      * PARAM 5 : Latitude

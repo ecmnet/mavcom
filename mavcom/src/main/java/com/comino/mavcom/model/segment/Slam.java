@@ -38,6 +38,19 @@ import com.comino.mavcom.model.segment.generic.Segment;
 public class Slam extends Segment {
 
 	private static final long serialVersionUID = -353494527253663585L;
+	
+	public static final short OFFBOARD_FLAG_NONE     = 0;
+	public static final short OFFBOARD_FLAG_HOLD     = 1;
+	public static final short OFFBOARD_FLAG_SPEEDUP  = 2;
+	public static final short OFFBOARD_FLAG_SLOWDOWN = 3;
+	public static final short OFFBOARD_FLAG_MOVE     = 4;
+	public static final short OFFBOARD_FLAG_ADJUST   = 5;
+	public static final short OFFBOARD_FLAG_TURN     = 6;
+	public static final short OFFBOARD_FLAG_SPEED    = 7;
+	
+	public static final short OFFBOARD_FLAG_LAND     = 9;
+	public static final short OFFBOARD_FLAG_TAKEOFF  = 10;
+	
 
 	public float    px;		// planned path x
 	public float    py;		// planned path y
@@ -51,6 +64,7 @@ public class Slam extends Segment {
 	public float    ox;		// nearest obstacle x
 	public float    oy;		// nearest obstacle y
 	public float    oz;		// nearest obstacle z
+	public short    flags;  // Offboard Flags
 	public float    fps;    // Rate in Hz.
 	public float  quality;	// SLAM quality
 	public int    wpcount;
@@ -73,6 +87,7 @@ public class Slam extends Segment {
 		oy = a.oy;
 		oz = a.oz;
 		fps = a.fps;
+		flags = a.flags;
 		quality = a.quality;
 		wpcount = a.wpcount;
 	}
@@ -97,6 +112,7 @@ public class Slam extends Segment {
 		oy = Float.NaN;
 		oz = Float.NaN;
 		fps = 0;
+		flags = 0;
 		quality = 0;
 		wpcount = 0;
 	}
