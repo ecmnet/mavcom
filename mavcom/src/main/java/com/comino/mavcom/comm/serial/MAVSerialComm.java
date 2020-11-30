@@ -137,6 +137,7 @@ public class MAVSerialComm implements IMAVComm {
 		if(serialPort.isOpen())
 			return true;
 
+		
 		while(!open(port ,baudrate, 8,SerialPort.ONE_STOP_BIT,SerialPort.NO_PARITY)) {
 			try {
 				if(serialPort.isOpen()) {

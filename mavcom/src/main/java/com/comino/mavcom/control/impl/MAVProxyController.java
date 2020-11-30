@@ -109,6 +109,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 
 	public MAVProxyController(int mode) {
+		
 		this.mode = mode;
 		controller = this;
 		model = new DataModel();
@@ -118,6 +119,15 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, true);
 		model.sys.setStatus(Status.MSP_SITL, mode == MAVController.MODE_NORMAL);
 		model.sys.setStatus(Status.MSP_PROXY, true);
+		
+		beat_gcs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
+		beat_gcs.system_status = MAV_STATE.MAV_STATE_ACTIVE;
+		
+		beat_px4.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
+		beat_px4.system_status = MAV_STATE.MAV_STATE_ACTIVE;
+		
+		beat_obs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
+		beat_obs.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 
 		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_RISING, (a) -> {
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
@@ -147,7 +157,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
-			try { Thread.sleep(500); } catch (InterruptedException e) { }
+			sendMAVLinkMessage(beat_px4);
+			
+			try { Thread.sleep(100); } catch (InterruptedException e) { }
 
 			proxy = new MAVUdpProxyNIO(model,"172.168.178.2",14550,"172.168.178.1",14555,comm);
 			peerAddress = "172.168.178.1";
@@ -207,14 +219,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			}
 		});
 
-		beat_gcs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
-		beat_gcs.system_status = MAV_STATE.MAV_STATE_ACTIVE;
-		
-		beat_px4.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
-		beat_px4.system_status = MAV_STATE.MAV_STATE_ACTIVE;
-		
-		beat_obs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
-		beat_obs.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 	}
 
 	@Override
@@ -226,8 +230,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 					proxy.write(msg);
 			}
 			else {
-				if(comm.isConnected())
+				if(comm.isConnected() && model.sys.isStatus(Status.MSP_ACTIVE)) {
 					comm.write(msg);
+				}
 			}
 			return true;
 		} catch (Exception e1) {
@@ -308,7 +313,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public boolean connect() {
-		try { Thread.sleep(500); } catch (InterruptedException e) { }
+		try { Thread.sleep(200); } catch (InterruptedException e) { }
 		comm.open(); proxy.open();
 		if(comm.isConnected()) {
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES, 1);

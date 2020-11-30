@@ -34,6 +34,7 @@
 
 package com.comino.mavcom.control.impl;
 
+import org.mavlink.messages.MAV_COMPONENT;
 import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.lquac.msg_heartbeat;
@@ -45,7 +46,7 @@ import com.comino.mavcom.model.segment.Status;
 
 public class MAVUdpController extends MAVController implements IMAVController, Runnable {
 
-	private boolean connect;
+	private boolean connected;
 
 	public MAVUdpController(String peerAddress, int peerPort, int bindPort, boolean isSITL) {
 		super();
@@ -62,9 +63,9 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 	public boolean connect() {
 
 		System.out.print("Try to start..");
-		if(this.connect)
+		if(this.connected)
 			return true;
-
+		
 		Thread t = new Thread(this);
 		t.setName("UDP Controller");
 		t.setDaemon(true);
@@ -75,7 +76,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 
 	@Override
 	public boolean close() {
-		this.connect = false;
+		this.connected = false;
 		return true;
 	}
 
@@ -91,26 +92,28 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 	@Override
 	public void run() {
 		
-		final msg_heartbeat beat = new msg_heartbeat(255,1);
+		final msg_heartbeat beat = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_OSD);
 		beat.type = MAV_TYPE.MAV_TYPE_GCS;
 		beat.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 
 		// If not checked here, the thread is started twice (not by connect) ??
-		if(connect)
+		if(connected)
 			return;
 
-		this.connect = true;
+		this.connected = true;
 		System.out.println("UDP connection Thread started");
-		while(connect) {
+		while(connected) {
 			try {
 				//System.out.println(comm.isConnected());
 				if(!comm.isConnected()) {
-				 comm.open();
+				 comm.close(); comm.open();
+				 Thread.sleep(100);
+				 continue;
 				}
 				model.sys.setStatus(Status.MSP_SITL, isSimulation());
 				comm.write(beat);
-				Thread.sleep(500);
-			} catch (Exception e) {  }
+				Thread.sleep(200);
+			} catch (Exception e) { try { Thread.sleep(100); } catch (InterruptedException e1) {	} }
 		}
 		comm.close();
 	}
