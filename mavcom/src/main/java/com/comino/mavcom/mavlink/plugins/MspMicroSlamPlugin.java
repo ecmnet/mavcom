@@ -26,6 +26,7 @@ public class MspMicroSlamPlugin extends MAVLinkPluginBase {
 		model.slam.oz = slam.oz;
 		model.slam.quality = slam.quality;
 		model.slam.wpcount = (int)slam.wpcount;
+		model.slam.flags = (short)slam.flags;
 		model.slam.fps  = slam.fps;
 		model.slam.tms = model.sys.getSynchronizedPX4Time_us();
 
