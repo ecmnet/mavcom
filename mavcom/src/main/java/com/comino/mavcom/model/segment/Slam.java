@@ -46,10 +46,13 @@ public class Slam extends Segment {
 	public static final short OFFBOARD_FLAG_MOVE     = 4;
 	public static final short OFFBOARD_FLAG_ADJUST   = 5;
 	public static final short OFFBOARD_FLAG_TURN     = 6;
-	public static final short OFFBOARD_FLAG_SPEED    = 7;
+	public static final short OFFBOARD_FLAG_LAND     = 8;
+	public static final short OFFBOARD_FLAG_TAKEOFF  = 9;
+	public static final short OFFBOARD_FLAG_SPEED    = 10;
 	
-	public static final short OFFBOARD_FLAG_LAND     = 9;
-	public static final short OFFBOARD_FLAG_TAKEOFF  = 10;
+	public static final short OFFBOARD_FLAG_DEBUG1   = 15;
+	public static final short OFFBOARD_FLAG_DEBUG2   = 16;
+	public static final short OFFBOARD_FLAG_DEBUG3   = 17;
 	
 
 	public float    px;		// planned path x

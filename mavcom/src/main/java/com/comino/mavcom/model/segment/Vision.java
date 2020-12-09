@@ -42,10 +42,14 @@ public class Vision extends Segment {
 
 	private static final long serialVersionUID = 270248566309263309L;
 
+	public static final int NOT_AVAILABLE       = 0;
 	public static final int RESETTING           = 1;
 	public static final int POS_VALID           = 2;
-	public static final int FIDUCIAL_ACTIVE     = 3;
+	public static final int RESERVED            = 3;
 	public static final int FIDUCIAL_LOCKED     = 4;
+	
+	public static final int FIDUCIAL_ACTIVE     = 16;
+
 
 
 	// Vision position
