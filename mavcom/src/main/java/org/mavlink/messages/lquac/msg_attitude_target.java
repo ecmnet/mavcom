@@ -52,7 +52,7 @@ public class msg_attitude_target extends MAVLinkMessage {
    */
   public float thrust;
   /**
-   * Mappings: If any of these bits are set, the corresponding input should be ignored: bit 1: body roll rate, bit 2: body pitch rate, bit 3: body yaw rate. bit 4-bit 7: reserved, bit 8: attitude
+   * Bitmap to indicate which dimensions should be ignored by the vehicle.
    */
   public int type_mask;
 /**
