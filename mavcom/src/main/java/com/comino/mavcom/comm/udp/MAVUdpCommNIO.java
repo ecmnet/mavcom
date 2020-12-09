@@ -114,7 +114,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 		parser.reset(); ((Buffer)rxBuffer).clear(); Arrays.fill(proxyBuffer, (byte)0);
 
-		if(channel!=null && channel.isOpen() ) { //&& parser.isConnected()) {
+		if(channel!=null && channel.isOpen() && channel.isConnected() ) { //&& parser.isConnected()) {
 			isConnected = true;
 			return true;
 		}
@@ -185,9 +185,13 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		while(isConnected) {
 
 			try {
+				
 
-				if(selector.select(2000)==0)
+				if(selector.select(200)==0) {
+					isConnected = false;
 					continue;
+				}
+					
 
 				selectedKeys = selector.selectedKeys().iterator();
 

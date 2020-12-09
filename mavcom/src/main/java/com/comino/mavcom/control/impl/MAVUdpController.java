@@ -41,6 +41,7 @@ import org.mavlink.messages.lquac.msg_heartbeat;
 
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO;
 import com.comino.mavcom.control.IMAVController;
+import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 
 
@@ -57,6 +58,11 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 		System.out.println("UDP Controller loaded ("+peerAddress+":"+peerPort+")");
 		comm = MAVUdpCommNIO.getInstance(model, peerAddress,peerPort, bindPort);
 		model.sys.setStatus(Status.MSP_PROXY, false);
+		
+		Thread t = new Thread(this);
+		t.setName("UDP Controller");
+		t.start();
+		
 	}
 
 	@Override
@@ -66,10 +72,9 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 		if(this.connected)
 			return true;
 		
-		Thread t = new Thread(this);
-		t.setName("UDP Controller");
-		t.setDaemon(true);
-		t.start();
+		if(!comm.isConnected()) {
+			 comm.close(); comm.open();
+		}
 
 		return true;
 	}
@@ -79,7 +84,6 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 		this.connected = false;
 		return true;
 	}
-
 
 	@Override
 	public boolean isConnected() {
@@ -100,21 +104,23 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 		if(connected)
 			return;
 
-		this.connected = true;
+		this.connected = false;
 		System.out.println("UDP connection Thread started");
-		while(connected) {
+		while(true) {
 			try {
 				//System.out.println(comm.isConnected());
 				if(!comm.isConnected()) {
-				 comm.close(); comm.open();
+					this.connected = false;
+				    comm.close(); comm.open();
 				 Thread.sleep(100);
 				 continue;
 				}
+				this.connected = true;
 				model.sys.setStatus(Status.MSP_SITL, isSimulation());
 				comm.write(beat);
 				Thread.sleep(200);
 			} catch (Exception e) { try { Thread.sleep(100); } catch (InterruptedException e1) {	} }
 		}
-		comm.close();
+		
 	}
 }
