@@ -40,7 +40,7 @@ public class LogMessage extends Segment {
 
 	private static final long serialVersionUID = 3345013931542810501L;
 
-	private static final String[] severity_texts = { "Emergency","Alert","Critical","Error","Warning","Notice","Info","Debug" };
+	public static final String[] severity_texts = { "Emergency","Alert","Critical","Error","Warning","Notice","Info","Debug" };
 
 	public String    text = null;
 	public int   severity = 0;

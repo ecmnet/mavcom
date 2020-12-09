@@ -284,9 +284,11 @@ public class MAVLinkToModelParser {
 
 			try {
 
+				synchronized(this) {
 				if (mavListener != null && mavListener.size() > 0)
 					for (IMAVLinkListener mavlistener : mavListener)
 						mavlistener.received(msg);
+				}
 
 				msgListener = msglisteners.get(msg.getClass());
 				if (msgListener != null && msgListener.size() > 0)
