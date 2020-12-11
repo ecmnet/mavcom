@@ -226,6 +226,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			while(isConnected) {
 
 				if(selector.select(2000)==0) {
+					isConnected = false;
 					continue;
 				}
 
