@@ -163,6 +163,19 @@ public class MSP3DUtils {
 			s.R.set(i, Double.NaN);
 	}
 
+	public static Vector4D_F32 filter(Vector4D_F32 current, Vector4D_F32 last, float factor) {
+		if(Float.isFinite(last.x))
+			current.x = factor * current.x + (1 - factor) * last.x;
+		if(Float.isFinite(last.y))
+			current.y = factor * current.y + (1 - factor) * last.y;
+		if(Float.isFinite(last.z))
+			current.z = factor * current.z + (1 - factor) * last.z;
+		if(Float.isFinite(last.w))
+			current.w = factor * current.w + (1 - factor) * last.w;
+		last.set(current);
+		return current;
+	}
+
 	public static boolean hasNaN(Vector4D_F32 vector) {
 		return Float.isNaN(vector.x) || Float.isNaN(vector.y) || Float.isNaN(vector.z);
 	}
@@ -226,6 +239,16 @@ public class MSP3DUtils {
 
 	public static float ConvertSe3_F32ToYaw(Se3_F32 state, float[] v) {
 		ConvertRotation3D_F32.matrixToEuler(state.R, EulerType.XYZ, v);
+		return v[YAW];
+	}
+	
+	public static double ConvertSe3_F64ToYaw(Se3_F64 state) {
+		double[] v = new double[3];
+		return  ConvertSe3_F64ToYaw(state,v);
+	}
+
+	public static double ConvertSe3_F64ToYaw(Se3_F64 state, double[] v) {
+		ConvertRotation3D_F64.matrixToEuler(state.R, EulerType.XYZ, v);
 		return v[YAW];
 	}
 
