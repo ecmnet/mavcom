@@ -37,6 +37,7 @@ import com.comino.mavcom.model.segment.generic.Segment;
 import com.comino.mavcom.struct.Attitude3D_F64;
 
 import georegression.struct.point.Vector3D_F64;
+import georegression.struct.point.Vector4D_F64;
 
 public class Vision extends Segment {
 
@@ -66,6 +67,7 @@ public class Vision extends Segment {
 	public float px = Float.NaN;
 	public float py = Float.NaN;
 	public float pz = Float.NaN;
+	public float pw = Float.NaN;
 
 	// Covariance
 	public float cov_px = Float.NaN;
@@ -105,6 +107,7 @@ public class Vision extends Segment {
 		px  = a.px;
 		py  = a.py;
 		pz  = a.pz;
+		pw  = a.pw;
 
 		cov_px  = a.cov_px;
 		cov_py  = a.cov_py;
@@ -148,6 +151,7 @@ public class Vision extends Segment {
 		px  = Float.NaN;
 		py  = Float.NaN;
 		pz  = Float.NaN;
+		pw  = Float.NaN;
 		
 		cov_px  = Float.NaN;
 		cov_py  = Float.NaN;
@@ -201,6 +205,13 @@ public class Vision extends Segment {
 		this.px = (float)v.x;
 		this.py = (float)v.y;
 		this.pz = (float)v.z;
+	}
+	
+	public void setPrecisionOffset(Vector4D_F64 v) {
+		this.px = (float)v.x;
+		this.py = (float)v.y;
+		this.pz = (float)v.z;
+		this.pw = (float)v.w;
 	}
 
 	public void setGroundTruth(Vector3D_F64 v) {

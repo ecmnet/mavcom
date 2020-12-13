@@ -29,6 +29,7 @@ public class MSPVisionPlugin extends MAVLinkPluginBase {
 		model.vision.px = vision.px;
 		model.vision.py = vision.py;
 		model.vision.pz = vision.pz;
+		model.vision.pw = vision.pw;
 
 		model.vision.x = vision.x;
 		model.vision.y = vision.y;
