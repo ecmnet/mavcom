@@ -1357,6 +1357,7 @@ See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
       <long_desc>The default value of 1000 requires the stick to be held in the arm or disarm position for 1 second.</long_desc>
       <min>100</min>
       <max>1500</max>
+      <unit>ms</unit>
     </parameter>
     <parameter name="COM_RC_IN_MODE" default="0" type="INT32">
       <short_desc>RC control input mode</short_desc>
@@ -3546,7 +3547,7 @@ Value 0 turns the functionality off</short_desc>
     </parameter>
   </group>
   <group name="Land Detector">
-    <parameter name="LNDFW_AIRSPD_MAX" default="8.00" type="FLOAT">
+    <parameter name="LNDFW_AIRSPD_MAX" default="6.00" type="FLOAT">
       <short_desc>Airspeed max</short_desc>
       <long_desc>Maximum airspeed allowed in the landed state (m/s)</long_desc>
       <min>4</min>
@@ -9732,6 +9733,10 @@ How often the sensor is readout</short_desc>
         <value code="4">TREvo600Hz</value>
         <value code="5">TREvo3m</value>
       </values>
+    </parameter>
+    <parameter name="SENS_EN_VL53L1X" default="0" type="INT32">
+      <short_desc>VL53L1X Distance Sensor</short_desc>
+      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="SENS_EXT_I2C_PRB" default="1" type="INT32" category="System">
       <short_desc>External I2C probe</short_desc>

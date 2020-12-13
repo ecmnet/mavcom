@@ -9,17 +9,6 @@ package org.mavlink.messages;
  **/
 public interface MAV_CMD {
     /**
-     * Request the target system(s) emit a single instance of a specified message (i.e. a "one-shot" version of MAV_CMD_SET_MESSAGE_INTERVAL).
-     * PARAM 1 : The MAVLink message ID of the requested message.
-     * PARAM 2 : Use for index ID, if required. Otherwise, the use of this parameter (if any) must be defined in the requested message. By default assumed not used (0).
-     * PARAM 3 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
-     * PARAM 4 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
-     * PARAM 5 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
-     * PARAM 6 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
-     * PARAM 7 : Target address for requested message (if message has target address fields). 0: Flight-stack default, 1: address of requestor, 2: broadcast.
-     */
-    public final static int MAV_CMD_REQUEST_MESSAGE = 512;
-    /**
      * Navigate to waypoint.
      * PARAM 1 : Hold time. (ignored by fixed wing, time to stay at waypoint for rotary wing)
      * PARAM 2 : Acceptance radius (if the sphere with this radius is hit, the waypoint counts as reached)
@@ -949,6 +938,17 @@ public interface MAV_CMD {
      * PARAM 7 : Target address of message stream (if message has target address fields). 0: Flight-stack default (recommended), 1: address of requestor, 2: broadcast.
      */
     public final static int MAV_CMD_SET_MESSAGE_INTERVAL = 511;
+    /**
+     * Request the target system(s) emit a single instance of a specified message (i.e. a "one-shot" version of MAV_CMD_SET_MESSAGE_INTERVAL).
+     * PARAM 1 : The MAVLink message ID of the requested message.
+     * PARAM 2 : Use for index ID, if required. Otherwise, the use of this parameter (if any) must be defined in the requested message. By default assumed not used (0).
+     * PARAM 3 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 4 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 5 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 6 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 7 : Target address for requested message (if message has target address fields). 0: Flight-stack default, 1: address of requestor, 2: broadcast.
+     */
+    public final static int MAV_CMD_REQUEST_MESSAGE = 512;
     /**
      * Request MAVLink protocol version compatibility. All receivers should ACK the command and then emit their capabilities in an PROTOCOL_VERSION message
      * PARAM 1 : 1: Request supported protocol versions by all nodes on the network

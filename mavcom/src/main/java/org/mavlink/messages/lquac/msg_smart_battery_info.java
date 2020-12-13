@@ -24,7 +24,7 @@ public class msg_smart_battery_info extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_SMART_BATTERY_INFO;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 75;
+    payload_length = 87;
 }
 
   /**
@@ -35,10 +35,6 @@ public class msg_smart_battery_info extends MAVLinkMessage {
    * Capacity when full (accounting for battery degradation), -1: field not provided.
    */
   public long capacity_full;
-  /**
-   * Serial number. -1: field not provided.
-   */
-  public long serial_number;
   /**
    * Charge/discharge cycle count. -1: field not provided.
    */
@@ -72,6 +68,26 @@ public class msg_smart_battery_info extends MAVLinkMessage {
    */
   public int type;
   /**
+   * Serial number in ASCII characters, 0 terminated. All 0: field not provided.
+   */
+  public char[] serial_number = new char[16];
+  public void setSerial_number(String tmp) {
+    int len = Math.min(tmp.length(), 16);
+    for (int i=0; i<len; i++) {
+      serial_number[i] = tmp.charAt(i);
+    }
+    for (int i=len; i<16; i++) {
+      serial_number[i] = 0;
+    }
+  }
+  public String getSerial_number() {
+    String result="";
+    for (int i=0; i<16; i++) {
+      if (serial_number[i] != 0) result=result+serial_number[i]; else break;
+    }
+    return result;
+  }
+  /**
    * Static device name. Encode as manufacturer and product names separated using an underscore.
    */
   public char[] device_name = new char[50];
@@ -97,7 +113,6 @@ public class msg_smart_battery_info extends MAVLinkMessage {
 public void decode(LittleEndianDataInputStream dis) throws IOException {
   capacity_full_specification = (int)dis.readInt();
   capacity_full = (int)dis.readInt();
-  serial_number = (int)dis.readInt();
   cycle_count = (int)dis.readUnsignedShort()&0x00FFFF;
   weight = (int)dis.readUnsignedShort()&0x00FFFF;
   discharge_minimum_voltage = (int)dis.readUnsignedShort()&0x00FFFF;
@@ -106,6 +121,9 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   id = (int)dis.readUnsignedByte()&0x00FF;
   battery_function = (int)dis.readUnsignedByte()&0x00FF;
   type = (int)dis.readUnsignedByte()&0x00FF;
+  for (int i=0; i<16; i++) {
+    serial_number[i] = (char)dis.readByte();
+  }
   for (int i=0; i<50; i++) {
     device_name[i] = (char)dis.readByte();
   }
@@ -114,7 +132,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+75];
+  byte[] buffer = new byte[12+87];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -128,7 +146,6 @@ public byte[] encode() throws IOException {
   dos.writeByte((messageType >> 16) & 0x00FF);
   dos.writeInt((int)(capacity_full_specification&0x00FFFFFFFF));
   dos.writeInt((int)(capacity_full&0x00FFFFFFFF));
-  dos.writeInt((int)(serial_number&0x00FFFFFFFF));
   dos.writeShort(cycle_count&0x00FFFF);
   dos.writeShort(weight&0x00FFFF);
   dos.writeShort(discharge_minimum_voltage&0x00FFFF);
@@ -137,25 +154,27 @@ public byte[] encode() throws IOException {
   dos.writeByte(id&0x00FF);
   dos.writeByte(battery_function&0x00FF);
   dos.writeByte(type&0x00FF);
+  for (int i=0; i<16; i++) {
+    dos.writeByte(serial_number[i]);
+  }
   for (int i=0; i<50; i++) {
     dos.writeByte(device_name[i]);
   }
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 75);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 87);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[85] = crcl;
-  buffer[86] = crch;
+  buffer[97] = crcl;
+  buffer[98] = crch;
   dos.close();
   return buffer;
 }
 public String toString() {
 return "MAVLINK_MSG_ID_SMART_BATTERY_INFO : " +   "  capacity_full_specification="+capacity_full_specification
 +  "  capacity_full="+capacity_full
-+  "  serial_number="+serial_number
 +  "  cycle_count="+cycle_count
 +  "  weight="+weight
 +  "  discharge_minimum_voltage="+discharge_minimum_voltage
@@ -164,6 +183,7 @@ return "MAVLINK_MSG_ID_SMART_BATTERY_INFO : " +   "  capacity_full_specification
 +  "  id="+id
 +  "  battery_function="+battery_function
 +  "  type="+type
++  "  serial_number="+getSerial_number()
 +  "  device_name="+getDevice_name()
 ;}
 }
