@@ -2,6 +2,7 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_position_target_local_ned;
 
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavutils.MSPMathUtils;
 
 public class PX4PositionTargetLocalPlugin extends MAVLinkPluginBase {
@@ -33,7 +34,7 @@ public class PX4PositionTargetLocalPlugin extends MAVLinkPluginBase {
 
 		model.target_state.c_frame = ned.coordinate_frame;
 
-		model.target_state.tms = model.sys.getSynchronizedPX4Time_us();
+		model.target_state.tms = DataModel.getSynchronizedPX4Time_us();
 
 	}
 }

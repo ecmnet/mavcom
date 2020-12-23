@@ -20,7 +20,7 @@ public class MspMicroGridPlugin extends MAVLinkPluginBase {
 		model.grid.setProperties(grid.extension, grid.resolution);
 		model.grid.count = (int) grid.count;
 		model.grid.status = (byte)grid.status;
-		model.grid.tms = model.sys.getSynchronizedPX4Time_us();
+		model.grid.tms = DataModel.getSynchronizedPX4Time_us();
 		model.sys.setSensor(Status.MSP_SLAM_AVAILABILITY, true);
 
 	}

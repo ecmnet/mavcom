@@ -2,6 +2,7 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_attitude;
 
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
 public class PX4AttitudePlugin extends MAVLinkPluginBase {
@@ -25,7 +26,7 @@ public class PX4AttitudePlugin extends MAVLinkPluginBase {
 		model.attitude.pr = att.pitchspeed;
 		model.attitude.yr = att.yawspeed;
 
-		model.attitude.tms = model.sys.getSynchronizedPX4Time_us();
+		model.attitude.tms = DataModel.getSynchronizedPX4Time_us();
 
 		model.hud.aX = att.roll;
 		model.hud.aY = att.pitch;

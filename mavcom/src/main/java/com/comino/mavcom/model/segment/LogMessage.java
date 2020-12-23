@@ -39,20 +39,21 @@ import com.comino.mavcom.model.segment.generic.Segment;
 public class LogMessage extends Segment {
 
 	private static final long serialVersionUID = 3345013931542810501L;
-
-	public static final String[] severity_texts = { "Emergency","Alert","Critical","Error","Warning","Notice","Info","Debug" };
+	public  static final String[] severity_texts = { "Emergency","Alert","Critical","Error","Warning","Notice","Info","Debug" };
 
 	public String    text = null;
 	public int   severity = 0;
+	
+	private static LogMessage last_message;
 
 	public LogMessage() {
-		this.tms = System.currentTimeMillis();
+		this.tms = System.currentTimeMillis()*1000;
 	}
 
 	public LogMessage(String text, int severity) {
 		this.text = text;
 		this.severity = severity;
-		this.tms = System.currentTimeMillis();
+		this.tms = System.currentTimeMillis()*1000;
 	}
 
 	public LogMessage(String text, int severity, long tms) {
@@ -77,6 +78,22 @@ public class LogMessage extends Segment {
 		if(m== null || m.text==null)
 			return true;
 		return !m.filter(this.text) || (m.tms - this.tms) > 500000 ;
+	}
+	
+	public boolean isNew(int level_filter) {
+
+		if( severity > level_filter)
+			return false;
+		
+		if(last_message== null || last_message.text==null) {
+			last_message = this;
+			return true;
+		}
+		if(!last_message.filter(this.text) || (last_message.tms - this.tms) > 500000) {
+			last_message = this;
+			return true;
+		}
+		return false;
 	}
 
 	public boolean filter(String filter) {

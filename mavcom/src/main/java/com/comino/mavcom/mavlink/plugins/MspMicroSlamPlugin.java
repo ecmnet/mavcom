@@ -2,6 +2,8 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_msp_micro_slam;
 
+import com.comino.mavcom.model.DataModel;
+
 public class MspMicroSlamPlugin extends MAVLinkPluginBase {
 
 	public MspMicroSlamPlugin() {
@@ -28,7 +30,7 @@ public class MspMicroSlamPlugin extends MAVLinkPluginBase {
 		model.slam.wpcount = (int)slam.wpcount;
 		model.slam.flags = (short)slam.flags;
 		model.slam.fps  = slam.fps;
-		model.slam.tms = model.sys.getSynchronizedPX4Time_us();
+		model.slam.tms = DataModel.getSynchronizedPX4Time_us();
 
 	}
 }

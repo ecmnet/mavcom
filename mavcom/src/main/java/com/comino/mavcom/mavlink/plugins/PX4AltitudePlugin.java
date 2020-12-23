@@ -2,6 +2,8 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_altitude;
 
+import com.comino.mavcom.model.DataModel;
+
 public class PX4AltitudePlugin extends MAVLinkPluginBase {
 
 	public PX4AltitudePlugin() {
@@ -20,7 +22,7 @@ public class PX4AltitudePlugin extends MAVLinkPluginBase {
 		else
 			model.hud.ar = alt.altitude_local;
 		model.hud.bc = alt.bottom_clearance;
-		model.hud.tms = model.sys.getSynchronizedPX4Time_us();
+		model.hud.tms = DataModel.getSynchronizedPX4Time_us();
 
 	}
 }

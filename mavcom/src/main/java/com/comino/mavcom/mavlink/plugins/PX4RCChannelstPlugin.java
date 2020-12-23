@@ -2,6 +2,7 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_rc_channels;
 
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
 
@@ -28,7 +29,7 @@ public class PX4RCChannelstPlugin extends MAVLinkPluginBase {
 		model.rc.s5  = rc.chan6_raw < 65534 ? (short) rc.chan6_raw : 1500;
 		model.rc.s6  = rc.chan7_raw < 65534 ? (short) rc.chan7_raw : 1500;
 		model.rc.s7  = rc.chan8_raw < 65534 ? (short) rc.chan8_raw : 1500;
-		model.rc.tms = model.sys.getSynchronizedPX4Time_us();
+		model.rc.tms = DataModel.getSynchronizedPX4Time_us();
 
 	}
 }

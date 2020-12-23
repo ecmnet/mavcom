@@ -133,7 +133,6 @@ public class Status extends Segment {
 	public long     t_boot_ms     	= 0;
 	public float    wifi_quality 	= Float.NaN;
 
-	public long     t_offset_ns     = 0;
 	public long     gcl_tms         = 0;
 	public String   version    		= "";
 	public String   build    		= "";
@@ -161,8 +160,6 @@ public class Status extends Segment {
 
 		msp_temp = s.msp_temp;
 		bat_temp = s.bat_temp;
-
-		t_offset_ns = s.t_offset_ns;
 	}
 
 
@@ -170,10 +167,6 @@ public class Status extends Segment {
 		Status f = new Status();
 		f.set(this);
 		return f;
-	}
-
-	public long getSynchronizedPX4Time_us() {
-		return (System.currentTimeMillis()*1000l) - (t_offset_ns/1000L);
 	}
 
 	public void  setSensor(int box, boolean val) {

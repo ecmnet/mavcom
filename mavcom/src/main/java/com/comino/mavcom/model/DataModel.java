@@ -68,6 +68,8 @@ public class DataModel extends Segment implements Serializable {
 	 *
 	 */
 	private static final long serialVersionUID = 3439530621929819600L;
+	
+	public static long  t_offset_ns     = 0;
 
 	public   Attitude    attitude = null;
 	public   Battery     battery  = null;
@@ -214,6 +216,10 @@ public class DataModel extends Segment implements Serializable {
 		} catch(Exception e) {
 			return Float.NaN;
 		}
+	}
+	
+	public static long getSynchronizedPX4Time_us() {
+		return (System.currentTimeMillis()*1000l) - (t_offset_ns/1000L);
 	}
 
 	public static void main(String[] args) {

@@ -2,6 +2,7 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_global_position_int;
 
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
 public class PX4GlobalPositionPlugin extends MAVLinkPluginBase {
@@ -24,7 +25,7 @@ public class PX4GlobalPositionPlugin extends MAVLinkPluginBase {
 		model.state.g_vz = pos.vz / 100f;
 
 		if(pos.lat!=0 && pos.lon!=0) {
-			model.state.gpos_tms = model.sys.getSynchronizedPX4Time_us();
+			model.state.gpos_tms = DataModel.getSynchronizedPX4Time_us();
 			model.sys.setStatus(Status.MSP_GPOS_VALID, true);
 		}
 

@@ -2,6 +2,7 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_local_position_ned;
 
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
 public class PX4LocalPositionPlugin extends MAVLinkPluginBase {
@@ -26,7 +27,7 @@ public class PX4LocalPositionPlugin extends MAVLinkPluginBase {
 		model.state.v = (float) Math.sqrt(ned.vx * ned.vx + ned.vy * ned.vy);
 
 		if((ned.x!=0 || ned.y!=0) && Float.isFinite(ned.x) && Float.isFinite(ned.y)) {
-			model.state.tms = model.sys.getSynchronizedPX4Time_us();
+			model.state.tms = DataModel.getSynchronizedPX4Time_us();
 			model.sys.setStatus(Status.MSP_LPOS_VALID, true);
 		}
 

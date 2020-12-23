@@ -2,6 +2,7 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_distance_sensor;
 
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
 public class PX4DistanceSensorPlugin extends MAVLinkPluginBase {
@@ -25,7 +26,7 @@ public class PX4DistanceSensorPlugin extends MAVLinkPluginBase {
 			model.sys.setSensor(Status.MSP_SONAR_AVAILABILITY, false);
 			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, true);
 		}
-		model.raw.tms = model.sys.getSynchronizedPX4Time_us();
+		model.raw.tms = DataModel.getSynchronizedPX4Time_us();
 
 	}
 }

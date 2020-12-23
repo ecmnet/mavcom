@@ -2,6 +2,8 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_highres_imu;
 
+import com.comino.mavcom.model.DataModel;
+
 public class PX4HighResIMUPlugin extends MAVLinkPluginBase {
 
 	public PX4HighResIMUPlugin() {
@@ -28,7 +30,7 @@ public class PX4HighResIMUPlugin extends MAVLinkPluginBase {
 		model.imu.abs_pressure = imu.abs_pressure;
 
 		model.sys.imu_temp = (byte) imu.temperature;
-		model.imu.tms = model.sys.getSynchronizedPX4Time_us();
+		model.imu.tms = DataModel.getSynchronizedPX4Time_us();
 
 	}
 }

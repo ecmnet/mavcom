@@ -4,6 +4,7 @@ package com.comino.mavcom.mavlink.plugins;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_msp_vision;
 
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.model.segment.Vision;
 
@@ -46,7 +47,7 @@ public class MSPVisionPlugin extends MAVLinkPluginBase {
 		model.sys.setSensor(Status.MSP_FIDUCIAL_LOCKED,model.vision.isStatus(Vision.FIDUCIAL_LOCKED));
 		model.vision.fps = vision.fps;
 		if (model.vision.errors < 5) {
-			model.vision.tms = model.sys.getSynchronizedPX4Time_us();
+			model.vision.tms = DataModel.getSynchronizedPX4Time_us();
 			model.sys.setSensor(Status.MSP_OPCV_AVAILABILITY, true);
 		}
 	}

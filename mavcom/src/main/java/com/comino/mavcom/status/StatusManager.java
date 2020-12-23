@@ -379,14 +379,14 @@ public class StatusManager implements Runnable {
 			System.out.println("..Connection timeout");
 			//	model.sys.setStatus(Status.MSP_ACTIVE, false);
 			model.sys.wifi_quality = 0;
-			model.sys.tms = model.sys.getSynchronizedPX4Time_us();
+			model.sys.tms = DataModel.getSynchronizedPX4Time_us();
 		}
 	}
 
 	private boolean checkTimeOut(long tms, long timeout) {
 		if(tms==0)
 			return false;
-		return model.sys.getSynchronizedPX4Time_us() > (tms + timeout);
+		return DataModel.getSynchronizedPX4Time_us() > (tms + timeout);
 	}
 	
 	private class Action {

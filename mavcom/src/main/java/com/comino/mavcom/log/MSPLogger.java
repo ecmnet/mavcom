@@ -36,6 +36,7 @@ package com.comino.mavcom.log;
 import org.mavlink.messages.MAV_SEVERITY;
 
 import com.comino.mavcom.control.IMAVController;
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavutils.legacy.ExecutorService;
 
@@ -81,7 +82,7 @@ public class MSPLogger {
 				return;
 			LogMessage m = new LogMessage();
 			m.text = msg; m.severity = severity;
-			m.tms = control.getCurrentModel().sys.getSynchronizedPX4Time_us();
+			m.tms = DataModel.getSynchronizedPX4Time_us();
 			control.writeLogMessage(m);
 	}
 

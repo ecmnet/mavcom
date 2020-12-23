@@ -2,6 +2,7 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_gps_raw_int;
 
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.GPS;
 import com.comino.mavcom.model.segment.Status;
 
@@ -35,7 +36,7 @@ public class PX4RawGPSPlugin extends MAVLinkPluginBase {
 
 			model.gps.altitude = (short) (gps.alt / 1000);
 			model.gps.fixtype = (byte) gps.fix_type;
-			model.gps.tms = model.sys.getSynchronizedPX4Time_us();
+			model.gps.tms = DataModel.getSynchronizedPX4Time_us();
 
 			model.sys.setSensor(Status.MSP_GPS_AVAILABILITY, true);
 			model.sys.setSensor(Status.MSP_RTK_AVAILABILITY, (gps.fix_type & 0xF) > 4);

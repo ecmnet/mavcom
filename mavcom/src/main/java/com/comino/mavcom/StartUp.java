@@ -160,7 +160,7 @@ public class StartUp implements Runnable {
 					grid.extension  = 0;
 					grid.cx  = model.grid.getIndicatorX();
 					grid.cy  = model.grid.getIndicatorY();
-					grid.tms  = model.sys.getSynchronizedPX4Time_us();
+					grid.tms  = DataModel.getSynchronizedPX4Time_us();
 					grid.count = model.grid.count;
 					if(model.grid.toArray(grid.data)) {
 						control.sendMAVLinkMessage(grid);
@@ -185,7 +185,7 @@ public class StartUp implements Runnable {
 				msg.setVersion(config.getVersion());
 				msg.setArch(osBean.getArch());
 				msg.cpu_temp = 27;
-				msg.unix_time_us = control.getCurrentModel().sys.getSynchronizedPX4Time_us();
+				msg.unix_time_us = DataModel.getSynchronizedPX4Time_us();
 				msg.wifi_quality = 100;
 				control.sendMAVLinkMessage(msg);
 
