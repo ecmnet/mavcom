@@ -93,13 +93,13 @@ public class PX4Parameters implements IMAVLinkListener {
 		return null;
 	}
 	
-	public float getParamValue(String paramName) {
+	public float getParamValue(String paramName, float default_value) {
 		if(!isLoaded)
-		  return Float.NaN;
+		  return default_value;
 	    ParameterAttributes att = this.parameterList.get(paramName);
 	    if(att!=null)
 	    	return (float)att.value;
-	    return Float.NaN;
+	    return default_value;
 	}
 
 	public boolean sendParameter(String name, float val) {
