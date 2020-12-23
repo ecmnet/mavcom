@@ -39,7 +39,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Future;
 
 import com.comino.mavcom.model.DataModel;
-import com.comino.mavcom.model.segment.EstStatus;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.legacy.ExecutorService;
@@ -48,12 +47,12 @@ public class StatusManager implements Runnable {
 
 	private static final long TIMEOUT_IMU             = 5000000;
 	private static final long TIMEOUT_VISION          = 3000000;
-	private static final long TIMEOUT_CONNECTED       = 1000000;
+	private static final long TIMEOUT_CONNECTED       = 2000000;
 	private static final long TIMEOUT_GCL_CONNECTED   = 2000000;
 	private static final long TIMEOUT_RC_ATTACHED     = 5000000;
-	private static final long TIMEOUT_JOY_ATTACHED    = 1000000;
-	private static final long TIMEOUT_GPOS            = 1000000;
-	private static final long TIMEOUT_LPOS            = 1000000;
+	private static final long TIMEOUT_JOY_ATTACHED    = 2000000;
+	private static final long TIMEOUT_GPOS            = 2000000;
+	private static final long TIMEOUT_LPOS            = 2000000;
 	private static final long TIMEOUT_GPS             = 2000000;
 	private static final long TIMEOUT_SLAM            = 2000000;
 	private static final long TIMEOUT_LIDAR           = 1500000;
