@@ -76,7 +76,7 @@ public class LogMessage extends Segment {
 	public boolean isNew(LogMessage m) {
 		if(m== null || m.text==null)
 			return true;
-		return !m.filter(this.text) || (m.tms - this.tms) > 500 ;
+		return !m.filter(this.text) || (m.tms - this.tms) > 500000 ;
 	}
 
 	public boolean filter(String filter) {
