@@ -11,6 +11,7 @@ import georegression.geometry.ConvertRotation3D_F32;
 import georegression.geometry.ConvertRotation3D_F64;
 import georegression.struct.EulerType;
 import georegression.struct.point.Point3D_F64;
+import georegression.struct.point.Point3D_I32;
 import georegression.struct.point.Vector3D_F32;
 import georegression.struct.point.Vector3D_F64;
 import georegression.struct.point.Vector4D_F32;
@@ -58,6 +59,10 @@ public class MSP3DUtils {
 	}
 
 	public static double distance3D(Vector3D_F64 t, Vector3D_F64 c) {
+		return (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
+	}
+	
+	public static float distance3D(Point3D_I32 t, Point3D_I32 c) {
 		return (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
 	}
 
@@ -172,6 +177,17 @@ public class MSP3DUtils {
 			current.z = factor * current.z + (1 - factor) * last.z;
 		if(Float.isFinite(last.w))
 			current.w = factor * current.w + (1 - factor) * last.w;
+		last.set(current);
+		return current;
+	}
+	
+	public static Vector3D_F64 filter(Vector3D_F64 current, Vector3D_F64 last, float factor) {
+		if(Double.isFinite(last.x))
+			current.x = factor * current.x + (1 - factor) * last.x;
+		if(Double.isFinite(last.y))
+			current.y = factor * current.y + (1 - factor) * last.y;
+		if(Double.isFinite(last.z))
+			current.z = factor * current.z + (1 - factor) * last.z;
 		last.set(current);
 		return current;
 	}
