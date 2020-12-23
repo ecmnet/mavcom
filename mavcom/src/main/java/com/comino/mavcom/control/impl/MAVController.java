@@ -82,8 +82,6 @@ public class MAVController implements IMAVController, Runnable {
 	protected   boolean isSITL = false;
 	protected   volatile DataModel model = null;
 
-	protected LogMessage last_log_message = null;
-
 	protected   int commError = 0;
 
 	private boolean file_log_enabled  = false;
@@ -315,10 +313,8 @@ public class MAVController implements IMAVController, Runnable {
 	@Override
 	public void writeLogMessage(LogMessage m) {
 
-		if(!m.isNew(last_log_message))
+		if(!m.isNew())
 			return;
-
-		last_log_message = m;
 
 		if(comm!=null)
 			comm.writeMessage(m);

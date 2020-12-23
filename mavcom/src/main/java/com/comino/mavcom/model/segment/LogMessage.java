@@ -34,6 +34,7 @@
 
 package com.comino.mavcom.model.segment;
 
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.generic.Segment;
 
 public class LogMessage extends Segment {
@@ -47,13 +48,13 @@ public class LogMessage extends Segment {
 	private static LogMessage last_message;
 
 	public LogMessage() {
-		this.tms = System.currentTimeMillis()*1000;
+		this.tms = DataModel.getSynchronizedPX4Time_us();
 	}
 
 	public LogMessage(String text, int severity) {
 		this.text = text;
 		this.severity = severity;
-		this.tms = System.currentTimeMillis()*1000;
+		this.tms = DataModel.getSynchronizedPX4Time_us();
 	}
 
 	public LogMessage(String text, int severity, long tms) {
@@ -73,26 +74,26 @@ public class LogMessage extends Segment {
 		this.severity = m.severity;
 		this.tms = m.tms;
 	}
-
-	public boolean isNew(LogMessage m) {
-		if(m== null || m.text==null)
-			return true;
-		return !m.filter(this.text) || (m.tms - this.tms) > 500000 ;
+	
+	public boolean isNew() {
+		return isNew(Integer.MAX_VALUE);
 	}
 	
 	public boolean isNew(int level_filter) {
 
-		if( severity > level_filter)
+		if( severity >= level_filter)
 			return false;
 		
-		if(last_message== null || last_message.text==null) {
+		if(last_message == null || last_message.text == null) {
 			last_message = this;
 			return true;
 		}
-		if(!last_message.filter(this.text) || (last_message.tms - this.tms) > 500000) {
+		if(!last_message.filter(this.text) || (last_message.tms - this.tms) > 20000) {
+	//		System.out.println("Printed: "+this.text+" -> "+this.tms +"("+last_message.text+")");
 			last_message = this;
 			return true;
 		}
+	//	System.out.println("NOT Printed: "+this.text+" -> "+this.tms +"("+last_message.text+")");
 		return false;
 	}
 

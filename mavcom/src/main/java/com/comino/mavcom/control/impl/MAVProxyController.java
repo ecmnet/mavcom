@@ -99,7 +99,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	private List<IMAVMessageListener> 	messageListener = null;
 
 	private ScheduledFuture<?> future = null;
-	private LogMessage last_log_message = null;
 
 	private int mode;
 
@@ -365,10 +364,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public void writeLogMessage(LogMessage m) {
 		
-		if(!m.isNew(last_log_message))
+		if(!m.isNew())
 			return;
-		
-		last_log_message = m;
 
 		this.model.msg = m;
 		this.model.msg.tms = DataModel.getSynchronizedPX4Time_us();
