@@ -44,7 +44,7 @@ public class LogMessage extends Segment {
 
 	public String    text = null;
 	public int   severity = 0;
-	
+
 	private static LogMessage last_message;
 
 	public LogMessage() {
@@ -74,26 +74,15 @@ public class LogMessage extends Segment {
 		this.severity = m.severity;
 		this.tms = m.tms;
 	}
-	
-	public boolean isNew() {
-		return isNew(Integer.MAX_VALUE);
-	}
-	
-	public boolean isNew(int level_filter) {
 
-		if( severity >= level_filter)
-			return false;
-		
-		if(last_message == null || last_message.text == null) {
-			last_message = this;
+	public boolean isNew() {
+		return isNew(Integer.MAX_VALUE,DataModel.getSynchronizedPX4Time_us());
+	}
+
+	public boolean isNew(int level_filter, long tms) {
+		if(text != null && (tms-this.tms) < 700000 
+				&& severity <= level_filter)
 			return true;
-		}
-		if(!last_message.filter(this.text) || (last_message.tms - this.tms) > 20000) {
-	//		System.out.println("Printed: "+this.text+" -> "+this.tms +"("+last_message.text+")");
-			last_message = this;
-			return true;
-		}
-	//	System.out.println("NOT Printed: "+this.text+" -> "+this.tms +"("+last_message.text+")");
 		return false;
 	}
 
