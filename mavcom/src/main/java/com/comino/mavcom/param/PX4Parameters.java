@@ -66,7 +66,7 @@ public class PX4Parameters implements IMAVLinkListener {
 		if(msg.param_index >= msg.param_count-1 && !isLoaded) {
 			isLoaded = true;
 			control.getCurrentModel().sys.setStatus(Status.MSP_PARAMS_LOADED, true);
-			System.out.println("PX4 Parameters loaded succesfully");
+			System.out.println("PX4 Parameters loaded succesfully: "+parameterList.size());
 		}
 	}
 
