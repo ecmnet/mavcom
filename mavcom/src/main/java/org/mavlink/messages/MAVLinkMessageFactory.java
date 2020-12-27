@@ -1295,6 +1295,7 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
   default:
       System.out.println("Mavlink Factory Error : unknown MsgId : " + msgid);
     }
+    dis.close();
     return msg;
   }
 }

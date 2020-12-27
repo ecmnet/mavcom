@@ -18,16 +18,20 @@ public class MAVLinkBlockingReader extends MAVLinkReader implements Runnable {
 
 	@Override
 	public void run() {
-		synchronized(this) {
+		
 			while(true) {
 				try {
+					synchronized(this) {
 					if(packets.isEmpty())
 						wait();
-					parser.parseMessage(getNextMessage());
+				
+					while(!packets.isEmpty())
+					  parser.parseMessage(getNextMessage());
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
-	}
+
 }

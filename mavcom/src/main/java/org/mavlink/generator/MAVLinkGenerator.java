@@ -705,6 +705,7 @@ public class MAVLinkGenerator {
 			writer.print("  default:\n");
 			writer.print("      System.out.println(\"Mavlink Factory Error : unknown MsgId : \" + msgid);\n");
 			writer.print("    }\n");
+			writer.print("    dis.close();\n");
 			writer.print("    return msg;\n");
 			writer.print("  }\n");
 			writer.print("}\n");
