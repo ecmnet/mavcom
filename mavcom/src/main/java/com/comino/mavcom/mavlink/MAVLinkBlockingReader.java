@@ -24,7 +24,6 @@ public class MAVLinkBlockingReader extends MAVLinkReader implements Runnable {
 					synchronized(this) {
 					if(packets.isEmpty())
 						wait();
-				
 					while(!packets.isEmpty())
 					  parser.parseMessage(getNextMessage());
 					}

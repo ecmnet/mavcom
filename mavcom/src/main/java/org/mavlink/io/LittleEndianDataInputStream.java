@@ -12,14 +12,14 @@ public final class LittleEndianDataInputStream extends InputStream implements Da
 
     protected DataInputStream dis;
 
-    protected InputStream is;
+//    protected InputStream is;
 
-    protected byte[] work = null;
+    protected final static byte[] work = new byte[8];
 
     public LittleEndianDataInputStream(InputStream in) {
-        this.is = in;
+//        this.is = in;
         this.dis = new DataInputStream(in);
-        work = new byte[8];
+  //      work = new byte[8];
     }
 
     public final void close() throws IOException {
@@ -27,7 +27,7 @@ public final class LittleEndianDataInputStream extends InputStream implements Da
     }
 
     public final int read(byte ba[], int off, int len) throws IOException {
-        return is.read(ba, off, len);
+        return dis.read(ba, off, len);
     }
 
     public final boolean readBoolean() throws IOException {

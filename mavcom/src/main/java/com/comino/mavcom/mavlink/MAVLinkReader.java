@@ -278,6 +278,7 @@ public class MAVLinkReader {
 
 				if(rxmsg.msg_received == mavlink_framing_t.MAVLINK_FRAMING_OK) {
 					MAVLinkMessage msg = MAVLinkMessageFactory.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId, rxmsg.rawData);
+//					MAVLinkMessage msg = MAVLinkObjectCache.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId, rxmsg.rawData);
 					if(msg!=null && checkPacket(rxmsg.sysId,rxmsg.packet)) {
 						msg.isValid = true;
 						msg.packet = rxmsg.packet;
@@ -305,6 +306,7 @@ public class MAVLinkReader {
 					state = t_parser_state.MAVLINK_PARSE_STATE_IDLE;
 					if(rxmsg.msg_received == mavlink_framing_t.MAVLINK_FRAMING_OK) {
 						MAVLinkMessage msg = MAVLinkMessageFactory.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId, rxmsg.rawData);
+//						MAVLinkMessage msg = MAVLinkObjectCache.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId, rxmsg.rawData);
 						if(msg!=null && checkPacket(rxmsg.sysId,rxmsg.packet)) {
 							msg.packet = rxmsg.packet;
 							packets.addElement(msg);
