@@ -70,7 +70,7 @@ public class ModelSubscriber<ModelType> {
 
 		@Override
 		public void onError(Throwable throwable) {
-			System.err.println(throwable.getMessage());
+			System.err.println("Flow "+throwable.getMessage());
 		}
 
 		@Override

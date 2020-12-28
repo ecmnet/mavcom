@@ -141,7 +141,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 				return true;
 			} catch(Exception e) {
-				System.err.println(e.getLocalizedMessage());
+				System.err.println("Open "+e.getLocalizedMessage());
 				try {
 					channel.disconnect();
 					channel.close();

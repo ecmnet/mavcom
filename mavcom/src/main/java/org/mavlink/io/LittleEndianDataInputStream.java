@@ -15,11 +15,12 @@ public final class LittleEndianDataInputStream extends InputStream implements Da
 //    protected InputStream is;
 
     protected final static byte[] work = new byte[8];
+ //   protected byte[] work ;
 
     public LittleEndianDataInputStream(InputStream in) {
 //        this.is = in;
         this.dis = new DataInputStream(in);
-  //      work = new byte[8];
+ //       work = new byte[8];
     }
 
     public final void close() throws IOException {
