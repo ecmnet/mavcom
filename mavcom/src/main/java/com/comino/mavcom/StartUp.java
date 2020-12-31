@@ -113,7 +113,6 @@ public class StartUp implements Runnable {
 				msg_msp_command cmd = (msg_msp_command)o;
 				switch(cmd.command) {
 				case MSP_CMD.MSP_TRANSFER_MICROSLAM:
-					model.grid.invalidateTransfer();
 					control.writeLogMessage(new LogMessage("[sitl] map transfer request",
 							MAV_SEVERITY.MAV_SEVERITY_NOTICE));
 					break;

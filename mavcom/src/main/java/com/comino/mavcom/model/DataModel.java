@@ -202,7 +202,6 @@ public class DataModel extends Segment implements Serializable {
 		this.vision.clear();
 		this.est.clear();
 		this.slam.clear();
-		this.grid.clear();
 		this.way.clear();
 	}
 
