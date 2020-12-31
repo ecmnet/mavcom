@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.nio.channels.ByteChannel;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -274,7 +275,7 @@ public class MAVLinkToModelParser {
 
 	public void parseMessage(MAVLinkMessage msg) throws IOException {
 
-		List<IMAVLinkListener> msgListener = null;
+		List<IMAVLinkListener> msgListener = null; 
 
 		if (msg != null) {
 
@@ -282,16 +283,17 @@ public class MAVLinkToModelParser {
 
 			try {
 
-				synchronized(this) {
-					if (mavListener != null && mavListener.size() > 0)
-						for (IMAVLinkListener mavlistener : mavListener)
-							mavlistener.received(msg);
-				}
-
 				msgListener = msglisteners.get(msg.getClass());
 				if (msgListener != null && msgListener.size() > 0)
 					for (IMAVLinkListener _listeners : msgListener)
 						_listeners.received(msg);
+
+				try {
+					if (mavListener != null && mavListener.size() > 0)
+						for (IMAVLinkListener mavlistener : mavListener)
+							mavlistener.received(msg);
+
+				} catch (ConcurrentModificationException e) { }
 
 				mavList.put(msg.getClass(), msg);
 
