@@ -157,8 +157,6 @@ public class StartUp implements Runnable {
 				while(model.grid.hasTransfers()) {
 					grid.resolution = 0;
 					grid.extension  = 0;
-					grid.cx  = model.grid.getIndicatorX();
-					grid.cy  = model.grid.getIndicatorY();
 					grid.tms  = DataModel.getSynchronizedPX4Time_us();
 					grid.count = model.grid.count;
 					if(model.grid.toArray(grid.data)) {

@@ -99,7 +99,7 @@ public class StatusManager implements Runnable {
 		if(isRunning)
 			return;
 		isRunning = true;
-		status_old.set(model.sys);
+	//	status_old.set(model.sys);
 		task = ExecutorService.submit(this, ExecutorService.LOW, 50);
 	}
 
@@ -164,16 +164,17 @@ public class StatusManager implements Runnable {
 		checkTimeouts();
 
 		status_current.set(model.sys);
+		
 
-		if (status_current.isStatus(Status.MSP_ARMED))
+		if (status_current.isStatus(Status.MSP_ARMED)) {
+			if(status_current.isStatusChanged(status_old, 1<<Status.MSP_ARMED))
+				t_armed_start = System.currentTimeMillis();
 			model.sys.t_armed_ms = System.currentTimeMillis() - t_armed_start;
+		} else
+			model.sys.t_armed_ms = 0;
 
 		if(status_old.isEqual(status_current))
 			return;
-
-
-		if(status_current.isStatusChanged(status_old, 1<<Status.MSP_ARMED) && status_current.isStatus(Status.MSP_ARMED))
-			t_armed_start = System.currentTimeMillis();
 
 		//		if(status_old.nav_state!=status_current.nav_state)
 		//			System.out.println(status_old.nav_state+" -> "+status_current.nav_state);
