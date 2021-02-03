@@ -32,4 +32,8 @@ public interface MAV_MOUNT_MODE {
      * Gimbal tracks system with specified system ID
      */
     public final static int MAV_MOUNT_MODE_SYSID_TARGET = 5;
+    /**
+     * Gimbal tracks home location
+     */
+    public final static int MAV_MOUNT_MODE_HOME_LOCATION = 6;
 }

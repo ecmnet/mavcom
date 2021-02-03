@@ -15,5 +15,9 @@ public interface MSP_GRID_STATUS {
     /**
      * Grid has a 3D map stored
      */
-    public final static int GRID_3D = 1;
+    public final static int GRID_3D_OCTREE = 1;
+    /**
+     * Grid has a 3D map stored
+     */
+    public final static int GRID_3D_CIRCULAR = 2;
 }

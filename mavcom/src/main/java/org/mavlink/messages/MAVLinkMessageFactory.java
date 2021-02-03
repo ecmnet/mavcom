@@ -67,7 +67,6 @@ import org.mavlink.messages.lquac.msg_mount_orientation;
 import org.mavlink.messages.lquac.msg_set_attitude_target;
 import org.mavlink.messages.lquac.msg_log_request_end;
 import org.mavlink.messages.lquac.msg_radio_status;
-import org.mavlink.messages.lquac.msg_param_ext_set_trimmed;
 import org.mavlink.messages.lquac.msg_gps_raw_int;
 import org.mavlink.messages.lquac.msg_sys_status;
 import org.mavlink.messages.lquac.msg_mission_item_int;
@@ -92,7 +91,6 @@ import org.mavlink.messages.lquac.msg_gps_status;
 import org.mavlink.messages.lquac.msg_winch_status;
 import org.mavlink.messages.lquac.msg_param_ack_transaction;
 import org.mavlink.messages.lquac.msg_scaled_pressure;
-import org.mavlink.messages.lquac.msg_param_ext_ack_trimmed;
 import org.mavlink.messages.lquac.msg_hil_optical_flow;
 import org.mavlink.messages.lquac.msg_actuator_output_status;
 import org.mavlink.messages.lquac.msg_set_actuator_control_target;
@@ -152,7 +150,6 @@ import org.mavlink.messages.lquac.msg_command_cancel;
 import org.mavlink.messages.lquac.msg_adsb_vehicle;
 import org.mavlink.messages.lquac.msg_memory_vect;
 import org.mavlink.messages.lquac.msg_raw_pressure;
-import org.mavlink.messages.lquac.msg_param_ext_value_trimmed;
 import org.mavlink.messages.lquac.msg_onboard_computer_status;
 import org.mavlink.messages.lquac.msg_autopilot_state_for_gimbal_device;
 import org.mavlink.messages.lquac.msg_utm_global_position;
@@ -276,7 +273,6 @@ import org.mavlink.messages.lquac.msg_mount_orientation;
 import org.mavlink.messages.lquac.msg_set_attitude_target;
 import org.mavlink.messages.lquac.msg_log_request_end;
 import org.mavlink.messages.lquac.msg_radio_status;
-import org.mavlink.messages.lquac.msg_param_ext_set_trimmed;
 import org.mavlink.messages.lquac.msg_gps_raw_int;
 import org.mavlink.messages.lquac.msg_sys_status;
 import org.mavlink.messages.lquac.msg_mission_item_int;
@@ -302,7 +298,6 @@ import org.mavlink.messages.lquac.msg_gps_status;
 import org.mavlink.messages.lquac.msg_winch_status;
 import org.mavlink.messages.lquac.msg_param_ack_transaction;
 import org.mavlink.messages.lquac.msg_scaled_pressure;
-import org.mavlink.messages.lquac.msg_param_ext_ack_trimmed;
 import org.mavlink.messages.lquac.msg_hil_optical_flow;
 import org.mavlink.messages.lquac.msg_actuator_output_status;
 import org.mavlink.messages.lquac.msg_set_actuator_control_target;
@@ -364,7 +359,6 @@ import org.mavlink.messages.lquac.msg_command_cancel;
 import org.mavlink.messages.lquac.msg_adsb_vehicle;
 import org.mavlink.messages.lquac.msg_memory_vect;
 import org.mavlink.messages.lquac.msg_raw_pressure;
-import org.mavlink.messages.lquac.msg_param_ext_value_trimmed;
 import org.mavlink.messages.lquac.msg_onboard_computer_status;
 import org.mavlink.messages.lquac.msg_autopilot_state_for_gimbal_device;
 import org.mavlink.messages.lquac.msg_utm_global_position;
@@ -672,10 +666,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_radio_status(sysId, componentId);
       msg.decode(dis);
       break;
-  case MAVLINK_MSG_ID_PARAM_EXT_SET_TRIMMED:
-      msg = new msg_param_ext_set_trimmed(sysId, componentId);
-      msg.decode(dis);
-      break;
   case MAVLINK_MSG_ID_GPS_RAW_INT:
       msg = new msg_gps_raw_int(sysId, componentId);
       msg.decode(dis);
@@ -774,10 +764,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_SCALED_PRESSURE:
       msg = new msg_scaled_pressure(sysId, componentId);
-      msg.decode(dis);
-      break;
-  case MAVLINK_MSG_ID_PARAM_EXT_ACK_TRIMMED:
-      msg = new msg_param_ext_ack_trimmed(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_HIL_OPTICAL_FLOW:
@@ -1022,10 +1008,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_RAW_PRESSURE:
       msg = new msg_raw_pressure(sysId, componentId);
-      msg.decode(dis);
-      break;
-  case MAVLINK_MSG_ID_PARAM_EXT_VALUE_TRIMMED:
-      msg = new msg_param_ext_value_trimmed(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_ONBOARD_COMPUTER_STATUS:

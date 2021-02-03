@@ -36,7 +36,7 @@ public class msg_smart_battery_info extends MAVLinkMessage {
    */
   public long capacity_full;
   /**
-   * Charge/discharge cycle count. -1: field not provided.
+   * Charge/discharge cycle count. UINT16_MAX: field not provided.
    */
   public int cycle_count;
   /**

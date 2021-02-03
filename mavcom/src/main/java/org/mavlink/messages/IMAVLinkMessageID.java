@@ -70,7 +70,6 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_BASIC_ID = 12900;
   public static int MAVLINK_MSG_ID_LOG_REQUEST_END = 122;
   public static int MAVLINK_MSG_ID_RADIO_STATUS = 109;
-  public static int MAVLINK_MSG_ID_PARAM_EXT_SET_TRIMMED = 326;
   public static int MAVLINK_MSG_ID_GPS_RAW_INT = 24;
   public static int MAVLINK_MSG_ID_SYS_STATUS = 1;
   public static int MAVLINK_MSG_ID_MISSION_ITEM_INT = 73;
@@ -96,7 +95,6 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_WINCH_STATUS = 9005;
   public static int MAVLINK_MSG_ID_PARAM_ACK_TRANSACTION = 19;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE = 29;
-  public static int MAVLINK_MSG_ID_PARAM_EXT_ACK_TRIMMED = 327;
   public static int MAVLINK_MSG_ID_HIL_OPTICAL_FLOW = 114;
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_LOCATION = 12901;
   public static int MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS = 375;
@@ -159,7 +157,6 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_ADSB_VEHICLE = 246;
   public static int MAVLINK_MSG_ID_MEMORY_VECT = 249;
   public static int MAVLINK_MSG_ID_RAW_PRESSURE = 28;
-  public static int MAVLINK_MSG_ID_PARAM_EXT_VALUE_TRIMMED = 325;
   public static int MAVLINK_MSG_ID_ONBOARD_COMPUTER_STATUS = 390;
   public static int MAVLINK_MSG_ID_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE = 286;
   public static int MAVLINK_MSG_ID_UTM_GLOBAL_POSITION = 340;

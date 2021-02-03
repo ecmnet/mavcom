@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_param_ext_request_read
- * Request to read the value of a parameter with either the param_id string id or param_index. PARAM_EXT_VALUE or PARAM_EXT_VALUE_TRIMMED should be emitted in response (see field: trimmed).
+ * Request to read the value of a parameter with either the param_id string id or param_index. PARAM_EXT_VALUE should be emitted in response.
  **/
 public class msg_param_ext_request_read extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ = 320;
@@ -24,7 +24,7 @@ public class msg_param_ext_request_read extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 21;
+    payload_length = 20;
 }
 
   /**
@@ -59,10 +59,6 @@ public class msg_param_ext_request_read extends MAVLinkMessage {
     }
     return result;
   }
-  /**
-   * Request _TRIMMED variants of PARAM_EXT_ messages. Set to 1 if _TRIMMED message variants are supported, and 0 otherwise. This signals the recipient that _TRIMMED messages are supported by the sender (and should be used if supported by the recipient).
-   */
-  public int trimmed;
 /**
  * Decode message with raw data
  */
@@ -73,13 +69,12 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   for (int i=0; i<16; i++) {
     param_id[i] = (char)dis.readByte();
   }
-  trimmed = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+21];
+  byte[] buffer = new byte[12+20];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -97,16 +92,15 @@ public byte[] encode() throws IOException {
   for (int i=0; i<16; i++) {
     dos.writeByte(param_id[i]);
   }
-  dos.writeByte(trimmed&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 21);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 20);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[31] = crcl;
-  buffer[32] = crch;
+  buffer[30] = crcl;
+  buffer[31] = crch;
   dos.close();
   return buffer;
 }
@@ -115,6 +109,5 @@ return "MAVLINK_MSG_ID_PARAM_EXT_REQUEST_READ : " +   "  param_index="+param_ind
 +  "  target_system="+target_system
 +  "  target_component="+target_component
 +  "  param_id="+getParam_id()
-+  "  trimmed="+trimmed
 ;}
 }

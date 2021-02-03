@@ -173,10 +173,6 @@ public interface MAV_SENSOR_ORIENTATION {
      */
     public final static int MAV_SENSOR_ROTATION_ROLL_90_PITCH_315 = 40;
     /**
-     * Roll: 270, Yaw: 180
-     */
-    public final static int MAV_SENSOR_ROTATION_ROLL_270_YAW_180 = 41;
-    /**
      * Custom orientation
      */
     public final static int MAV_SENSOR_ROTATION_CUSTOM = 100;

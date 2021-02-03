@@ -32,7 +32,7 @@ public class msg_msp_micro_grid extends MAVLinkMessage {
    */
   public long tms;
   /**
-   * SLAM data integers
+   * Encoded Grid data integers
    */
   public long[] data = new long[40];
   /**
@@ -60,7 +60,7 @@ public class msg_msp_micro_grid extends MAVLinkMessage {
    */
   public long count;
   /**
-   * Grid Status
+   * Grid Status/type
    */
   public int status;
 /**
