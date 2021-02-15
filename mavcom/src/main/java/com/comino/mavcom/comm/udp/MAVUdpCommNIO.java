@@ -140,8 +140,6 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 			t.start();
 
 		} catch(Exception e) {
-			//e.printStackTrace();
-			System.err.println("Open:"+e.getMessage());
 			try {
 				if(channel.isOpen()) {
 					channel.disconnect();
@@ -187,7 +185,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 			try {
 				
 
-				if(selector.select(200)==0) {
+				if(selector.select(2000)==0) {
 					isConnected = false;
 					continue;
 				}
@@ -223,7 +221,6 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 					}
 				}
 			} catch(Exception e) {
-				
 				((Buffer)rxBuffer).clear();
 				model.sys.setStatus(Status.MSP_CONNECTED,false);
 				try { channel.close(); } catch (IOException e1) { 	}
