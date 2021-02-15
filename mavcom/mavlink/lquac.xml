@@ -164,14 +164,17 @@
               </entry>
            </enum>
             <enum name="MSP_GRID_STATUS">
-              <entry value="0" name="GRID_2D">
+              <entry value="0" name="POINT_CLOUD">
+                  <description>Grid has a raw point cloud stored</description>
+              </entry>
+              <entry value="1" name="GRID_2D">
                   <description>Grid has a 2D map stored</description>
               </entry>
-               <entry value="1" name="GRID_3D_OCTREE">
-                  <description>Grid has a 3D map stored</description>
+               <entry value="2" name="GRID_3D_OCTREE">
+                  <description>Grid has a octree based 3D map stored</description>
               </entry>
-               <entry value="2" name="GRID_3D_CIRCULAR">
-                  <description>Grid has a 3D map stored</description>
+               <entry value="3" name="GRID_3D_CIRCULAR">
+                  <description>Grid has a circular 3D map stored</description>
               </entry>
             </enum>
       </enums>
