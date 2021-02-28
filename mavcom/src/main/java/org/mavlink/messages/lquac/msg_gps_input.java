@@ -48,11 +48,11 @@ public class msg_gps_input extends MAVLinkMessage {
    */
   public float alt;
   /**
-   * GPS HDOP horizontal dilution of position
+   * GPS HDOP horizontal dilution of position (unitless). If unknown, set to: UINT16_MAX
    */
   public float hdop;
   /**
-   * GPS VDOP vertical dilution of position
+   * GPS VDOP vertical dilution of position (unitless). If unknown, set to: UINT16_MAX
    */
   public float vdop;
   /**

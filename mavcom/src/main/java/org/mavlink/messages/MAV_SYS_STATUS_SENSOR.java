@@ -128,4 +128,8 @@ public interface MAV_SYS_STATUS_SENSOR {
      * 0x20000000 Avoidance/collision prevention
      */
     public final static int MAV_SYS_STATUS_OBSTACLE_AVOIDANCE = 536870912;
+    /**
+     * 0x40000000 propulsion (actuator, esc, motor or propellor)
+     */
+    public final static int MAV_SYS_STATUS_SENSOR_PROPULSION = 1073741824;
 }

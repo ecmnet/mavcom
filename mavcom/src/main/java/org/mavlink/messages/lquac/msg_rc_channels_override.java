@@ -104,7 +104,7 @@ public class msg_rc_channels_override extends MAVLinkMessage {
    */
   public int chan17_raw;
   /**
-   * RC channel 18 val1ue. A value of 0 or UINT16_MAX means to ignore this field. A value of UINT16_MAX-1 means to release this channel back to the RC radio.
+   * RC channel 18 value. A value of 0 or UINT16_MAX means to ignore this field. A value of UINT16_MAX-1 means to release this channel back to the RC radio.
    */
   public int chan18_raw;
 /**

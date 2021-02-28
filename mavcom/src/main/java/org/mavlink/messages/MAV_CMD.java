@@ -67,7 +67,7 @@ public interface MAV_CMD {
      * Land at location.
      * PARAM 1 : Minimum target altitude if landing is aborted (0 = undefined/use system default).
      * PARAM 2 : Precision land mode.
-     * PARAM 3 : Empty
+     * PARAM 3 : Empty.
      * PARAM 4 : Desired yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude.
      * PARAM 6 : Longitude.
@@ -439,7 +439,7 @@ public interface MAV_CMD {
     public final static int MAV_CMD_DO_FLIGHTTERMINATION = 185;
     /**
      * Change altitude set point.
-     * PARAM 1 : Altitude
+     * PARAM 1 : Altitude.
      * PARAM 2 : Frame of new altitude.
      * PARAM 3 : Empty
      * PARAM 4 : Empty
@@ -543,8 +543,8 @@ public interface MAV_CMD {
      * PARAM 3 : Empty
      * PARAM 4 : Empty
      * PARAM 5 : Pitch offset from next waypoint, positive pitching up
-     * PARAM 6 : roll offset from next waypoint, positive rolling to the right
-     * PARAM 7 : yaw offset from next waypoint, positive yawing to the right
+     * PARAM 6 : Roll offset from next waypoint, positive rolling to the right
+     * PARAM 7 : Yaw offset from next waypoint, positive yawing to the right
      */
     public final static int MAV_CMD_DO_SET_ROI_WPNEXT_OFFSET = 196;
     /**
@@ -1255,7 +1255,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_CONDITION_GATE = 4501;
     /**
-     * Fence return point. There can only be one fence return point.
+     * Fence return point (there can only be one such point in a geofence definition). If rally points are supported they should be used instead.
      * PARAM 1 : Reserved
      * PARAM 2 : Reserved
      * PARAM 3 : Reserved

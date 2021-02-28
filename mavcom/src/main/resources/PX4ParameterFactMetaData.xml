@@ -996,7 +996,7 @@ Set to 2 to use heading from motion capture</short_desc>
       <max>121212</max>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter name="CBRK_IO_SAFETY" default="0" type="INT32" category="Developer">
+    <parameter name="CBRK_IO_SAFETY" default="22027" type="INT32" category="Developer">
       <short_desc>Circuit breaker for IO safety</short_desc>
       <long_desc>Setting this parameter to 22027 will disable IO safety. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
       <min>0</min>
@@ -1062,7 +1062,7 @@ Set to 2 to use heading from motion capture</short_desc>
     </parameter>
     <parameter name="COM_ARM_AUTH_REQ" default="0" type="INT32" boolean="true">
       <short_desc>Require arm authorization to arm</short_desc>
-      <long_desc>The default allows to arm the vehicle without a arm authorization.</long_desc>
+      <long_desc>By default off. The default allows to arm the vehicle without a arm authorization.</long_desc>
     </parameter>
     <parameter name="COM_ARM_AUTH_TO" default="1" type="FLOAT">
       <short_desc>Arm authorization timeout</short_desc>
@@ -1134,13 +1134,26 @@ Set -1 to disable the check</short_desc>
       <short_desc>Require valid mission to arm</short_desc>
       <long_desc>The default allows to arm the vehicle without a valid mission.</long_desc>
     </parameter>
+    <parameter name="COM_ARM_SDCARD" default="1" type="INT32">
+      <short_desc>Enable FMU SD card detection check</short_desc>
+      <long_desc>This check detects if the FMU SD card is missing. Depending on the value of the parameter, the check can be disabled, warn only or deny arming.</long_desc>
+      <values>
+        <value code="0">Disabled</value>
+        <value code="1">Warning only</value>
+        <value code="2">Enforce SD card presence</value>
+      </values>
+    </parameter>
     <parameter name="COM_ARM_SWISBTN" default="0" type="INT32" boolean="true">
       <short_desc>Arm switch is only a button</short_desc>
       <long_desc>The default uses the arm switch as real switch. If parameter set button gets handled like stick arming.</long_desc>
     </parameter>
-    <parameter name="COM_ARM_WO_GPS" default="1" type="INT32" boolean="true">
+    <parameter name="COM_ARM_WO_GPS" default="1" type="INT32">
       <short_desc>Allow arming without GPS</short_desc>
       <long_desc>The default allows to arm the vehicle without GPS signal.</long_desc>
+      <values>
+        <value code="0">Allow arming without GPS</value>
+        <value code="1">Require GPS lock to arm</value>
+      </values>
     </parameter>
     <parameter name="COM_CPU_MAX" default="90.0" type="FLOAT">
       <short_desc>Maximum allowed CPU load to still arm</short_desc>
@@ -1488,6 +1501,14 @@ See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
         <value code="2">Always</value>
       </values>
     </parameter>
+    <parameter name="COM_RCL_ACT_T" default="15.0" type="FLOAT">
+      <short_desc>Delay between RC loss and configured reaction</short_desc>
+      <long_desc>RC signal not updated -&gt; still use data for COM_RC_LOSS_T seconds Consider RC signal lost -&gt; wait COM_RCL_ACT_T seconds on the spot waiting to regain signal React with failsafe action NAV_RCL_ACT A zero value disables the delay.</long_desc>
+      <min>0.0</min>
+      <max>25.0</max>
+      <unit>s</unit>
+      <decimal>3</decimal>
+    </parameter>
     <parameter name="COM_RC_ARM_HYST" default="1000" type="INT32">
       <short_desc>RC input arm/disarm command duration</short_desc>
       <long_desc>The default value of 1000 requires the stick to be held in the arm or disarm position for 1 second.</long_desc>
@@ -1508,7 +1529,7 @@ See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
     </parameter>
     <parameter name="COM_RC_LOSS_T" default="0.5" type="FLOAT">
       <short_desc>RC loss time threshold</short_desc>
-      <long_desc>After this amount of seconds without RC connection the rc lost flag is set to true</long_desc>
+      <long_desc>After this amount of seconds without RC connection it's considered lost and not used anymore</long_desc>
       <min>0</min>
       <max>35</max>
       <unit>s</unit>
@@ -2235,12 +2256,12 @@ Sets the number of standard deviations used by the innovation consistency test</
     </parameter>
     <parameter name="EKF2_GPS_CHECK" default="245" type="INT32">
       <short_desc>Integer bitmask controlling GPS checks</short_desc>
-      <long_desc>Set bits to 1 to enable checks. Checks enabled by the following bit positions 0 : Minimum required sat count set by EKF2_REQ_NSATS 1 : Minimum required PDOP set by EKF2_REQ_PDOP 2 : Maximum allowed horizontal position error set by EKF2_REQ_EPH 3 : Maximum allowed vertical position error set by EKF2_REQ_EPV 4 : Maximum allowed speed error set by EKF2_REQ_SACC 5 : Maximum allowed horizontal position rate set by EKF2_REQ_HDRIFT. This check will only run when the vehicle is on ground and stationary. Detecton of the stationary condition is controlled by the EKF2_MOVE_TEST parameter. 6 : Maximum allowed vertical position rate set by EKF2_REQ_VDRIFT. This check will only run when the vehicle is on ground and stationary. Detecton of the stationary condition is controlled by the EKF2_MOVE_TEST parameter. 7 : Maximum allowed horizontal speed set by EKF2_REQ_HDRIFT. This check will only run when the vehicle is on ground and stationary. Detecton of the stationary condition is controlled by the EKF2_MOVE_TEST parameter. 8 : Maximum allowed vertical velocity discrepancy set by EKF2_REQ_VDRIFT</long_desc>
+      <long_desc>Set bits to 1 to enable checks. Checks enabled by the following bit positions 0 : Minimum required sat count set by EKF2_REQ_NSATS 1 : Maximum allowed PDOP set by EKF2_REQ_PDOP 2 : Maximum allowed horizontal position error set by EKF2_REQ_EPH 3 : Maximum allowed vertical position error set by EKF2_REQ_EPV 4 : Maximum allowed speed error set by EKF2_REQ_SACC 5 : Maximum allowed horizontal position rate set by EKF2_REQ_HDRIFT. This check will only run when the vehicle is on ground and stationary. Detecton of the stationary condition is controlled by the EKF2_MOVE_TEST parameter. 6 : Maximum allowed vertical position rate set by EKF2_REQ_VDRIFT. This check will only run when the vehicle is on ground and stationary. Detecton of the stationary condition is controlled by the EKF2_MOVE_TEST parameter. 7 : Maximum allowed horizontal speed set by EKF2_REQ_HDRIFT. This check will only run when the vehicle is on ground and stationary. Detecton of the stationary condition is controlled by the EKF2_MOVE_TEST parameter. 8 : Maximum allowed vertical velocity discrepancy set by EKF2_REQ_VDRIFT</long_desc>
       <min>0</min>
       <max>511</max>
       <bitmask>
         <bit index="0">Min sat count (EKF2_REQ_NSATS)</bit>
-        <bit index="1">Min PDOP (EKF2_REQ_PDOP)</bit>
+        <bit index="1">Max PDOP (EKF2_REQ_PDOP)</bit>
         <bit index="2">Max horizontal position error (EKF2_REQ_EPH)</bit>
         <bit index="3">Max vertical position error (EKF2_REQ_EPV)</bit>
         <bit index="4">Max speed error (EKF2_REQ_SACC)</bit>
@@ -2609,7 +2630,7 @@ This is the ratio of static pressure error to dynamic pressure generated by a wi
       <max>12</max>
     </parameter>
     <parameter name="EKF2_REQ_PDOP" default="2.5" type="FLOAT">
-      <short_desc>Required PDOP to use GPS</short_desc>
+      <short_desc>Maximum PDOP to use GPS</short_desc>
       <min>1.5</min>
       <max>5.0</max>
       <decimal>1</decimal>
@@ -3018,8 +3039,8 @@ This is the ratio of static pressure error to dynamic pressure generated by a wi
       <increment>0.005</increment>
     </parameter>
     <parameter name="FW_PSP_OFF" default="0.0" type="FLOAT">
-      <short_desc>Pitch setpoint offset</short_desc>
-      <long_desc>An airframe specific offset of the pitch setpoint in degrees, the value is added to the pitch setpoint and should correspond to the typical cruise speed of the airframe.</long_desc>
+      <short_desc>Pitch setpoint offset (pitch at level flight)</short_desc>
+      <long_desc>An airframe specific offset of the pitch setpoint in degrees, the value is added to the pitch setpoint and should correspond to the pitch at typical cruise speed of the airframe.</long_desc>
       <min>-90.0</min>
       <max>90.0</max>
       <unit>deg</unit>
@@ -3102,15 +3123,6 @@ This is the ratio of static pressure error to dynamic pressure generated by a wi
       <unit>%/rad/s</unit>
       <decimal>3</decimal>
       <increment>0.005</increment>
-    </parameter>
-    <parameter name="FW_RSP_OFF" default="0.0" type="FLOAT">
-      <short_desc>Roll setpoint offset</short_desc>
-      <long_desc>An airframe specific offset of the roll setpoint in degrees, the value is added to the roll setpoint and should correspond to the typical cruise speed of the airframe.</long_desc>
-      <min>-90.0</min>
-      <max>90.0</max>
-      <unit>deg</unit>
-      <decimal>1</decimal>
-      <increment>0.5</increment>
     </parameter>
     <parameter name="FW_R_RMAX" default="70.0" type="FLOAT">
       <short_desc>Maximum roll rate</short_desc>
@@ -3436,6 +3448,14 @@ Set to 0 to disable heading hold</short_desc>
       <long_desc>Maximum slew rate for the commanded throttle</long_desc>
       <min>0.0</min>
       <max>1.0</max>
+    </parameter>
+    <parameter name="FW_TKO_PITCH_MIN" default="10.0" type="FLOAT">
+      <short_desc>Minimum pitch during takeoff</short_desc>
+      <min>-5.0</min>
+      <max>30.0</max>
+      <unit>deg</unit>
+      <decimal>1</decimal>
+      <increment>0.5</increment>
     </parameter>
   </group>
   <group name="FW Launch detection">
@@ -4055,6 +4075,13 @@ Value 0 turns the functionality off</short_desc>
       <unit>m/s^2</unit>
       <decimal>1</decimal>
     </parameter>
+    <parameter name="LNDMC_ALT_GND" default="-1.0" type="FLOAT">
+      <short_desc>Ground effect altitude for multicopters</short_desc>
+      <long_desc>The height above ground below which ground effect creates barometric altitude errors. A negative value indicates no ground effect.</long_desc>
+      <min>-1</min>
+      <unit>m</unit>
+      <decimal>2</decimal>
+    </parameter>
     <parameter name="LNDMC_ALT_MAX" default="-1.0" type="FLOAT">
       <short_desc>Maximum altitude for multicopters</short_desc>
       <long_desc>The system will obey this limit as a hard altitude limit. This setting will be consolidated with the GF_MAX_VER_DIST parameter. A negative value indicates no altitude limitation.</long_desc>
@@ -4234,14 +4261,14 @@ by initializing the estimator to the LPE_LAT/LON parameters when global informat
       <min>0</min>
       <max>255</max>
       <bitmask>
-        <bit index="0"> fuse GPS, requires GPS for alt. init</bit>
-        <bit index="1"> fuse optical flow</bit>
-        <bit index="2"> fuse vision position</bit>
-        <bit index="3"> fuse landing target</bit>
-        <bit index="4"> fuse land detector</bit>
-        <bit index="5"> pub agl as lpos down</bit>
-        <bit index="6"> flow gyro compensation</bit>
-        <bit index="7"> fuse baro</bit>
+        <bit index="0">fuse GPS, requires GPS for alt. init</bit>
+        <bit index="1">fuse optical flow</bit>
+        <bit index="2">fuse vision position</bit>
+        <bit index="3">fuse landing target</bit>
+        <bit index="4">fuse land detector</bit>
+        <bit index="5">pub agl as lpos down</bit>
+        <bit index="6">flow gyro compensation</bit>
+        <bit index="7">fuse baro</bit>
       </bitmask>
     </parameter>
     <parameter name="LPE_GPS_DELAY" default="0.29" type="FLOAT">
@@ -4469,6 +4496,7 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="5">Config</value>
         <value code="7">Minimal</value>
         <value code="8">External Vision</value>
+        <value code="10">Gimbal</value>
       </values>
     </parameter>
     <parameter name="MAV_0_RADIO_CTL" default="1" type="INT32" boolean="true">
@@ -4519,6 +4547,7 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="5">Config</value>
         <value code="7">Minimal</value>
         <value code="8">External Vision</value>
+        <value code="10">Gimbal</value>
       </values>
     </parameter>
     <parameter name="MAV_1_RADIO_CTL" default="1" type="INT32" boolean="true">
@@ -4569,6 +4598,7 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="5">Config</value>
         <value code="7">Minimal</value>
         <value code="8">External Vision</value>
+        <value code="10">Gimbal</value>
       </values>
     </parameter>
     <parameter name="MAV_2_RADIO_CTL" default="1" type="INT32" boolean="true">
@@ -4582,15 +4612,6 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
       <min>0</min>
       <unit>B/s</unit>
       <reboot_required>True</reboot_required>
-    </parameter>
-    <parameter name="MAV_BROADCAST" default="0" type="INT32">
-      <short_desc>Broadcast heartbeats on local network</short_desc>
-      <long_desc>This allows a ground control station to automatically find the drone on the local network.</long_desc>
-      <values>
-        <value code="0">Never broadcast</value>
-        <value code="1">Always broadcast</value>
-        <value code="2">Only multicast</value>
-      </values>
     </parameter>
     <parameter name="MAV_COMP_ID" default="1" type="INT32">
       <short_desc>MAVLink component ID</short_desc>
@@ -4679,11 +4700,6 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
     <parameter name="MAV_USEHILGPS" default="0" type="INT32" boolean="true">
       <short_desc>Use/Accept HIL GPS message even if not in HIL mode</short_desc>
       <long_desc>If set to 1 incoming HIL GPS messages are parsed.</long_desc>
-    </parameter>
-  </group>
-  <group name="MKBLCTRL Testmode">
-    <parameter name="MKBLCTRL_TEST" default="0" type="INT32" boolean="true">
-      <short_desc>Test mode (Identify) of MKBLCTRL Driver</short_desc>
     </parameter>
   </group>
   <group name="Mission">
@@ -4894,9 +4910,17 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
     </parameter>
   </group>
   <group name="Mount">
-    <parameter name="MNT_DO_STAB" default="0" type="INT32" boolean="true">
+    <parameter name="MNT_DO_STAB" default="0" type="INT32">
       <short_desc>Stabilize the mount (set to true for servo gimbal, false for passthrough).
-Does not affect MAVLINK_ROI input</short_desc>
+(This is required for a gimbal which is not capable of stabilizing itself
+and relies on the IMU's attitude estimation.)</short_desc>
+      <min>0</min>
+      <max>2</max>
+      <values>
+        <value code="0">Disable</value>
+        <value code="1">Stabilize all axis</value>
+        <value code="2">Stabilize yaw for absolute/lock mode.</value>
+      </values>
     </parameter>
     <parameter name="MNT_MAN_PITCH" default="0" type="INT32">
       <short_desc>Auxiliary channel to control pitch (in AUX input or manual mode)</short_desc>
@@ -4942,11 +4966,11 @@ Does not affect MAVLINK_ROI input</short_desc>
     </parameter>
     <parameter name="MNT_MAV_COMPID" default="154" type="INT32">
       <short_desc>Mavlink Component ID of the mount</short_desc>
-      <long_desc>If MNT_MODE_OUT is MAVLINK, mount configure/control commands will be sent with this component ID.</long_desc>
+      <long_desc>If MNT_MODE_OUT is MAVLink protocol v2, mount configure/control commands will be sent with this component ID.</long_desc>
     </parameter>
     <parameter name="MNT_MAV_SYSID" default="1" type="INT32">
       <short_desc>Mavlink System ID of the mount</short_desc>
-      <long_desc>If MNT_MODE_OUT is MAVLINK, mount configure/control commands will be sent with this target ID.</long_desc>
+      <long_desc>If MNT_MODE_OUT is MAVLink gimbal protocol v1, mount configure/control commands will be sent with this target ID.</long_desc>
     </parameter>
     <parameter name="MNT_MODE_IN" default="-1" type="INT32">
       <short_desc>Mount input mode</short_desc>
@@ -4958,18 +4982,20 @@ Does not affect MAVLINK_ROI input</short_desc>
         <value code="-1">DISABLED</value>
         <value code="0">AUTO</value>
         <value code="1">RC</value>
-        <value code="2">MAVLINK_ROI</value>
-        <value code="3">MAVLINK_DO_MOUNT</value>
+        <value code="2">MAVLINK_ROI (protocol v1)</value>
+        <value code="3">MAVLINK_DO_MOUNT (protocol v1)</value>
+        <value code="4">MAVlink gimbal protocol v2</value>
       </values>
     </parameter>
     <parameter name="MNT_MODE_OUT" default="0" type="INT32">
       <short_desc>Mount output mode</short_desc>
       <long_desc>AUX uses the mixer output Control Group #2. MAVLINK uses the MAV_CMD_DO_MOUNT_CONFIGURE and MAV_CMD_DO_MOUNT_CONTROL MavLink messages to control a mount (set MNT_MAV_SYSID &amp; MNT_MAV_COMPID)</long_desc>
       <min>0</min>
-      <max>1</max>
+      <max>2</max>
       <values>
         <value code="0">AUX</value>
-        <value code="1">MAVLINK</value>
+        <value code="1">MAVLink gimbal protocol v1</value>
+        <value code="2">MAVLink gimbal protocol v2</value>
       </values>
     </parameter>
     <parameter name="MNT_OB_LOCK_MODE" default="0.0" type="FLOAT">
@@ -5021,6 +5047,18 @@ if required by the gimbal (only in AUX output mode)</short_desc>
       <min>1.0</min>
       <max>720.0</max>
       <decimal>1</decimal>
+    </parameter>
+    <parameter name="MNT_RATE_PITCH" default="30.0" type="FLOAT">
+      <short_desc>Angular pitch rate for manual input in degrees/second.
+Full stick input [-1..1] translats to [-pitch rate..pitch rate]</short_desc>
+      <min>1.0</min>
+      <max>90.0</max>
+    </parameter>
+    <parameter name="MNT_RATE_YAW" default="30.0" type="FLOAT">
+      <short_desc>Angular yaw rate for manual input in degrees/second.
+Full stick input [-1..1] translats to [-yaw rate..yaw rate]</short_desc>
+      <min>1.0</min>
+      <max>90.0</max>
     </parameter>
   </group>
   <group name="Multicopter Attitude Control">
@@ -5183,15 +5221,6 @@ Setting this parameter to 0 disables the filter</short_desc>
         <value code="2">Terrain hold</value>
       </values>
     </parameter>
-    <parameter name="MPC_DEC_HOR_SLOW" default="5.0" type="FLOAT">
-      <short_desc>Slow horizontal manual deceleration for manual mode</short_desc>
-      <long_desc>Note: This is only used when MPC_POS_MODE is set to 1.</long_desc>
-      <min>0.5</min>
-      <max>10.0</max>
-      <unit>m/s^2</unit>
-      <decimal>2</decimal>
-      <increment>1</increment>
-    </parameter>
     <parameter name="MPC_HOLD_DZ" default="0.1" type="FLOAT">
       <short_desc>Deadzone of sticks where position hold is enabled</short_desc>
       <min>0.0</min>
@@ -5230,18 +5259,9 @@ Setting this parameter to 0 disables the filter</short_desc>
       <decimal>2</decimal>
       <increment>1</increment>
     </parameter>
-    <parameter name="MPC_JERK_MIN" default="8.0" type="FLOAT">
-      <short_desc>Velocity-based jerk limit</short_desc>
-      <long_desc>If this is not zero, a velocity-based maximum jerk limit is used: the applied jerk limit linearly increases with the vehicle's velocity between MPC_JERK_MIN (zero velocity) and MPC_JERK_MAX (maximum velocity). This means that the vehicle's motions are smooth for low velocities, but still allows fast direction changes or breaking at higher velocities. Set this to zero to use a fixed maximum jerk limit (MPC_JERK_MAX). Note: This is only used when MPC_POS_MODE is set to 1.</long_desc>
-      <min>0</min>
-      <max>30.0</max>
-      <unit>m/s^3</unit>
-      <decimal>2</decimal>
-      <increment>1</increment>
-    </parameter>
     <parameter name="MPC_LAND_ALT1" default="10.0" type="FLOAT">
       <short_desc>Altitude for 1. step of slow landing (descend)</short_desc>
-      <long_desc>Below this altitude: - descending velocity gets limited to a value between "MPC_Z_VEL_MAX" and "MPC_LAND_SPEED" - horizontal velocity gets limited to a value between "MPC_VEL_MANUAL" and "MPC_LAND_VEL_XY" for a smooth descent and landing experience. Value needs to be higher than "MPC_LAND_ALT2"</long_desc>
+      <long_desc>Below this altitude: - descending velocity gets limited to a value between "MPC_Z_VEL_MAX_DN" and "MPC_LAND_SPEED" - horizontal velocity gets limited to a value between "MPC_VEL_MANUAL" and "MPC_LAND_VEL_XY" for a smooth descent and landing experience. Value needs to be higher than "MPC_LAND_ALT2"</long_desc>
       <min>0</min>
       <max>122</max>
       <unit>m</unit>
@@ -5410,6 +5430,13 @@ the setpoint will be capped to MPC_XY_VEL_MAX</short_desc>
       <decimal>2</decimal>
       <increment>1</increment>
     </parameter>
+    <parameter name="MPC_XY_ERR_MAX" default="2.0" type="FLOAT">
+      <short_desc>Maximum horizontal error allowed by the trajectory generator</short_desc>
+      <long_desc>The integration speed of the trajectory setpoint is linearly reduced with the horizontal position tracking error. When the error is above this parameter, the integration of the trajectory is stopped to wait for the drone. This value can be adjusted depending on the tracking capabilities of the vehicle.</long_desc>
+      <min>0.1</min>
+      <max>10.0</max>
+      <decimal>1</decimal>
+    </parameter>
     <parameter name="MPC_XY_MAN_EXPO" default="0.6" type="FLOAT">
       <short_desc>Manual position control stick exponential curve sensitivity</short_desc>
       <long_desc>The higher the value the less sensitivity the stick has around zero while still reaching the maximum value with full stick deflection. 0 Purely linear input curve (default) 1 Purely cubic input curve</long_desc>
@@ -5428,6 +5455,14 @@ the setpoint will be capped to MPC_XY_VEL_MAX</short_desc>
       <min>0.1</min>
       <max>1.0</max>
       <decimal>1</decimal>
+    </parameter>
+    <parameter name="MPC_XY_VEL_ALL" default="-10.0" type="FLOAT">
+      <short_desc>Overall Horizonal Velocity Limit</short_desc>
+      <long_desc>If set to a value greater than zero, other parameters are automatically set (such as MPC_XY_VEL_MAX or MPC_VEL_MANUAL). If set to -1, the existing individual parameters are used.</long_desc>
+      <min>-20</min>
+      <max>20</max>
+      <decimal>1</decimal>
+      <increment>1</increment>
     </parameter>
     <parameter name="MPC_XY_VEL_D_ACC" default="0.2" type="FLOAT">
       <short_desc>Differential gain for horizontal velocity error. Small values help reduce fast oscillations. If value is too big oscillations will appear again</short_desc>
@@ -5456,7 +5491,7 @@ the setpoint will be capped to MPC_XY_VEL_MAX</short_desc>
       <short_desc>Proportional gain for horizontal velocity error</short_desc>
       <long_desc>defined as correction acceleration in m/s^2 per m/s velocity error</long_desc>
       <min>1.2</min>
-      <max>3.0</max>
+      <max>5.0</max>
       <decimal>2</decimal>
     </parameter>
     <parameter name="MPC_YAW_EXPO" default="0.6" type="FLOAT">
@@ -5479,6 +5514,14 @@ the setpoint will be capped to MPC_XY_VEL_MAX</short_desc>
       <max>1.5</max>
       <decimal>2</decimal>
     </parameter>
+    <parameter name="MPC_Z_VEL_ALL" default="-3.0" type="FLOAT">
+      <short_desc>Overall Vertical Velocity Limit</short_desc>
+      <long_desc>If set to a value greater than zero, other parameters are automatically set (such as MPC_Z_VEL_MAX_UP or MPC_LAND_SPEED). If set to -1, the existing individual parameters are used.</long_desc>
+      <min>-3</min>
+      <max>8</max>
+      <decimal>1</decimal>
+      <increment>0.5</increment>
+    </parameter>
     <parameter name="MPC_Z_VEL_D_ACC" default="0.0" type="FLOAT">
       <short_desc>Differential gain for vertical velocity error</short_desc>
       <long_desc>defined as correction acceleration in m/s^2 per m/s^2 velocity derivative</long_desc>
@@ -5490,7 +5533,7 @@ the setpoint will be capped to MPC_XY_VEL_MAX</short_desc>
       <short_desc>Integral gain for vertical velocity error</short_desc>
       <long_desc>defined as correction acceleration in m/s^2 per m velocity integral Non zero value allows hovering thrust estimation on stabilized or autonomous takeoff.</long_desc>
       <min>0.2</min>
-      <max>2.0</max>
+      <max>3.0</max>
       <decimal>3</decimal>
     </parameter>
     <parameter name="MPC_Z_VEL_MAX_DN" default="1.0" type="FLOAT">
@@ -5512,8 +5555,16 @@ the setpoint will be capped to MPC_XY_VEL_MAX</short_desc>
       <short_desc>Proportional gain for vertical velocity error</short_desc>
       <long_desc>defined as correction acceleration in m/s^2 per m/s velocity error</long_desc>
       <min>2.0</min>
-      <max>8.0</max>
+      <max>15.0</max>
       <decimal>2</decimal>
+    </parameter>
+    <parameter name="SYS_VEHICLE_RESP" default="-0.4" type="FLOAT">
+      <short_desc>Responsiveness</short_desc>
+      <long_desc>Changes the overall responsiveness of the vehicle. The higher the value, the faster the vehicle will react. If set to a value greater than zero, other parameters are automatically set (such as the acceleration or jerk limits). If set to -1, the existing individual parameters are used.</long_desc>
+      <min>-1</min>
+      <max>1</max>
+      <decimal>2</decimal>
+      <increment>0.05</increment>
     </parameter>
     <parameter name="WV_EN" default="0" type="INT32" boolean="true">
       <short_desc>Enable weathervane</short_desc>
@@ -8761,6 +8812,15 @@ default 1.5 turns per second</short_desc>
       <decimal>1</decimal>
       <increment>0.5</increment>
     </parameter>
+    <parameter name="RTL_LOITER_RAD" default="50.0" type="FLOAT">
+      <short_desc>Loiter radius for rtl descend</short_desc>
+      <long_desc>Set the radius for loitering to a safe altitude for VTOL transition.</long_desc>
+      <min>25</min>
+      <max>1000</max>
+      <unit>m</unit>
+      <decimal>1</decimal>
+      <increment>0.5</increment>
+    </parameter>
     <parameter name="RTL_MIN_DIST" default="10.0" type="FLOAT">
       <short_desc>Horizontal radius from return point within which special rules for return mode apply</short_desc>
       <long_desc>The return altitude will be calculated based on RTL_CONE_ANG parameter. The yaw setpoint will switch to the one defined by corresponding waypoint.</long_desc>
@@ -8884,23 +8944,30 @@ default 1.5 turns per second</short_desc>
       <decimal>2</decimal>
       <increment>0.05</increment>
     </parameter>
-    <parameter name="GND_L1_DIST" default="5.0" type="FLOAT">
+    <parameter name="GND_L1_DIST" default="1.0" type="FLOAT">
       <short_desc>L1 distance</short_desc>
-      <long_desc>This is the waypoint radius</long_desc>
-      <min>0.0</min>
-      <max>100.0</max>
+      <long_desc>This is the distance at which the next waypoint is activated. This should be set to about 2-4x of GND_WHEEL_BASE and not smaller than one meter (due to GPS accuracy).</long_desc>
+      <min>1.0</min>
+      <max>50.0</max>
       <unit>m</unit>
       <decimal>1</decimal>
       <increment>0.1</increment>
     </parameter>
-    <parameter name="GND_L1_PERIOD" default="10.0" type="FLOAT">
+    <parameter name="GND_L1_PERIOD" default="5.0" type="FLOAT">
       <short_desc>L1 period</short_desc>
-      <long_desc>This is the L1 distance and defines the tracking point ahead of the rover it's following. Using values around 2-5 for a traxxas stampede. Shorten slowly during tuning until response is sharp without oscillation.</long_desc>
-      <min>0.0</min>
+      <long_desc>This is the L1 distance and defines the tracking point ahead of the rover it's following. Use values around 2-5m for a 0.3m wheel base. Tuning instructions: Shorten slowly during tuning until response is sharp without oscillation.</long_desc>
+      <min>0.5</min>
       <max>50.0</max>
       <unit>m</unit>
       <decimal>1</decimal>
       <increment>0.5</increment>
+    </parameter>
+    <parameter name="GND_MAN_Y_MAX" default="150.0" type="FLOAT">
+      <short_desc>Max manual yaw rate</short_desc>
+      <min>0.0</min>
+      <max>400</max>
+      <unit>deg/s</unit>
+      <decimal>1</decimal>
     </parameter>
     <parameter name="GND_MAX_ANG" default="0.7854" type="FLOAT">
       <short_desc>Maximum turn angle for Ackerman steering.
@@ -8992,15 +9059,6 @@ At a control output of 1, the steering wheels are at GND_MAX_ANG radians</short_
       <decimal>2</decimal>
       <increment>0.01</increment>
     </parameter>
-    <parameter name="GND_THR_IDLE" default="0.0" type="FLOAT">
-      <short_desc>Idle throttle</short_desc>
-      <long_desc>This is the minimum throttle while on the ground, it should be 0 for a rover</long_desc>
-      <min>0.0</min>
-      <max>0.4</max>
-      <unit>norm</unit>
-      <decimal>2</decimal>
-      <increment>0.01</increment>
-    </parameter>
     <parameter name="GND_THR_MAX" default="0.3" type="FLOAT">
       <short_desc>Throttle limit max</short_desc>
       <long_desc>This is the maximum throttle % that can be used by the controller. For a Traxxas stampede vxl with the ESC set to training, 30 % is enough</long_desc>
@@ -9019,8 +9077,9 @@ At a control output of 1, the steering wheels are at GND_MAX_ANG radians</short_
       <decimal>2</decimal>
       <increment>0.01</increment>
     </parameter>
-    <parameter name="GND_WHEEL_BASE" default="2.0" type="FLOAT">
+    <parameter name="GND_WHEEL_BASE" default="0.31" type="FLOAT">
       <short_desc>Distance from front axle to rear axle</short_desc>
+      <long_desc>A value of 0.31 is typical for 1/10 RC cars.</long_desc>
       <min>0.0</min>
       <unit>m</unit>
       <decimal>3</decimal>
@@ -9147,7 +9206,7 @@ to takeoff is reached</short_desc>
     </parameter>
     <parameter name="SDLOG_PROFILE" default="1" type="INT32">
       <short_desc>Logging topic profile (integer bitmask)</short_desc>
-      <long_desc>This integer bitmask controls the set and rates of logged topics. The default allows for general log analysis and estimator replay, while keeping the log file size reasonably small. Enabling multiple sets leads to higher bandwidth requirements and larger log files. Set bits true to enable: 0 : Default set (used for general log analysis) 1 : Full rate estimator (EKF2) replay topics 2 : Topics for thermal calibration (high rate raw IMU and Baro sensor data) 3 : Topics for system identification (high rate actuator control and IMU data) 4 : Full rates for analysis of fast maneuvers (RC, attitude, rates and actuators) 5 : Debugging topics (debug_*.msg topics, for custom code) 6 : Topics for sensor comparison (low rate raw IMU, Baro and Magnetomer data) 7 : Topics for computer vision and collision avoidance 8 : Raw FIFO high-rate IMU (Gyro) 9 : Raw FIFO high-rate IMU (Accel)</long_desc>
+      <long_desc>This integer bitmask controls the set and rates of logged topics. The default allows for general log analysis while keeping the log file size reasonably small. Enabling multiple sets leads to higher bandwidth requirements and larger log files. Set bits true to enable: 0 : Default set (used for general log analysis) 1 : Full rate estimator (EKF2) replay topics 2 : Topics for thermal calibration (high rate raw IMU and Baro sensor data) 3 : Topics for system identification (high rate actuator control and IMU data) 4 : Full rates for analysis of fast maneuvers (RC, attitude, rates and actuators) 5 : Debugging topics (debug_*.msg topics, for custom code) 6 : Topics for sensor comparison (low rate raw IMU, Baro and Magnetomer data) 7 : Topics for computer vision and collision avoidance 8 : Raw FIFO high-rate IMU (Gyro) 9 : Raw FIFO high-rate IMU (Accel)</long_desc>
       <min>0</min>
       <max>1023</max>
       <reboot_required>true</reboot_required>
@@ -9261,22 +9320,22 @@ Particularly useful for testing different low-battery behaviour</short_desc>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
-    <parameter name="CAL_ACC0_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC0_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC0_XSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC0_XSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis scaling factor</short_desc>
     </parameter>
-    <parameter name="CAL_ACC0_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC0_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC0_YSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC0_YSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Y-axis scaling factor</short_desc>
     </parameter>
-    <parameter name="CAL_ACC0_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC0_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Z-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC0_ZSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC0_ZSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Z-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_ACC1_ID" default="0" type="INT32" category="System">
@@ -9345,22 +9404,22 @@ Particularly useful for testing different low-battery behaviour</short_desc>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
-    <parameter name="CAL_ACC1_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC1_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC1_XSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC1_XSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis scaling factor</short_desc>
     </parameter>
-    <parameter name="CAL_ACC1_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC1_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC1_YSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC1_YSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Y-axis scaling factor</short_desc>
     </parameter>
-    <parameter name="CAL_ACC1_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC1_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Z-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC1_ZSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC1_ZSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Z-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_ACC2_ID" default="0" type="INT32" category="System">
@@ -9429,22 +9488,22 @@ Particularly useful for testing different low-battery behaviour</short_desc>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
-    <parameter name="CAL_ACC2_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC2_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC2_XSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC2_XSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis scaling factor</short_desc>
     </parameter>
-    <parameter name="CAL_ACC2_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC2_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC2_YSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC2_YSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Y-axis scaling factor</short_desc>
     </parameter>
-    <parameter name="CAL_ACC2_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC2_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Z-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC2_ZSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC2_ZSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Z-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_ACC3_ID" default="0" type="INT32" category="System">
@@ -9513,22 +9572,22 @@ Particularly useful for testing different low-battery behaviour</short_desc>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
-    <parameter name="CAL_ACC3_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC3_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC3_XSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC3_XSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis scaling factor</short_desc>
     </parameter>
-    <parameter name="CAL_ACC3_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC3_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC3_YSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC3_YSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Y-axis scaling factor</short_desc>
     </parameter>
-    <parameter name="CAL_ACC3_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC3_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Z-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_ACC3_ZSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_ACC3_ZSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer Z-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_GYRO0_ID" default="0" type="INT32" category="System">
@@ -9597,13 +9656,13 @@ Particularly useful for testing different low-battery behaviour</short_desc>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
-    <parameter name="CAL_GYRO0_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO0_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_GYRO0_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO0_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_GYRO0_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO0_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro Z-axis offset</short_desc>
     </parameter>
     <parameter name="CAL_GYRO1_ID" default="0" type="INT32" category="System">
@@ -9672,13 +9731,13 @@ Particularly useful for testing different low-battery behaviour</short_desc>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
-    <parameter name="CAL_GYRO1_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO1_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_GYRO1_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO1_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_GYRO1_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO1_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro Z-axis offset</short_desc>
     </parameter>
     <parameter name="CAL_GYRO2_ID" default="0" type="INT32" category="System">
@@ -9747,13 +9806,13 @@ Particularly useful for testing different low-battery behaviour</short_desc>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
-    <parameter name="CAL_GYRO2_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO2_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_GYRO2_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO2_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_GYRO2_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO2_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro Z-axis offset</short_desc>
     </parameter>
     <parameter name="CAL_GYRO3_ID" default="0" type="INT32" category="System">
@@ -9822,13 +9881,13 @@ Particularly useful for testing different low-battery behaviour</short_desc>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
-    <parameter name="CAL_GYRO3_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO3_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_GYRO3_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO3_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_GYRO3_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_GYRO3_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro Z-axis offset</short_desc>
     </parameter>
     <parameter name="CAL_MAG0_ID" default="0" type="INT32" category="System">
@@ -9904,13 +9963,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG0_XODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG0_XODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG0_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG0_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG0_XSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG0_XSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG0_YCOMP" default="0.0" type="FLOAT" category="System">
@@ -9920,13 +9979,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG0_YODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG0_YODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG0_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG0_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG0_YSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG0_YSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG0_ZCOMP" default="0.0" type="FLOAT" category="System">
@@ -9936,13 +9995,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG0_ZODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG0_ZODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG0_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG0_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG0_ZSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG0_ZSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG1_ID" default="0" type="INT32" category="System">
@@ -10018,13 +10077,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG1_XODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG1_XODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG1_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG1_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG1_XSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG1_XSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG1_YCOMP" default="0.0" type="FLOAT" category="System">
@@ -10034,13 +10093,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG1_YODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG1_YODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG1_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG1_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG1_YSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG1_YSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG1_ZCOMP" default="0.0" type="FLOAT" category="System">
@@ -10050,13 +10109,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG1_ZODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG1_ZODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG1_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG1_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG1_ZSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG1_ZSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG2_ID" default="0" type="INT32" category="System">
@@ -10132,13 +10191,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG2_XODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG2_XODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG2_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG2_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG2_XSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG2_XSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG2_YCOMP" default="0.0" type="FLOAT" category="System">
@@ -10148,13 +10207,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG2_YODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG2_YODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG2_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG2_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG2_YSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG2_YSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG2_ZCOMP" default="0.0" type="FLOAT" category="System">
@@ -10164,13 +10223,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG2_ZODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG2_ZODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG2_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG2_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG2_ZSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG2_ZSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG3_ID" default="0" type="INT32" category="System">
@@ -10246,13 +10305,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG3_XODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG3_XODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG3_XOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG3_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG3_XSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG3_XSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG3_YCOMP" default="0.0" type="FLOAT" category="System">
@@ -10262,13 +10321,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG3_YODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG3_YODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG3_YOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG3_YOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG3_YSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG3_YSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG3_ZCOMP" default="0.0" type="FLOAT" category="System">
@@ -10278,13 +10337,13 @@ and either current or throttle depending on value of CAL_MAG_COMP_TYP
 Unit for throttle-based compensation is [G] and
 for current-based compensation [G/kA]</short_desc>
     </parameter>
-    <parameter name="CAL_MAG3_ZODIAG" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG3_ZODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis off diagonal factor</short_desc>
     </parameter>
-    <parameter name="CAL_MAG3_ZOFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG3_ZOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis offset</short_desc>
     </parameter>
-    <parameter name="CAL_MAG3_ZSCALE" default="1.0" type="FLOAT" category="System">
+    <parameter name="CAL_MAG3_ZSCALE" default="1.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG_COMP_TYP" default="0" type="INT32" category="System">
@@ -10300,7 +10359,7 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Differential pressure sensor analog scaling</short_desc>
       <long_desc>Pick the appropriate scaling from the datasheet. this number defines the (linear) conversion from voltage to Pascal (pa). For the MPXV7002DP this is 1000. NOTE: If the sensor always registers zero, try switching the static and dynamic tubes.</long_desc>
     </parameter>
-    <parameter name="SENS_DPRES_OFF" default="0.0" type="FLOAT" category="System">
+    <parameter name="SENS_DPRES_OFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Differential pressure sensor offset</short_desc>
       <long_desc>The offset (zero-reading) in Pascal</long_desc>
     </parameter>
@@ -10394,7 +10453,7 @@ is less than 50% of this value</short_desc>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter name="IMU_DGYRO_CUTOFF" default="30.0" type="FLOAT">
+    <parameter name="IMU_DGYRO_CUTOFF" default="10.0" type="FLOAT">
       <short_desc>Cutoff frequency for angular acceleration (D-Term filter)</short_desc>
       <long_desc>The cutoff frequency for the 2nd order butterworth filter used on the time derivative of the measured angular velocity, also known as the D-term filter in the rate controller. The D-term uses the derivative of the rate and thus is the most susceptible to noise. Therefore, using a D-term filter allows to increase IMU_GYRO_CUTOFF, which leads to reduced control latency and permits to increase the P gains. A value of 0 disables the filter.</long_desc>
       <min>0</min>
@@ -10790,6 +10849,13 @@ How often the sensor is readout</short_desc>
       <unit>celcius</unit>
       <decimal>3</decimal>
     </parameter>
+    <parameter name="SENS_IMU_TEMP_FF" default="0.05" type="FLOAT" category="System">
+      <short_desc>IMU heater controller feedforward value</short_desc>
+      <min>0</min>
+      <max>1.0</max>
+      <unit>%</unit>
+      <decimal>3</decimal>
+    </parameter>
     <parameter name="SENS_IMU_TEMP_I" default="0.025" type="FLOAT" category="System">
       <short_desc>IMU heater controller integrator gain value</short_desc>
       <min>0</min>
@@ -10803,6 +10869,11 @@ How often the sensor is readout</short_desc>
       <max>2.0</max>
       <unit>us/C</unit>
       <decimal>3</decimal>
+    </parameter>
+    <parameter name="SENS_INT_BARO_EN" default="1" type="INT32" boolean="true" category="System">
+      <short_desc>Enable internal barometers</short_desc>
+      <long_desc>For systems with an external barometer, this should be set to false to make sure that the external is used.</long_desc>
+      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="SENS_LEDDAR1_CFG" default="0" type="INT32">
       <short_desc>Serial Configuration for LeddarOne Rangefinder</short_desc>
@@ -11689,6 +11760,37 @@ How often the sensor is readout</short_desc>
     </parameter>
   </group>
   <group name="Simulation In Hardware">
+    <parameter name="SIH_BARO_OFFSET" default="0.0" type="FLOAT">
+      <short_desc>Barometer offset in meters</short_desc>
+      <long_desc>Absolute value superior to 10000 will disable barometer</long_desc>
+      <unit>m</unit>
+    </parameter>
+    <parameter name="SIH_DISTSNSR_MAX" default="100.0" type="FLOAT">
+      <short_desc>distance sensor maximun range</short_desc>
+      <min>0.0</min>
+      <max>1000.0</max>
+      <unit>m</unit>
+      <decimal>4</decimal>
+      <increment>0.01</increment>
+    </parameter>
+    <parameter name="SIH_DISTSNSR_MIN" default="0.0" type="FLOAT">
+      <short_desc>distance sensor minimun range</short_desc>
+      <min>0.0</min>
+      <max>10.0</max>
+      <unit>m</unit>
+      <decimal>4</decimal>
+      <increment>0.01</increment>
+    </parameter>
+    <parameter name="SIH_DISTSNSR_OVR" default="-1.0" type="FLOAT">
+      <short_desc>if &gt;= 0 the distance sensor measures will be overrided by this value
+Absolute value superior to 10000 will disable distance sensor</short_desc>
+      <unit>m</unit>
+    </parameter>
+    <parameter name="SIH_GPS_USED" default="10" type="INT32">
+      <short_desc>Number of GPS satellites used</short_desc>
+      <min>0</min>
+      <max>50</max>
+    </parameter>
     <parameter name="SIH_IXX" default="0.025" type="FLOAT">
       <short_desc>Vehicle inertia about X axis</short_desc>
       <long_desc>The intertia is a 3 by 3 symmetric matrix. It represents the difficulty of the vehicle to modify its angular rate.</long_desc>
@@ -11815,6 +11917,21 @@ How often the sensor is readout</short_desc>
       <unit>m</unit>
       <decimal>2</decimal>
       <increment>0.05</increment>
+    </parameter>
+    <parameter name="SIH_MAG_OFFSET_X" default="0.0" type="FLOAT">
+      <short_desc>magnetometer X offset in Gauss</short_desc>
+      <long_desc>Absolute value superior to 10000 will disable magnetometer</long_desc>
+      <unit>gauss</unit>
+    </parameter>
+    <parameter name="SIH_MAG_OFFSET_Y" default="0.0" type="FLOAT">
+      <short_desc>magnetometer Y offset in Gauss</short_desc>
+      <long_desc>Absolute value superior to 10000 will disable magnetometer</long_desc>
+      <unit>gauss</unit>
+    </parameter>
+    <parameter name="SIH_MAG_OFFSET_Z" default="0.0" type="FLOAT">
+      <short_desc>magnetometer Z offset in Gauss</short_desc>
+      <long_desc>Absolute value superior to 10000 will disable magnetometer</long_desc>
+      <unit>gauss</unit>
     </parameter>
     <parameter name="SIH_MASS" default="1.0" type="FLOAT">
       <short_desc>Vehicle mass</short_desc>
@@ -12698,6 +12815,43 @@ How often the sensor is readout</short_desc>
       <unit>m</unit>
     </parameter>
   </group>
+  <group name="UAVCAN v1">
+    <parameter name="UAVCAN_V1_BAT_ID" default="4242" type="INT32">
+      <short_desc>UAVCAN v1 battery port ID</short_desc>
+      <min>1</min>
+      <max>32767</max>
+    </parameter>
+    <parameter name="UAVCAN_V1_BAT_MD" default="0" type="INT32">
+      <short_desc>UAVCAN v1 battery mode</short_desc>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">Disable</value>
+        <value code="1">Receive BMSStatus</value>
+        <value code="2">Send BMSStatus</value>
+      </values>
+    </parameter>
+    <parameter name="UAVCAN_V1_BAUD" default="1000000" type="INT32">
+      <short_desc>UAVCAN/CAN v1 bus bitrate</short_desc>
+      <min>20000</min>
+      <max>1000000</max>
+      <unit>bit/s</unit>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="UAVCAN_V1_ENABLE" default="0" type="INT32" boolean="true">
+      <short_desc>UAVCAN v1</short_desc>
+      <long_desc>0 - UAVCAN disabled. 1 - Enables UAVCANv1</long_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
+  </group>
+  <group name="UAVCANv1">
+    <parameter name="UAVCAN_V1_ID" default="1" type="INT32">
+      <short_desc>UAVCAN v1 Node ID</short_desc>
+      <long_desc>Read the specs at http://uavcan.org to learn more about Node ID.</long_desc>
+      <min>1</min>
+      <max>125</max>
+      <reboot_required>true</reboot_required>
+    </parameter>
+  </group>
   <group name="UUV Attitude Control">
     <parameter name="UUV_DIRCT_PITCH" default="0.0" type="FLOAT">
       <short_desc>Direct pitch input</short_desc>
@@ -12735,6 +12889,33 @@ How often the sensor is readout</short_desc>
     </parameter>
     <parameter name="UUV_YAW_P" default="4.0" type="FLOAT">
       <short_desc>Yawh proportional gain</short_desc>
+    </parameter>
+  </group>
+  <group name="UUV Position Control">
+    <parameter name="UUV_GAIN_X_D" default="0.2" type="FLOAT">
+      <short_desc>Gain of D controller X</short_desc>
+    </parameter>
+    <parameter name="UUV_GAIN_X_P" default="1.0" type="FLOAT">
+      <short_desc>Gain of P controller X</short_desc>
+    </parameter>
+    <parameter name="UUV_GAIN_Y_D" default="0.2" type="FLOAT">
+      <short_desc>Gain of D controller Y</short_desc>
+    </parameter>
+    <parameter name="UUV_GAIN_Y_P" default="1.0" type="FLOAT">
+      <short_desc>Gain of P controller Y</short_desc>
+    </parameter>
+    <parameter name="UUV_GAIN_Z_D" default="0.2" type="FLOAT">
+      <short_desc>Gain of D controller Z</short_desc>
+    </parameter>
+    <parameter name="UUV_GAIN_Z_P" default="1.0" type="FLOAT">
+      <short_desc>Gain of P controller Z</short_desc>
+    </parameter>
+    <parameter name="UUV_STAB_MODE" default="1" type="INT32">
+      <short_desc>Stabilization mode(1) or Position Control(0)</short_desc>
+      <values>
+        <value code="0">Position Control</value>
+        <value code="1">Stabilization Mode</value>
+      </values>
     </parameter>
   </group>
   <group name="VTOL Attitude Control">
@@ -12849,6 +13030,8 @@ demanded down pitch to fixed-wing actuation</short_desc>
         <value code="2">Enable FW forward actuation in hover in altitude, position and auto modes if above MPC_LAND_ALT1.</value>
         <value code="3">Enable FW forward actuation in hover in altitude, position and auto modes if above MPC_LAND_ALT2.</value>
         <value code="4">Enable FW forward actuation in hover in altitude, position and auto modes.</value>
+        <value code="5">Enable FW forward actuation in hover in altitude, position and auto modes if above MPC_LAND_ALT1 (except LANDING).</value>
+        <value code="6">Enable FW forward actuation in hover in altitude, position and auto modes if above MPC_LAND_ALT2 (except LANDING).</value>
       </values>
     </parameter>
     <parameter name="VT_FWD_THRUST_SC" default="0.7" type="FLOAT">
@@ -13100,6 +13283,30 @@ to fixed wing mode. Zero or negative values will produce an instant throttle ris
     </parameter>
     <parameter name="RV_YAW_P" default="0.1" type="FLOAT">
       <short_desc>RV_YAW_P</short_desc>
+    </parameter>
+    <parameter name="UCAN1_BMS0_PID" default="0" type="INT32">
+      <short_desc>UCAN1_BMS0_PID</short_desc>
+    </parameter>
+    <parameter name="UCAN1_BMS1_PID" default="0" type="INT32">
+      <short_desc>UCAN1_BMS1_PID</short_desc>
+    </parameter>
+    <parameter name="UCAN1_ESC0_PID" default="0" type="INT32">
+      <short_desc>UCAN1_ESC0_PID</short_desc>
+    </parameter>
+    <parameter name="UCAN1_ESC_PUB" default="0" type="INT32">
+      <short_desc>UCAN1_ESC_PUB</short_desc>
+    </parameter>
+    <parameter name="UCAN1_GPS0_PID" default="0" type="INT32">
+      <short_desc>UCAN1_GPS0_PID</short_desc>
+    </parameter>
+    <parameter name="UCAN1_GPS1_PID" default="0" type="INT32">
+      <short_desc>UCAN1_GPS1_PID</short_desc>
+    </parameter>
+    <parameter name="UCAN1_GPS_PUB" default="0" type="INT32">
+      <short_desc>UCAN1_GPS_PUB</short_desc>
+    </parameter>
+    <parameter name="UCAN1_SERVO_PUB" default="0" type="INT32">
+      <short_desc>UCAN1_SERVO_PUB</short_desc>
     </parameter>
     <parameter name="UUV_SKIP_CTRL" default="0" type="INT32">
       <short_desc>Skip the controller</short_desc>

@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * Little-Endian version of DataInputStream.
@@ -15,12 +16,13 @@ public final class LittleEndianDataInputStream extends InputStream implements Da
 //    protected InputStream is;
 
     protected final static byte[] work = new byte[8];
- //   protected byte[] work ;
+//    protected byte[] work ;
 
     public LittleEndianDataInputStream(InputStream in) {
 //        this.is = in;
         this.dis = new DataInputStream(in);
- //       work = new byte[8];
+//       Arrays.fill(work, (byte)0);
+//        work = new byte[8];
     }
 
     public final void close() throws IOException {
