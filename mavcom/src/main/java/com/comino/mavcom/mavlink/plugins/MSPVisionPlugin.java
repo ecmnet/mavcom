@@ -46,10 +46,10 @@ public class MSPVisionPlugin extends MAVLinkPluginBase {
 		model.vision.flags = (int) vision.flags;
 		model.sys.setSensor(Status.MSP_FIDUCIAL_LOCKED,model.vision.isStatus(Vision.FIDUCIAL_LOCKED));
 		model.vision.fps = vision.fps;
-		if (model.vision.errors < 5) {
-			model.vision.tms = DataModel.getSynchronizedPX4Time_us();
-			model.sys.setSensor(Status.MSP_OPCV_AVAILABILITY, true);
-		}
+
+		model.sys.setSensor(Status.MSP_OPCV_AVAILABILITY, model.vision.isStatus(Vision.POS_VALID, Vision.PUBLISHED));
+		model.vision.tms = DataModel.getSynchronizedPX4Time_us();
+
 	}
 
 }

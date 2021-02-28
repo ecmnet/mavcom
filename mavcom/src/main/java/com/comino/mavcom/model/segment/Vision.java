@@ -46,11 +46,10 @@ public class Vision extends Segment {
 	public static final int NOT_AVAILABLE       = 0;
 	public static final int RESETTING           = 1;
 	public static final int POS_VALID           = 2;
-	public static final int RESERVED            = 3;
+	public static final int PUBLISHED           = 3;
 	public static final int FIDUCIAL_LOCKED     = 4;
 	
 	public static final int FIDUCIAL_ACTIVE     = 16;
-
 
 
 	// Vision position
