@@ -49,7 +49,7 @@ public class Vision extends Segment {
 	public static final int PUBLISHED           = 3;
 	public static final int FIDUCIAL_LOCKED     = 4;
 	
-	public static final int FIDUCIAL_ACTIVE     = 16;
+	public static final int FIDUCIAL_ACTIVE     = 15;
 
 
 	// Vision position
