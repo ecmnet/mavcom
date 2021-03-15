@@ -36,12 +36,12 @@ package com.comino.mavcom.status;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Future;
 
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.legacy.ExecutorService;
+import com.comino.mavutils.workqueue.WorkQueue;
 
 public class StatusManager implements Runnable {
 
@@ -84,7 +84,8 @@ public class StatusManager implements Runnable {
 	private boolean isRunning                = false;
 
 	private long t_armed_start			     = 0;
-	private Future<?> task                   = null;
+	
+	private final WorkQueue wq = WorkQueue.getInstance();
 
 
 	public StatusManager(DataModel model) {
@@ -93,19 +94,17 @@ public class StatusManager implements Runnable {
 		this.status_old     = new Status();
 		this.list  = new ArrayList<StatusListenerEntry>();
 		this.actions = new ConcurrentLinkedQueue<Action>();
+		wq.addCyclicTask("NP", 50, this);
 	}
 
 	public void start() {
 		if(isRunning)
 			return;
 		isRunning = true;
-	//	status_old.set(model.sys);
-		task = ExecutorService.submit(this, ExecutorService.LOW, 50);
 	}
 
 	public void stop() {
 		isRunning = false;
-		task.cancel(false);
 	}
 
 	public int getSize() {
