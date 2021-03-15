@@ -124,7 +124,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 					System.err.println("Connection error: "+b.getLocalizedMessage());
 					System.exit(-1);
 				} catch (Exception e) {
-					e.printStackTrace();
+//					e.printStackTrace();
 					continue;
 				}
 				channel.connect(peerPort);

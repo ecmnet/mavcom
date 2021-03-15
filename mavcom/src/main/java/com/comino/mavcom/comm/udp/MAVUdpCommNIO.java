@@ -65,7 +65,7 @@ import com.comino.mavutils.legacy.ExecutorService;
 
 public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	
-	private static final int BUFFER = 256;
+	private static final int BUFFER = 64;
 
 
 	private DataModel 				model = null;
@@ -227,6 +227,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 				isConnected = false;
 			}
 		}
+		rxBuffer.clear();
 		close();
 	}
 
