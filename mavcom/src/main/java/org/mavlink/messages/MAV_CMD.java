@@ -1221,7 +1221,8 @@ public interface MAV_CMD {
     public final static int MAV_CMD_PANORAMA_CREATE = 2800;
     /**
      * Request VTOL transition
-     * PARAM 1 : The target VTOL state. Only MAV_VTOL_STATE_MC and MAV_VTOL_STATE_FW can be used.
+     * PARAM 1 : The target VTOL state. For normal transitions, only MAV_VTOL_STATE_MC and MAV_VTOL_STATE_FW can be used.
+     * PARAM 2 : Force immediate transition to the specified MAV_VTOL_STATE. 1: Force immediate, 0: normal transition. Can be used, for example, to trigger an emergency "Quadchute". Caution: Can be dangerous/damage vehicle, depending on autopilot implementation of this command.
      */
     public final static int MAV_CMD_DO_VTOL_TRANSITION = 3000;
     /**

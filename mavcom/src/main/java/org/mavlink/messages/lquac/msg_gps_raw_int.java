@@ -45,11 +45,11 @@ public class msg_gps_raw_int extends MAVLinkMessage {
    */
   public long alt;
   /**
-   * GPS HDOP horizontal dilution of position (unitless). If unknown, set to: UINT16_MAX
+   * GPS HDOP horizontal dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
    */
   public int eph;
   /**
-   * GPS VDOP vertical dilution of position (unitless). If unknown, set to: UINT16_MAX
+   * GPS VDOP vertical dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
    */
   public int epv;
   /**

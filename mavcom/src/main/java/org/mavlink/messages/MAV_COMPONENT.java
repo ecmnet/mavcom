@@ -447,6 +447,14 @@ public interface MAV_COMPONENT {
      */
     public final static int MAV_COMP_ID_GIMBAL6 = 175;
     /**
+     * Battery #1.
+     */
+    public final static int MAV_COMP_ID_BATTERY = 180;
+    /**
+     * Battery #2.
+     */
+    public final static int MAV_COMP_ID_BATTERY2 = 181;
+    /**
      * Component that can generate/supply a mission flight plan (e.g. GCS or developer API).
      */
     public final static int MAV_COMP_ID_MISSIONPLANNER = 190;

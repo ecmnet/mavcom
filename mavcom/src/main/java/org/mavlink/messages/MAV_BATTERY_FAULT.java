@@ -36,4 +36,12 @@ public interface MAV_BATTERY_FAULT {
      * Vehicle voltage is not compatible with this battery (batteries on same power rail should have similar voltage).
      */
     public final static int MAV_BATTERY_FAULT_INCOMPATIBLE_VOLTAGE = 64;
+    /**
+     * Battery firmware is not compatible with current autopilot firmware.
+     */
+    public final static int MAV_BATTERY_FAULT_INCOMPATIBLE_FIRMWARE = 128;
+    /**
+     * Battery is not compatible due to cell configuration (e.g. 5s1p when vehicle requires 6s).
+     */
+    public final static int BATTERY_FAULT_INCOMPATIBLE_CELLS_CONFIGURATION = 256;
 }

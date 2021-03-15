@@ -152,4 +152,8 @@ public interface MAV_TYPE {
      * Decarotor
      */
     public final static int MAV_TYPE_DECAROTOR = 35;
+    /**
+     * Battery
+     */
+    public final static int MAV_TYPE_BATTERY = 36;
 }
