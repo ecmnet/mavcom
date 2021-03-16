@@ -71,6 +71,7 @@ import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.StatusManager;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.legacy.ExecutorService;
+import com.comino.mavutils.workqueue.WorkQueue;
 
 public class MAVProxyController implements IMAVMSPController, Runnable {
 
@@ -98,7 +99,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	private StatusManager 				status_manager 	= null;
 	private List<IMAVMessageListener> 	messageListener = null;
 
-	private ScheduledFuture<?> future = null;
+	private final WorkQueue wq = WorkQueue.getInstance();
 
 	private int mode;
 
@@ -317,7 +318,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		if(comm.isConnected()) {
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES, 1);
 		}
-		future = ExecutorService.get().scheduleAtFixedRate(this, 1, 1000, TimeUnit.MILLISECONDS);
+		wq.addCyclicTask("NP", 500, this);	
 		return true;
 	}
 

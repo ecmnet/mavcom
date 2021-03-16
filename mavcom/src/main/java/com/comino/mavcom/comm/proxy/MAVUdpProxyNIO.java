@@ -58,7 +58,7 @@ import com.comino.mavcom.model.segment.Status;
 
 public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	
-	private static final int BUFFER = 64;
+	private static final int BUFFER = 128;
 
 	private SocketAddress 			bindPort = null;
 	private SocketAddress 			peerPort;

@@ -65,7 +65,7 @@ import com.comino.mavutils.legacy.ExecutorService;
 
 public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	
-	private static final int BUFFER = 64;
+	private static final int BUFFER = 128;
 
 
 	private DataModel 				model = null;
@@ -131,7 +131,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 			channel.register(selector, SelectionKey.OP_READ);
 
 
-			LockSupport.parkNanos(10000000);
+		//	LockSupport.parkNanos(10000000);
 			((Buffer)rxBuffer).clear();
 
 			Thread t = new Thread(this);
@@ -185,7 +185,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 			try {
 				
 
-				if(selector.select(2000)==0) {
+				if(selector.select(3000)==0) {
 					isConnected = false;
 					continue;
 				}
@@ -194,8 +194,10 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 				selectedKeys = selector.selectedKeys().iterator();
 
 				while (selectedKeys.hasNext()) {
+					
 					key = (SelectionKey) selectedKeys.next();
 					selectedKeys.remove();
+					
 					if (!key.isValid())
 						continue;
 
@@ -227,7 +229,6 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 				isConnected = false;
 			}
 		}
-		rxBuffer.clear();
 		close();
 	}
 

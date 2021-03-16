@@ -43,11 +43,15 @@ import com.comino.mavcom.comm.udp.MAVUdpCommNIO;
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
+import com.comino.mavutils.workqueue.WorkQueue;
 
 
 public class MAVUdpController extends MAVController implements IMAVController, Runnable {
 
 	private boolean connected;
+
+	private final WorkQueue wq = WorkQueue.getInstance();
+	private final msg_heartbeat beat = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_OSD);
 
 	public MAVUdpController(String peerAddress, int peerPort, int bindPort, boolean isSITL) {
 		super();
@@ -58,11 +62,12 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 		System.out.println("UDP Controller loaded ("+peerAddress+":"+peerPort+")");
 		comm = MAVUdpCommNIO.getInstance(model, peerAddress,peerPort, bindPort);
 		model.sys.setStatus(Status.MSP_PROXY, false);
+
+		beat.type = MAV_TYPE.MAV_TYPE_GCS;
+		beat.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 		
-		Thread t = new Thread(this);
-		t.setName("UDP Controller");
-		t.start();
-		
+		wq.addCyclicTask("LP", 500, this);	
+
 	}
 
 	@Override
@@ -71,9 +76,9 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 		System.out.print("Try to start..");
 		if(this.connected)
 			return true;
-		
+
 		if(!comm.isConnected()) {
-			 comm.close(); comm.open();
+			comm.close(); comm.open();
 		}
 
 		return true;
@@ -87,40 +92,25 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 
 	@Override
 	public boolean isConnected() {
-//		if(comm == null)
-//			return false;
-//		return comm.isConnected();
+		//		if(comm == null)
+		//			return false;
+		//		return comm.isConnected();
 		return model.sys.isStatus(Status.MSP_CONNECTED);
 	}
 
 	@Override
 	public void run() {
-		
-		final msg_heartbeat beat = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_OSD);
-		beat.type = MAV_TYPE.MAV_TYPE_GCS;
-		beat.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 
-		// If not checked here, the thread is started twice (not by connect) ??
-		if(connected)
-			return;
+		try {
+			if(!comm.isConnected()) {
+				this.connected = false;
+				comm.close(); comm.open();
+				return;
+			}
+			this.connected = true;
+			model.sys.setStatus(Status.MSP_SITL, isSimulation());
+			comm.write(beat);
 
-		this.connected = false;
-		System.out.println("UDP connection Thread started");
-		while(true) {
-			try {
-				//System.out.println(comm.isConnected());
-				if(!comm.isConnected()) {
-					this.connected = false;
-				    comm.close(); comm.open();
-				 Thread.sleep(100);
-				 continue;
-				}
-				this.connected = true;
-				model.sys.setStatus(Status.MSP_SITL, isSimulation());
-				comm.write(beat);
-				Thread.sleep(200);
-			} catch (Exception e) { try { Thread.sleep(100); } catch (InterruptedException e1) {	} }
-		}
-		
+		} catch (Exception e) {  }	
 	}
 }
