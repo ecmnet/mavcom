@@ -41,16 +41,13 @@ import org.mavlink.messages.lquac.msg_heartbeat;
 
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO;
 import com.comino.mavcom.control.IMAVController;
-import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
-import com.comino.mavutils.workqueue.WorkQueue;
 
 
 public class MAVUdpController extends MAVController implements IMAVController, Runnable {
 
 	private boolean connected;
 
-	private final WorkQueue wq = WorkQueue.getInstance();
 	private final msg_heartbeat beat = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_OSD);
 
 	public MAVUdpController(String peerAddress, int peerPort, int bindPort, boolean isSITL) {

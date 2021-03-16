@@ -63,6 +63,7 @@ import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.StatusManager;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.legacy.ExecutorService;
+import com.comino.mavutils.workqueue.WorkQueue;
 
 
 public class MAVController implements IMAVController, Runnable {
@@ -91,6 +92,8 @@ public class MAVController implements IMAVController, Runnable {
 	private String           filename;
 	private SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	private PrintStream      ps_log;
+	
+	protected final WorkQueue wq = WorkQueue.getInstance();
 
 	public static IMAVController getInstance() {
 		return controller;
@@ -137,7 +140,7 @@ public class MAVController implements IMAVController, Runnable {
 				writeLogToFile(msg.toString());
 			});
 
-			ExecutorService.get().schedule(this, 10 , TimeUnit.SECONDS);
+			wq.addCyclicTask("LP",10000,this);
 			return this.filename;
 		}
 		return null;
@@ -342,7 +345,6 @@ public class MAVController implements IMAVController, Runnable {
 	public void run() {
 		if(file_log_enabled) {
 			ps_log.flush();
-			ExecutorService.get().schedule(this, 1, TimeUnit.SECONDS);
 		}
 	}
 

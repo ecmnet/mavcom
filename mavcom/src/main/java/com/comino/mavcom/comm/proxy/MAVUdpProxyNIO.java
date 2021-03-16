@@ -136,8 +136,6 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				t.setName("Proxy worker");
 				t.start();
 
-				//				ExecutorService.submit(this);
-
 
 				return true;
 			} catch(Exception e) {

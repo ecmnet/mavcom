@@ -70,7 +70,6 @@ import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.StatusManager;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
-import com.comino.mavutils.legacy.ExecutorService;
 import com.comino.mavutils.workqueue.WorkQueue;
 
 public class MAVProxyController implements IMAVMSPController, Runnable {
@@ -109,7 +108,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 
 	public MAVProxyController(int mode) {
-		
+
 		this.mode = mode;
 		controller = this;
 		model = new DataModel();
@@ -119,13 +118,13 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, true);
 		model.sys.setStatus(Status.MSP_SITL, mode == MAVController.MODE_NORMAL);
 		model.sys.setStatus(Status.MSP_PROXY, true);
-		
+
 		beat_gcs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
 		beat_gcs.system_status = MAV_STATE.MAV_STATE_ACTIVE;
-		
+
 		beat_px4.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
 		beat_px4.system_status = MAV_STATE.MAV_STATE_ACTIVE;
-		
+
 		beat_obs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
 		beat_obs.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 
@@ -158,7 +157,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
-			
+
 			try { Thread.sleep(100); } catch (InterruptedException e) { }
 
 			proxy = new MAVUdpProxyNIO(model,"172.168.178.2",14550,"172.168.178.1",14555,comm);
@@ -201,7 +200,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		}
 
-//		comm.addMAVLinkListener(proxy);
+		//		comm.addMAVLinkListener(proxy);
 		// Direct byte based proxy
 		comm.setProxyListener(proxy);
 
@@ -211,7 +210,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			model.sys.gcl_tms = DataModel.getSynchronizedPX4Time_us();
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
 		});
-		
+
 		// FWD PX4 heartbeat messages to GCL when not connected
 		comm.addMAVLinkListener((o) -> {
 			if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && o instanceof msg_heartbeat) {
@@ -364,7 +363,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void writeLogMessage(LogMessage m) {
-		
+
 		if(!m.isNew())
 			return;
 
@@ -381,9 +380,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 				msglistener.messageReceived(m);
 		}
 		if(isSimulation()) {
-			ExecutorService.get().submit(() -> {
-				System.out.println(m);
-			});
+			System.out.println(m);
 		}
 	}
 
@@ -441,10 +438,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
 
 		sendMAVLinkMessage(beat_px4);
-		
+
 		sendMAVLinkMessage(beat_obs);
-		
-		
+
+
 	}
 
 	@Override

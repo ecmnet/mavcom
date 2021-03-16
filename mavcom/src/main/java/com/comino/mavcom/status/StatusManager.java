@@ -94,6 +94,7 @@ public class StatusManager implements Runnable {
 		this.status_old     = new Status();
 		this.list  = new ArrayList<StatusListenerEntry>();
 		this.actions = new ConcurrentLinkedQueue<Action>();
+		
 		wq.addCyclicTask("NP", 50, this);
 	}
 
@@ -319,6 +320,13 @@ public class StatusManager implements Runnable {
 	private void run_callbacks() {
 		
 		if(!actions.isEmpty()) {
+			
+//			while(!actions.isEmpty()) {
+//				wq.addSingleTask("NP", 0, actions.poll());
+//			}
+//			
+//			wq.printStatus();
+			
 			ExecutorService.get().execute(() -> {
 				while(!actions.isEmpty()) {
 					actions.poll().run();
@@ -389,7 +397,7 @@ public class StatusManager implements Runnable {
 		return DataModel.getSynchronizedPX4Time_us() > (tms + timeout);
 	}
 	
-	private class Action {
+	private class Action implements Runnable {
 		
 		public Status status;
 		public IMSPStatusChangedListener listener;

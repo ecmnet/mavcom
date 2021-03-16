@@ -45,8 +45,7 @@ import org.mavlink.messages.MAVLinkMessageFactory;
 
 
 public class MAVLinkReader {
-
-
+	
 	private static final byte MAVLINK_IFLAG_SIGNED = 0x01;
 
 	private static int MAVLINK_SIGNATURE_BLOCK_LEN = 13;
@@ -279,7 +278,7 @@ public class MAVLinkReader {
 				if(rxmsg.msg_received == mavlink_framing_t.MAVLINK_FRAMING_OK) {
 					MAVLinkMessage msg = MAVLinkMessageFactory.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId, rxmsg.rawData);
 //					MAVLinkMessage msg = MAVLinkObjectCache.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId, rxmsg.rawData);
-					if(msg!=null && checkPacket(rxmsg.sysId,rxmsg.packet)) {
+					if(msg!=null && (checkPacket(rxmsg.sysId,rxmsg.packet))) {
 						msg.isValid = true;
 						msg.packet = rxmsg.packet;
 						packets.addElement(msg);
@@ -289,10 +288,10 @@ public class MAVLinkReader {
 						//	System.out.println("added: "+rxmsg.packet+":"+msg);
 					} else {
 						packet_lost++;
-						//System.out.println("Packet check failed: "+rxmsg);
+					//	System.out.println("Packet check failed: "+rxmsg);
 					}
 				} else {
-					//System.out.println("Framing not ok: "+rxmsg);
+				//	System.out.println("Framing not ok: "+rxmsg);
 					packet_lost++;
 				}
 				break;

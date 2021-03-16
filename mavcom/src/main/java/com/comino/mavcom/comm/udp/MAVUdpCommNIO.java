@@ -321,7 +321,6 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 			comm.close();
 
-			ExecutorService.shutdown();
 
 
 
