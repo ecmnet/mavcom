@@ -34,10 +34,12 @@
 
 package com.comino.mavcom.control.impl;
 
+import org.mavlink.messages.MAV_CMD;
 import org.mavlink.messages.MAV_COMPONENT;
 import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.lquac.msg_heartbeat;
+import org.mavlink.messages.lquac.msg_highres_imu;
 
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO;
 import com.comino.mavcom.control.IMAVController;

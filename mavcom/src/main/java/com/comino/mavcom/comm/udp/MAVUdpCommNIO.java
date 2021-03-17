@@ -112,7 +112,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		if(isConnected)
 			return true;
 
-		parser.reset(); ((Buffer)rxBuffer).clear(); Arrays.fill(proxyBuffer, (byte)0);
+		parser.reset(); Arrays.fill(proxyBuffer, (byte)0);
 
 		if(channel!=null && channel.isOpen() && channel.isConnected() ) { //&& parser.isConnected()) {
 			isConnected = true;
@@ -122,9 +122,9 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		try {
 			channel = DatagramChannel.open();
 			channel.bind(bindPort);
-			channel.socket().setTrafficClass(0x08);
+		//	channel.socket().setTrafficClass(0x08);
 			channel.socket().setReceiveBufferSize(BUFFER*1024);
-			channel.socket().setSendBufferSize(16*1024);
+			channel.socket().setSendBufferSize(32*1024);
 			channel.connect(peerPort);
 			channel.configureBlocking(false);
 			selector = Selector.open();
@@ -185,7 +185,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 			try {
 				
 
-				if(selector.select(3000)==0) {
+				if(selector.select(5000)==0) {
 					isConnected = false;
 					continue;
 				}
@@ -224,6 +224,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 				}
 			} catch(Exception e) {
 				((Buffer)rxBuffer).clear();
+				parser.reset(); 
 				model.sys.setStatus(Status.MSP_CONNECTED,false);
 				try { channel.close(); } catch (IOException e1) { 	}
 				isConnected = false;

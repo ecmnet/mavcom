@@ -60,7 +60,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	private static final int TEST  = 57600;
 
-	private static final int BUFFER = 32;
+	private static final int BUFFER = 64;
 
 	private SerialPort 			serialPort;
 	private String	            port;

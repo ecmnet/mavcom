@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- * Copyright (c) 2017-2019 Eike Mansfeld ecm@gmx.de. All rights reserved.
+ * Copyright (c) 2017-2021 Eike Mansfeld ecm@gmx.de. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -58,7 +58,7 @@ import com.comino.mavcom.model.segment.Status;
 
 public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	
-	private static final int BUFFER = 128;
+	private static final int BUFFER = 32;
 
 	private SocketAddress 			bindPort = null;
 	private SocketAddress 			peerPort;
@@ -113,7 +113,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				try {
 					channel = DatagramChannel.open();
 					channel.socket().bind(bindPort);
-					channel.socket().setTrafficClass(0x08);
+				//	channel.socket().setTrafficClass(0x08);
 					channel.socket().setSendBufferSize(BUFFER*1024);
 					channel.socket().setReceiveBufferSize(BUFFER*1024);
 					channel.configureBlocking(false);
@@ -223,7 +223,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			start = System.currentTimeMillis();
 			while(isConnected) {
 
-				if(selector.select(2000)==0) {
+				if(selector.select(5000)==0) {
 					isConnected = false;
 					continue;
 				}

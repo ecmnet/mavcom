@@ -260,7 +260,7 @@ public class MAVLinkReader {
 						break;
 					default:
 						rxmsg.msg_received = mavlink_framing_t.MAVLINK_FRAMING_BAD_CRC;
-						//System.out.println("BadCRC: "+rxmsg.msgId+":"+rxmsg.len);
+					//	System.out.println("BadCRC: "+rxmsg.msgId+":"+rxmsg.len);
 						break;
 					}
 				}
