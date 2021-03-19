@@ -320,18 +320,17 @@ public class StatusManager implements Runnable {
 	private void run_callbacks() {
 		
 		if(!actions.isEmpty()) {
+			while(!actions.isEmpty()) {
+				wq.addSingleTask("NP", 0, actions.poll());
+			}
 			
-//			while(!actions.isEmpty()) {
-//				wq.addSingleTask("NP", 0, actions.poll());
-//			}
-//			
 //			wq.printStatus();
 			
-			ExecutorService.get().execute(() -> {
-				while(!actions.isEmpty()) {
-					actions.poll().run();
-				}	
-			});
+//			ExecutorService.get().execute(() -> {
+//				while(!actions.isEmpty()) {
+//					actions.poll().run();
+//				}	
+//			});
 		}
 	}
 
