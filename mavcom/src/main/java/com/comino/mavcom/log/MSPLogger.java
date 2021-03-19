@@ -38,7 +38,6 @@ import org.mavlink.messages.MAV_SEVERITY;
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
-import com.comino.mavutils.legacy.ExecutorService;
 
 public class MSPLogger {
 

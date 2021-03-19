@@ -1,7 +1,5 @@
 package com.comino.mavcom.mavlink.plugins;
 
-import org.mavlink.messages.MAVLinkMessage;
-
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.model.DataModel;
 

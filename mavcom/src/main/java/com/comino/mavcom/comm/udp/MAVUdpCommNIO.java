@@ -45,7 +45,6 @@ import java.nio.channels.Selector;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.locks.LockSupport;
 
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_heartbeat;
@@ -60,7 +59,6 @@ import com.comino.mavcom.mavlink.MAVLinkToModelParser;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
-import com.comino.mavutils.legacy.ExecutorService;
 
 
 public class MAVUdpCommNIO implements IMAVComm, Runnable {

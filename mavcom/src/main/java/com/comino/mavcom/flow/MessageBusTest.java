@@ -1,12 +1,9 @@
 package com.comino.mavcom.flow;
 
-import java.util.concurrent.Flow.Subscriber;
-import java.util.concurrent.SubmissionPublisher;
 import java.util.concurrent.TimeUnit;
 
 import com.comino.mavcom.model.segment.Battery;
 import com.comino.mavcom.model.segment.Vision;
-import com.comino.mavcom.model.segment.generic.Segment;
 import com.comino.mavutils.legacy.ExecutorService;
 
 public class MessageBusTest {

@@ -34,12 +34,10 @@
 
 package com.comino.mavcom.control.impl;
 
-import org.mavlink.messages.MAV_CMD;
 import org.mavlink.messages.MAV_COMPONENT;
 import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.lquac.msg_heartbeat;
-import org.mavlink.messages.lquac.msg_highres_imu;
 
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO;
 import com.comino.mavcom.control.IMAVController;
@@ -64,8 +62,6 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 
 		beat.type = MAV_TYPE.MAV_TYPE_GCS;
 		beat.system_status = MAV_STATE.MAV_STATE_ACTIVE;
-		
-		wq.addCyclicTask("LP", 500, this);	
 
 	}
 

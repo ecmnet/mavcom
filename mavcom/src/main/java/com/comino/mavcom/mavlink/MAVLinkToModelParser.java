@@ -58,7 +58,7 @@ import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.utils.MSPPluginHelper;
-import com.comino.mavutils.legacy.ExecutorService;
+import com.comino.mavutils.workqueue.WorkQueue;
 
 public class MAVLinkToModelParser {
 
@@ -85,6 +85,7 @@ public class MAVLinkToModelParser {
 
 	private IMAVCmdAcknowledge cmd_ack = null;
 
+	private final WorkQueue wq = WorkQueue.getInstance();
 
 	public MAVLinkToModelParser(DataModel model, IMAVComm link) {
 
@@ -103,7 +104,8 @@ public class MAVLinkToModelParser {
 			@Override
 			public void received(Object o) {
 
-				ExecutorService.get().submit(() -> {
+				wq.addSingleTask("LP", () -> {
+//				ExecutorService.get().submit(() -> {
 					msg_command_ack ack = (msg_command_ack) o;
 
 					if(cmd_ack!=null) {

@@ -44,7 +44,6 @@ import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.model.DataModel;
-import com.comino.mavcom.model.segment.Grid;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
@@ -187,7 +186,7 @@ public class MAVSimController extends MAVController implements IMAVController {
 			model.slam.px = model.state.l_x+(float)Math.cos(model.slam.pd);
 			model.slam.py = model.state.l_y+(float)Math.sin(model.slam.pd);
 
-			buildWall(model.grid);
+			
 
 //			for(int i=0;i<5;i++)
 //			  model.grid.setBlock((float)Math.random()*20f-10,(float)Math.random()*20f-10, -(float)Math.random()*3, Math.random()>0.8);
@@ -224,12 +223,5 @@ public class MAVSimController extends MAVController implements IMAVController {
 		}
 	}
 
-	public void buildWall(Grid g) {
-		double x0 = 2.0f; double y0 = 1.0f;
-
-		for(double i= -10;i < 10;i++) {
-			for(double z=0; z< 40;z++)
-			  g.setBlock(x0, y0+i*0.05, -z*0.05f, true);
-		}
-	}
+	
 }

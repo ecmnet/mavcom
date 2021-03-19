@@ -35,7 +35,6 @@
 package com.comino.mavcom.comm.serial;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.Map;
 
 import org.mavlink.messages.MAVLinkMessage;

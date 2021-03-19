@@ -38,10 +38,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
-import org.mavlink.IMAVLinkMessage;
 import org.mavlink.messages.IMAVLinkMessageID;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAV_CMD;
@@ -217,6 +214,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 				proxy.write((MAVLinkMessage)o);
 			}
 		});
+		
+		wq.addCyclicTask("LP", 500, this);	
 
 	}
 
@@ -317,7 +316,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		if(comm.isConnected()) {
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES, 1);
 		}
-		wq.addCyclicTask("NP", 500, this);	
 		return true;
 	}
 

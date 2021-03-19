@@ -21,8 +21,8 @@ public class PX4AltitudePlugin extends MAVLinkPluginBase {
 //		  model.hud.ar = alt.altitude_local - alt.altitude_terrain;//alt.altitude_relative 
 //		else
 			model.hud.ar = alt.altitude_relative ;
-		if(model.hud.ar<0)
-			model.hud.ar = 0;
+//		if(model.hud.ar<0)
+//			model.hud.ar = 0;
 		model.hud.bc = alt.bottom_clearance;
 		model.hud.tms = DataModel.getSynchronizedPX4Time_us();
 

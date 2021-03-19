@@ -1,7 +1,6 @@
 package com.comino.mavcom.mavlink.plugins;
 
 
-import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_msp_vision;
 
 import com.comino.mavcom.model.DataModel;

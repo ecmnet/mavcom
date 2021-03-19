@@ -43,7 +43,6 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.SERIAL_CONTROL_DEV;
@@ -62,7 +61,6 @@ import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.StatusManager;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
-import com.comino.mavutils.legacy.ExecutorService;
 import com.comino.mavutils.workqueue.WorkQueue;
 
 
@@ -140,7 +138,7 @@ public class MAVController implements IMAVController, Runnable {
 				writeLogToFile(msg.toString());
 			});
 
-			wq.addCyclicTask("LP",10000,this);
+			wq.addCyclicTask("LP",500,this);
 			return this.filename;
 		}
 		return null;
