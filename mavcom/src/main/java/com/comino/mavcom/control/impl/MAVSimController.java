@@ -36,7 +36,6 @@ package com.comino.mavcom.control.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.mavlink.messages.MAVLinkMessage;
 
@@ -48,7 +47,7 @@ import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.MSPMathUtils;
-import com.comino.mavutils.legacy.ExecutorService;
+import com.comino.mavutils.workqueue.WorkQueue;
 
 
 
@@ -58,6 +57,8 @@ public class MAVSimController extends MAVController implements IMAVController {
 	ArrayList<LogMessage>					msgList;
 	private List<IMAVMessageListener> msgListener        = null;
 	private ArrayList<IMSPStatusChangedListener> modeListener;
+	
+	private final WorkQueue wq = WorkQueue.getInstance();
 
 	public MAVSimController() {
 		model = new DataModel();
@@ -65,7 +66,7 @@ public class MAVSimController extends MAVController implements IMAVController {
 		msgListener = new ArrayList<IMAVMessageListener>();
 		modeListener = new ArrayList<IMSPStatusChangedListener>();
 
-		ExecutorService.get().scheduleAtFixedRate(new Simulation(), 2000, 50, TimeUnit.MILLISECONDS);
+		wq.addCyclicTask("NP",50, new Simulation());
 	}
 
 	@Override

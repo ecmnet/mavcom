@@ -40,7 +40,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
-import com.comino.mavutils.legacy.ExecutorService;
 import com.comino.mavutils.workqueue.WorkQueue;
 
 public class StatusManager implements Runnable {
@@ -323,14 +322,6 @@ public class StatusManager implements Runnable {
 			while(!actions.isEmpty()) {
 				wq.addSingleTask("NP", 0, actions.poll());
 			}
-			
-//			wq.printStatus();
-			
-//			ExecutorService.get().execute(() -> {
-//				while(!actions.isEmpty()) {
-//					actions.poll().run();
-//				}	
-//			});
 		}
 	}
 

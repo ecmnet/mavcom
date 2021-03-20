@@ -53,7 +53,6 @@ import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.param.PX4Parameters;
-import com.comino.mavutils.legacy.ExecutorService;
 
 
 public class StartUp implements Runnable {
@@ -71,8 +70,6 @@ public class StartUp implements Runnable {
 	private PX4Parameters params = null;
 
 	public StartUp(String[] args) {
-
-		ExecutorService.create();
 
 		if(args.length != 0) {
 			is_simulation = true;

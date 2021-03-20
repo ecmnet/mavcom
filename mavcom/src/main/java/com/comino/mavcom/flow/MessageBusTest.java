@@ -1,12 +1,12 @@
 package com.comino.mavcom.flow;
 
-import java.util.concurrent.TimeUnit;
-
 import com.comino.mavcom.model.segment.Battery;
 import com.comino.mavcom.model.segment.Vision;
-import com.comino.mavutils.legacy.ExecutorService;
+import com.comino.mavutils.workqueue.WorkQueue;
 
 public class MessageBusTest {
+	
+	private final WorkQueue wq = WorkQueue.getInstance();
 
 	public MessageBusTest() {
 
@@ -40,10 +40,7 @@ public class MessageBusTest {
 		bus.publish(v2);
 
 
-        ExecutorService.create();
-
-
-		ExecutorService.get().schedule(() -> {
+		wq.addSingleTask("LP",3000,() -> {
 
 			try {
 			MessageBus bus2 = MessageBus.getInstance();
@@ -62,7 +59,7 @@ public class MessageBusTest {
 			} catch(Exception e) { e.printStackTrace(); }
 
 
-		}, 3, TimeUnit.SECONDS);
+		});
 
 
 

@@ -42,7 +42,7 @@ public class ParameterAttributes  implements Comparable<ParameterAttributes> {
 	public double  default_val = 0;
 	public double  min_val   = -Double.MAX_VALUE;
 	public double  max_val   =  Double.MAX_VALUE;
-	public double  value     = 0;
+	public double  value     =  Double.NaN;
 	public double  increment = 0;
 	public int     vtype     = 0;
 	public int     decimals  = 3;
