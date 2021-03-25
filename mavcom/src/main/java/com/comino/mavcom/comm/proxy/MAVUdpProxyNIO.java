@@ -216,6 +216,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				//				hb.isValid = true;
 				//				comm.write(hb);
 			} else {
+				
 				isConnected = false;
 				return;
 			}

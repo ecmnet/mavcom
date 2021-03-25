@@ -57,6 +57,7 @@ public interface IMAVController {
 
 	public int getErrorCount();
 	public long getTransferRate();
+	public int getMode();
 
 	public DataModel getCurrentModel();
 

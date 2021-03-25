@@ -263,6 +263,14 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		return sendMAVLinkMessage(cmd);
 	}
+	
+	
+
+	@Override
+	public int getMode() {
+		return mode;
+	}
+
 
 	@Override
 	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge ack, float...params) {

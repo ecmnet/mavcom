@@ -105,7 +105,6 @@ public class MAVLinkToModelParser {
 			public void received(Object o) {
 
 				wq.addSingleTask("LP", () -> {
-//				ExecutorService.get().submit(() -> {
 					msg_command_ack ack = (msg_command_ack) o;
 
 					if(cmd_ack!=null) {

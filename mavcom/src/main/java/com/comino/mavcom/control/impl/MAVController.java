@@ -91,6 +91,8 @@ public class MAVController implements IMAVController, Runnable {
 	private SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	private PrintStream      ps_log;
 	
+	private int  mode = 0;
+	
 	protected final WorkQueue wq = WorkQueue.getInstance();
 
 	public static IMAVController getInstance() {
@@ -104,6 +106,8 @@ public class MAVController implements IMAVController, Runnable {
 		status_manager = new StatusManager(model);
 
 	}
+	
+	
 
 	public String enableFileLogging(boolean enable, String directory_name) {
 		this.file_log_enabled = enable;
@@ -142,6 +146,13 @@ public class MAVController implements IMAVController, Runnable {
 			return this.filename;
 		}
 		return null;
+	}
+
+	
+
+	@Override
+	public int getMode() {
+		return mode;
 	}
 
 
