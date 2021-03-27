@@ -15,18 +15,30 @@ public class PX4DistanceSensorPlugin extends MAVLinkPluginBase {
 	public void received(Object o) {
 
 		msg_distance_sensor lidar = (msg_distance_sensor) o;
-		model.raw.di = lidar.current_distance / 100f;
-		model.raw.dicov = lidar.covariance / 100f;
-		switch(lidar.type) {
-		case 1:
-			model.sys.setSensor(Status.MSP_SONAR_AVAILABILITY, true);
-			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, false);
-			break;
-		default:
-			model.sys.setSensor(Status.MSP_SONAR_AVAILABILITY, false);
+		
+		// with HereFlow: Workaround to map lightware distance sensor to model
+		if(lidar.max_distance > 200 ) {
 			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, true);
+			model.raw.di = lidar.current_distance / 100f;
+			model.raw.dicov = lidar.covariance / 100f;
+			model.raw.tms = DataModel.getSynchronizedPX4Time_us();
+		} else {
+			// Map hereflow distance to flow distance
+			model.raw.fd = lidar.current_distance / 100f;
 		}
-		model.raw.tms = DataModel.getSynchronizedPX4Time_us();
+		
+		
+//		switch(lidar.id) {
+//		case 0:
+//			model.raw.fd = lidar.current_distance / 100f;
+//			break;
+//		case 1:
+//			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, true);
+//			model.raw.di = lidar.current_distance / 100f;
+//			model.raw.dicov = lidar.covariance / 100f;
+//			model.raw.tms = DataModel.getSynchronizedPX4Time_us();
+//			break;
+//		}
 
 	}
 }

@@ -20,7 +20,7 @@ public class PX4OptFlowRadPlugin extends MAVLinkPluginBase {
 		model.raw.fgX = flow.integrated_xgyro;
 		model.raw.fgY = flow.integrated_ygyro;
 		model.raw.fgZ = flow.integrated_zgyro;
-		model.raw.fd = flow.distance;
+		//model.raw.fd = flow.distance;
 
 		if(flow.quality > 0) {
 		  model.sys.setSensor(Status.MSP_PIX4FLOW_AVAILABILITY, true);
