@@ -107,7 +107,7 @@ public class Status extends Segment {
 	public static final  int NAVIGATION_STATE_AUTO_PRECLAND 		= 20	; 	// Precision land with landing target
 
 
-	private static final String[] sensor_names = { "IMU","LIDAR","SONAR","GPS","FLOW","MSP","CV","SYSM","SLAM","BASE","RTK","GND","LOCK",
+	private static final String[] sensor_names = { "EKF2","LIDAR","SONAR","GPS","FLOW","MSP","CV","PX4","SLAM","BASE","RTK","GND","LOCK",
 
 	};
 
