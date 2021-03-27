@@ -93,13 +93,12 @@ public class StatusManager implements Runnable {
 		this.status_old     = new Status();
 		this.list  = new ArrayList<StatusListenerEntry>();
 		this.actions = new ConcurrentLinkedQueue<Action>();
-		
-		wq.addCyclicTask("NP", 50, this);
 	}
 
 	public void start() {
 		if(isRunning)
 			return;
+		wq.addCyclicTask("NP", 50, this);
 		isRunning = true;
 	}
 
