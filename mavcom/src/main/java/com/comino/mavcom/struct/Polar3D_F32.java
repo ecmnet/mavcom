@@ -181,13 +181,13 @@ public class Polar3D_F32 {
 
 
 	public String toString() {
-		return "XY="+MSPMathUtils.fromRad(angle_xy)+" XZ="+MSPMathUtils.fromRad(angle_xz)+" L="+value;
+		return "XY="+MSPMathUtils.fromRad2(angle_xy)+" XZ="+MSPMathUtils.fromRad2(angle_xz)+" L="+value;
 	}
 
 	public static void main(String[] args) {
 
 		Vector3D_F32 current = new Vector3D_F32();
-		Vector3D_F32 target  = new Vector3D_F32(1,1,1);
+		Vector3D_F32 target  = new Vector3D_F32(0,-1,0);
 		Vector3D_F32 result  = new Vector3D_F32();
 
 		Polar3D_F32 p = new Polar3D_F32();
@@ -212,7 +212,7 @@ public class Polar3D_F32 {
 		if((dx > 0 && dy > 0) || (dx > 0 && dy < 0))
 			return (float)Math.atan(dy/dx);
 		if((dx < 0 && dy > 0) || (dx < 0 && dy < 0))
-			return (float)(Math.atan(dy/dx)+Math.PI);
+			return (float)(Math.atan(dy/dx)-Math.PI);
 
 		return 0;
 	}

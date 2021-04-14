@@ -433,7 +433,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public void run() {
 
-
 		if(!proxy.isConnected())  {
 			proxy.close(); proxy.open();
 		}
