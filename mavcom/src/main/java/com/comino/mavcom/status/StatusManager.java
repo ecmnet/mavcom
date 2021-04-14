@@ -372,6 +372,7 @@ public class StatusManager implements Runnable {
 
 		if (checkTimeOut(model.sys.tms, TIMEOUT_CONNECTED) && model.sys.isStatus(Status.MSP_CONNECTED)) {
 			//System.out.println(model.sys.tms+" / "+  model.sys.getSynchronizedPX4Time_us());
+			System.out.println(model.sys);
 			model.sys.setStatus(Status.MSP_CONNECTED, false);
 			System.out.println("..Connection timeout");
 			//	model.sys.setStatus(Status.MSP_ACTIVE, false);
@@ -383,7 +384,7 @@ public class StatusManager implements Runnable {
 	private boolean checkTimeOut(long tms, long timeout) {
 		if(tms==0)
 			return false;
-		return DataModel.getSynchronizedPX4Time_us() > (tms + timeout);
+		return DataModel.getSynchronizedPX4Time_us() > (tms + timeout) || DataModel.getSynchronizedPX4Time_us() < tms;
 	}
 	
 	private class Action implements Runnable {
