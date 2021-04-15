@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_param_set
  * Set a parameter value (write new value to permanent storage).
@@ -120,4 +119,6 @@ return "MAVLINK_MSG_ID_PARAM_SET : " +   "  param_value="+format((float)param_va
 +  "  param_id="+getParam_id()
 +  "  param_type="+param_type
 ;}
+
 }
+

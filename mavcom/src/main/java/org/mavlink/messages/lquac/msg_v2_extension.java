@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_v2_extension
  * Message implementing parts of the V2 payload specs in V1 frames for transitional support.
@@ -350,4 +349,6 @@ return "MAVLINK_MSG_ID_V2_EXTENSION : " +   "  message_type="+message_type
 +  "  payload[247]="+payload[247]
 +  "  payload[248]="+payload[248]
 ;}
+
 }
+

@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_link_node_status
  * Status generated in each node in the communication chain and injected into MAVLink stream.
@@ -140,4 +139,6 @@ return "MAVLINK_MSG_ID_LINK_NODE_STATUS : " +   "  timestamp="+timestamp
 +  "  tx_buf="+tx_buf
 +  "  rx_buf="+rx_buf
 ;}
+
 }
+

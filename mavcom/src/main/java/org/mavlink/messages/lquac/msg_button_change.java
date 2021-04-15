@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_button_change
  * Report button state change.
@@ -84,4 +83,6 @@ return "MAVLINK_MSG_ID_BUTTON_CHANGE : " +   "  time_boot_ms="+time_boot_ms
 +  "  last_change_ms="+last_change_ms
 +  "  state="+state
 ;}
+
 }
+

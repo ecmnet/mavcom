@@ -483,9 +483,22 @@ public class MAVLinkGenerator {
 				if (debug) {
 					writer.print("public String toString() {\n");
 					writer.print("return \"" + id + " : \" + " + forToString + ";");
-					writer.print("}\n");
+					writer.print("}\n\n");
 				}
-				writer.print("}\n");
+				
+//				writer.print("public boolean equals(Object o) {\n");
+//				writer.print(" if (this == o)\n");
+//				writer.print("     return  true;\n");
+//				writer.print(" if(o == null || getClass() != o.getClass())\n");
+//				writer.print("     return  false;\n");
+//				writer.print("  return o.hashCode() == "+id+";\n");
+//				writer.print("}\n\n");
+//				
+//				writer.print("public int hashCode() {\n");
+//				writer.print(" return "+id+";");
+//				writer.print("}\n\n");
+				
+				writer.print("}\n\n");
 				forToString = "";
 			}
 			catch (Exception e) {

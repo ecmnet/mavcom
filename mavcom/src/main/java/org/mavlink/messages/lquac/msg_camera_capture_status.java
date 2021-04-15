@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_camera_capture_status
  * Information about the status of a capture. Can be requested with a MAV_CMD_REQUEST_MESSAGE command.
@@ -37,7 +36,7 @@ public class msg_camera_capture_status extends MAVLinkMessage {
    */
   public float image_interval;
   /**
-   * Time since recording started
+   * Elapsed time since recording started (0: Not supported/available). A GCS should compute recording time and use non-zero values of this field to correct any discrepancy.
    */
   public long recording_time_ms;
   /**
@@ -112,4 +111,6 @@ return "MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS : " +   "  time_boot_ms="+time_boot
 +  "  video_status="+video_status
 +  "  image_count="+image_count
 ;}
+
 }
+

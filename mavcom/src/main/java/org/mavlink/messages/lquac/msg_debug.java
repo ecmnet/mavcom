@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_debug
  * Send a debug value. The index is used to discriminate between values. These values show up in the plot of QGroundControl as DEBUG N.
@@ -84,4 +83,6 @@ return "MAVLINK_MSG_ID_DEBUG : " +   "  time_boot_ms="+time_boot_ms
 +  "  value="+format((float)value)
 +  "  ind="+ind
 ;}
+
 }
+

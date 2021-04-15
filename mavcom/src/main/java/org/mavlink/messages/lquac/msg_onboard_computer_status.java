@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_onboard_computer_status
  * Hardware status sent by an onboard computer.
@@ -331,4 +330,6 @@ return "MAVLINK_MSG_ID_ONBOARD_COMPUTER_STATUS : " +   "  time_usec="+time_usec
 +  "  temperature_core[6]="+temperature_core[6]
 +  "  temperature_core[7]="+temperature_core[7]
 ;}
+
 }
+

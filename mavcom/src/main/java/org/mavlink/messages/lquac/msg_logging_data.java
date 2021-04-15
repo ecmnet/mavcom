@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_logging_data
  * A message containing logged data (see also MAV_CMD_LOGGING_START)
@@ -357,4 +356,6 @@ return "MAVLINK_MSG_ID_LOGGING_DATA : " +   "  sequence="+sequence
 +  "  data[247]="+data[247]
 +  "  data[248]="+data[248]
 ;}
+
 }
+

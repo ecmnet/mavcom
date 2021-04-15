@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_camera_information
  * Information about a camera. Can be requested with a MAV_CMD_REQUEST_MESSAGE command.
@@ -77,7 +76,7 @@ public class msg_camera_information extends MAVLinkMessage {
    */
   public int lens_id;
   /**
-   * Camera definition URI (if any, otherwise only basic functions will be available). HTTP- (http://) and MAVLink FTP- (mavlinkftp://) formatted URIs are allowed (and both must be supported by any GCS that implements the Camera Protocol).
+   * Camera definition URI (if any, otherwise only basic functions will be available). HTTP- (http://) and MAVLink FTP- (mavlinkftp://) formatted URIs are allowed (and both must be supported by any GCS that implements the Camera Protocol). The definition file may be xz compressed, which will be indicated by the file extension .xml.xz (a GCS that implements the protocol must support decompressing the file).
    */
   public char[] cam_definition_uri = new char[140];
   public void setCam_definition_uri(String tmp) {
@@ -244,4 +243,6 @@ return "MAVLINK_MSG_ID_CAMERA_INFORMATION : " +   "  time_boot_ms="+time_boot_ms
 +  "  lens_id="+lens_id
 +  "  cam_definition_uri="+getCam_definition_uri()
 ;}
+
 }
+

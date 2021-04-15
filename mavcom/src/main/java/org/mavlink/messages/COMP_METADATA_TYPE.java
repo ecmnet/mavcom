@@ -9,9 +9,9 @@ package org.mavlink.messages;
  **/
 public interface COMP_METADATA_TYPE {
     /**
-     * Version information which also includes information on other optional supported COMP_METADATA_TYPE's. Must be supported. Only downloadable from vehicle.
+     * General information which also includes information on other optional supported COMP_METADATA_TYPE's. Must be supported. Only downloadable from vehicle.
      */
-    public final static int COMP_METADATA_TYPE_VERSION = 0;
+    public final static int COMP_METADATA_TYPE_GENERAL = 0;
     /**
      * Parameter meta data.
      */
@@ -20,4 +20,8 @@ public interface COMP_METADATA_TYPE {
      * Meta data which specifies the commands the vehicle supports. (WIP)
      */
     public final static int COMP_METADATA_TYPE_COMMANDS = 2;
+    /**
+     * Meta data which specifies potential external peripherals that do not talk MAVLink
+     */
+    public final static int COMP_METADATA_TYPE_PERIPHERALS = 3;
 }

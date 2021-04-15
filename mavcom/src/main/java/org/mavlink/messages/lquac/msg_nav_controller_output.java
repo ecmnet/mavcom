@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_nav_controller_output
  * The state of the fixed wing navigation and position controller.
@@ -119,4 +118,6 @@ return "MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT : " +   "  nav_roll="+format((float
 +  "  target_bearing="+target_bearing
 +  "  wp_dist="+wp_dist
 ;}
+
 }
+

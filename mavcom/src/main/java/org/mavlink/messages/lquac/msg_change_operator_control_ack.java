@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_change_operator_control_ack
  * Accept / deny control of this MAV
@@ -84,4 +83,6 @@ return "MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK : " +   "  gcs_system_id="+gc
 +  "  control_request="+control_request
 +  "  ack="+ack
 ;}
+
 }
+

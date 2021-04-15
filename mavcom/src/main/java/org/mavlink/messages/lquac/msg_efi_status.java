@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_efi_status
  * EFI status output
@@ -182,4 +181,6 @@ return "MAVLINK_MSG_ID_EFI_STATUS : " +   "  ecu_index="+format((float)ecu_index
 +  "  pt_compensation="+format((float)pt_compensation)
 +  "  health="+health
 ;}
+
 }
+

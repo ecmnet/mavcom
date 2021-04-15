@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_resource_request
  * The autopilot is requesting a resource (file, binary, other type of data)
@@ -344,4 +343,6 @@ return "MAVLINK_MSG_ID_RESOURCE_REQUEST : " +   "  request_id="+request_id
 +  "  storage[118]="+storage[118]
 +  "  storage[119]="+storage[119]
 ;}
+
 }
+

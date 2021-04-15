@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_actuator_control_target
  * Set the vehicle attitude and body angular rates.
@@ -95,4 +94,6 @@ return "MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET : " +   "  time_usec="+time_usec
 +  "  controls[7]="+format((float)controls[7])
 +  "  group_mlx="+group_mlx
 ;}
+
 }
+

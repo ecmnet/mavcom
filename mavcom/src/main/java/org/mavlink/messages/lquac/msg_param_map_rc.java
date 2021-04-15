@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_param_map_rc
  * Bind a RC channel to a parameter. The parameter should change according to the RC channel value.
@@ -146,4 +145,6 @@ return "MAVLINK_MSG_ID_PARAM_MAP_RC : " +   "  param_value0="+format((float)para
 +  "  param_id="+getParam_id()
 +  "  parameter_rc_channel_index="+parameter_rc_channel_index
 ;}
+
 }
+

@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_global_vision_position_estimate
  * Global position/attitude estimate from a vision source.
@@ -150,4 +149,6 @@ return "MAVLINK_MSG_ID_GLOBAL_VISION_POSITION_ESTIMATE : " +   "  usec="+usec
 +  "  covariance[20]="+format((float)covariance[20])
 +  "  reset_counter="+reset_counter
 ;}
+
 }
+

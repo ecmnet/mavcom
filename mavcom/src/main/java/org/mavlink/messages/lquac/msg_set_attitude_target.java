@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_set_attitude_target
  * Sets a desired vehicle attitude. Used by an external controller to command the vehicle (manual controller or other system).
@@ -25,7 +24,7 @@ public class msg_set_attitude_target extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_SET_ATTITUDE_TARGET;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 39;
+    payload_length = 51;
 }
 
   /**
@@ -64,6 +63,10 @@ public class msg_set_attitude_target extends MAVLinkMessage {
    * Bitmap to indicate which dimensions should be ignored by the vehicle.
    */
   public int type_mask;
+  /**
+   * 3D thrust setpoint in the body NED frame, normalized to -1 .. 1
+   */
+  public float[] thrust_body = new float[3];
 /**
  * Decode message with raw data
  */
@@ -79,12 +82,15 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   target_system = (int)dis.readUnsignedByte()&0x00FF;
   target_component = (int)dis.readUnsignedByte()&0x00FF;
   type_mask = (int)dis.readUnsignedByte()&0x00FF;
+  for (int i=0; i<3; i++) {
+    thrust_body[i] = (float)dis.readFloat();
+  }
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+39];
+  byte[] buffer = new byte[12+51];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -107,15 +113,18 @@ public byte[] encode() throws IOException {
   dos.writeByte(target_system&0x00FF);
   dos.writeByte(target_component&0x00FF);
   dos.writeByte(type_mask&0x00FF);
+  for (int i=0; i<3; i++) {
+    dos.writeFloat(thrust_body[i]);
+  }
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 39);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 51);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[49] = crcl;
-  buffer[50] = crch;
+  buffer[61] = crcl;
+  buffer[62] = crch;
   dos.close();
   return buffer;
 }
@@ -132,5 +141,10 @@ return "MAVLINK_MSG_ID_SET_ATTITUDE_TARGET : " +   "  time_boot_ms="+time_boot_m
 +  "  target_system="+target_system
 +  "  target_component="+target_component
 +  "  type_mask="+type_mask
++  "  thrust_body[0]="+format((float)thrust_body[0])
++  "  thrust_body[1]="+format((float)thrust_body[1])
++  "  thrust_body[2]="+format((float)thrust_body[2])
 ;}
+
 }
+

@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_hil_sensor
  * The IMU readings in SI units in NED body frame
@@ -175,4 +174,6 @@ return "MAVLINK_MSG_ID_HIL_SENSOR : " +   "  time_usec="+time_usec
 +  "  fields_updated="+fields_updated
 +  "  id="+id
 ;}
+
 }
+

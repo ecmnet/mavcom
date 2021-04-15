@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_command_long
  * Send a command with up to seven parameters to the MAV. The command microservice is documented at https://mavlink.io/en/services/command.html
@@ -140,4 +139,6 @@ return "MAVLINK_MSG_ID_COMMAND_LONG : " +   "  param1="+format((float)param1)
 +  "  target_component="+target_component
 +  "  confirmation="+confirmation
 ;}
+
 }
+

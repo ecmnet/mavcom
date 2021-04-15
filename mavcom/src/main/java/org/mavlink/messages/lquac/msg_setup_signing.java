@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_setup_signing
  * Setup a MAVLink2 signing key. If called with secret_key of all zero and zero initial_timestamp will disable signing
@@ -126,4 +125,6 @@ return "MAVLINK_MSG_ID_SETUP_SIGNING : " +   "  initial_timestamp="+initial_time
 +  "  secret_key[30]="+secret_key[30]
 +  "  secret_key[31]="+secret_key[31]
 ;}
+
 }
+

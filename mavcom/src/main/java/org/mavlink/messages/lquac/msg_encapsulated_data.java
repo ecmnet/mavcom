@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_encapsulated_data
  * Data packet for images sent using the Image Transmission Protocol: https://mavlink.io/en/services/image_transmission.html.
@@ -333,4 +332,6 @@ return "MAVLINK_MSG_ID_ENCAPSULATED_DATA : " +   "  seqnr="+seqnr
 +  "  data[251]="+data[251]
 +  "  data[252]="+data[252]
 ;}
+
 }
+

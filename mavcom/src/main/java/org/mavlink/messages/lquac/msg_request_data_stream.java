@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_request_data_stream
  * Request a data stream.
@@ -98,4 +97,6 @@ return "MAVLINK_MSG_ID_REQUEST_DATA_STREAM : " +   "  req_message_rate="+req_mes
 +  "  req_stream_id="+req_stream_id
 +  "  start_stop="+start_stop
 ;}
+
 }
+

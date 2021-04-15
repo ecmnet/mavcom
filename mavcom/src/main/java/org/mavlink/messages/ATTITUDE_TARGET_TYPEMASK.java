@@ -21,6 +21,10 @@ public interface ATTITUDE_TARGET_TYPEMASK {
      */
     public final static int ATTITUDE_TARGET_TYPEMASK_BODY_YAW_RATE_IGNORE = 4;
     /**
+     * Use 3D body thrust setpoint instead of throttle
+     */
+    public final static int ATTITUDE_TARGET_TYPEMASK_THRUST_BODY_SET = 32;
+    /**
      * Ignore throttle
      */
     public final static int ATTITUDE_TARGET_TYPEMASK_THROTTLE_IGNORE = 64;

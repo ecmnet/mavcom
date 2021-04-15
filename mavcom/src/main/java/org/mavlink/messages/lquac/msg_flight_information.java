@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_flight_information
  * Information about flight since last arming.
@@ -91,4 +90,6 @@ return "MAVLINK_MSG_ID_FLIGHT_INFORMATION : " +   "  arming_time_utc="+arming_ti
 +  "  flight_uuid="+flight_uuid
 +  "  time_boot_ms="+time_boot_ms
 ;}
+
 }
+

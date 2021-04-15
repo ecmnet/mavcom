@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_vibration
  * Vibration levels and accelerometer clipping
@@ -112,4 +111,6 @@ return "MAVLINK_MSG_ID_VIBRATION : " +   "  time_usec="+time_usec
 +  "  clipping_1="+clipping_1
 +  "  clipping_2="+clipping_2
 ;}
+
 }
+

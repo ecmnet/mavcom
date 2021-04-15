@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_extended_sys_state
  * Provides state for additional features
@@ -77,4 +76,6 @@ public String toString() {
 return "MAVLINK_MSG_ID_EXTENDED_SYS_STATE : " +   "  vtol_state="+vtol_state
 +  "  landed_state="+landed_state
 ;}
+
 }
+

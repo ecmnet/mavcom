@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_vfr_hud
  * Metrics typically displayed on a HUD for fixed wing aircraft.
@@ -105,4 +104,6 @@ return "MAVLINK_MSG_ID_VFR_HUD : " +   "  airspeed="+format((float)airspeed)
 +  "  heading="+heading
 +  "  throttle="+throttle
 ;}
+
 }
+

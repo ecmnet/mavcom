@@ -453,8 +453,7 @@
   </group>
   <group name="Attitude Q estimator">
     <parameter name="ATT_ACC_COMP" default="1" type="INT32" boolean="true">
-      <short_desc>Acceleration compensation based on GPS
-velocity</short_desc>
+      <short_desc>Acceleration compensation based on GPS velocity</short_desc>
     </parameter>
     <parameter name="ATT_BIAS_MAX" default="0.05" type="FLOAT">
       <short_desc>Gyro bias limit</short_desc>
@@ -464,9 +463,8 @@ velocity</short_desc>
       <decimal>3</decimal>
     </parameter>
     <parameter name="ATT_EXT_HDG_M" default="0" type="INT32">
-      <short_desc>External heading usage mode (from Motion capture/Vision)
-Set to 1 to use heading estimate from vision.
-Set to 2 to use heading from motion capture</short_desc>
+      <short_desc>External heading usage mode (from Motion capture/Vision)</short_desc>
+      <long_desc>Set to 1 to use heading estimate from vision. Set to 2 to use heading from motion capture.</long_desc>
       <min>0</min>
       <max>2</max>
       <values>
@@ -1017,9 +1015,9 @@ Set to 2 to use heading from motion capture</short_desc>
       <max>894281</max>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter name="CBRK_USB_CHK" default="0" type="INT32" category="Developer">
+    <parameter name="CBRK_USB_CHK" default="197848" type="INT32" category="Developer">
       <short_desc>Circuit breaker for USB link check</short_desc>
-      <long_desc>Setting this parameter to 197848 will disable the USB connected checks in the commander. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
+      <long_desc>Setting this parameter to 197848 will disable the USB connected checks in the commander, setting it to 0 keeps them enabled (recommended). We are generally recommending to not fly with the USB link connected and production vehicles should set this parameter to zero to prevent users from flying USB powered. However, for R&amp;D purposes it has proven over the years to work just fine.</long_desc>
       <min>0</min>
       <max>197848</max>
       <reboot_required>true</reboot_required>
@@ -1120,8 +1118,8 @@ Set to 2 to use heading from motion capture</short_desc>
       <increment>0.01</increment>
     </parameter>
     <parameter name="COM_ARM_MAG_ANG" default="45" type="INT32">
-      <short_desc>Maximum magnetic field inconsistency between units that will allow arming
-Set -1 to disable the check</short_desc>
+      <short_desc>Maximum magnetic field inconsistency between units that will allow arming</short_desc>
+      <long_desc>Set -1 to disable the check.</long_desc>
       <min>3</min>
       <max>180</max>
       <unit>deg</unit>
@@ -1149,10 +1147,10 @@ Set -1 to disable the check</short_desc>
     </parameter>
     <parameter name="COM_ARM_WO_GPS" default="1" type="INT32">
       <short_desc>Allow arming without GPS</short_desc>
-      <long_desc>The default allows to arm the vehicle without GPS signal.</long_desc>
+      <long_desc>The default allows the vehicle to arm without GPS signal.</long_desc>
       <values>
-        <value code="0">Allow arming without GPS</value>
-        <value code="1">Require GPS lock to arm</value>
+        <value code="0">Require GPS lock to arm</value>
+        <value code="1">Allow arming without GPS</value>
       </values>
     </parameter>
     <parameter name="COM_CPU_MAX" default="90.0" type="FLOAT">
@@ -1169,9 +1167,9 @@ Set -1 to disable the check</short_desc>
       <unit>s</unit>
       <decimal>2</decimal>
     </parameter>
-    <parameter name="COM_DISARM_PRFLT" default="10.0" type="FLOAT">
+    <parameter name="COM_DISARM_PRFLT" default="25.0" type="FLOAT">
       <short_desc>Time-out for auto disarm if too slow to takeoff</short_desc>
-      <long_desc>A non-zero, positive value specifies the time after arming, in seconds, within which the vehicle must take off (after which it will automatically disarm). A zero or negative value means that automatic disarming triggered by a pre-takeoff timeout is disabled.</long_desc>
+      <long_desc>A non-zero, positive value specifies the time after arming, in seconds, within which the vehicle must take off (after which it will automatically disarm). This is set to 25 seconds to ensure a system will not disarm if the pilot is not immediately taking off, but not so long that a system is completely forgotten about. A zero or negative value means that automatic disarming triggered by a pre-takeoff timeout is disabled.</long_desc>
       <unit>s</unit>
       <decimal>2</decimal>
     </parameter>
@@ -1406,6 +1404,13 @@ Set -1 to disable the check</short_desc>
       <short_desc>Enable Motor Testing</short_desc>
       <long_desc>If set, enables the motor test interface via MAVLink (DO_MOTOR_TEST), that allows spinning the motors for testing purposes.</long_desc>
     </parameter>
+    <parameter name="COM_OBC_LOSS_T" default="5.0" type="FLOAT">
+      <short_desc>Time-out to wait when onboard computer connection is lost before warning about loss connection</short_desc>
+      <min>0</min>
+      <max>60</max>
+      <unit>s</unit>
+      <increment>0.01</increment>
+    </parameter>
     <parameter name="COM_OBL_ACT" default="0" type="INT32">
       <short_desc>Set offboard loss failsafe mode</short_desc>
       <long_desc>The offboard loss failsafe will only be entered after a timeout, set by COM_OF_LOSS_T in seconds.</long_desc>
@@ -1434,8 +1439,8 @@ Set -1 to disable the check</short_desc>
       </values>
     </parameter>
     <parameter name="COM_OF_LOSS_T" default="1.0" type="FLOAT">
-      <short_desc>Time-out to wait when offboard connection is lost before triggering offboard lost action.
-See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
+      <short_desc>Time-out to wait when offboard connection is lost before triggering offboard lost action</short_desc>
+      <long_desc>See COM_OBL_ACT and COM_OBL_RC_ACT to configure action.</long_desc>
       <min>0</min>
       <max>60</max>
       <unit>s</unit>
@@ -1486,7 +1491,7 @@ See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
       <min>0</min>
       <max>4</max>
     </parameter>
-    <parameter name="COM_PREARM_MODE" default="1" type="INT32">
+    <parameter name="COM_PREARM_MODE" default="0" type="INT32">
       <short_desc>Condition to enter prearmed mode</short_desc>
       <long_desc>Condition to enter the prearmed state, an intermediate state between disarmed and armed in which non-throttling actuators are active.</long_desc>
       <values>
@@ -1978,34 +1983,32 @@ See COM_OBL_ACT and COM_OBL_RC_ACT to configure action</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="EKF2_ABL_ACCLIM" default="25.0" type="FLOAT">
-      <short_desc>Maximum IMU accel magnitude that allows IMU bias learning.
-If the magnitude of the IMU accelerometer vector exceeds this value, the EKF delta velocity state estimation will be inhibited.
-This reduces the adverse effect of high manoeuvre accelerations and IMU nonlinerity and scale factor errors on the delta velocity bias estimates</short_desc>
+      <short_desc>Maximum IMU accel magnitude that allows IMU bias learning</short_desc>
+      <long_desc>If the magnitude of the IMU accelerometer vector exceeds this value, the EKF delta velocity state estimation will be inhibited. This reduces the adverse effect of high manoeuvre accelerations and IMU nonlinerity and scale factor errors on the delta velocity bias estimates.</long_desc>
       <min>20.0</min>
       <max>200.0</max>
       <unit>m/s^2</unit>
       <decimal>1</decimal>
     </parameter>
     <parameter name="EKF2_ABL_GYRLIM" default="3.0" type="FLOAT">
-      <short_desc>Maximum IMU gyro angular rate magnitude that allows IMU bias learning.
-If the magnitude of the IMU angular rate vector exceeds this value, the EKF delta velocity state estimation will be inhibited.
-This reduces the adverse effect of rapid rotation rates and associated errors on the delta velocity bias estimates</short_desc>
+      <short_desc>Maximum IMU gyro angular rate magnitude that allows IMU bias learning</short_desc>
+      <long_desc>If the magnitude of the IMU angular rate vector exceeds this value, the EKF delta velocity state estimation will be inhibited. This reduces the adverse effect of rapid rotation rates and associated errors on the delta velocity bias estimates.</long_desc>
       <min>2.0</min>
       <max>20.0</max>
       <unit>rad/s</unit>
       <decimal>1</decimal>
     </parameter>
     <parameter name="EKF2_ABL_LIM" default="0.4" type="FLOAT">
-      <short_desc>Accelerometer bias learning limit. The ekf delta velocity bias states will be limited to within a range equivalent to +- of this value</short_desc>
+      <short_desc>Accelerometer bias learning limit</short_desc>
+      <long_desc>The ekf delta velocity bias states will be limited to within a range equivalent to +- of this value.</long_desc>
       <min>0.0</min>
       <max>0.8</max>
       <unit>m/s^2</unit>
       <decimal>2</decimal>
     </parameter>
     <parameter name="EKF2_ABL_TAU" default="0.5" type="FLOAT">
-      <short_desc>Time constant used by acceleration and angular rate magnitude checks used to inhibit delta velocity bias learning.
-The vector magnitude of angular rate and acceleration used to check if learning should be inhibited has a peak hold filter applied to it with an exponential decay.
-This parameter controls the time constant of the decay</short_desc>
+      <short_desc>Time constant used by acceleration and angular rate magnitude checks used to inhibit delta velocity bias learning</short_desc>
+      <long_desc>The vector magnitude of angular rate and acceleration used to check if learning should be inhibited has a peak hold filter applied to it with an exponential decay. This parameter controls the time constant of the decay.</long_desc>
       <min>0.1</min>
       <max>1.0</max>
       <unit>s</unit>
@@ -2052,10 +2055,8 @@ This parameter controls the time constant of the decay</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="EKF2_ARSP_THR" default="0.0" type="FLOAT">
-      <short_desc>Airspeed fusion threshold. A value of zero will deactivate airspeed fusion. Any other positive
-value will determine the minimum airspeed which will still be fused. Set to about 90% of the vehicles stall speed.
-Both airspeed fusion and sideslip fusion must be active for the EKF to continue navigating after loss of GPS.
-Use EKF2_FUSE_BETA to activate sideslip fusion</short_desc>
+      <short_desc>Airspeed fusion threshold</short_desc>
+      <long_desc>A value of zero will deactivate airspeed fusion. Any other positive value will determine the minimum airspeed which will still be fused. Set to about 90% of the vehicles stall speed. Both airspeed fusion and sideslip fusion must be active for the EKF to continue navigating after loss of GPS. Use EKF2_FUSE_BETA to activate sideslip fusion.</long_desc>
       <min>0.0</min>
       <unit>m/s</unit>
       <decimal>1</decimal>
@@ -2106,16 +2107,16 @@ Use EKF2_FUSE_BETA to activate sideslip fusion</short_desc>
       <decimal>2</decimal>
     </parameter>
     <parameter name="EKF2_BCOEF_X" default="25.0" type="FLOAT">
-      <short_desc>X-axis ballistic coefficient used by the multi-rotor specific drag force model.
-This should be adjusted to minimise variance of the X-axis drag specific force innovation sequence</short_desc>
+      <short_desc>X-axis ballistic coefficient used by the multi-rotor specific drag force model</short_desc>
+      <long_desc>This should be adjusted to minimise variance of the X-axis drag specific force innovation sequence.</long_desc>
       <min>1.0</min>
       <max>100.0</max>
       <unit>kg/m^2</unit>
       <decimal>1</decimal>
     </parameter>
     <parameter name="EKF2_BCOEF_Y" default="25.0" type="FLOAT">
-      <short_desc>Y-axis ballistic coefficient used by the multi-rotor specific drag force model.
-This should be adjusted to minimise variance of the Y-axis drag specific force innovation sequence</short_desc>
+      <short_desc>Y-axis ballistic coefficient used by the multi-rotor specific drag force model</short_desc>
+      <long_desc>This should be adjusted to minimise variance of the Y-axis drag specific force innovation sequence.</long_desc>
       <min>1.0</min>
       <max>100.0</max>
       <unit>kg/m^2</unit>
@@ -2148,8 +2149,8 @@ This should be adjusted to minimise variance of the Y-axis drag specific force i
       </bitmask>
     </parameter>
     <parameter name="EKF2_DRAG_NOISE" default="2.5" type="FLOAT">
-      <short_desc>Specific drag force observation noise variance used by the multi-rotor specific drag force model.
-Increasing it makes the multi-rotor wind estimates adjust more slowly</short_desc>
+      <short_desc>Specific drag force observation noise variance used by the multi-rotor specific drag force model</short_desc>
+      <long_desc>Increasing this makes the multi-rotor wind estimates adjust more slowly.</long_desc>
       <min>0.5</min>
       <max>10.0</max>
       <unit>(m/s^2)^2</unit>
@@ -2169,8 +2170,8 @@ Increasing it makes the multi-rotor wind estimates adjust more slowly</short_des
       <decimal>2</decimal>
     </parameter>
     <parameter name="EKF2_EVP_GATE" default="5.0" type="FLOAT">
-      <short_desc>Gate size for vision position fusion
-Sets the number of standard deviations used by the innovation consistency test</short_desc>
+      <short_desc>Gate size for vision position fusion</short_desc>
+      <long_desc>Sets the number of standard deviations used by the innovation consistency test.</long_desc>
       <min>1.0</min>
       <unit>SD</unit>
       <decimal>1</decimal>
@@ -2318,8 +2319,8 @@ Sets the number of standard deviations used by the innovation consistency test</
       <decimal>2</decimal>
     </parameter>
     <parameter name="EKF2_GSF_TAS" default="15.0" type="FLOAT">
-      <short_desc>Default value of true airspeed used in EKF-GSF AHRS calculation.
-If no airspeed measurements are avalable, the EKF-GSF AHRS calculation will assume this value of true airspeed when compensating for centripetal acceleration during turns. Set to zero to disable centripetal acceleration compensation during fixed wing flight modes</short_desc>
+      <short_desc>Default value of true airspeed used in EKF-GSF AHRS calculation</short_desc>
+      <long_desc>If no airspeed measurements are avalable, the EKF-GSF AHRS calculation will assume this value of true airspeed when compensating for centripetal acceleration during turns. Set to zero to disable centripetal acceleration compensation during fixed wing flight modes.</long_desc>
       <min>0.0</min>
       <max>100.0</max>
       <unit>m/s</unit>
@@ -2380,8 +2381,8 @@ If no airspeed measurements are avalable, the EKF-GSF AHRS calculation will assu
       <decimal>3</decimal>
     </parameter>
     <parameter name="EKF2_MAG_ACCLIM" default="0.5" type="FLOAT">
-      <short_desc>Horizontal acceleration threshold used by automatic selection of magnetometer fusion method.
-This parameter is used when the magnetometer fusion method is set automatically (EKF2_MAG_TYPE = 0). If the filtered horizontal acceleration is greater than this parameter value, then the EKF will use 3-axis magnetomer fusion</short_desc>
+      <short_desc>Horizontal acceleration threshold used by automatic selection of magnetometer fusion method</short_desc>
+      <long_desc>This parameter is used when the magnetometer fusion method is set automatically (EKF2_MAG_TYPE = 0). If the filtered horizontal acceleration is greater than this parameter value, then the EKF will use 3-axis magnetomer fusion.</long_desc>
       <min>0.0</min>
       <max>5.0</max>
       <unit>m/s^2</unit>
@@ -2446,16 +2447,16 @@ This parameter is used when the magnetometer fusion method is set automatically 
       </values>
     </parameter>
     <parameter name="EKF2_MAG_YAWLIM" default="0.25" type="FLOAT">
-      <short_desc>Yaw rate threshold used by automatic selection of magnetometer fusion method.
-This parameter is used when the magnetometer fusion method is set automatically (EKF2_MAG_TYPE = 0). If the filtered yaw rate is greater than this parameter value, then the EKF will use 3-axis magnetomer fusion</short_desc>
+      <short_desc>Yaw rate threshold used by automatic selection of magnetometer fusion method</short_desc>
+      <long_desc>This parameter is used when the magnetometer fusion method is set automatically (EKF2_MAG_TYPE = 0). If the filtered yaw rate is greater than this parameter value, then the EKF will use 3-axis magnetomer fusion.</long_desc>
       <min>0.0</min>
       <max>1.0</max>
       <unit>rad/s</unit>
       <decimal>2</decimal>
     </parameter>
     <parameter name="EKF2_MIN_OBS_DT" default="20" type="INT32">
-      <short_desc>Minimum time of arrival delta between non-IMU observations before data is downsampled.
-Baro and Magnetometer data will be averaged before downsampling, other data will be point sampled resulting in loss of information</short_desc>
+      <short_desc>Minimum time of arrival delta between non-IMU observations before data is downsampled</short_desc>
+      <long_desc>Baro and Magnetometer data will be averaged before downsampling, other data will be point sampled resulting in loss of information.</long_desc>
       <min>10</min>
       <max>50</max>
       <unit>ms</unit>
@@ -2503,8 +2504,8 @@ Baro and Magnetometer data will be averaged before downsampling, other data will
       <unit>us</unit>
     </parameter>
     <parameter name="EKF2_OF_DELAY" default="20" type="FLOAT">
-      <short_desc>Optical flow measurement delay relative to IMU measurements
-Assumes measurement is timestamped at trailing edge of integration period</short_desc>
+      <short_desc>Optical flow measurement delay relative to IMU measurements</short_desc>
+      <long_desc>Assumes measurement is timestamped at trailing edge of integration period</long_desc>
       <min>0</min>
       <max>300</max>
       <unit>ms</unit>
@@ -2552,40 +2553,36 @@ Assumes measurement is timestamped at trailing edge of integration period</short
       <max>255</max>
     </parameter>
     <parameter name="EKF2_PCOEF_XN" default="0.0" type="FLOAT">
-      <short_desc>Static pressure position error coefficient for the negative X axis.
-This is the ratio of static pressure error to dynamic pressure generated by a negative wind relative velocity along the X body axis.
-If the baro height estimate rises during backwards flight, then this will be a negative number</short_desc>
+      <short_desc>Static pressure position error coefficient for the negative X axis</short_desc>
+      <long_desc>This is the ratio of static pressure error to dynamic pressure generated by a negative wind relative velocity along the X body axis. If the baro height estimate rises during backwards flight, then this will be a negative number.</long_desc>
       <min>-0.5</min>
       <max>0.5</max>
       <decimal>2</decimal>
     </parameter>
     <parameter name="EKF2_PCOEF_XP" default="0.0" type="FLOAT">
-      <short_desc>Static pressure position error coefficient for the positive X axis
-This is the ratio of static pressure error to dynamic pressure generated by a positive wind relative velocity along the X body axis.
-If the baro height estimate rises during forward flight, then this will be a negative number</short_desc>
+      <short_desc>Static pressure position error coefficient for the positive X axis</short_desc>
+      <long_desc>This is the ratio of static pressure error to dynamic pressure generated by a positive wind relative velocity along the X body axis. If the baro height estimate rises during forward flight, then this will be a negative number.</long_desc>
       <min>-0.5</min>
       <max>0.5</max>
       <decimal>2</decimal>
     </parameter>
     <parameter name="EKF2_PCOEF_YN" default="0.0" type="FLOAT">
-      <short_desc>Pressure position error coefficient for the negative Y axis.
-This is the ratio of static pressure error to dynamic pressure generated by a wind relative velocity along the negative Y (LH) body axis.
-If the baro height estimate rises during sideways flight to the left, then this will be a negative number</short_desc>
+      <short_desc>Pressure position error coefficient for the negative Y axis</short_desc>
+      <long_desc>This is the ratio of static pressure error to dynamic pressure generated by a wind relative velocity along the negative Y (LH) body axis. If the baro height estimate rises during sideways flight to the left, then this will be a negative number.</long_desc>
       <min>-0.5</min>
       <max>0.5</max>
       <decimal>2</decimal>
     </parameter>
     <parameter name="EKF2_PCOEF_YP" default="0.0" type="FLOAT">
-      <short_desc>Pressure position error coefficient for the positive Y axis.
-This is the ratio of static pressure error to dynamic pressure generated by a wind relative velocity along the positive Y (RH) body axis.
-If the baro height estimate rises during sideways flight to the right, then this will be a negative number</short_desc>
+      <short_desc>Pressure position error coefficient for the positive Y axis</short_desc>
+      <long_desc>This is the ratio of static pressure error to dynamic pressure generated by a wind relative velocity along the positive Y (RH) body axis. If the baro height estimate rises during sideways flight to the right, then this will be a negative number.</long_desc>
       <min>-0.5</min>
       <max>0.5</max>
       <decimal>2</decimal>
     </parameter>
     <parameter name="EKF2_PCOEF_Z" default="0.0" type="FLOAT">
-      <short_desc>Static pressure position error coefficient for the Z axis.
-This is the ratio of static pressure error to dynamic pressure generated by a wind relative velocity along the Z body axis</short_desc>
+      <short_desc>Static pressure position error coefficient for the Z axis</short_desc>
+      <long_desc>This is the ratio of static pressure error to dynamic pressure generated by a wind relative velocity along the Z body axis.</long_desc>
       <min>-0.5</min>
       <max>0.5</max>
       <decimal>2</decimal>
@@ -2644,7 +2641,7 @@ This is the ratio of static pressure error to dynamic pressure generated by a wi
       <unit>m/s</unit>
       <decimal>2</decimal>
     </parameter>
-    <parameter name="EKF2_RNG_AID" default="0" type="INT32">
+    <parameter name="EKF2_RNG_AID" default="1" type="INT32">
       <short_desc>Range sensor aid</short_desc>
       <long_desc>If this parameter is enabled then the estimator will make use of the range finder measurements to estimate it's height even if range sensor is not the primary height source. It will only do so if conditions for range measurement fusion are met. This enables the range finder to be used during low speed and low altitude operation, eg takeoff and landing, where baro interference from rotor wash is excessive and can corrupt EKF state estimates. It is intended to be used where a vertical takeoff and landing is performed, and horizontal flight does not occur until above EKF2_RNG_A_HMAX. If vehicle motion causes repeated switching between the primary height sensor and range finder, an offset in the local position origin can accumulate. Also range finder measurements are less reliable and can experience unexpected errors. For these reasons, if accurate control of height relative to ground is required, it is recommended to use the MPC_ALT_MODE parameter instead, unless baro errors are severe enough to cause problems with landing and takeoff.</long_desc>
       <values>
@@ -3303,8 +3300,8 @@ This is the ratio of static pressure error to dynamic pressure generated by a wi
       <increment>0.5</increment>
     </parameter>
     <parameter name="FW_LND_HHDIST" default="15.0" type="FLOAT">
-      <short_desc>Landing heading hold horizontal distance.
-Set to 0 to disable heading hold</short_desc>
+      <short_desc>Landing heading hold horizontal distance</short_desc>
+      <long_desc>Set to 0 to disable heading hold.</long_desc>
       <min>0</min>
       <max>30.0</max>
       <unit>m</unit>
@@ -3576,6 +3573,13 @@ Set to 0 to disable heading hold</short_desc>
       <decimal>1</decimal>
       <increment>0.5</increment>
     </parameter>
+    <parameter name="FW_T_SEB_R_FF" default="1.0" type="FLOAT">
+      <short_desc>Specific total energy balance rate feedforward gain</short_desc>
+      <min>0.5</min>
+      <max>3</max>
+      <decimal>2</decimal>
+      <increment>0.01</increment>
+    </parameter>
     <parameter name="FW_T_SINK_MAX" default="5.0" type="FLOAT">
       <short_desc>Maximum descent rate</short_desc>
       <long_desc>This sets the maximum descent rate that the controller will use. If this value is too large, the aircraft can over-speed on descent. This should be set to a value that can be achieved without exceeding the lower pitch angle limit and without over-speeding the aircraft.</long_desc>
@@ -3653,15 +3657,13 @@ Set to 0 to disable heading hold</short_desc>
   </group>
   <group name="Failure Detector">
     <parameter name="FD_ESCS_EN" default="1" type="INT32" boolean="true">
-      <short_desc>Enable checks on ESCs that report their arming state.
-If enabled, failure detector will verify that all the ESCs have successfully armed when the vehicle has transitioned to the armed state.
-Timeout for receiving an acknowledgement from the ESCs is 0.3s, if no feedback is received the failure detector will auto disarm the vehicle</short_desc>
+      <short_desc>Enable checks on ESCs that report their arming state</short_desc>
+      <long_desc>If enabled, failure detector will verify that all the ESCs have successfully armed when the vehicle has transitioned to the armed state. Timeout for receiving an acknowledgement from the ESCs is 0.3s, if no feedback is received the failure detector will auto disarm the vehicle.</long_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="FD_EXT_ATS_EN" default="0" type="INT32" boolean="true">
-      <short_desc>Enable PWM input on AUX5 or MAIN5 (depending on board) for engaging failsafe from an external
-automatic trigger system (ATS)</short_desc>
-      <long_desc>External ATS is required by ASTM F3322-18.</long_desc>
+      <short_desc>Enable PWM input on for engaging failsafe from an external automatic trigger system (ATS)</short_desc>
+      <long_desc>Enabled on either AUX5 or MAIN5 depending on board. External ATS is required by ASTM F3322-18.</long_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="FD_EXT_ATS_TRIG" default="1900" type="INT32">
@@ -3715,9 +3717,8 @@ automatic trigger system (ATS)</short_desc>
       <max>3</max>
     </parameter>
     <parameter name="NAV_FT_RS" default="0.5" type="FLOAT">
-      <short_desc>Dynamic filtering algorithm responsiveness to target movement
-lower numbers increase the responsiveness to changing long lat
-but also ignore less noise</short_desc>
+      <short_desc>Dynamic filtering algorithm responsiveness to target movement</short_desc>
+      <long_desc>lower numbers increase the responsiveness to changing long lat but also ignore less noise</long_desc>
       <min>0.0</min>
       <max>1.0</max>
       <decimal>2</decimal>
@@ -4022,8 +4023,8 @@ but also ignore less noise</short_desc>
       <unit>s</unit>
     </parameter>
     <parameter name="ISBD_STACK_TIME" default="0" type="INT32">
-      <short_desc>Time [ms] the Iridium driver will wait for additional mavlink messages to combine them into one SBD message
-Value 0 turns the functionality off</short_desc>
+      <short_desc>Time the Iridium driver will wait for additional mavlink messages to combine them into one SBD message</short_desc>
+      <long_desc>Value 0 turns the functionality off</long_desc>
       <min>0</min>
       <max>500</max>
       <unit>ms</unit>
@@ -4032,7 +4033,7 @@ Value 0 turns the functionality off</short_desc>
   <group name="Land Detector">
     <parameter name="LNDFW_AIRSPD_MAX" default="6.00" type="FLOAT">
       <short_desc>Airspeed max</short_desc>
-      <long_desc>Maximum airspeed allowed in the landed state (m/s)</long_desc>
+      <long_desc>Maximum airspeed allowed in the landed state</long_desc>
       <min>4</min>
       <max>20</max>
       <unit>m/s</unit>
@@ -4040,7 +4041,7 @@ Value 0 turns the functionality off</short_desc>
     </parameter>
     <parameter name="LNDFW_VEL_XY_MAX" default="5.0" type="FLOAT">
       <short_desc>Fixedwing max horizontal velocity</short_desc>
-      <long_desc>Maximum horizontal velocity allowed in the landed state (m/s)</long_desc>
+      <long_desc>Maximum horizontal velocity allowed in the landed state</long_desc>
       <min>0.5</min>
       <max>10</max>
       <unit>m/s</unit>
@@ -4048,7 +4049,7 @@ Value 0 turns the functionality off</short_desc>
     </parameter>
     <parameter name="LNDFW_VEL_Z_MAX" default="3.0" type="FLOAT">
       <short_desc>Fixedwing max climb rate</short_desc>
-      <long_desc>Maximum vertical velocity allowed in the landed state (m/s up and down)</long_desc>
+      <long_desc>Maximum vertical velocity allowed in the landed state</long_desc>
       <min>0.1</min>
       <max>20</max>
       <unit>m/s</unit>
@@ -4056,7 +4057,7 @@ Value 0 turns the functionality off</short_desc>
     </parameter>
     <parameter name="LNDFW_XYACC_MAX" default="8.0" type="FLOAT">
       <short_desc>Fixedwing max horizontal acceleration</short_desc>
-      <long_desc>Maximum horizontal (x,y body axes) acceleration allowed in the landed state (m/s^2)</long_desc>
+      <long_desc>Maximum horizontal (x,y body axes) acceleration allowed in the landed state</long_desc>
       <min>2</min>
       <max>15</max>
       <unit>m/s^2</unit>
@@ -4085,13 +4086,13 @@ Value 0 turns the functionality off</short_desc>
     </parameter>
     <parameter name="LNDMC_XY_VEL_MAX" default="1.5" type="FLOAT">
       <short_desc>Multicopter max horizontal velocity</short_desc>
-      <long_desc>Maximum horizontal velocity allowed in the landed state (m/s)</long_desc>
+      <long_desc>Maximum horizontal velocity allowed in the landed state</long_desc>
       <unit>m/s</unit>
       <decimal>1</decimal>
     </parameter>
     <parameter name="LNDMC_Z_VEL_MAX" default="0.50" type="FLOAT">
       <short_desc>Multicopter max climb rate</short_desc>
-      <long_desc>Maximum vertical velocity allowed in the landed state (m/s up and down)</long_desc>
+      <long_desc>Maximum vertical velocity allowed in the landed state</long_desc>
       <unit>m/s</unit>
       <decimal>1</decimal>
     </parameter>
@@ -4196,8 +4197,8 @@ Value 0 turns the functionality off</short_desc>
       <decimal>3</decimal>
     </parameter>
     <parameter name="LPE_FAKE_ORIGIN" default="0" type="INT32">
-      <short_desc>Enable publishing of a fake global position (e.g for AUTO missions using Optical Flow)
-by initializing the estimator to the LPE_LAT/LON parameters when global information is unavailable</short_desc>
+      <short_desc>Enable publishing of a fake global position (e.g for AUTO missions using Optical Flow)</short_desc>
+      <long_desc>By initializing the estimator to the LPE_LAT/LON parameters when global information is unavailable</long_desc>
       <min>0</min>
       <max>1</max>
     </parameter>
@@ -4266,8 +4267,8 @@ by initializing the estimator to the LPE_LAT/LON parameters when global informat
       <decimal>2</decimal>
     </parameter>
     <parameter name="LPE_GPS_VXY" default="0.25" type="FLOAT">
-      <short_desc>GPS xy velocity standard deviation.
-EPV used if greater than this value</short_desc>
+      <short_desc>GPS xy velocity standard deviation</short_desc>
+      <long_desc>EPV used if greater than this value.</long_desc>
       <min>0.01</min>
       <max>2</max>
       <unit>m/s</unit>
@@ -4388,8 +4389,8 @@ EPV used if greater than this value</short_desc>
       <decimal>3</decimal>
     </parameter>
     <parameter name="LPE_T_MAX_GRADE" default="1.0" type="FLOAT">
-      <short_desc>Terrain maximum percent grade, hilly/outdoor (100 = 45 deg), flat/Indoor (0 = 0 deg)
-Used to calculate increased terrain random walk nosie due to movement</short_desc>
+      <short_desc>Terrain maximum percent grade, hilly/outdoor (100 = 45 deg), flat/Indoor (0 = 0 deg)</short_desc>
+      <long_desc>Used to calculate increased terrain random walk nosie due to movement.</long_desc>
       <min>0</min>
       <max>100</max>
       <unit>%</unit>
@@ -4484,6 +4485,7 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="7">Minimal</value>
         <value code="8">External Vision</value>
         <value code="10">Gimbal</value>
+        <value code="11">Onboard Low Bandwidth</value>
       </values>
     </parameter>
     <parameter name="MAV_0_RADIO_CTL" default="1" type="INT32" boolean="true">
@@ -4535,6 +4537,7 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="7">Minimal</value>
         <value code="8">External Vision</value>
         <value code="10">Gimbal</value>
+        <value code="11">Onboard Low Bandwidth</value>
       </values>
     </parameter>
     <parameter name="MAV_1_RADIO_CTL" default="1" type="INT32" boolean="true">
@@ -4586,6 +4589,7 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
         <value code="7">Minimal</value>
         <value code="8">External Vision</value>
         <value code="10">Gimbal</value>
+        <value code="11">Onboard Low Bandwidth</value>
       </values>
     </parameter>
     <parameter name="MAV_2_RADIO_CTL" default="1" type="INT32" boolean="true">
@@ -4898,9 +4902,8 @@ Used to calculate increased terrain random walk nosie due to movement</short_des
   </group>
   <group name="Mount">
     <parameter name="MNT_DO_STAB" default="0" type="INT32">
-      <short_desc>Stabilize the mount (set to true for servo gimbal, false for passthrough).
-(This is required for a gimbal which is not capable of stabilizing itself
-and relies on the IMU's attitude estimation.)</short_desc>
+      <short_desc>Stabilize the mount</short_desc>
+      <long_desc>Set to true for servo gimbal, false for passthrough. This is required for a gimbal which is not capable of stabilizing itself and relies on the IMU's attitude estimation.</long_desc>
       <min>0</min>
       <max>2</max>
       <values>
@@ -4986,15 +4989,15 @@ and relies on the IMU's attitude estimation.)</short_desc>
       </values>
     </parameter>
     <parameter name="MNT_OB_LOCK_MODE" default="0.0" type="FLOAT">
-      <short_desc>Mixer value for selecting a locking mode
-if required for the gimbal (only in AUX output mode)</short_desc>
+      <short_desc>Mixer value for selecting a locking mode</short_desc>
+      <long_desc>if required for the gimbal (only in AUX output mode)</long_desc>
       <min>-1.0</min>
       <max>1.0</max>
       <decimal>3</decimal>
     </parameter>
     <parameter name="MNT_OB_NORM_MODE" default="-1.0" type="FLOAT">
-      <short_desc>Mixer value for selecting normal mode
-if required by the gimbal (only in AUX output mode)</short_desc>
+      <short_desc>Mixer value for selecting normal mode</short_desc>
+      <long_desc>if required by the gimbal (only in AUX output mode)</long_desc>
       <min>-1.0</min>
       <max>1.0</max>
       <decimal>3</decimal>
@@ -5036,14 +5039,14 @@ if required by the gimbal (only in AUX output mode)</short_desc>
       <decimal>1</decimal>
     </parameter>
     <parameter name="MNT_RATE_PITCH" default="30.0" type="FLOAT">
-      <short_desc>Angular pitch rate for manual input in degrees/second.
-Full stick input [-1..1] translats to [-pitch rate..pitch rate]</short_desc>
+      <short_desc>Angular pitch rate for manual input in degrees/second</short_desc>
+      <long_desc>Full stick input [-1..1] translats to [-pitch rate..pitch rate].</long_desc>
       <min>1.0</min>
       <max>90.0</max>
     </parameter>
     <parameter name="MNT_RATE_YAW" default="30.0" type="FLOAT">
-      <short_desc>Angular yaw rate for manual input in degrees/second.
-Full stick input [-1..1] translats to [-yaw rate..yaw rate]</short_desc>
+      <short_desc>Angular yaw rate for manual input in degrees/second</short_desc>
+      <long_desc>Full stick input [-1..1] translats to [-yaw rate..yaw rate].</long_desc>
       <min>1.0</min>
       <max>90.0</max>
     </parameter>
@@ -5144,8 +5147,8 @@ Full stick input [-1..1] translats to [-yaw rate..yaw rate]</short_desc>
       <unit>deg</unit>
     </parameter>
     <parameter name="MC_MAN_TILT_TAU" default="0.0" type="FLOAT">
-      <short_desc>Manual tilt input filter time constant
-Setting this parameter to 0 disables the filter</short_desc>
+      <short_desc>Manual tilt input filter time constant</short_desc>
+      <long_desc>Setting this parameter to 0 disables the filter</long_desc>
       <min>0.0</min>
       <max>2.0</max>
       <unit>s</unit>
@@ -5257,8 +5260,8 @@ Setting this parameter to 0 disables the filter</short_desc>
       <decimal>1</decimal>
     </parameter>
     <parameter name="MPC_LAND_VEL_XY" default="10.0" type="FLOAT">
-      <short_desc>Maximum horizontal position mode velocity when close to ground/home altitude
-Set the value higher than the otherwise expected maximum to disable any slowdown</short_desc>
+      <short_desc>Maximum horizontal position mode velocity when close to ground/home altitude</short_desc>
+      <long_desc>Set the value higher than the otherwise expected maximum to disable any slowdown.</long_desc>
       <min>0</min>
       <unit>m/s</unit>
       <decimal>1</decimal>
@@ -5287,8 +5290,8 @@ Set the value higher than the otherwise expected maximum to disable any slowdown
       <decimal>1</decimal>
     </parameter>
     <parameter name="MPC_MAN_Y_TAU" default="0.08" type="FLOAT">
-      <short_desc>Manual yaw rate input filter time constant
-Setting this parameter to 0 disables the filter</short_desc>
+      <short_desc>Manual yaw rate input filter time constant</short_desc>
+      <long_desc>Setting this parameter to 0 disables the filter</long_desc>
       <min>0.0</min>
       <max>5.0</max>
       <unit>s</unit>
@@ -5386,9 +5389,8 @@ Setting this parameter to 0 disables the filter</short_desc>
       <decimal>2</decimal>
     </parameter>
     <parameter name="MPC_VEL_MANUAL" default="10.0" type="FLOAT">
-      <short_desc>Maximum horizontal velocity setpoint for manual controlled mode
-If velocity setpoint larger than MPC_XY_VEL_MAX is set, then
-the setpoint will be capped to MPC_XY_VEL_MAX</short_desc>
+      <short_desc>Maximum horizontal velocity setpoint for manual controlled mode</short_desc>
+      <long_desc>If velocity setpoint larger than MPC_XY_VEL_MAX is set, then the setpoint will be capped to MPC_XY_VEL_MAX</long_desc>
       <min>3.0</min>
       <max>20.0</max>
       <unit>m/s</unit>
@@ -5397,7 +5399,7 @@ the setpoint will be capped to MPC_XY_VEL_MAX</short_desc>
     </parameter>
     <parameter name="MPC_XY_CRUISE" default="5.0" type="FLOAT">
       <short_desc>Maximum horizontal velocity in mission</short_desc>
-      <long_desc>Normal horizontal velocity in AUTO modes (includes also RTL / hold / etc.) and endpoint for position stabilized mode (POSCTRL).</long_desc>
+      <long_desc>Horizontal velocity used when flying autonomously in e.g. Missions, RTL, Goto.</long_desc>
       <min>3.0</min>
       <max>20.0</max>
       <unit>m/s</unit>
@@ -5572,8 +5574,8 @@ the setpoint will be capped to MPC_XY_VEL_MAX</short_desc>
       <decimal>2</decimal>
     </parameter>
     <parameter name="MC_ACRO_P_MAX" default="720.0" type="FLOAT">
-      <short_desc>Max acro pitch rate
-default: 2 turns per second</short_desc>
+      <short_desc>Max acro pitch rate</short_desc>
+      <long_desc>default: 2 turns per second</long_desc>
       <min>0.0</min>
       <max>1800.0</max>
       <unit>deg/s</unit>
@@ -5581,8 +5583,8 @@ default: 2 turns per second</short_desc>
       <increment>5</increment>
     </parameter>
     <parameter name="MC_ACRO_R_MAX" default="720.0" type="FLOAT">
-      <short_desc>Max acro roll rate
-default: 2 turns per second</short_desc>
+      <short_desc>Max acro roll rate</short_desc>
+      <long_desc>default: 2 turns per second</long_desc>
       <min>0.0</min>
       <max>1800.0</max>
       <unit>deg/s</unit>
@@ -5604,8 +5606,8 @@ default: 2 turns per second</short_desc>
       <decimal>2</decimal>
     </parameter>
     <parameter name="MC_ACRO_Y_MAX" default="540.0" type="FLOAT">
-      <short_desc>Max acro yaw rate
-default 1.5 turns per second</short_desc>
+      <short_desc>Max acro yaw rate</short_desc>
+      <long_desc>default 1.5 turns per second</long_desc>
       <min>0.0</min>
       <max>1800.0</max>
       <unit>deg/s</unit>
@@ -5769,56 +5771,56 @@ default 1.5 turns per second</short_desc>
     </parameter>
     <parameter name="PWM_AUX_DIS1" default="0" type="INT32">
       <short_desc>PWM aux 1 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_AUX_DIS2" default="0" type="INT32">
       <short_desc>PWM aux 2 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_AUX_DIS3" default="0" type="INT32">
       <short_desc>PWM aux 3 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_AUX_DIS4" default="0" type="INT32">
       <short_desc>PWM aux 4 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_AUX_DIS5" default="0" type="INT32">
       <short_desc>PWM aux 5 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_AUX_DIS6" default="0" type="INT32">
       <short_desc>PWM aux 6 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_AUX_DIS7" default="0" type="INT32">
       <short_desc>PWM aux 7 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_AUX_DIS8" default="0" type="INT32">
       <short_desc>PWM aux 8 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_AUX_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
@@ -6463,98 +6465,98 @@ default 1.5 turns per second</short_desc>
     </parameter>
     <parameter name="PWM_MAIN_DIS1" default="-1" type="INT32">
       <short_desc>PWM main 1 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS10" default="-1" type="INT32">
       <short_desc>PWM main 10 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS11" default="-1" type="INT32">
       <short_desc>PWM main 11 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS12" default="-1" type="INT32">
       <short_desc>PWM main 12 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS13" default="-1" type="INT32">
       <short_desc>PWM main 13 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS14" default="-1" type="INT32">
       <short_desc>PWM main 14 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS2" default="-1" type="INT32">
       <short_desc>PWM main 2 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS3" default="-1" type="INT32">
       <short_desc>PWM main 3 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS4" default="-1" type="INT32">
       <short_desc>PWM main 4 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS5" default="-1" type="INT32">
       <short_desc>PWM main 5 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS6" default="-1" type="INT32">
       <short_desc>PWM main 6 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS7" default="-1" type="INT32">
       <short_desc>PWM main 7 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS8" default="-1" type="INT32">
       <short_desc>PWM main 8 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_DIS9" default="-1" type="INT32">
       <short_desc>PWM main 9 disarmed value</short_desc>
-      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_DISARMED will be used</long_desc>
+      <long_desc>This is the PWM pulse the autopilot is outputting if not armed. When set to -1 the value for PWM_MAIN_DISARM will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
@@ -6673,98 +6675,98 @@ default 1.5 turns per second</short_desc>
     </parameter>
     <parameter name="PWM_MAIN_MAX1" default="-1" type="INT32">
       <short_desc>PWM main 1 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX10" default="-1" type="INT32">
       <short_desc>PWM main 10 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX11" default="-1" type="INT32">
       <short_desc>PWM main 11 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX12" default="-1" type="INT32">
       <short_desc>PWM main 12 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX13" default="-1" type="INT32">
       <short_desc>PWM main 13 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX14" default="-1" type="INT32">
       <short_desc>PWM main 14 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX2" default="-1" type="INT32">
       <short_desc>PWM main 2 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX3" default="-1" type="INT32">
       <short_desc>PWM main 3 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX4" default="-1" type="INT32">
       <short_desc>PWM main 4 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX5" default="-1" type="INT32">
       <short_desc>PWM main 5 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX6" default="-1" type="INT32">
       <short_desc>PWM main 6 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX7" default="-1" type="INT32">
       <short_desc>PWM main 7 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX8" default="-1" type="INT32">
       <short_desc>PWM main 8 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MAX9" default="-1" type="INT32">
       <short_desc>PWM main 9 maximum value</short_desc>
-      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAX will be used</long_desc>
+      <long_desc>This is the maximum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MAX will be used</long_desc>
       <min>-1</min>
       <max>2150</max>
       <unit>us</unit>
@@ -6778,98 +6780,98 @@ default 1.5 turns per second</short_desc>
     </parameter>
     <parameter name="PWM_MAIN_MIN1" default="-1" type="INT32">
       <short_desc>PWM main 1 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN10" default="-1" type="INT32">
       <short_desc>PWM main 10 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN11" default="-1" type="INT32">
       <short_desc>PWM main 11 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN12" default="-1" type="INT32">
       <short_desc>PWM main 12 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN13" default="-1" type="INT32">
       <short_desc>PWM main 13 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN14" default="-1" type="INT32">
       <short_desc>PWM main 14 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN2" default="-1" type="INT32">
       <short_desc>PWM main 2 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN3" default="-1" type="INT32">
       <short_desc>PWM main 3 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN4" default="-1" type="INT32">
       <short_desc>PWM main 4 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN5" default="-1" type="INT32">
       <short_desc>PWM main 5 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN6" default="-1" type="INT32">
       <short_desc>PWM main 6 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN7" default="-1" type="INT32">
       <short_desc>PWM main 7 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN8" default="-1" type="INT32">
       <short_desc>PWM main 8 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
     </parameter>
     <parameter name="PWM_MAIN_MIN9" default="-1" type="INT32">
       <short_desc>PWM main 9 minimum value</short_desc>
-      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MIN will be used</long_desc>
+      <long_desc>This is the minimum PWM pulse the autopilot is allowed to output. When set to -1 the value for PWM_MAIN_MIN will be used</long_desc>
       <min>-1</min>
       <max>1600</max>
       <unit>us</unit>
@@ -7051,12 +7053,6 @@ default 1.5 turns per second</short_desc>
       <long_desc>Parameter used to model the nonlinear relationship between motor control signal (e.g. PWM) and static thrust. The model is: rel_thrust = factor * rel_signal^2 + (1-factor) * rel_signal, where rel_thrust is the normalized thrust between 0 and 1, and rel_signal is the relative motor control signal between 0 and 1.</long_desc>
       <min>0.0</min>
       <max>1.0</max>
-    </parameter>
-  </group>
-  <group name="Peripheral">
-    <parameter name="LIGHT_EN_BLINKM" default="0" type="INT32" boolean="true">
-      <short_desc>BlinkM LED</short_desc>
-      <reboot_required>true</reboot_required>
     </parameter>
   </group>
   <group name="Precision Land">
@@ -8912,9 +8908,8 @@ default 1.5 turns per second</short_desc>
       <decimal>1</decimal>
     </parameter>
     <parameter name="GND_MAX_ANG" default="0.7854" type="FLOAT">
-      <short_desc>Maximum turn angle for Ackerman steering.
-At a control output of 0, the steering wheels are at 0 radians.
-At a control output of 1, the steering wheels are at GND_MAX_ANG radians</short_desc>
+      <short_desc>Maximum turn angle for Ackerman steering</short_desc>
+      <long_desc>At a control output of 0, the steering wheels are at 0 radians. At a control output of 1, the steering wheels are at GND_MAX_ANG radians.</long_desc>
       <min>0.0</min>
       <max>3.14159</max>
       <unit>rad</unit>
@@ -9030,9 +9025,8 @@ At a control output of 1, the steering wheels are at GND_MAX_ANG radians</short_
   </group>
   <group name="Runway Takeoff">
     <parameter name="RWTO_AIRSPD_SCL" default="1.3" type="FLOAT">
-      <short_desc>Min. airspeed scaling factor for takeoff.
-Pitch up will be commanded when the following airspeed is reached:
-FW_AIRSPD_MIN * RWTO_AIRSPD_SCL</short_desc>
+      <short_desc>Min airspeed scaling factor for takeoff</short_desc>
+      <long_desc>Pitch up will be commanded when the following airspeed is reached: FW_AIRSPD_MIN * RWTO_AIRSPD_SCL</long_desc>
       <min>0.0</min>
       <max>2.0</max>
       <unit>norm</unit>
@@ -9050,9 +9044,8 @@ FW_AIRSPD_MIN * RWTO_AIRSPD_SCL</short_desc>
       </values>
     </parameter>
     <parameter name="RWTO_MAX_PITCH" default="20.0" type="FLOAT">
-      <short_desc>Max pitch during takeoff.
-Fixed-wing settings are used if set to 0. Note that there is also a minimum
-pitch of 10 degrees during takeoff, so this must be larger if set</short_desc>
+      <short_desc>Max pitch during takeoff</short_desc>
+      <long_desc>Fixed-wing settings are used if set to 0. Note that there is also a minimum pitch of 10 degrees during takeoff, so this must be larger if set.</long_desc>
       <min>0.0</min>
       <max>60.0</max>
       <unit>deg</unit>
@@ -9060,9 +9053,8 @@ pitch of 10 degrees during takeoff, so this must be larger if set</short_desc>
       <increment>0.5</increment>
     </parameter>
     <parameter name="RWTO_MAX_ROLL" default="25.0" type="FLOAT">
-      <short_desc>Max roll during climbout.
-Roll is limited during climbout to ensure enough lift and prevents aggressive
-navigation before we're on a safe height</short_desc>
+      <short_desc>Max roll during climbout</short_desc>
+      <long_desc>Roll is limited during climbout to ensure enough lift and prevents aggressive navigation before we're on a safe height.</long_desc>
       <min>0.0</min>
       <max>60.0</max>
       <unit>deg</unit>
@@ -9070,8 +9062,8 @@ navigation before we're on a safe height</short_desc>
       <increment>0.5</increment>
     </parameter>
     <parameter name="RWTO_MAX_THR" default="1.0" type="FLOAT">
-      <short_desc>Max throttle during runway takeoff.
-(Can be used to test taxi on runway)</short_desc>
+      <short_desc>Max throttle during runway takeoff</short_desc>
+      <long_desc>Can be used to test taxi on runway</long_desc>
       <min>0.0</min>
       <max>1.0</max>
       <unit>norm</unit>
@@ -9079,10 +9071,8 @@ navigation before we're on a safe height</short_desc>
       <increment>0.01</increment>
     </parameter>
     <parameter name="RWTO_NAV_ALT" default="5.0" type="FLOAT">
-      <short_desc>Altitude AGL at which we have enough ground clearance to allow some roll.
-Until RWTO_NAV_ALT is reached the plane is held level and only
-rudder is used to keep the heading (see RWTO_HDG). This should be below
-FW_CLMBOUT_DIFF if FW_CLMBOUT_DIFF &gt; 0</short_desc>
+      <short_desc>Altitude AGL at which we have enough ground clearance to allow some roll</short_desc>
+      <long_desc>Until RWTO_NAV_ALT is reached the plane is held level and only rudder is used to keep the heading (see RWTO_HDG). This should be below FW_CLMBOUT_DIFF if FW_CLMBOUT_DIFF &gt; 0.</long_desc>
       <min>0.0</min>
       <max>100.0</max>
       <unit>m</unit>
@@ -9090,10 +9080,8 @@ FW_CLMBOUT_DIFF if FW_CLMBOUT_DIFF &gt; 0</short_desc>
       <increment>1</increment>
     </parameter>
     <parameter name="RWTO_PSP" default="0.0" type="FLOAT">
-      <short_desc>Pitch setpoint during taxi / before takeoff airspeed is reached.
-A taildragger with stearable wheel might need to pitch up
-a little to keep it's wheel on the ground before airspeed
-to takeoff is reached</short_desc>
+      <short_desc>Pitch setpoint during taxi / before takeoff airspeed is reached</short_desc>
+      <long_desc>A taildragger with steerable wheel might need to pitch up a little to keep its wheel on the ground before airspeed to takeoff is reached.</long_desc>
       <min>-10.0</min>
       <max>20.0</max>
       <unit>deg</unit>
@@ -9186,9 +9174,8 @@ to takeoff is reached</short_desc>
       <increment>1</increment>
     </parameter>
     <parameter name="SIM_BAT_MIN_PCT" default="50.0" type="FLOAT">
-      <short_desc>Simulator Battery minimal percentage. Can be used to alter
-the battery level during SITL- or HITL-simulation on the fly.
-Particularly useful for testing different low-battery behaviour</short_desc>
+      <short_desc>Simulator Battery minimal percentage</short_desc>
+      <long_desc>Can be used to alter the battery level during SITL- or HITL-simulation on the fly. Particularly useful for testing different low-battery behaviour.</long_desc>
       <min>0</min>
       <max>100</max>
       <unit>%</unit>
@@ -9899,11 +9886,8 @@ Particularly useful for testing different low-battery behaviour</short_desc>
       </values>
     </parameter>
     <parameter name="CAL_MAG0_XCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-X component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>X Axis throttle compensation for Mag 0</short_desc>
+      <long_desc>Coefficient describing linear relationship between X component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG0_XODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis off diagonal factor</short_desc>
@@ -9915,11 +9899,8 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Magnetometer X-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG0_YCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-Y component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>Y Axis throttle compensation for Mag 0</short_desc>
+      <long_desc>Coefficient describing linear relationship between Y component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG0_YODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis off diagonal factor</short_desc>
@@ -9931,11 +9912,8 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Magnetometer Y-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG0_ZCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-Z component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>Z Axis throttle compensation for Mag 0</short_desc>
+      <long_desc>Coefficient describing linear relationship between Z component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG0_ZODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis off diagonal factor</short_desc>
@@ -10013,11 +9991,8 @@ for current-based compensation [G/kA]</short_desc>
       </values>
     </parameter>
     <parameter name="CAL_MAG1_XCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-X component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>X Axis throttle compensation for Mag 1</short_desc>
+      <long_desc>Coefficient describing linear relationship between X component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG1_XODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis off diagonal factor</short_desc>
@@ -10029,11 +10004,8 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Magnetometer X-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG1_YCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-Y component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>Y Axis throttle compensation for Mag 1</short_desc>
+      <long_desc>Coefficient describing linear relationship between Y component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG1_YODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis off diagonal factor</short_desc>
@@ -10045,11 +10017,8 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Magnetometer Y-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG1_ZCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-Z component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>Z Axis throttle compensation for Mag 1</short_desc>
+      <long_desc>Coefficient describing linear relationship between Z component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG1_ZODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis off diagonal factor</short_desc>
@@ -10127,11 +10096,8 @@ for current-based compensation [G/kA]</short_desc>
       </values>
     </parameter>
     <parameter name="CAL_MAG2_XCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-X component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>X Axis throttle compensation for Mag 2</short_desc>
+      <long_desc>Coefficient describing linear relationship between X component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG2_XODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis off diagonal factor</short_desc>
@@ -10143,11 +10109,8 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Magnetometer X-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG2_YCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-Y component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>Y Axis throttle compensation for Mag 2</short_desc>
+      <long_desc>Coefficient describing linear relationship between Y component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG2_YODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis off diagonal factor</short_desc>
@@ -10159,11 +10122,8 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Magnetometer Y-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG2_ZCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-Z component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>Z Axis throttle compensation for Mag 2</short_desc>
+      <long_desc>Coefficient describing linear relationship between Z component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG2_ZODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis off diagonal factor</short_desc>
@@ -10241,11 +10201,8 @@ for current-based compensation [G/kA]</short_desc>
       </values>
     </parameter>
     <parameter name="CAL_MAG3_XCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-X component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>X Axis throttle compensation for Mag 3</short_desc>
+      <long_desc>Coefficient describing linear relationship between X component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG3_XODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer X-axis off diagonal factor</short_desc>
@@ -10257,11 +10214,8 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Magnetometer X-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG3_YCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-Y component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>Y Axis throttle compensation for Mag 3</short_desc>
+      <long_desc>Coefficient describing linear relationship between Y component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG3_YODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Y-axis off diagonal factor</short_desc>
@@ -10273,11 +10227,8 @@ for current-based compensation [G/kA]</short_desc>
       <short_desc>Magnetometer Y-axis scaling factor</short_desc>
     </parameter>
     <parameter name="CAL_MAG3_ZCOMP" default="0.0" type="FLOAT" category="System">
-      <short_desc>Coefficient describing linear relationship between
-Z component of magnetometer in body frame axis
-and either current or throttle depending on value of CAL_MAG_COMP_TYP
-Unit for throttle-based compensation is [G] and
-for current-based compensation [G/kA]</short_desc>
+      <short_desc>Z Axis throttle compensation for Mag 3</short_desc>
+      <long_desc>Coefficient describing linear relationship between Z component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
     </parameter>
     <parameter name="CAL_MAG3_ZODIAG" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Magnetometer Z-axis off diagonal factor</short_desc>
@@ -10315,10 +10266,8 @@ for current-based compensation [G/kA]</short_desc>
       <increment>0.1</increment>
     </parameter>
     <parameter name="SENS_FLOW_MAXR" default="2.5" type="FLOAT">
-      <short_desc>Magnitude of maximum angular flow rate reliably measurable by the optical flow sensor.
-Optical flow data will not fused by the estimators if the magnitude of the flow rate exceeds this value and
-control loops will be instructed to limit ground speed such that the flow rate produced by movement over ground
-is less than 50% of this value</short_desc>
+      <short_desc>Magnitude of maximum angular flow rate reliably measurable by the optical flow sensor</short_desc>
+      <long_desc>Optical flow data will not fused by the estimators if the magnitude of the flow rate exceeds this value and control loops will be instructed to limit ground speed such that the flow rate produced by movement over ground is less than 50% of this value.</long_desc>
       <min>1.0</min>
       <unit>rad/s</unit>
       <decimal>2</decimal>
@@ -10395,12 +10344,16 @@ is less than 50% of this value</short_desc>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter name="IMU_DGYRO_CUTOFF" default="10.0" type="FLOAT">
+    <parameter name="IMU_DGYRO_CUTOFF" default="20.0" type="FLOAT">
       <short_desc>Cutoff frequency for angular acceleration (D-Term filter)</short_desc>
       <long_desc>The cutoff frequency for the 2nd order butterworth filter used on the time derivative of the measured angular velocity, also known as the D-term filter in the rate controller. The D-term uses the derivative of the rate and thus is the most susceptible to noise. Therefore, using a D-term filter allows to increase IMU_GYRO_CUTOFF, which leads to reduced control latency and permits to increase the P gains. A value of 0 disables the filter.</long_desc>
       <min>0</min>
       <max>1000</max>
       <unit>Hz</unit>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="IMU_GYRO_CAL_EN" default="1" type="INT32" boolean="true">
+      <short_desc>IMU gyro auto calibration enable</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="IMU_GYRO_CUTOFF" default="30.0" type="FLOAT">
@@ -10430,15 +10383,12 @@ is less than 50% of this value</short_desc>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
       <values>
-        <value code="128">128</value>
         <value code="256">256</value>
-        <value code="512">512</value>
         <value code="1024">1024</value>
-        <value code="2048">2048</value>
         <value code="4096">4096</value>
       </values>
     </parameter>
-    <parameter name="IMU_GYRO_FFT_MAX" default="256." type="FLOAT">
+    <parameter name="IMU_GYRO_FFT_MAX" default="192." type="FLOAT">
       <short_desc>IMU gyro FFT maximum frequency</short_desc>
       <min>1</min>
       <max>1000</max>
@@ -10469,17 +10419,17 @@ is less than 50% of this value</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="IMU_GYRO_RATEMAX" default="400" type="INT32">
-      <short_desc>Gyro control data maximum publication rate</short_desc>
-      <long_desc>This is the maximum rate the gyro control data (sensor_gyro) will be allowed to publish at. Set to 0 to disable and publish at the native sensor sample rate.</long_desc>
-      <min>0</min>
+      <short_desc>Gyro control data maximum publication rate (inner loop rate)</short_desc>
+      <long_desc>The maximum rate the gyro control data (vehicle_angular_velocity) will be allowed to publish at. This is the loop rate for the rate controller and outputs. Note: sensor data is always read and filtered at the full raw rate (eg commonly 8 kHz) regardless of this setting.</long_desc>
+      <min>100</min>
       <max>2000</max>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
       <values>
-        <value code="0">0 (driver minimum)</value>
         <value code="100">100 Hz</value>
         <value code="250">250 Hz</value>
         <value code="400">400 Hz</value>
+        <value code="800">800 Hz</value>
         <value code="1000">1000 Hz</value>
         <value code="2000">2000 Hz</value>
       </values>
@@ -10494,6 +10444,7 @@ is less than 50% of this value</short_desc>
       <values>
         <value code="100">100 Hz</value>
         <value code="200">200 Hz</value>
+        <value code="250">250 Hz</value>
         <value code="400">400 Hz</value>
       </values>
     </parameter>
@@ -10533,8 +10484,8 @@ is less than 50% of this value</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="PCF8583_POOL" default="1000000" type="INT32">
-      <short_desc>PCF8583 rotorfreq (i2c) pool interval
-How often the sensor is readout</short_desc>
+      <short_desc>PCF8583 rotorfreq (i2c) pool interval</short_desc>
+      <long_desc>Determines how often the sensor is read out.</long_desc>
       <unit>us</unit>
       <reboot_required>true</reboot_required>
     </parameter>
@@ -10652,6 +10603,16 @@ How often the sensor is readout</short_desc>
         <value code="12">ROTATION_BACKWARD_FACING</value>
         <value code="24">ROTATION_UPWARD_FACING</value>
         <value code="25">ROTATION_DOWNWARD_FACING</value>
+      </values>
+    </parameter>
+    <parameter name="SENS_EN_ADIS164X" default="0" type="INT32">
+      <short_desc>Analog Devices ADIS16448 IMU (external SPI)</short_desc>
+      <min>0</min>
+      <max>1</max>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">Disabled</value>
+        <value code="1">Enabled</value>
       </values>
     </parameter>
     <parameter name="SENS_EN_BATT" default="0" type="INT32" boolean="true">
@@ -11747,8 +11708,8 @@ How often the sensor is readout</short_desc>
       <increment>0.01</increment>
     </parameter>
     <parameter name="SIH_DISTSNSR_OVR" default="-1.0" type="FLOAT">
-      <short_desc>if &gt;= 0 the distance sensor measures will be overrided by this value
-Absolute value superior to 10000 will disable distance sensor</short_desc>
+      <short_desc>if &gt;= 0 the distance sensor measures will be overrided by this value</short_desc>
+      <long_desc>Absolute value superior to 10000 will disable distance sensor</long_desc>
       <unit>m</unit>
     </parameter>
     <parameter name="SIH_GPS_USED" default="10" type="INT32">
@@ -11946,8 +11907,7 @@ Absolute value superior to 10000 will disable distance sensor</short_desc>
       <long_desc>Set to 1 to reset parameters on next system startup (setting defaults). Platform-specific values are used if available. RC* parameters are preserved.</long_desc>
       <values>
         <value code="0">Keep parameters</value>
-        <value code="1">Reset parameters</value>
-        <value code="2">Reload airframe parameters</value>
+        <value code="1">Reset parameters to airframe defaults</value>
       </values>
     </parameter>
     <parameter name="SYS_AUTOSTART" default="0" type="INT32">
@@ -12034,11 +11994,6 @@ Absolute value superior to 10000 will disable distance sensor</short_desc>
         <value code="2">ekf2 (recommended)</value>
         <value code="3">Q attitude estimator (no position)</value>
       </values>
-    </parameter>
-    <parameter name="SYS_PARAM_VER" default="1" type="INT32">
-      <short_desc>Parameter version</short_desc>
-      <long_desc>This is used internally only: an airframe configuration might set an expected parameter version value via PARAM_DEFAULTS_VER. This is checked on bootup against SYS_PARAM_VER, and if they do not match, parameters from the airframe configuration are reloaded.</long_desc>
-      <min>0</min>
     </parameter>
     <parameter name="SYS_RESTART_TYPE" default="2" type="INT32" volatile="true" category="System">
       <short_desc>Set restart type</short_desc>
@@ -12691,6 +12646,17 @@ Absolute value superior to 10000 will disable distance sensor</short_desc>
       <min>1</min>
       <max>125</max>
     </parameter>
+    <parameter name="UAVCAN_BAT_MON" default="0" type="INT32">
+      <short_desc>UAVCAN BATTERY_MONITOR battery monitor selection</short_desc>
+      <long_desc>This parameter defines that the system will select the battery monitor under the following conditions 0 - default battery monitor 1 - CUAV battery monitor</long_desc>
+      <min>0</min>
+      <max>1</max>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">default battery monitor</value>
+        <value code="1">CUAV battery monitor</value>
+      </values>
+    </parameter>
     <parameter name="UAVCAN_BITRATE" default="1000000" type="INT32">
       <short_desc>UAVCAN CAN bus bitrate</short_desc>
       <min>20000</min>
@@ -12933,18 +12899,16 @@ Absolute value superior to 10000 will disable distance sensor</short_desc>
       <increment>0.1</increment>
     </parameter>
     <parameter name="VT_B_REV_DEL" default="0.0" type="FLOAT">
-      <short_desc>Delay in seconds before applying back transition throttle
-Set this to a value greater than 0 to give the motor time to spin down</short_desc>
-      <long_desc>unit s</long_desc>
+      <short_desc>Delay in seconds before applying back transition throttle</short_desc>
+      <long_desc>Set this to a value greater than 0 to give the motor time to spin down. unit s</long_desc>
       <min>0</min>
       <max>10</max>
       <decimal>2</decimal>
       <increment>1</increment>
     </parameter>
     <parameter name="VT_B_REV_OUT" default="0.0" type="FLOAT">
-      <short_desc>Output on airbrakes channel during back transition
-Used for airbrakes or with ESCs that have reverse thrust enabled on a seperate channel
-Airbrakes need to be enables for your selected model/mixer</short_desc>
+      <short_desc>Output on airbrakes channel during back transition</short_desc>
+      <long_desc>Used for airbrakes or with ESCs that have reverse thrust enabled on a seperate channel Airbrakes need to be enables for your selected model/mixer</long_desc>
       <min>0</min>
       <max>1</max>
       <decimal>2</decimal>
@@ -12967,19 +12931,16 @@ Airbrakes need to be enables for your selected model/mixer</short_desc>
       <unit>s</unit>
     </parameter>
     <parameter name="VT_B_TRANS_THR" default="0.0" type="FLOAT">
-      <short_desc>Target throttle value for the transition to hover flight.
-standard vtol: pusher
-tailsitter, tiltrotor: main throttle</short_desc>
-      <long_desc>Note for standard vtol: For ESCs and mixers that support reverse thrust on low PWM values set this to a negative value to apply active breaking For ESCs that support thrust reversal with a control channel please set VT_B_REV_OUT and set this to a positive value to apply active breaking</long_desc>
+      <short_desc>Target throttle value for the transition to hover flight</short_desc>
+      <long_desc>standard vtol: pusher tailsitter, tiltrotor: main throttle Note for standard vtol: For ESCs and mixers that support reverse thrust on low PWM values set this to a negative value to apply active breaking For ESCs that support thrust reversal with a control channel please set VT_B_REV_OUT and set this to a positive value to apply active breaking</long_desc>
       <min>-1</min>
       <max>1</max>
       <decimal>2</decimal>
       <increment>0.01</increment>
     </parameter>
     <parameter name="VT_DWN_PITCH_MAX" default="5.0" type="FLOAT">
-      <short_desc>Maximum allowed angle the vehicle is allowed to pitch down to generate forward force
-when fixed-wing forward actuation is active (seeVT_FW_TRHUST_EN).
-If demanded down pitch exceeds this limmit, the fixed-wing forward actuators are used instead</short_desc>
+      <short_desc>Maximum allowed angle the vehicle is allowed to pitch down to generate forward force</short_desc>
+      <long_desc>When fixed-wing forward actuation is active (see VT_FW_TRHUST_EN). If demanded down pitch exceeds this limmit, the fixed-wing forward actuators are used instead.</long_desc>
       <min>0.0</min>
       <max>45.0</max>
     </parameter>
@@ -12988,12 +12949,8 @@ If demanded down pitch exceeds this limmit, the fixed-wing forward actuators are
       <long_desc>If set to 1 the elevons are locked in multicopter mode</long_desc>
     </parameter>
     <parameter name="VT_FWD_THRUST_EN" default="0" type="INT32">
-      <short_desc>Enable/disable usage of fixed-wing actuators in hover to generate forward force (instead of pitching down).
-This technique can be used to avoid the plane having to pitch down in order to move forward.
-This prevents large, negative lift values being created when facing strong winds.
-Fixed-wing forward actuators refers to puller/pusher (standard VTOL), or forward-tilt (tiltrotor VTOL).
-Only active if demaded down pitch is above VT_DWN_PITCH_MAX, and uses VT_FWD_THRUST_SC to get from
-demanded down pitch to fixed-wing actuation</short_desc>
+      <short_desc>Enable/disable usage of fixed-wing actuators in hover to generate forward force (instead of pitching down)</short_desc>
+      <long_desc>This technique can be used to avoid the plane having to pitch down in order to move forward. This prevents large, negative lift values being created when facing strong winds. Fixed-wing forward actuators refers to puller/pusher (standard VTOL), or forward-tilt (tiltrotor VTOL). Only active if demaded down pitch is above VT_DWN_PITCH_MAX, and uses VT_FWD_THRUST_SC to get from demanded down pitch to fixed-wing actuation.</long_desc>
       <values>
         <value code="0">Disable FW forward actuation in hover.</value>
         <value code="1">Enable FW forward actuation in hover in altitude, position and auto modes (except LANDING).</value>
@@ -13070,9 +13027,8 @@ demanded down pitch to fixed-wing actuation</short_desc>
       <increment>1</increment>
     </parameter>
     <parameter name="VT_F_TRANS_THR" default="1.0" type="FLOAT">
-      <short_desc>Target throttle value for the transition to fixed wing flight.
-standard vtol: pusher
-tailsitter, tiltrotor: main throttle</short_desc>
+      <short_desc>Target throttle value for the transition to fixed wing flight</short_desc>
+      <long_desc>standard vtol: pusher tailsitter, tiltrotor: main throttle</long_desc>
       <min>0.0</min>
       <max>1.0</max>
       <decimal>3</decimal>
@@ -13105,8 +13061,8 @@ tailsitter, tiltrotor: main throttle</short_desc>
       <increment>1</increment>
     </parameter>
     <parameter name="VT_PSHER_RMP_DT" default="3.0" type="FLOAT">
-      <short_desc>Defines the time window during which the pusher throttle will be ramped up linearly to VT_F_TRANS_THR during a transition
-to fixed wing mode. Zero or negative values will produce an instant throttle rise to VT_F_TRANS_THR</short_desc>
+      <short_desc>Pusher throttle ramp up window</short_desc>
+      <long_desc>Defines the time window during which the pusher throttle will be ramped up linearly to VT_F_TRANS_THR during a transition to fixed wing mode. Zero or negative values will produce an instant throttle rise to VT_F_TRANS_THR.</long_desc>
       <max>20</max>
       <decimal>2</decimal>
       <increment>0.01</increment>

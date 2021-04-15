@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_mission_clear_all
  * Delete all mission items at once.
@@ -84,4 +83,6 @@ return "MAVLINK_MSG_ID_MISSION_CLEAR_ALL : " +   "  target_system="+target_syste
 +  "  target_component="+target_component
 +  "  mission_type="+mission_type
 ;}
+
 }
+

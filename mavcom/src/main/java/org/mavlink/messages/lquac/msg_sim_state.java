@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_sim_state
  * Status of simulation environment, if used
@@ -210,4 +209,6 @@ return "MAVLINK_MSG_ID_SIM_STATE : " +   "  q1="+format((float)q1)
 +  "  ve="+format((float)ve)
 +  "  vd="+format((float)vd)
 ;}
+
 }
+

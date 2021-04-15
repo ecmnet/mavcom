@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_gps2_rtk
  * RTK GPS data. Gives information on the relative baseline calculation the GPS is reporting
@@ -154,4 +153,6 @@ return "MAVLINK_MSG_ID_GPS2_RTK : " +   "  time_last_baseline_ms="+time_last_bas
 +  "  nsats="+nsats
 +  "  baseline_coords_type="+baseline_coords_type
 ;}
+
 }
+

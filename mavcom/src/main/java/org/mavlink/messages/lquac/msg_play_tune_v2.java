@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_play_tune_v2
  * Play vehicle tone/tune (buzzer). Supersedes message PLAY_TUNE.
@@ -111,4 +110,6 @@ return "MAVLINK_MSG_ID_PLAY_TUNE_V2 : " +   "  format="+format
 +  "  target_component="+target_component
 +  "  tune="+getTune()
 ;}
+
 }
+

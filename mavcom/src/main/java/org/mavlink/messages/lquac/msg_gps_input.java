@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_gps_input
  * GPS sensor input message.  This is a raw sensor value sent by the GPS. This is NOT the global position estimate of the system.
@@ -196,4 +195,6 @@ return "MAVLINK_MSG_ID_GPS_INPUT : " +   "  time_usec="+time_usec
 +  "  satellites_visible="+satellites_visible
 +  "  yaw="+yaw
 ;}
+
 }
+

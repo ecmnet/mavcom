@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_system_time
  * The system time is the time of the master clock, typically the computer clock of the main onboard computer.
@@ -77,4 +76,6 @@ public String toString() {
 return "MAVLINK_MSG_ID_SYSTEM_TIME : " +   "  time_unix_usec="+time_unix_usec
 +  "  time_boot_ms="+time_boot_ms
 ;}
+
 }
+

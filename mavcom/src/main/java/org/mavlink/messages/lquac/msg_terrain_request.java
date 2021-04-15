@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_terrain_request
  * Request for terrain data and terrain status. See terrain protocol docs: https://mavlink.io/en/services/terrain.html
@@ -91,4 +90,6 @@ return "MAVLINK_MSG_ID_TERRAIN_REQUEST : " +   "  mask="+mask
 +  "  lon="+lon
 +  "  grid_spacing="+grid_spacing
 ;}
+
 }
+

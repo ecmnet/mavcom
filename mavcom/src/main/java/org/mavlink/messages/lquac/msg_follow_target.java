@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_follow_target
  * Current motion information from a designated system
@@ -171,4 +170,6 @@ return "MAVLINK_MSG_ID_FOLLOW_TARGET : " +   "  timestamp="+timestamp
 +  "  position_cov[2]="+format((float)position_cov[2])
 +  "  est_capabilities="+est_capabilities
 ;}
+
 }
+

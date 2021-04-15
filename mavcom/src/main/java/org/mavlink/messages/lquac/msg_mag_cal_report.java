@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_mag_cal_report
  * Reports results of completed compass calibration. Sent until MAG_CAL_ACK received.
@@ -189,4 +188,6 @@ return "MAVLINK_MSG_ID_MAG_CAL_REPORT : " +   "  fitness="+format((float)fitness
 +  "  old_orientation="+old_orientation
 +  "  new_orientation="+new_orientation
 ;}
+
 }
+

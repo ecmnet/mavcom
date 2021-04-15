@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_msp_command
  * MSP Commands.
@@ -112,4 +111,6 @@ return "MAVLINK_MSG_ID_MSP_COMMAND : " +   "  param1="+format((float)param1)
 +  "  param6="+format((float)param6)
 +  "  command="+command
 ;}
+
 }
+

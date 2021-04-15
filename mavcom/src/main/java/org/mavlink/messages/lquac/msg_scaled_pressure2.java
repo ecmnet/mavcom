@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_scaled_pressure2
  * Barometer readings for 2nd barometer
@@ -98,4 +97,6 @@ return "MAVLINK_MSG_ID_SCALED_PRESSURE2 : " +   "  time_boot_ms="+time_boot_ms
 +  "  temperature="+temperature
 +  "  temperature_press_diff="+temperature_press_diff
 ;}
+
 }
+

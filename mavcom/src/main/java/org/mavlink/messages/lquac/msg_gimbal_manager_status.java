@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_gimbal_manager_status
  * Current status about a high level gimbal manager. This message should be broadcast at a low regular rate (e.g. 5Hz).
@@ -112,4 +111,6 @@ return "MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS : " +   "  time_boot_ms="+time_boot
 +  "  secondary_control_sysid="+secondary_control_sysid
 +  "  secondary_control_compid="+secondary_control_compid
 ;}
+
 }
+

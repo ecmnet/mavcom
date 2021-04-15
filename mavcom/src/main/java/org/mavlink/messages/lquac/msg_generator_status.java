@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_generator_status
  * Telemetry of power generation system. Alternator or mechanical generator.
@@ -140,4 +139,6 @@ return "MAVLINK_MSG_ID_GENERATOR_STATUS : " +   "  status="+status
 +  "  rectifier_temperature="+rectifier_temperature
 +  "  generator_temperature="+generator_temperature
 ;}
+
 }
+

@@ -3,17 +3,16 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_component_information
- * Information about a component. For camera components instead use CAMERA_INFORMATION, and for autopilots use AUTOPILOT_VERSION. Components including GCSes should consider supporting requests of this message via MAV_CMD_REQUEST_MESSAGE.
+ * Information about a component. For camera components instead use CAMERA_INFORMATION, and for autopilots additionally use AUTOPILOT_VERSION. Components including GCSes should consider supporting requests of this message via MAV_CMD_REQUEST_MESSAGE.
  **/
 public class msg_component_information extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_COMPONENT_INFORMATION = 395;
@@ -25,7 +24,7 @@ public class msg_component_information extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_COMPONENT_INFORMATION;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 156;
+    payload_length = 212;
 }
 
   /**
@@ -33,54 +32,50 @@ public class msg_component_information extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * The type of metadata being requested.
+   * CRC32 of the TYPE_GENERAL file (can be used by a GCS for file caching).
    */
-  public long metadata_type;
+  public long general_metadata_file_crc;
   /**
-   * Unique uid for this metadata which a gcs can use for created cached metadata and understanding whether it's cache it up to date or whether it needs to download new data.
+   * CRC32 of the TYPE_PERIPHERALS file (can be used by a GCS for file caching).
    */
-  public long metadata_uid;
+  public long peripherals_metadata_file_crc;
   /**
-   * Unique uid for the translation file associated with the metadata.
+   * Component definition URI for TYPE_GENERAL. This must be a MAVLink FTP URI and the file might be compressed with xz.
    */
-  public long translation_uid;
-  /**
-   * Component definition URI. If prefix mavlinkftp:// file is downloaded from vehicle over mavlink ftp protocol. If prefix http[s]:// file is downloaded over internet. Files are json format. They can end in .gz to indicate file is in gzip format.
-   */
-  public char[] metadata_uri = new char[70];
-  public void setMetadata_uri(String tmp) {
-    int len = Math.min(tmp.length(), 70);
+  public char[] general_metadata_uri = new char[100];
+  public void setGeneral_metadata_uri(String tmp) {
+    int len = Math.min(tmp.length(), 100);
     for (int i=0; i<len; i++) {
-      metadata_uri[i] = tmp.charAt(i);
+      general_metadata_uri[i] = tmp.charAt(i);
     }
-    for (int i=len; i<70; i++) {
-      metadata_uri[i] = 0;
+    for (int i=len; i<100; i++) {
+      general_metadata_uri[i] = 0;
     }
   }
-  public String getMetadata_uri() {
+  public String getGeneral_metadata_uri() {
     String result="";
-    for (int i=0; i<70; i++) {
-      if (metadata_uri[i] != 0) result=result+metadata_uri[i]; else break;
+    for (int i=0; i<100; i++) {
+      if (general_metadata_uri[i] != 0) result=result+general_metadata_uri[i]; else break;
     }
     return result;
   }
   /**
-   * The translations for strings within the metadata file. If null the either do not exist or may be included in the metadata file itself. The translations specified here supercede any which may be in the metadata file itself. The uri format is the same as component_metadata_uri . Files are in Json Translation spec format. Empty string indicates no tranlsation file.
+   * (Optional) Component definition URI for TYPE_PERIPHERALS. This must be a MAVLink FTP URI and the file might be compressed with xz.
    */
-  public char[] translation_uri = new char[70];
-  public void setTranslation_uri(String tmp) {
-    int len = Math.min(tmp.length(), 70);
+  public char[] peripherals_metadata_uri = new char[100];
+  public void setPeripherals_metadata_uri(String tmp) {
+    int len = Math.min(tmp.length(), 100);
     for (int i=0; i<len; i++) {
-      translation_uri[i] = tmp.charAt(i);
+      peripherals_metadata_uri[i] = tmp.charAt(i);
     }
-    for (int i=len; i<70; i++) {
-      translation_uri[i] = 0;
+    for (int i=len; i<100; i++) {
+      peripherals_metadata_uri[i] = 0;
     }
   }
-  public String getTranslation_uri() {
+  public String getPeripherals_metadata_uri() {
     String result="";
-    for (int i=0; i<70; i++) {
-      if (translation_uri[i] != 0) result=result+translation_uri[i]; else break;
+    for (int i=0; i<100; i++) {
+      if (peripherals_metadata_uri[i] != 0) result=result+peripherals_metadata_uri[i]; else break;
     }
     return result;
   }
@@ -89,21 +84,20 @@ public class msg_component_information extends MAVLinkMessage {
  */
 public void decode(LittleEndianDataInputStream dis) throws IOException {
   time_boot_ms = (int)dis.readInt()&0x00FFFFFFFF;
-  metadata_type = (int)dis.readInt()&0x00FFFFFFFF;
-  metadata_uid = (int)dis.readInt()&0x00FFFFFFFF;
-  translation_uid = (int)dis.readInt()&0x00FFFFFFFF;
-  for (int i=0; i<70; i++) {
-    metadata_uri[i] = (char)dis.readByte();
+  general_metadata_file_crc = (int)dis.readInt()&0x00FFFFFFFF;
+  peripherals_metadata_file_crc = (int)dis.readInt()&0x00FFFFFFFF;
+  for (int i=0; i<100; i++) {
+    general_metadata_uri[i] = (char)dis.readByte();
   }
-  for (int i=0; i<70; i++) {
-    translation_uri[i] = (char)dis.readByte();
+  for (int i=0; i<100; i++) {
+    peripherals_metadata_uri[i] = (char)dis.readByte();
   }
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+156];
+  byte[] buffer = new byte[12+212];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -116,33 +110,33 @@ public byte[] encode() throws IOException {
   dos.writeByte((messageType >> 8) & 0x00FF);
   dos.writeByte((messageType >> 16) & 0x00FF);
   dos.writeInt((int)(time_boot_ms&0x00FFFFFFFF));
-  dos.writeInt((int)(metadata_type&0x00FFFFFFFF));
-  dos.writeInt((int)(metadata_uid&0x00FFFFFFFF));
-  dos.writeInt((int)(translation_uid&0x00FFFFFFFF));
-  for (int i=0; i<70; i++) {
-    dos.writeByte(metadata_uri[i]);
+  dos.writeInt((int)(general_metadata_file_crc&0x00FFFFFFFF));
+  dos.writeInt((int)(peripherals_metadata_file_crc&0x00FFFFFFFF));
+  for (int i=0; i<100; i++) {
+    dos.writeByte(general_metadata_uri[i]);
   }
-  for (int i=0; i<70; i++) {
-    dos.writeByte(translation_uri[i]);
+  for (int i=0; i<100; i++) {
+    dos.writeByte(peripherals_metadata_uri[i]);
   }
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 156);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 212);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[166] = crcl;
-  buffer[167] = crch;
+  buffer[222] = crcl;
+  buffer[223] = crch;
   dos.close();
   return buffer;
 }
 public String toString() {
 return "MAVLINK_MSG_ID_COMPONENT_INFORMATION : " +   "  time_boot_ms="+time_boot_ms
-+  "  metadata_type="+metadata_type
-+  "  metadata_uid="+metadata_uid
-+  "  translation_uid="+translation_uid
-+  "  metadata_uri="+getMetadata_uri()
-+  "  translation_uri="+getTranslation_uri()
++  "  general_metadata_file_crc="+general_metadata_file_crc
++  "  peripherals_metadata_file_crc="+peripherals_metadata_file_crc
++  "  general_metadata_uri="+getGeneral_metadata_uri()
++  "  peripherals_metadata_uri="+getPeripherals_metadata_uri()
 ;}
+
 }
+

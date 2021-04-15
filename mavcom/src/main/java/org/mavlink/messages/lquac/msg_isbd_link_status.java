@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_isbd_link_status
  * Status of the Iridium SBD link.
@@ -119,4 +118,6 @@ return "MAVLINK_MSG_ID_ISBD_LINK_STATUS : " +   "  timestamp="+timestamp
 +  "  tx_session_pending="+tx_session_pending
 +  "  rx_session_pending="+rx_session_pending
 ;}
+
 }
+

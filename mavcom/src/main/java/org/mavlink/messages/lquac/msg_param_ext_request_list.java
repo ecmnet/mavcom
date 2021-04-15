@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_param_ext_request_list
  * Request all parameters of this component. All parameters should be emitted in response as PARAM_EXT_VALUE.
@@ -77,4 +76,6 @@ public String toString() {
 return "MAVLINK_MSG_ID_PARAM_EXT_REQUEST_LIST : " +   "  target_system="+target_system
 +  "  target_component="+target_component
 ;}
+
 }
+

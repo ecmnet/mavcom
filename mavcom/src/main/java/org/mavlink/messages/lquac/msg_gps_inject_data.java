@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_gps_inject_data
  * Data for injecting into the onboard GPS (used for DGPS)
@@ -204,4 +203,6 @@ return "MAVLINK_MSG_ID_GPS_INJECT_DATA : " +   "  target_system="+target_system
 +  "  data[108]="+data[108]
 +  "  data[109]="+data[109]
 ;}
+
 }
+

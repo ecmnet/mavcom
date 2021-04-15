@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_trajectory_representation_bezier
  * Describe a trajectory using an array of up-to 5 bezier control points in the local frame (MAV_FRAME_LOCAL_NED).
@@ -152,4 +151,6 @@ return "MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_BEZIER : " +   "  time_usec="+t
 +  "  pos_yaw[4]="+format((float)pos_yaw[4])
 +  "  valid_points="+valid_points
 ;}
+
 }
+

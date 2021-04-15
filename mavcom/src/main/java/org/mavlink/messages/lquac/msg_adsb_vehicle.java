@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_adsb_vehicle
  * The location and information of an ADSB vehicle
@@ -174,4 +173,6 @@ return "MAVLINK_MSG_ID_ADSB_VEHICLE : " +   "  ICAO_address="+ICAO_address
 +  "  emitter_type="+emitter_type
 +  "  tslc="+tslc
 ;}
+
 }
+

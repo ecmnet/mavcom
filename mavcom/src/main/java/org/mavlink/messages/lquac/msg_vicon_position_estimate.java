@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_vicon_position_estimate
  * Global position estimate from a Vicon motion system source.
@@ -143,4 +142,6 @@ return "MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE : " +   "  usec="+usec
 +  "  covariance[19]="+format((float)covariance[19])
 +  "  covariance[20]="+format((float)covariance[20])
 ;}
+
 }
+

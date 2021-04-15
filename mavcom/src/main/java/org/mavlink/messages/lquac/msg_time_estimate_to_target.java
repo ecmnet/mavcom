@@ -3,14 +3,13 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-import org.mavlink.messages.MAVLinkMessage;
 /**
  * Class msg_time_estimate_to_target
  * Time/duration estimates for various events and actions given the current vehicle state and position.
@@ -98,4 +97,6 @@ return "MAVLINK_MSG_ID_TIME_ESTIMATE_TO_TARGET : " +   "  safe_return="+safe_ret
 +  "  mission_end="+mission_end
 +  "  commanded_action="+commanded_action
 ;}
+
 }
+
