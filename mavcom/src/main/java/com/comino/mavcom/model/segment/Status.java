@@ -60,6 +60,10 @@ public class Status extends Segment {
 	public static final int MSP_GPOS_VALID		            	= 11;
 	public static final int MSP_LPOS_VALID         		    	= 12;
 	public static final int MSP_PARAMS_LOADED      		    	= 13;
+	
+	private static final String[] MSP_STATUS_TEXTS = { "Connected", "GCL connected", "MSP actve", "RC Attached", "Joystick attached", 
+			                                          "Offboard started", "SITL", "Proxy enabled", "Armed", "Landed", "In air", 
+			                                          "GPOS valid", "LPOS valid", "Parameter loaded" };
 
 
 	// Low level sensors
@@ -81,6 +85,7 @@ public class Status extends Segment {
 	public static final  int MSP_RTK_AVAILABILITY    		    =10;
 	public static final  int MSP_GROUND_TRUTH        		    =11;
 	public static final  int MSP_FIDUCIAL_LOCKED           	    =12;
+	
 
 	// Navigation states
 
@@ -299,7 +304,14 @@ public class Status extends Segment {
 
 
 	public String toString() {
-		return "Status="+Integer.toBinaryString(status)+" Autopilot="+Long.toBinaryString(autopilot);
+		StringBuilder b = new StringBuilder();
+		b.append("!---------------------------------------------------!\n");
+		b.append("Status flags:\n");
+		for(int i=0;i<MSP_STATUS_TEXTS.length;i++) {
+		   b.append((status >> i) & 0x1).append(" = ").append(MSP_STATUS_TEXTS[i]).append("\n"); 
+		}
+		b.append("!---------------------------------------------------!\n");
+		return b.toString();
 	}
 
 
