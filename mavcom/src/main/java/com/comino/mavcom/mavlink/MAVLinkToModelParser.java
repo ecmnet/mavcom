@@ -41,6 +41,7 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAV_RESULT;
@@ -69,11 +70,11 @@ public class MAVLinkToModelParser {
 	private DataModel model;
 	private MSPLogger logger = null;
 
-	private HashMap<Class<?>, MAVLinkMessage> mavList = null;
+	private Map<Class<?>, MAVLinkMessage>                mavList = null;
 
 	private IMAVComm link = null;
 
-	private HashMap<Class<?>, List<IMAVLinkListener>> 	msglisteners 		= null;
+	private Map<Class<?>, List<IMAVLinkListener>> 	   msglisteners 		= null;
 	private List<IMAVLinkListener> 	  					mavListener 		= null;
 	private List<IMAVMessageListener> 					messageListener 	= null;
 

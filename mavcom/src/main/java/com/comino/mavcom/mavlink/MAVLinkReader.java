@@ -34,6 +34,7 @@
 
 package com.comino.mavcom.mavlink;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -78,8 +79,8 @@ public class MAVLinkReader {
 		MAVLINK_FRAMING_BAD_SEQUENCE,
 	};
 
-	private volatile t_parser_state state = t_parser_state.MAVLINK_PARSE_STATE_IDLE;
-	private volatile RxMsg rxmsg          = new RxMsg();
+	private t_parser_state state = t_parser_state.MAVLINK_PARSE_STATE_IDLE;
+	private RxMsg rxmsg          = new RxMsg();
 
 
 	private final int[] lastPacket = new int[256];
@@ -232,7 +233,7 @@ public class MAVLinkReader {
 				state = t_parser_state.MAVLINK_PARSE_STATE_GOT_MSGID3;
 				break;
 			case MAVLINK_PARSE_STATE_GOT_MSGID3:
-				rxmsg.rawData[lengthToRead] = (byte)c;
+				rxmsg.rawData[lengthToRead] = (byte)c; 
 				rxmsg.crc = MAVLinkCRC.crc_accumulate((byte)c, rxmsg.crc);
 				if(++lengthToRead >= rxmsg.len)
 					state = t_parser_state.MAVLINK_PARSE_STATE_GOT_PAYLOAD;
@@ -422,7 +423,9 @@ public class MAVLinkReader {
 			signature_wait = MAVLINK_SIGNATURE_BLOCK_LEN;
 			msg_received = mavlink_framing_t.MAVLINK_FRAMING_INCOMPLETE;
 			crc= MAVLinkCRC.crc_init();
-		//s	Arrays.fill(rawData, (byte)0x00);
+			// first 48 bytes need to be filled as deserialization does not work properly for corner cases
+			Arrays.fill(rxmsg.rawData,8,48,(byte)0x00);
+			
 		}
 
 		public String toString() {

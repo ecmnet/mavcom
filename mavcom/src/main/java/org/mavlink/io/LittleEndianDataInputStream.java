@@ -104,4 +104,7 @@ public final class LittleEndianDataInputStream extends InputStream implements Da
         //        return dis.readLine();
         return "";
     }
+    
+    
+    
 }

@@ -46,8 +46,8 @@ public class StatusManager implements Runnable {
 
 	private static final long TIMEOUT_IMU             = 5000000;
 	private static final long TIMEOUT_VISION          = 3000000;
-	private static final long TIMEOUT_CONNECTED       = 5000000;
-	private static final long TIMEOUT_GCL_CONNECTED   = 5000000;
+	private static final long TIMEOUT_CONNECTED       = 6000000;
+	private static final long TIMEOUT_GCL_CONNECTED   = 6000000;
 	private static final long TIMEOUT_RC_ATTACHED     = 5000000;
 	private static final long TIMEOUT_JOY_ATTACHED    = 2000000;
 	private static final long TIMEOUT_GPOS            = 8000000;
@@ -326,41 +326,42 @@ public class StatusManager implements Runnable {
 
 	private void checkTimeouts() {
 
-		if (checkTimeOut(model.attitude.tms, TIMEOUT_IMU)) {
+		if (checkTimeOut(model.attitude.tms, TIMEOUT_IMU) && model.sys.isSensorAvailable(Status.MSP_IMU_AVAILABILITY)) {
 			model.sys.setSensor(Status.MSP_IMU_AVAILABILITY, false);
 		}
 
-		if (checkTimeOut(model.state.tms, TIMEOUT_LPOS)) {
+		if (checkTimeOut(model.state.tms, TIMEOUT_LPOS) && model.sys.isStatus(Status.MSP_LPOS_VALID)) {
 			model.sys.setStatus(Status.MSP_LPOS_VALID, false);
 		}
 
-		if (checkTimeOut(model.state.gpos_tms, TIMEOUT_GPOS)) {
+		if (checkTimeOut(model.state.gpos_tms, TIMEOUT_GPOS) && model.sys.isStatus(Status.MSP_GPOS_VALID)) {
 			model.sys.setStatus(Status.MSP_GPOS_VALID, false);
 		}
 
-		if (checkTimeOut(model.raw.tms, TIMEOUT_LIDAR)) {
+		if (checkTimeOut(model.raw.tms, TIMEOUT_LIDAR) && model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
 			//System.out.println("LIDAR timeout");
 			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, false);
 		}
 
-		if (checkTimeOut(model.vision.tms, TIMEOUT_VISION)) {
+		if (checkTimeOut(model.vision.tms, TIMEOUT_VISION) && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
 			model.sys.setSensor(Status.MSP_OPCV_AVAILABILITY, false);
 			model.vision.clear();
 		}
 
-		if (checkTimeOut(model.gps.tms, TIMEOUT_GPS)) {
+		if (checkTimeOut(model.gps.tms, TIMEOUT_GPS) && model.sys.isSensorAvailable(Status.MSP_GPS_AVAILABILITY)) {
 			model.sys.setSensor(Status.MSP_GPS_AVAILABILITY, false);
 			model.gps.clear();
 		}
 
-		if (checkTimeOut(model.slam.tms, TIMEOUT_SLAM)) {
+		if (checkTimeOut(model.slam.tms, TIMEOUT_SLAM) && model.sys.isSensorAvailable(Status.MSP_SLAM_AVAILABILITY)) {
 			model.sys.setSensor(Status.MSP_SLAM_AVAILABILITY, false);
 			model.slam.clear();
 		}
 
-		if (checkTimeOut(model.sys.gcl_tms, TIMEOUT_GCL_CONNECTED)) {
-			//System.out.println((model.sys.gcl_tms - model.sys.getSynchronizedPX4Time_us()));
+		if (checkTimeOut(model.sys.gcl_tms, TIMEOUT_GCL_CONNECTED) && model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, (false));
+			System.out.println(("GCL lost: "+(model.sys.gcl_tms - DataModel.getSynchronizedPX4Time_us())/1000)+"ms");
+			System.out.println(model.sys);
 		}
 
 		if(!model.sys.isStatus(Status.MSP_SITL)) {
@@ -371,11 +372,10 @@ public class StatusManager implements Runnable {
 		}
 
 		if (checkTimeOut(model.sys.tms, TIMEOUT_CONNECTED) && model.sys.isStatus(Status.MSP_CONNECTED)) {
-			//System.out.println(model.sys.tms+" / "+  model.sys.getSynchronizedPX4Time_us());
-			System.out.println(model.sys);
 			model.sys.setStatus(Status.MSP_CONNECTED, false);
 			System.out.println("..Connection timeout");
-			//	model.sys.setStatus(Status.MSP_ACTIVE, false);
+			System.out.println(("MSP lost: "+(model.sys.tms - DataModel.getSynchronizedPX4Time_us())/1000)+"ms");
+			System.out.println(model.sys);
 			model.sys.wifi_quality = 0;
 			model.sys.tms = DataModel.getSynchronizedPX4Time_us();
 		}
