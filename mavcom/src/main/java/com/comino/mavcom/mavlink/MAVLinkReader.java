@@ -424,7 +424,7 @@ public class MAVLinkReader {
 			msg_received = mavlink_framing_t.MAVLINK_FRAMING_INCOMPLETE;
 			crc= MAVLinkCRC.crc_init();
 			// first 48 bytes need to be filled as deserialization does not work properly for corner cases
-			Arrays.fill(rxmsg.rawData,8,48,(byte)0x00);
+			Arrays.fill(rxmsg.rawData,8,rxmsg.rawData.length-1,(byte)0x00);
 			
 		}
 
