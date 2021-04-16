@@ -125,5 +125,9 @@ return "MAVLINK_MSG_ID_PARAM_ACK_TRANSACTION : " +   "  param_value="+format((fl
 +  "  param_result="+param_result
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_PARAM_ACK_TRANSACTION;
+}
+
 }
 

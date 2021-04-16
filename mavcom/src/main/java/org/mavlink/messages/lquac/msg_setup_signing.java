@@ -126,5 +126,9 @@ return "MAVLINK_MSG_ID_SETUP_SIGNING : " +   "  initial_timestamp="+initial_time
 +  "  secret_key[31]="+secret_key[31]
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_SETUP_SIGNING;
+}
+
 }
 

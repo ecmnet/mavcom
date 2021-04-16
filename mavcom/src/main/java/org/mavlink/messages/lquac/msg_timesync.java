@@ -77,5 +77,9 @@ return "MAVLINK_MSG_ID_TIMESYNC : " +   "  tc1="+tc1
 +  "  ts1="+ts1
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_TIMESYNC;
+}
+
 }
 

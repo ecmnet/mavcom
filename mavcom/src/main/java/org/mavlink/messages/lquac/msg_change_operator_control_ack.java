@@ -84,5 +84,9 @@ return "MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK : " +   "  gcs_system_id="+gc
 +  "  ack="+ack
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL_ACK;
+}
+
 }
 

@@ -231,5 +231,9 @@ return "MAVLINK_MSG_ID_HIGH_LATENCY : " +   "  custom_mode="+custom_mode
 +  "  wp_num="+wp_num
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_HIGH_LATENCY;
+}
+
 }
 

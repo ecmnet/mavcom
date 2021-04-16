@@ -203,5 +203,9 @@ return "MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE : " +   "  chan1_raw="+chan1_raw
 +  "  chan18_raw="+chan18_raw
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE;
+}
+
 }
 

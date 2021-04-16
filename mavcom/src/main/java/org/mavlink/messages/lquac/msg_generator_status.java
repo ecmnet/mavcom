@@ -140,5 +140,9 @@ return "MAVLINK_MSG_ID_GENERATOR_STATUS : " +   "  status="+status
 +  "  generator_temperature="+generator_temperature
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GENERATOR_STATUS;
+}
+
 }
 

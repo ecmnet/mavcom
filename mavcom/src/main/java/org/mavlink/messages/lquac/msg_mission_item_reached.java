@@ -70,5 +70,9 @@ public String toString() {
 return "MAVLINK_MSG_ID_MISSION_ITEM_REACHED : " +   "  seq="+seq
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_MISSION_ITEM_REACHED;
+}
+
 }
 

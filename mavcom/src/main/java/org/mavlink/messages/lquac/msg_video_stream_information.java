@@ -187,5 +187,9 @@ return "MAVLINK_MSG_ID_VIDEO_STREAM_INFORMATION : " +   "  framerate="+format((f
 +  "  uri="+getUri()
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_VIDEO_STREAM_INFORMATION;
+}
+
 }
 

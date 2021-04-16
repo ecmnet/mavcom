@@ -98,5 +98,9 @@ return "MAVLINK_MSG_ID_LOG_ENTRY : " +   "  time_utc="+time_utc
 +  "  last_log_num="+last_log_num
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_LOG_ENTRY;
+}
+
 }
 

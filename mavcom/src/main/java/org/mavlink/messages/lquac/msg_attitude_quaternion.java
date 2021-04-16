@@ -133,5 +133,9 @@ return "MAVLINK_MSG_ID_ATTITUDE_QUATERNION : " +   "  time_boot_ms="+time_boot_m
 +  "  repr_offset_q[3]="+format((float)repr_offset_q[3])
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_ATTITUDE_QUATERNION;
+}
+
 }
 

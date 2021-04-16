@@ -77,5 +77,9 @@ return "MAVLINK_MSG_ID_TERRAIN_CHECK : " +   "  lat="+lat
 +  "  lon="+lon
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_TERRAIN_CHECK;
+}
+
 }
 

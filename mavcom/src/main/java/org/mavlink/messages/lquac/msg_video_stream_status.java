@@ -119,5 +119,9 @@ return "MAVLINK_MSG_ID_VIDEO_STREAM_STATUS : " +   "  framerate="+format((float)
 +  "  stream_id="+stream_id
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_VIDEO_STREAM_STATUS;
+}
+
 }
 

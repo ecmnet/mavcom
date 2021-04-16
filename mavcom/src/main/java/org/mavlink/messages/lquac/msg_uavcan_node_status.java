@@ -105,5 +105,9 @@ return "MAVLINK_MSG_ID_UAVCAN_NODE_STATUS : " +   "  time_usec="+time_usec
 +  "  sub_mode="+sub_mode
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_UAVCAN_NODE_STATUS;
+}
+
 }
 

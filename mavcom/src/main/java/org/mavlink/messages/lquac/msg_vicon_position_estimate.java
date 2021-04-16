@@ -143,5 +143,9 @@ return "MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE : " +   "  usec="+usec
 +  "  covariance[20]="+format((float)covariance[20])
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_VICON_POSITION_ESTIMATE;
+}
+
 }
 

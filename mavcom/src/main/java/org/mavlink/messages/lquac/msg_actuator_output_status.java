@@ -119,5 +119,9 @@ return "MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS : " +   "  time_usec="+time_usec
 +  "  actuator[31]="+format((float)actuator[31])
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS;
+}
+
 }
 

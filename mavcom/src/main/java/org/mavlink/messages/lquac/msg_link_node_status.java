@@ -140,5 +140,9 @@ return "MAVLINK_MSG_ID_LINK_NODE_STATUS : " +   "  timestamp="+timestamp
 +  "  rx_buf="+rx_buf
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_LINK_NODE_STATUS;
+}
+
 }
 

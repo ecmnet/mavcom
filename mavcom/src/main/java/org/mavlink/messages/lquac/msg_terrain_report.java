@@ -112,5 +112,9 @@ return "MAVLINK_MSG_ID_TERRAIN_REPORT : " +   "  lat="+lat
 +  "  loaded="+loaded
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_TERRAIN_REPORT;
+}
+
 }
 

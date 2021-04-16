@@ -331,5 +331,9 @@ return "MAVLINK_MSG_ID_ONBOARD_COMPUTER_STATUS : " +   "  time_usec="+time_usec
 +  "  temperature_core[7]="+temperature_core[7]
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_ONBOARD_COMPUTER_STATUS;
+}
+
 }
 

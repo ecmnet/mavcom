@@ -147,5 +147,9 @@ return "MAVLINK_MSG_ID_HIL_OPTICAL_FLOW : " +   "  time_usec="+time_usec
 +  "  quality="+quality
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_HIL_OPTICAL_FLOW;
+}
+
 }
 

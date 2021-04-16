@@ -112,5 +112,9 @@ return "MAVLINK_MSG_ID_MANUAL_SETPOINT : " +   "  time_boot_ms="+time_boot_ms
 +  "  manual_override_switch="+manual_override_switch
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_MANUAL_SETPOINT;
+}
+
 }
 

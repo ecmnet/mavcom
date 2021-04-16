@@ -182,5 +182,9 @@ return "MAVLINK_MSG_ID_HIL_STATE_QUATERNION : " +   "  time_usec="+time_usec
 +  "  zacc="+zacc
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_HIL_STATE_QUATERNION;
+}
+
 }
 

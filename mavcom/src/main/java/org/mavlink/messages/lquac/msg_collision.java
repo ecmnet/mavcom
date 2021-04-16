@@ -112,5 +112,9 @@ return "MAVLINK_MSG_ID_COLLISION : " +   "  id="+id
 +  "  threat_level="+threat_level
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_COLLISION;
+}
+
 }
 

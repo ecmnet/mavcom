@@ -147,5 +147,9 @@ return "MAVLINK_MSG_ID_OPTICAL_FLOW_RAD : " +   "  time_usec="+time_usec
 +  "  quality="+quality
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_OPTICAL_FLOW_RAD;
+}
+
 }
 

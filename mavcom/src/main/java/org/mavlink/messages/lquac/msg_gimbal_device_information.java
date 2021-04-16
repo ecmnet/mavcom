@@ -228,5 +228,9 @@ return "MAVLINK_MSG_ID_GIMBAL_DEVICE_INFORMATION : " +   "  uid="+uid
 +  "  custom_name="+getCustom_name()
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GIMBAL_DEVICE_INFORMATION;
+}
+
 }
 

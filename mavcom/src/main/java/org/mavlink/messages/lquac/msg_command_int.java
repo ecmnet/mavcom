@@ -154,5 +154,9 @@ return "MAVLINK_MSG_ID_COMMAND_INT : " +   "  param1="+format((float)param1)
 +  "  autocontinue="+autocontinue
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_COMMAND_INT;
+}
+
 }
 

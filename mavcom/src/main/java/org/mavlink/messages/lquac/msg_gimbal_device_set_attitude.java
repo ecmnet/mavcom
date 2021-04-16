@@ -119,5 +119,9 @@ return "MAVLINK_MSG_ID_GIMBAL_DEVICE_SET_ATTITUDE : " +   "  q[0]="+format((floa
 +  "  target_component="+target_component
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GIMBAL_DEVICE_SET_ATTITUDE;
+}
+
 }
 

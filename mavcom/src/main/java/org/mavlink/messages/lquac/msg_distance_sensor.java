@@ -154,5 +154,9 @@ return "MAVLINK_MSG_ID_DISTANCE_SENSOR : " +   "  time_boot_ms="+time_boot_ms
 +  "  signal_quality="+signal_quality
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_DISTANCE_SENSOR;
+}
+
 }
 

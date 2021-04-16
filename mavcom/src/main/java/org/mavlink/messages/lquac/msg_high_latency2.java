@@ -252,5 +252,9 @@ return "MAVLINK_MSG_ID_HIGH_LATENCY2 : " +   "  timestamp="+timestamp
 +  "  custom2="+custom2
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_HIGH_LATENCY2;
+}
+
 }
 

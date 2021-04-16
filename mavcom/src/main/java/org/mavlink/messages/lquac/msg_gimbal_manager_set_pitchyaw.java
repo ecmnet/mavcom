@@ -119,5 +119,9 @@ return "MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_PITCHYAW : " +   "  flags="+flags
 +  "  gimbal_device_id="+gimbal_device_id
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_PITCHYAW;
+}
+
 }
 

@@ -77,5 +77,9 @@ return "MAVLINK_MSG_ID_RAW_RPM : " +   "  frequency="+format((float)frequency)
 +  "  index="+index
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_RAW_RPM;
+}
+
 }
 

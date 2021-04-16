@@ -105,5 +105,9 @@ return "MAVLINK_MSG_ID_ORBIT_EXECUTION_STATUS : " +   "  time_usec="+time_usec
 +  "  frame="+frame
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_ORBIT_EXECUTION_STATUS;
+}
+
 }
 

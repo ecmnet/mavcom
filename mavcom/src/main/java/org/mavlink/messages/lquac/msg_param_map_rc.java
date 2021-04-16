@@ -146,5 +146,9 @@ return "MAVLINK_MSG_ID_PARAM_MAP_RC : " +   "  param_value0="+format((float)para
 +  "  parameter_rc_channel_index="+parameter_rc_channel_index
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_PARAM_MAP_RC;
+}
+
 }
 

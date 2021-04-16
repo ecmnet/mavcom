@@ -84,5 +84,9 @@ return "MAVLINK_MSG_ID_DEBUG : " +   "  time_boot_ms="+time_boot_ms
 +  "  ind="+ind
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_DEBUG;
+}
+
 }
 

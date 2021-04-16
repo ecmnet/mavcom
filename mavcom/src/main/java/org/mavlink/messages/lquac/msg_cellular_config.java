@@ -199,5 +199,9 @@ return "MAVLINK_MSG_ID_CELLULAR_CONFIG : " +   "  enable_lte="+enable_lte
 +  "  response="+response
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_CELLULAR_CONFIG;
+}
+
 }
 

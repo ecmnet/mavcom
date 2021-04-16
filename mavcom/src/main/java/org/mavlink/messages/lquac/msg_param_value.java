@@ -118,5 +118,9 @@ return "MAVLINK_MSG_ID_PARAM_VALUE : " +   "  param_value="+format((float)param_
 +  "  param_type="+param_type
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_PARAM_VALUE;
+}
+
 }
 

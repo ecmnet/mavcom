@@ -201,5 +201,9 @@ return "MAVLINK_MSG_ID_OBSTACLE_DISTANCE : " +   "  time_usec="+time_usec
 +  "  frame="+frame
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_OBSTACLE_DISTANCE;
+}
+
 }
 

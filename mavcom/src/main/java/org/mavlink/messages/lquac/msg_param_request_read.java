@@ -111,5 +111,9 @@ return "MAVLINK_MSG_ID_PARAM_REQUEST_READ : " +   "  param_index="+param_index
 +  "  param_id="+getParam_id()
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_PARAM_REQUEST_READ;
+}
+
 }
 

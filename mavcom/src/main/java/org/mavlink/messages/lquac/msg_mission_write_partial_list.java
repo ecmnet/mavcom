@@ -98,5 +98,9 @@ return "MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST : " +   "  start_index="+start
 +  "  mission_type="+mission_type
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_MISSION_WRITE_PARTIAL_LIST;
+}
+
 }
 

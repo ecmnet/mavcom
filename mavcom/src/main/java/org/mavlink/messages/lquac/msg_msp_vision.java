@@ -210,5 +210,9 @@ return "MAVLINK_MSG_ID_MSP_VISION : " +   "  tms="+tms
 +  "  quality="+quality
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_MSP_VISION;
+}
+
 }
 

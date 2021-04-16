@@ -187,5 +187,9 @@ return "MAVLINK_MSG_ID_SMART_BATTERY_INFO : " +   "  capacity_full_specification
 +  "  device_name="+getDevice_name()
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_SMART_BATTERY_INFO;
+}
+
 }
 

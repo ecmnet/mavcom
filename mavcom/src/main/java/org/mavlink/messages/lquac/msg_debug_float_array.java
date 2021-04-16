@@ -172,5 +172,9 @@ return "MAVLINK_MSG_ID_DEBUG_FLOAT_ARRAY : " +   "  time_usec="+time_usec
 +  "  data[57]="+format((float)data[57])
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_DEBUG_FLOAT_ARRAY;
+}
+
 }
 

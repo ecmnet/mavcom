@@ -154,5 +154,9 @@ return "MAVLINK_MSG_ID_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE : " +   "  time_boot_us
 +  "  landed_state="+landed_state
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE;
+}
+
 }
 

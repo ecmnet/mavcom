@@ -147,5 +147,9 @@ return "MAVLINK_MSG_ID_ESC_INFO : " +   "  time_usec="+time_usec
 +  "  temperature[3]="+temperature[3]
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_ESC_INFO;
+}
+
 }
 

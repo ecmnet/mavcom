@@ -220,5 +220,9 @@ return "MAVLINK_MSG_ID_GPS_STATUS : " +   "  satellites_visible="+satellites_vis
 +  "  satellite_snr[19]="+satellite_snr[19]
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GPS_STATUS;
+}
+
 }
 

@@ -91,5 +91,9 @@ return "MAVLINK_MSG_ID_TERRAIN_REQUEST : " +   "  mask="+mask
 +  "  grid_spacing="+grid_spacing
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_TERRAIN_REQUEST;
+}
+
 }
 

@@ -171,5 +171,9 @@ return "MAVLINK_MSG_ID_FOLLOW_TARGET : " +   "  timestamp="+timestamp
 +  "  est_capabilities="+est_capabilities
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_FOLLOW_TARGET;
+}
+
 }
 

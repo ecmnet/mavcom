@@ -105,5 +105,9 @@ return "MAVLINK_MSG_ID_COMMAND_ACK : " +   "  command="+command
 +  "  target_component="+target_component
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_COMMAND_ACK;
+}
+
 }
 

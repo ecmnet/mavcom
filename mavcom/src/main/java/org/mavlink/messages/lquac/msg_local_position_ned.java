@@ -112,5 +112,9 @@ return "MAVLINK_MSG_ID_LOCAL_POSITION_NED : " +   "  time_boot_ms="+time_boot_ms
 +  "  vz="+format((float)vz)
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_LOCAL_POSITION_NED;
+}
+
 }
 

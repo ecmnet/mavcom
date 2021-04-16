@@ -103,5 +103,9 @@ return "MAVLINK_MSG_ID_WHEEL_DISTANCE : " +   "  time_usec="+time_usec
 +  "  count="+count
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_WHEEL_DISTANCE;
+}
+
 }
 

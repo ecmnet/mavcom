@@ -104,5 +104,9 @@ return "MAVLINK_MSG_ID_NAMED_VALUE_FLOAT : " +   "  time_boot_ms="+time_boot_ms
 +  "  name="+getName()
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_NAMED_VALUE_FLOAT;
+}
+
 }
 

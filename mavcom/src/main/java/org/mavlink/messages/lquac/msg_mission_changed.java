@@ -98,5 +98,9 @@ return "MAVLINK_MSG_ID_MISSION_CHANGED : " +   "  start_index="+start_index
 +  "  mission_type="+mission_type
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_MISSION_CHANGED;
+}
+
 }
 

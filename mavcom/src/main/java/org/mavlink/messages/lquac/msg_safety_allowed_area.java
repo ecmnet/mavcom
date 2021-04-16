@@ -112,5 +112,9 @@ return "MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA : " +   "  p1x="+format((float)p1x)
 +  "  frame="+frame
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA;
+}
+
 }
 

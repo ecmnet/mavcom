@@ -112,5 +112,9 @@ return "MAVLINK_MSG_ID_RADIO_STATUS : " +   "  rxerrors="+rxerrors
 +  "  remnoise="+remnoise
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_RADIO_STATUS;
+}
+
 }
 

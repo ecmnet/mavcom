@@ -133,5 +133,9 @@ return "MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS : " +   "  time_boot_ms="+t
 +  "  target_component="+target_component
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS;
+}
+
 }
 

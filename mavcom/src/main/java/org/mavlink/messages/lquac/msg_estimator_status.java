@@ -133,5 +133,9 @@ return "MAVLINK_MSG_ID_ESTIMATOR_STATUS : " +   "  time_usec="+time_usec
 +  "  flags="+flags
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_ESTIMATOR_STATUS;
+}
+
 }
 

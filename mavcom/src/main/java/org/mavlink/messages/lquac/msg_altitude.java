@@ -112,5 +112,9 @@ return "MAVLINK_MSG_ID_ALTITUDE : " +   "  time_usec="+time_usec
 +  "  bottom_clearance="+format((float)bottom_clearance)
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_ALTITUDE;
+}
+
 }
 

@@ -154,5 +154,9 @@ return "MAVLINK_MSG_ID_GPS_RTK : " +   "  time_last_baseline_ms="+time_last_base
 +  "  baseline_coords_type="+baseline_coords_type
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GPS_RTK;
+}
+
 }
 

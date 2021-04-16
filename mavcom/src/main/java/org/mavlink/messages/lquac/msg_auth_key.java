@@ -90,5 +90,9 @@ public String toString() {
 return "MAVLINK_MSG_ID_AUTH_KEY : " +   "  key="+getKey()
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_AUTH_KEY;
+}
+
 }
 

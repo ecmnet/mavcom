@@ -77,5 +77,9 @@ return "MAVLINK_MSG_ID_SYSTEM_TIME : " +   "  time_unix_usec="+time_unix_usec
 +  "  time_boot_ms="+time_boot_ms
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_SYSTEM_TIME;
+}
+
 }
 

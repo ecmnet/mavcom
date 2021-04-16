@@ -133,5 +133,9 @@ return "MAVLINK_MSG_ID_CAMERA_TRACKING_IMAGE_STATUS : " +   "  point_x="+format(
 +  "  target_data="+target_data
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_CAMERA_TRACKING_IMAGE_STATUS;
+}
+
 }
 

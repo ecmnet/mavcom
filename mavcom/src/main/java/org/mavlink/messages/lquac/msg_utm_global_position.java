@@ -210,5 +210,9 @@ return "MAVLINK_MSG_ID_UTM_GLOBAL_POSITION : " +   "  time="+time
 +  "  flags="+flags
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_UTM_GLOBAL_POSITION;
+}
+
 }
 

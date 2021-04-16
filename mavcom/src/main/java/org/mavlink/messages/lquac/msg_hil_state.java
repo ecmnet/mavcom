@@ -175,5 +175,9 @@ return "MAVLINK_MSG_ID_HIL_STATE : " +   "  time_usec="+time_usec
 +  "  zacc="+zacc
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_HIL_STATE;
+}
+
 }
 

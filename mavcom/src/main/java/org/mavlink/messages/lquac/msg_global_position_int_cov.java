@@ -172,5 +172,9 @@ return "MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV : " +   "  time_usec="+time_usec
 +  "  estimator_type="+estimator_type
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GLOBAL_POSITION_INT_COV;
+}
+
 }
 

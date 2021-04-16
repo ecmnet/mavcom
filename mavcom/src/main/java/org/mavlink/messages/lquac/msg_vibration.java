@@ -112,5 +112,9 @@ return "MAVLINK_MSG_ID_VIBRATION : " +   "  time_usec="+time_usec
 +  "  clipping_2="+clipping_2
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_VIBRATION;
+}
+
 }
 

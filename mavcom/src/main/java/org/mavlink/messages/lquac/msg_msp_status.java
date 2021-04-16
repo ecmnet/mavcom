@@ -201,5 +201,9 @@ return "MAVLINK_MSG_ID_MSP_STATUS : " +   "  uptime_ms="+uptime_ms
 +  "  arch="+getArch()
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_MSP_STATUS;
+}
+
 }
 

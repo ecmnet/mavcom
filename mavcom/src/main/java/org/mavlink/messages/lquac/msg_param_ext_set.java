@@ -138,5 +138,9 @@ return "MAVLINK_MSG_ID_PARAM_EXT_SET : " +   "  target_system="+target_system
 +  "  param_type="+param_type
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_PARAM_EXT_SET;
+}
+
 }
 

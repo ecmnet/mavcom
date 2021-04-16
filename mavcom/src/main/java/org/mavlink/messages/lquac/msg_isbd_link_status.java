@@ -119,5 +119,9 @@ return "MAVLINK_MSG_ID_ISBD_LINK_STATUS : " +   "  timestamp="+timestamp
 +  "  rx_session_pending="+rx_session_pending
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_ISBD_LINK_STATUS;
+}
+
 }
 

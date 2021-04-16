@@ -77,5 +77,9 @@ return "MAVLINK_MSG_ID_PARAM_EXT_REQUEST_LIST : " +   "  target_system="+target_
 +  "  target_component="+target_component
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_PARAM_EXT_REQUEST_LIST;
+}
+
 }
 

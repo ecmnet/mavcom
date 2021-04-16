@@ -126,5 +126,9 @@ return "MAVLINK_MSG_ID_WIND_COV : " +   "  time_usec="+time_usec
 +  "  vert_accuracy="+format((float)vert_accuracy)
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_WIND_COV;
+}
+
 }
 

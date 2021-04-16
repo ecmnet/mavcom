@@ -126,5 +126,9 @@ return "MAVLINK_MSG_ID_GIMBAL_MANAGER_INFORMATION : " +   "  time_boot_ms="+time
 +  "  gimbal_device_id="+gimbal_device_id
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GIMBAL_MANAGER_INFORMATION;
+}
+
 }
 

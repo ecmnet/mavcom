@@ -229,5 +229,9 @@ return "MAVLINK_MSG_ID_TUNNEL : " +   "  payload_type="+payload_type
 +  "  payload[127]="+payload[127]
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_TUNNEL;
+}
+
 }
 

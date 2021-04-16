@@ -91,5 +91,9 @@ return "MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN : " +   "  latitude="+latitude
 +  "  time_usec="+time_usec
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN;
+}
+
 }
 

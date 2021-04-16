@@ -196,5 +196,9 @@ return "MAVLINK_MSG_ID_GPS_INPUT : " +   "  time_usec="+time_usec
 +  "  yaw="+yaw
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_GPS_INPUT;
+}
+
 }
 

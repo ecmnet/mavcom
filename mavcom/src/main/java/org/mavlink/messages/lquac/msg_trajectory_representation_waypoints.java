@@ -257,5 +257,9 @@ return "MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS : " +   "  time_usec=
 +  "  valid_points="+valid_points
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS;
+}
+
 }
 

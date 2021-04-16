@@ -119,5 +119,9 @@ return "MAVLINK_MSG_ID_ESC_STATUS : " +   "  time_usec="+time_usec
 +  "  index="+index
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_ESC_STATUS;
+}
+
 }
 

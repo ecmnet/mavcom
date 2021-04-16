@@ -112,5 +112,9 @@ return "MAVLINK_MSG_ID_CELLULAR_STATUS : " +   "  mcc="+mcc
 +  "  quality="+quality
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_CELLULAR_STATUS;
+}
+
 }
 

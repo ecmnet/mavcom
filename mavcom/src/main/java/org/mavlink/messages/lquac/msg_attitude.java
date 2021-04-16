@@ -112,5 +112,9 @@ return "MAVLINK_MSG_ID_ATTITUDE : " +   "  time_boot_ms="+time_boot_ms
 +  "  yawspeed="+format((float)yawspeed)
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_ATTITUDE;
+}
+
 }
 

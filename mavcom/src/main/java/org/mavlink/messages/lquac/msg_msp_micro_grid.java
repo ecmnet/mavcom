@@ -169,5 +169,9 @@ return "MAVLINK_MSG_ID_MSP_MICRO_GRID : " +   "  tms="+tms
 +  "  status="+status
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_MSP_MICRO_GRID;
+}
+
 }
 

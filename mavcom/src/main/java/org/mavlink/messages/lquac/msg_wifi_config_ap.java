@@ -131,5 +131,9 @@ return "MAVLINK_MSG_ID_WIFI_CONFIG_AP : " +   "  ssid="+getSsid()
 +  "  response="+response
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_WIFI_CONFIG_AP;
+}
+
 }
 

@@ -111,5 +111,9 @@ return "MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL : " +   "  target_system="+target
 +  "  passkey="+getPasskey()
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_CHANGE_OPERATOR_CONTROL;
+}
+
 }
 

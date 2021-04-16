@@ -110,5 +110,9 @@ return "MAVLINK_MSG_ID_HIL_ACTUATOR_CONTROLS : " +   "  time_usec="+time_usec
 +  "  mode="+mode
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_HIL_ACTUATOR_CONTROLS;
+}
+
 }
 

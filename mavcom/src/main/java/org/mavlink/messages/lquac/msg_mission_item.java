@@ -169,5 +169,9 @@ return "MAVLINK_MSG_ID_MISSION_ITEM : " +   "  param1="+format((float)param1)
 +  "  mission_type="+mission_type
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_MISSION_ITEM;
+}
+
 }
 

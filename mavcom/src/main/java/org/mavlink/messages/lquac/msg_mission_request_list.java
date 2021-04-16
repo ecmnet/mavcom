@@ -84,5 +84,9 @@ return "MAVLINK_MSG_ID_MISSION_REQUEST_LIST : " +   "  target_system="+target_sy
 +  "  mission_type="+mission_type
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_MISSION_REQUEST_LIST;
+}
+
 }
 

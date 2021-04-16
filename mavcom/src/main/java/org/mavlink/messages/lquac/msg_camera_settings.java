@@ -91,5 +91,9 @@ return "MAVLINK_MSG_ID_CAMERA_SETTINGS : " +   "  time_boot_ms="+time_boot_ms
 +  "  focusLevel="+format((float)focusLevel)
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_CAMERA_SETTINGS;
+}
+
 }
 

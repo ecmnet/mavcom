@@ -181,5 +181,9 @@ return "MAVLINK_MSG_ID_BATTERY_STATUS : " +   "  current_consumed="+current_cons
 +  "  mode="+mode
 ;}
 
+public int getId() {
+ return MAVLINK_MSG_ID_BATTERY_STATUS;
+}
+
 }
 
