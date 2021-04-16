@@ -77,9 +77,5 @@ return "MAVLINK_MSG_ID_LOG_REQUEST_END : " +   "  target_system="+target_system
 +  "  target_component="+target_component
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_LOG_REQUEST_END;
-}
-
 }
 

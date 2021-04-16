@@ -77,9 +77,5 @@ return "MAVLINK_MSG_ID_MESSAGE_INTERVAL : " +   "  interval_us="+interval_us
 +  "  message_id="+message_id
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MESSAGE_INTERVAL;
-}
-
 }
 

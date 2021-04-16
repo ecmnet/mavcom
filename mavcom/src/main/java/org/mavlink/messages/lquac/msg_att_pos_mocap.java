@@ -136,9 +136,5 @@ return "MAVLINK_MSG_ID_ATT_POS_MOCAP : " +   "  time_usec="+time_usec
 +  "  covariance[20]="+format((float)covariance[20])
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_ATT_POS_MOCAP;
-}
-
 }
 

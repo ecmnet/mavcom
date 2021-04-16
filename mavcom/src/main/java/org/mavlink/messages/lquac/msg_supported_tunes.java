@@ -84,9 +84,5 @@ return "MAVLINK_MSG_ID_SUPPORTED_TUNES : " +   "  format="+format
 +  "  target_component="+target_component
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SUPPORTED_TUNES;
-}
-
 }
 

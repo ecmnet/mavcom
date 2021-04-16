@@ -182,9 +182,5 @@ return "MAVLINK_MSG_ID_EFI_STATUS : " +   "  ecu_index="+format((float)ecu_index
 +  "  health="+health
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_EFI_STATUS;
-}
-
 }
 

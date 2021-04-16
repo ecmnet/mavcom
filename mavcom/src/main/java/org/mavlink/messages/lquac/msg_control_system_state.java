@@ -201,9 +201,5 @@ return "MAVLINK_MSG_ID_CONTROL_SYSTEM_STATE : " +   "  time_usec="+time_usec
 +  "  yaw_rate="+format((float)yaw_rate)
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_CONTROL_SYSTEM_STATE;
-}
-
 }
 

@@ -105,9 +105,5 @@ return "MAVLINK_MSG_ID_HEARTBEAT : " +   "  custom_mode="+custom_mode
 +  "  mavlink_version="+mavlink_version
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_HEARTBEAT;
-}
-
 }
 

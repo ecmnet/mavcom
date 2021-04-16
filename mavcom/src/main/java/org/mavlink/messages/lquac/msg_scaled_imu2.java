@@ -140,9 +140,5 @@ return "MAVLINK_MSG_ID_SCALED_IMU2 : " +   "  time_boot_ms="+time_boot_ms
 +  "  temperature="+temperature
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SCALED_IMU2;
-}
-
 }
 

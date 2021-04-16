@@ -344,9 +344,5 @@ return "MAVLINK_MSG_ID_RESOURCE_REQUEST : " +   "  request_id="+request_id
 +  "  storage[119]="+storage[119]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_RESOURCE_REQUEST;
-}
-
 }
 

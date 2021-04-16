@@ -91,9 +91,5 @@ return "MAVLINK_MSG_ID_LOG_REQUEST_LIST : " +   "  start="+start
 +  "  target_component="+target_component
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_LOG_REQUEST_LIST;
-}
-
 }
 

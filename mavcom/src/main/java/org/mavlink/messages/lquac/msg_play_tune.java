@@ -131,9 +131,5 @@ return "MAVLINK_MSG_ID_PLAY_TUNE : " +   "  target_system="+target_system
 +  "  tune2="+getTune2()
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_PLAY_TUNE;
-}
-
 }
 

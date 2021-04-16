@@ -119,9 +119,5 @@ return "MAVLINK_MSG_ID_ATTITUDE_TARGET : " +   "  time_boot_ms="+time_boot_ms
 +  "  type_mask="+type_mask
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_ATTITUDE_TARGET;
-}
-
 }
 

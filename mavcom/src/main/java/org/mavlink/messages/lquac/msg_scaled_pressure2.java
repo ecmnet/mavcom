@@ -98,9 +98,5 @@ return "MAVLINK_MSG_ID_SCALED_PRESSURE2 : " +   "  time_boot_ms="+time_boot_ms
 +  "  temperature_press_diff="+temperature_press_diff
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SCALED_PRESSURE2;
-}
-
 }
 

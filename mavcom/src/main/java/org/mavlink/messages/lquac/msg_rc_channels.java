@@ -210,9 +210,5 @@ return "MAVLINK_MSG_ID_RC_CHANNELS : " +   "  time_boot_ms="+time_boot_ms
 +  "  rssi="+rssi
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_RC_CHANNELS;
-}
-
 }
 

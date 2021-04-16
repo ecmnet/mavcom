@@ -140,9 +140,5 @@ return "MAVLINK_MSG_ID_COMMAND_LONG : " +   "  param1="+format((float)param1)
 +  "  confirmation="+confirmation
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_COMMAND_LONG;
-}
-
 }
 

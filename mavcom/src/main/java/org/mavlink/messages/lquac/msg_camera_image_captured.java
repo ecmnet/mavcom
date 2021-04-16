@@ -167,9 +167,5 @@ return "MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED : " +   "  time_utc="+time_utc
 +  "  file_url="+getFile_url()
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_CAMERA_IMAGE_CAPTURED;
-}
-
 }
 

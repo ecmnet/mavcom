@@ -127,9 +127,5 @@ return "MAVLINK_MSG_ID_GLOBAL_POSITION_INT : " +   "  time_boot_ms="+time_boot_m
 +  "  hdg="+hdg
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_GLOBAL_POSITION_INT;
-}
-
 }
 

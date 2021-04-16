@@ -120,7 +120,7 @@ public abstract class MAVLinkMessage extends MAVLinkMessageCoder implements IMAV
     public MAVLinkMessage(byte[] raw) {
         rawData = raw;
     }
-
+    
     /**
      * Decode TM with raw data
      */

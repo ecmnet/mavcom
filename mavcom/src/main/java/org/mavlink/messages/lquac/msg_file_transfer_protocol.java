@@ -345,9 +345,5 @@ return "MAVLINK_MSG_ID_FILE_TRANSFER_PROTOCOL : " +   "  target_network="+target
 +  "  payload[250]="+payload[250]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_FILE_TRANSFER_PROTOCOL;
-}
-
 }
 

@@ -84,9 +84,5 @@ return "MAVLINK_MSG_ID_MISSION_CLEAR_ALL : " +   "  target_system="+target_syste
 +  "  mission_type="+mission_type
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MISSION_CLEAR_ALL;
-}
-
 }
 

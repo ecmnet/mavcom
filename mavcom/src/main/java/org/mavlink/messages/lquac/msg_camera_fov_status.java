@@ -140,9 +140,5 @@ return "MAVLINK_MSG_ID_CAMERA_FOV_STATUS : " +   "  time_boot_ms="+time_boot_ms
 +  "  vfov="+format((float)vfov)
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_CAMERA_FOV_STATUS;
-}
-
 }
 

@@ -91,9 +91,5 @@ return "MAVLINK_MSG_ID_PING : " +   "  time_usec="+time_usec
 +  "  target_component="+target_component
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_PING;
-}
-
 }
 

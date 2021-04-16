@@ -126,9 +126,5 @@ return "MAVLINK_MSG_ID_MEMORY_VECT : " +   "  address="+address
 +  "  value[31]="+value[31]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MEMORY_VECT;
-}
-
 }
 

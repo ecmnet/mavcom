@@ -84,9 +84,5 @@ return "MAVLINK_MSG_ID_COMMAND_CANCEL : " +   "  command="+command
 +  "  target_component="+target_component
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_COMMAND_CANCEL;
-}
-
 }
 

@@ -120,9 +120,5 @@ return "MAVLINK_MSG_ID_PROTOCOL_VERSION : " +   "  version="+version
 +  "  library_version_hash[7]="+library_version_hash[7]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_PROTOCOL_VERSION;
-}
-
 }
 

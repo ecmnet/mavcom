@@ -267,9 +267,5 @@ return "MAVLINK_MSG_ID_GPS_RTCM_DATA : " +   "  flags="+flags
 +  "  data[179]="+data[179]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_GPS_RTCM_DATA;
-}
-
 }
 

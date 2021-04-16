@@ -150,9 +150,5 @@ return "MAVLINK_MSG_ID_GLOBAL_VISION_POSITION_ESTIMATE : " +   "  usec="+usec
 +  "  reset_counter="+reset_counter
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_GLOBAL_VISION_POSITION_ESTIMATE;
-}
-
 }
 

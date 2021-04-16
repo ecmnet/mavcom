@@ -333,9 +333,5 @@ return "MAVLINK_MSG_ID_ENCAPSULATED_DATA : " +   "  seqnr="+seqnr
 +  "  data[252]="+data[252]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_ENCAPSULATED_DATA;
-}
-
 }
 

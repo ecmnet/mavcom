@@ -117,9 +117,5 @@ return "MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE : " +   "  usec="+usec
 +  "  reset_counter="+reset_counter
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_VISION_SPEED_ESTIMATE;
-}
-
 }
 

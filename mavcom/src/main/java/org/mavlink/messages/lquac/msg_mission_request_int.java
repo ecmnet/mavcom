@@ -91,9 +91,5 @@ return "MAVLINK_MSG_ID_MISSION_REQUEST_INT : " +   "  seq="+seq
 +  "  mission_type="+mission_type
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MISSION_REQUEST_INT;
-}
-
 }
 

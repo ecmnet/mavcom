@@ -84,9 +84,5 @@ return "MAVLINK_MSG_ID_SET_MODE : " +   "  custom_mode="+custom_mode
 +  "  base_mode="+base_mode
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SET_MODE;
-}
-
 }
 

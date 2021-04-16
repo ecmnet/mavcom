@@ -204,9 +204,5 @@ return "MAVLINK_MSG_ID_GPS_INJECT_DATA : " +   "  target_system="+target_system
 +  "  data[109]="+data[109]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_GPS_INJECT_DATA;
-}
-
 }
 

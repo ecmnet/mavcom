@@ -201,9 +201,5 @@ return "MAVLINK_MSG_ID_AUTOPILOT_VERSION : " +   "  capabilities="+capabilities
 +  "  uid2[17]="+uid2[17]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_AUTOPILOT_VERSION;
-}
-
 }
 

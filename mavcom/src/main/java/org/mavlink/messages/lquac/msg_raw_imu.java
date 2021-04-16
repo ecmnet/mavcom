@@ -147,9 +147,5 @@ return "MAVLINK_MSG_ID_RAW_IMU : " +   "  time_usec="+time_usec
 +  "  id="+id
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_RAW_IMU;
-}
-
 }
 

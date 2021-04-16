@@ -138,9 +138,5 @@ return "MAVLINK_MSG_ID_COMPONENT_INFORMATION : " +   "  time_boot_ms="+time_boot
 +  "  peripherals_metadata_uri="+getPeripherals_metadata_uri()
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_COMPONENT_INFORMATION;
-}
-
 }
 

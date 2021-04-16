@@ -112,9 +112,5 @@ return "MAVLINK_MSG_ID_LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET : " +   "  time_b
 +  "  yaw="+format((float)yaw)
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET;
-}
-
 }
 

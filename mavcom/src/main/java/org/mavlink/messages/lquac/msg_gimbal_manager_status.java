@@ -112,9 +112,5 @@ return "MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS : " +   "  time_boot_ms="+time_boot
 +  "  secondary_control_compid="+secondary_control_compid
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS;
-}
-
 }
 

@@ -161,9 +161,5 @@ return "MAVLINK_MSG_ID_HIL_RC_INPUTS_RAW : " +   "  time_usec="+time_usec
 +  "  rssi="+rssi
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_HIL_RC_INPUTS_RAW;
-}
-
 }
 

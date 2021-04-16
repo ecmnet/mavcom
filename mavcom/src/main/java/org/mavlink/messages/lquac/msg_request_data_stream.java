@@ -98,9 +98,5 @@ return "MAVLINK_MSG_ID_REQUEST_DATA_STREAM : " +   "  req_message_rate="+req_mes
 +  "  start_stop="+start_stop
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_REQUEST_DATA_STREAM;
-}
-
 }
 

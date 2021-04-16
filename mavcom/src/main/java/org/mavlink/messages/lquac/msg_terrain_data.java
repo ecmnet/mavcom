@@ -117,9 +117,5 @@ return "MAVLINK_MSG_ID_TERRAIN_DATA : " +   "  lat="+lat
 +  "  gridbit="+gridbit
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_TERRAIN_DATA;
-}
-
 }
 

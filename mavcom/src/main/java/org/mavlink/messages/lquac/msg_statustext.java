@@ -111,9 +111,5 @@ return "MAVLINK_MSG_ID_STATUSTEXT : " +   "  severity="+severity
 +  "  chunk_seq="+chunk_seq
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_STATUSTEXT;
-}
-
 }
 

@@ -146,9 +146,5 @@ return "MAVLINK_MSG_ID_SET_ATTITUDE_TARGET : " +   "  time_boot_ms="+time_boot_m
 +  "  thrust_body[2]="+format((float)thrust_body[2])
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SET_ATTITUDE_TARGET;
-}
-
 }
 

@@ -222,9 +222,5 @@ return "MAVLINK_MSG_ID_AIS_VESSEL : " +   "  MMSI="+MMSI
 +  "  name="+getName()
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_AIS_VESSEL;
-}
-
 }
 

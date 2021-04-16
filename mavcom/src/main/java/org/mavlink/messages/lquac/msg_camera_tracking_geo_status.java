@@ -154,9 +154,5 @@ return "MAVLINK_MSG_ID_CAMERA_TRACKING_GEO_STATUS : " +   "  lat="+lat
 +  "  tracking_status="+tracking_status
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_CAMERA_TRACKING_GEO_STATUS;
-}
-
 }
 

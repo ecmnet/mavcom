@@ -189,9 +189,5 @@ return "MAVLINK_MSG_ID_MAG_CAL_REPORT : " +   "  fitness="+format((float)fitness
 +  "  new_orientation="+new_orientation
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MAG_CAL_REPORT;
-}
-
 }
 

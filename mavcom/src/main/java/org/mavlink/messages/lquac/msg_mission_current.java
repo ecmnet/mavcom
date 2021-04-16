@@ -70,9 +70,5 @@ public String toString() {
 return "MAVLINK_MSG_ID_MISSION_CURRENT : " +   "  seq="+seq
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MISSION_CURRENT;
-}
-
 }
 

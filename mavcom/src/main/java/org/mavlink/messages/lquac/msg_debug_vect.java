@@ -118,9 +118,5 @@ return "MAVLINK_MSG_ID_DEBUG_VECT : " +   "  time_usec="+time_usec
 +  "  name="+getName()
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_DEBUG_VECT;
-}
-
 }
 

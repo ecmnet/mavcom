@@ -84,9 +84,5 @@ return "MAVLINK_MSG_ID_POWER_STATUS : " +   "  Vcc="+Vcc
 +  "  flags="+flags
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_POWER_STATUS;
-}
-
 }
 

@@ -119,9 +119,5 @@ return "MAVLINK_MSG_ID_WINCH_STATUS : " +   "  time_usec="+time_usec
 +  "  temperature="+temperature
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_WINCH_STATUS;
-}
-
 }
 

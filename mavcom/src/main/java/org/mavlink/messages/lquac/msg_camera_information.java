@@ -244,9 +244,5 @@ return "MAVLINK_MSG_ID_CAMERA_INFORMATION : " +   "  time_boot_ms="+time_boot_ms
 +  "  cam_definition_uri="+getCam_definition_uri()
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_CAMERA_INFORMATION;
-}
-
 }
 

@@ -350,9 +350,5 @@ return "MAVLINK_MSG_ID_V2_EXTENSION : " +   "  message_type="+message_type
 +  "  payload[248]="+payload[248]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_V2_EXTENSION;
-}
-
 }
 

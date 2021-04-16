@@ -154,9 +154,5 @@ return "MAVLINK_MSG_ID_SYS_STATUS : " +   "  onboard_control_sensors_present="+o
 +  "  battery_remaining="+battery_remaining
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SYS_STATUS;
-}
-
 }
 

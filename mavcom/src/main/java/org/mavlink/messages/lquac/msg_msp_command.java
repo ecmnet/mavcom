@@ -112,9 +112,5 @@ return "MAVLINK_MSG_ID_MSP_COMMAND : " +   "  param1="+format((float)param1)
 +  "  command="+command
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MSP_COMMAND;
-}
-
 }
 

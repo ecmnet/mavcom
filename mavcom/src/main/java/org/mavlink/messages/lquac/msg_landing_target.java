@@ -168,9 +168,5 @@ return "MAVLINK_MSG_ID_LANDING_TARGET : " +   "  time_usec="+time_usec
 +  "  position_valid="+position_valid
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_LANDING_TARGET;
-}
-
 }
 

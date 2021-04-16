@@ -175,9 +175,5 @@ return "MAVLINK_MSG_ID_HIL_SENSOR : " +   "  time_usec="+time_usec
 +  "  id="+id
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_HIL_SENSOR;
-}
-
 }
 

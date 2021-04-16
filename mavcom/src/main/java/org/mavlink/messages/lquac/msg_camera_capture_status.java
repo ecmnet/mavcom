@@ -112,9 +112,5 @@ return "MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS : " +   "  time_boot_ms="+time_boot
 +  "  image_count="+image_count
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS;
-}
-
 }
 

@@ -98,9 +98,5 @@ return "MAVLINK_MSG_ID_TIME_ESTIMATE_TO_TARGET : " +   "  safe_return="+safe_ret
 +  "  commanded_action="+commanded_action
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_TIME_ESTIMATE_TO_TARGET;
-}
-
 }
 

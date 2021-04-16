@@ -174,9 +174,5 @@ return "MAVLINK_MSG_ID_ADSB_VEHICLE : " +   "  ICAO_address="+ICAO_address
 +  "  tslc="+tslc
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_ADSB_VEHICLE;
-}
-
 }
 

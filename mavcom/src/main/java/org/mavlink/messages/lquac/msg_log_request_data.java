@@ -98,9 +98,5 @@ return "MAVLINK_MSG_ID_LOG_REQUEST_DATA : " +   "  ofs="+ofs
 +  "  target_component="+target_component
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_LOG_REQUEST_DATA;
-}
-
 }
 

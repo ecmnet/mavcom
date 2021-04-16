@@ -98,9 +98,5 @@ return "MAVLINK_MSG_ID_MOUNT_ORIENTATION : " +   "  time_boot_ms="+time_boot_ms
 +  "  yaw_absolute="+format((float)yaw_absolute)
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MOUNT_ORIENTATION;
-}
-
 }
 

@@ -112,9 +112,5 @@ return "MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE : " +   "  size="+size
 +  "  jpg_quality="+jpg_quality
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE;
-}
-
 }
 

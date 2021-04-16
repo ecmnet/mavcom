@@ -165,9 +165,5 @@ return "MAVLINK_MSG_ID_UAVCAN_NODE_INFO : " +   "  time_usec="+time_usec
 +  "  sw_version_minor="+sw_version_minor
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_UAVCAN_NODE_INFO;
-}
-
 }
 

@@ -175,9 +175,5 @@ return "MAVLINK_MSG_ID_SET_POSITION_TARGET_GLOBAL_INT : " +   "  time_boot_ms="+
 +  "  coordinate_frame="+coordinate_frame
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SET_POSITION_TARGET_GLOBAL_INT;
-}
-
 }
 

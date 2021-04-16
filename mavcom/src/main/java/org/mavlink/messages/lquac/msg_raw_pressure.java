@@ -98,9 +98,5 @@ return "MAVLINK_MSG_ID_RAW_PRESSURE : " +   "  time_usec="+time_usec
 +  "  temperature="+temperature
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_RAW_PRESSURE;
-}
-
 }
 

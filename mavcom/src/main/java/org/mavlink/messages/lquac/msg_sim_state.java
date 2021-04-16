@@ -210,9 +210,5 @@ return "MAVLINK_MSG_ID_SIM_STATE : " +   "  q1="+format((float)q1)
 +  "  vd="+format((float)vd)
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SIM_STATE;
-}
-
 }
 

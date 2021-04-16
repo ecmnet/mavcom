@@ -189,9 +189,5 @@ return "MAVLINK_MSG_ID_SERVO_OUTPUT_RAW : " +   "  time_usec="+time_usec
 +  "  servo16_raw="+servo16_raw
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SERVO_OUTPUT_RAW;
-}
-
 }
 

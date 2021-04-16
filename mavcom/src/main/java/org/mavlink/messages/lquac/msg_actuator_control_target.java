@@ -95,9 +95,5 @@ return "MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET : " +   "  time_usec="+time_usec
 +  "  group_mlx="+group_mlx
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET;
-}
-
 }
 

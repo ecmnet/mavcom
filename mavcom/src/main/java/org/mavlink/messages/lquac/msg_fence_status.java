@@ -98,9 +98,5 @@ return "MAVLINK_MSG_ID_FENCE_STATUS : " +   "  breach_time="+breach_time
 +  "  breach_mitigation="+breach_mitigation
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_FENCE_STATUS;
-}
-
 }
 

@@ -119,9 +119,5 @@ return "MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT : " +   "  nav_roll="+format((float
 +  "  wp_dist="+wp_dist
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT;
-}
-
 }
 

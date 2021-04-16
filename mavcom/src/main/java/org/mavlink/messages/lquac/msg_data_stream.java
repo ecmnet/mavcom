@@ -84,9 +84,5 @@ return "MAVLINK_MSG_ID_DATA_STREAM : " +   "  message_rate="+message_rate
 +  "  on_off="+on_off
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_DATA_STREAM;
-}
-
 }
 

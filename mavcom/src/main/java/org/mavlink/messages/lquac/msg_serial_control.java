@@ -178,9 +178,5 @@ return "MAVLINK_MSG_ID_SERIAL_CONTROL : " +   "  baudrate="+baudrate
 +  "  data[69]="+data[69]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SERIAL_CONTROL;
-}
-
 }
 

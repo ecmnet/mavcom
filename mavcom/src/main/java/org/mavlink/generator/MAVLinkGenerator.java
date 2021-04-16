@@ -486,10 +486,6 @@ public class MAVLinkGenerator {
 					writer.print("}\n\n");
 				}
 				
-				writer.print("public int getId() {\n");
-				writer.print(" return "+id+";\n");
-				writer.print("}\n\n");
-				
 //				writer.print("public boolean equals(Object o) {\n");
 //				writer.print(" if (this == o)\n");
 //				writer.print("     return  true;\n");

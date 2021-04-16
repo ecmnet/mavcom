@@ -105,9 +105,5 @@ return "MAVLINK_MSG_ID_VFR_HUD : " +   "  airspeed="+format((float)airspeed)
 +  "  throttle="+throttle
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_VFR_HUD;
-}
-
 }
 

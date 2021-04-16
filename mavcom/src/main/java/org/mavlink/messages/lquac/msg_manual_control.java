@@ -105,9 +105,5 @@ return "MAVLINK_MSG_ID_MANUAL_CONTROL : " +   "  x="+x
 +  "  target="+target
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MANUAL_CONTROL;
-}
-
 }
 

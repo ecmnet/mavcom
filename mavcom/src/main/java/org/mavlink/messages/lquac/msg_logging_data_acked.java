@@ -357,9 +357,5 @@ return "MAVLINK_MSG_ID_LOGGING_DATA_ACKED : " +   "  sequence="+sequence
 +  "  data[248]="+data[248]
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_LOGGING_DATA_ACKED;
-}
-
 }
 

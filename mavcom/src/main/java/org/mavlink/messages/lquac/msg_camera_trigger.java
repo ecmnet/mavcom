@@ -77,9 +77,5 @@ return "MAVLINK_MSG_ID_CAMERA_TRIGGER : " +   "  time_usec="+time_usec
 +  "  seq="+seq
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_CAMERA_TRIGGER;
-}
-
 }
 

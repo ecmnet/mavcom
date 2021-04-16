@@ -77,9 +77,5 @@ return "MAVLINK_MSG_ID_EXTENDED_SYS_STATE : " +   "  vtol_state="+vtol_state
 +  "  landed_state="+landed_state
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_EXTENDED_SYS_STATE;
-}
-
 }
 

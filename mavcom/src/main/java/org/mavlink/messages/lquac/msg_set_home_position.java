@@ -154,9 +154,5 @@ return "MAVLINK_MSG_ID_SET_HOME_POSITION : " +   "  latitude="+latitude
 +  "  time_usec="+time_usec
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_SET_HOME_POSITION;
-}
-
 }
 

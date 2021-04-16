@@ -152,9 +152,5 @@ return "MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_BEZIER : " +   "  time_usec="+t
 +  "  valid_points="+valid_points
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_BEZIER;
-}
-
 }
 

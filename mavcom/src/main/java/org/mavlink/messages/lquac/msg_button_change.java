@@ -84,9 +84,5 @@ return "MAVLINK_MSG_ID_BUTTON_CHANGE : " +   "  time_boot_ms="+time_boot_ms
 +  "  state="+state
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_BUTTON_CHANGE;
-}
-
 }
 

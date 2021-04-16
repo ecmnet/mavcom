@@ -160,9 +160,5 @@ return "MAVLINK_MSG_ID_STORAGE_INFORMATION : " +   "  time_boot_ms="+time_boot_m
 +  "  name="+getName()
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_STORAGE_INFORMATION;
-}
-
 }
 

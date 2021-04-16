@@ -124,9 +124,5 @@ return "MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV : " +   "  time_usec="+time_usec
 +  "  covariance[8]="+format((float)covariance[8])
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV;
-}
-
 }
 

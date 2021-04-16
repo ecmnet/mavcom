@@ -91,9 +91,5 @@ return "MAVLINK_MSG_ID_FLIGHT_INFORMATION : " +   "  arming_time_utc="+arming_ti
 +  "  time_boot_ms="+time_boot_ms
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_FLIGHT_INFORMATION;
-}
-
 }
 

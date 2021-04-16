@@ -84,9 +84,5 @@ return "MAVLINK_MSG_ID_MISSION_SET_CURRENT : " +   "  seq="+seq
 +  "  target_component="+target_component
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MISSION_SET_CURRENT;
-}
-
 }
 

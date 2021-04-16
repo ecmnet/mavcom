@@ -182,9 +182,5 @@ return "MAVLINK_MSG_ID_MSP_MICRO_SLAM : " +   "  tms="+tms
 +  "  flags="+flags
 ;}
 
-public int getId() {
- return MAVLINK_MSG_ID_MSP_MICRO_SLAM;
-}
-
 }
 
