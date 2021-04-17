@@ -16,7 +16,7 @@ import org.mavlink.messages.MAVLinkMessageFactory;
  * @author ghelle
  * @version $Rev: 20 $
  */
-public class MAVLinkReader {
+public class MAVLinkReaderOld {
 
 	/**
 	 * Input stream
@@ -39,6 +39,8 @@ public class MAVLinkReader {
 	 *
 	 */
 	private final byte[] receivedBuffer = new byte[RECEIVED_BUFFER_SIZE];
+	
+	private static int MAVLINK_MAX_PAYLOAD_SIZE = 255;
 
 	/**
 	 * Nb bytes received
@@ -93,11 +95,11 @@ public class MAVLinkReader {
 	/**
 	 * Constructor with MAVLink 1.0 by default and without stream. Must be used whith byte array read methods.
 	 */
-	public MAVLinkReader(int id) {
+	public MAVLinkReaderOld(int id) {
 		this((byte)IMAVLinkMessage.MAVPROT_PACKET_START_V20,id);
 	}
 
-	public MAVLinkReader(int id, boolean debug) {
+	public MAVLinkReaderOld(int id, boolean debug) {
 		this((byte)IMAVLinkMessage.MAVPROT_PACKET_START_V20,id);
 		this.debug = debug;
 	}
@@ -111,7 +113,7 @@ public class MAVLinkReader {
 	 * @param start
 	 *            Start byte for MAVLink version
 	 */
-	public MAVLinkReader(DataInputStream dis, byte start) {
+	public MAVLinkReaderOld(DataInputStream dis, byte start) {
 		this.dis = dis;
 		this.start = start;
 		for (int i = 0; i < lastPacket.length; i++) {
@@ -125,7 +127,7 @@ public class MAVLinkReader {
 	 * @param start
 	 *            Start byte for MAVLink version
 	 */
-	public MAVLinkReader(byte start, int id) {
+	public MAVLinkReaderOld(byte start, int id) {
 		this.id = id;
 		this.dis = null;
 		this.start = start;
@@ -451,9 +453,9 @@ public class MAVLinkReader {
 	 * @return Payload bytes
 	 * @throws IOException
 	 */
-	private byte[] buffer = new byte[512];
+	private byte[] buffer = new byte[MAVLINK_MAX_PAYLOAD_SIZE+1];
 	protected byte[] readRawData(int nb) throws IOException {
-		Arrays.fill(buffer,(byte)0);
+		Arrays.fill(buffer,8,MAVLINK_MAX_PAYLOAD_SIZE,(byte)0x00);
 		int index = 0;
 		/*
 		 * while (dis.available() < nb) { ; }

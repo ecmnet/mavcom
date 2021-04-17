@@ -235,8 +235,11 @@ public class MAVLinkReader {
 			case MAVLINK_PARSE_STATE_GOT_MSGID3:
 				rxmsg.rawData[lengthToRead] = (byte)c; 
 				rxmsg.crc = MAVLinkCRC.crc_accumulate((byte)c, rxmsg.crc);
-				if(++lengthToRead >= rxmsg.len)
+				if(++lengthToRead >= rxmsg.len) {
+					// clear some additional bytes of the payload buffer
+					Arrays.fill(rxmsg.rawData, lengthToRead, lengthToRead+31,(byte)0);
 					state = t_parser_state.MAVLINK_PARSE_STATE_GOT_PAYLOAD;
+				}
 				break;
 			case MAVLINK_PARSE_STATE_GOT_PAYLOAD:
 				try {
@@ -278,7 +281,6 @@ public class MAVLinkReader {
 
 				if(rxmsg.msg_received == mavlink_framing_t.MAVLINK_FRAMING_OK) {
 					MAVLinkMessage msg = MAVLinkMessageFactory.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId, rxmsg.rawData);
-//					MAVLinkMessage msg = MAVLinkObjectCache.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId, rxmsg.rawData);
 					if(msg!=null && (checkPacket(rxmsg.sysId,rxmsg.packet))) {
 						msg.isValid = true;
 						msg.packet = rxmsg.packet;
@@ -405,7 +407,7 @@ public class MAVLinkReader {
 		public int componentId;
 		public int msgId;
 		public int crc = MAVLinkCRC.crc_init();;
-		public byte[] rawData = new byte[MAVLINK_MAX_PAYLOAD_SIZE+1];
+		public byte[] rawData = new byte[MAVLINK_MAX_PAYLOAD_SIZE+32];
 		public byte[] signature = new byte[MAVLINK_SIGNATURE_BLOCK_LEN];
 
 		public mavlink_framing_t msg_received;
@@ -422,10 +424,7 @@ public class MAVLinkReader {
 			msgId=0;
 			signature_wait = MAVLINK_SIGNATURE_BLOCK_LEN;
 			msg_received = mavlink_framing_t.MAVLINK_FRAMING_INCOMPLETE;
-			crc= MAVLinkCRC.crc_init();
-			// first 48 bytes need to be filled as deserialization does not work properly for corner cases
-			Arrays.fill(rxmsg.rawData,8,rxmsg.rawData.length-1,(byte)0x00);
-			
+			crc= MAVLinkCRC.crc_init();	
 		}
 
 		public String toString() {
