@@ -34,7 +34,11 @@
 
 package com.comino.mavcom.comm.serial;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 import org.mavlink.messages.MAVLinkMessage;
@@ -59,7 +63,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	private static final int TEST  = 57600;
 
-	private static final int BUFFER = 64;
+	private static final int BUFFER = 16;
 
 	private SerialPort 			serialPort;
 	private String	            port;
@@ -74,6 +78,9 @@ public class MAVSerialComm implements IMAVComm {
 	private MAVUdpProxyNIO byteListener = null;
 
 	private int baudrate = 921600;
+
+	private InputStream is;
+	private OutputStream os;
 
 	public static IMAVComm getInstance(DataModel model, int baudrate, boolean isUSB) {
 		if(com==null)
@@ -120,7 +127,9 @@ public class MAVSerialComm implements IMAVComm {
 
 		this.parser     = new MAVLinkToModelParser(model, this);
 		this.reader     = new MAVLinkBlockingReader(3, parser);
-		//new Thread(reader).start();
+
+		this.is = new BufferedInputStream(serialPort.getInputStream(),BUFFER*1024);
+		this.os = new BufferedOutputStream(serialPort.getOutputStream(),1024);
 
 	}
 
@@ -178,6 +187,13 @@ public class MAVSerialComm implements IMAVComm {
 	public void close() {
 		if(serialPort!=null)
 			serialPort.closePort();
+		try {
+			is.close();
+			os.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private boolean open(String portName, int baudRate, int dataBits, int stopBits, int parity) {
@@ -207,12 +223,14 @@ public class MAVSerialComm implements IMAVComm {
 						return;
 
 					try {
-						avail = serialPort.bytesAvailable();
-						serialPort.readBytes(buf, avail);
-						if(avail < 3000) {
-							if(byteListener != null)
-								byteListener.write(buf, avail);
-							reader.put(buf, avail);
+						avail = is.available();
+						if(avail > 0) {
+							is.read(buf, 0, avail);
+							if(avail < 3000) {
+								if(byteListener != null)
+									byteListener.write(buf, avail);
+								reader.put(buf, avail);
+							}
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -221,17 +239,6 @@ public class MAVSerialComm implements IMAVComm {
 			});
 			serialPort.openPort();
 			model.sys.setStatus(Status.MSP_CONNECTED, true);
-
-			//			Thread serialTh = new Thread(()-> {
-			//				int avail=0;
-			//				while(true) {
-			//					avail = serialPort.readBytes(buf, buf.length);
-			//					reader.put(buf, avail);
-			//				}
-			//			});
-			//			serialTh.setName("Serial");
-			//			serialTh.setPriority(Thread.MIN_PRIORITY);
-			//			serialTh.start();
 
 		} catch (Exception e2) {
 			e2.printStackTrace();
@@ -251,7 +258,8 @@ public class MAVSerialComm implements IMAVComm {
 			return;
 		try {
 			byte[] buffer = msg.encode();
-			serialPort.writeBytes(buffer,buffer.length);
+			os.write(buffer, 0, buffer.length);
+			os.flush();
 		} catch (Exception e) { e.printStackTrace(); }
 	}
 

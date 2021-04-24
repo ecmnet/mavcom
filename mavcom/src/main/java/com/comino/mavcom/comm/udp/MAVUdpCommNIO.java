@@ -311,6 +311,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 				if(comm.isConnected)
 					System.out.println("ANGLEX="+comm.model.hud.aX+" ANGLEY="+comm.model.hud.aY+" "+comm.model.sys.toString());
+				
 
 				Thread.sleep(100);
 
