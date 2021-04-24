@@ -3,6 +3,7 @@ package com.comino.mavcom.mavlink.plugins;
 import org.mavlink.messages.lquac.msg_msp_micro_slam;
 
 import com.comino.mavcom.model.DataModel;
+import com.comino.mavcom.model.segment.Status;
 
 public class MspMicroSlamPlugin extends MAVLinkPluginBase {
 
@@ -31,6 +32,7 @@ public class MspMicroSlamPlugin extends MAVLinkPluginBase {
 		model.slam.flags = (short)slam.flags;
 		model.slam.fps  = slam.fps;
 		model.slam.tms = DataModel.getSynchronizedPX4Time_us();
+		model.sys.setSensor(Status.MSP_SLAM_AVAILABILITY, true);
 
 	}
 }
