@@ -120,7 +120,7 @@ public class MAVSerialComm implements IMAVComm {
 
 		this.parser     = new MAVLinkToModelParser(model, this);
 		this.reader     = new MAVLinkBlockingReader(3, parser);
-		new Thread(reader).start();
+		//new Thread(reader).start();
 
 	}
 
@@ -136,7 +136,7 @@ public class MAVSerialComm implements IMAVComm {
 		if(serialPort.isOpen())
 			return true;
 
-		
+
 		while(!open(port ,baudrate, 8,SerialPort.ONE_STOP_BIT,SerialPort.NO_PARITY)) {
 			try {
 				if(serialPort.isOpen()) {
@@ -147,6 +147,7 @@ public class MAVSerialComm implements IMAVComm {
 		}
 		System.out.println("Serial port "+this.getClass().getSimpleName()+" opened: "+port+": "+baudrate+" baud");
 		System.out.println(serialPort.getPortDescription());
+		System.out.println("Buffersize (read/write): "+serialPort.getDeviceReadBufferSize()+"/"+serialPort.getDeviceWriteBufferSize());
 		return true;
 	}
 
@@ -208,9 +209,11 @@ public class MAVSerialComm implements IMAVComm {
 					try {
 						avail = serialPort.bytesAvailable();
 						serialPort.readBytes(buf, avail);
-						if(byteListener != null)
-							byteListener.write(buf, avail);
-						reader.put(buf, avail);
+						if(avail < 3000) {
+							if(byteListener != null)
+								byteListener.write(buf, avail);
+							reader.put(buf, avail);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -302,8 +305,8 @@ public class MAVSerialComm implements IMAVComm {
 
 	@Override
 	public void setProxyListener(MAVUdpProxyNIO listener) {
-	this.byteListener = listener;
-		
+		this.byteListener = listener;
+
 	}
 
 
@@ -354,7 +357,7 @@ public class MAVSerialComm implements IMAVComm {
 				//				System.out.println("REM="+comm.getModel().battery.p+" VOLT="+comm.getModel().battery.b0+" CURRENT="+comm.getModel().battery.c0);
 				//				System.out.println("ANGLEX="+comm.getModel().attitude.p+" ANGLEY="+comm.getModel().attitude.r+" "+comm.getModel().sys.toString());
 				Thread.sleep(2000);
-//				System.out.println("Errors: "+comm.getErrorCount()+"Current Unix Time: "+(System.nanoTime()/1000*1000)+" "+msg);
+				//				System.out.println("Errors: "+comm.getErrorCount()+"Current Unix Time: "+(System.nanoTime()/1000*1000)+" "+msg);
 				comm.getMavLinkMessageMap().forEach((a,m) -> {
 					System.out.println(a+":"+m);
 				});

@@ -237,7 +237,7 @@ public class MAVLinkReader {
 				rxmsg.crc = MAVLinkCRC.crc_accumulate((byte)c, rxmsg.crc);
 				if(++lengthToRead >= rxmsg.len) {
 					// clear some additional bytes of the payload buffer
-					Arrays.fill(rxmsg.rawData, lengthToRead, lengthToRead+24,(byte)0);
+					Arrays.fill(rxmsg.rawData, lengthToRead, lengthToRead+32,(byte)0);
 					state = t_parser_state.MAVLINK_PARSE_STATE_GOT_PAYLOAD;
 				}
 				break;
