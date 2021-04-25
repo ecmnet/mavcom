@@ -64,6 +64,13 @@ public class Status extends Segment {
 	private static final String[] MSP_STATUS_TEXTS = { "Connected", "GCL connected", "MSP actve", "RC Attached", "Joystick attached", 
 			                                          "Offboard started", "SITL", "Proxy enabled", "Armed", "Landed", "In air", 
 			                                          "GPOS valid", "LPOS valid", "Parameter loaded" };
+	
+	private static final String[] MSP_SENSOR_TEXTS = { "EKF2","LIDAR","SONAR","GPS","FLOW","MSP","CV","PX4","SLAM","BASE","RTK",
+			      						               "GND","LOCK" };
+	
+	private static final String[] MSP_PX4MODE_TEXTS = { "MANUAL","ALTHOLD","POSHOLD","MISSION","LOITER","RTL","RCRECOVER","RTGS","ENGFAIL","GPSFAIL",
+			                                            "ACRO","UNKNOWN", "DESCEND","TERMINATION","STABILIZED","RATTITUDE","TAKEOFF","LAND","FOLLOW",
+			                                            "PRECLAND"};
 
 
 	// Low level sensors
@@ -111,10 +118,6 @@ public class Status extends Segment {
  	public static final  int NAVIGATION_STATE_AUTO_FOLLOW_TARGET 	= 19;	// Auto Follow
 	public static final  int NAVIGATION_STATE_AUTO_PRECLAND 		= 20	; 	// Precision land with landing target
 
-
-	private static final String[] sensor_names = { "EKF2","LIDAR","SONAR","GPS","FLOW","MSP","CV","PX4","SLAM","BASE","RTK","GND","LOCK",
-
-	};
 
 	public  long    autopilot    	= 0;
 	public  int     px4_status   	= 0;
@@ -260,11 +263,17 @@ public class Status extends Segment {
 
 	public String getSensorString() {
 		String text=" ";
-		for(int i=0; i < sensor_names.length;i++) {
+		for(int i=0; i < MSP_SENSOR_TEXTS.length;i++) {
 			if(((sensors >> i) & 1) == 1)
-				text = text + sensor_names[i] +" ";
+				text = text + MSP_SENSOR_TEXTS[i] +" ";
 		}
 		return text;
+	}
+	
+	public String getModeString() {
+		if(!isStatus(MSP_ARMED))
+	        return ""; 
+	    return MSP_PX4MODE_TEXTS[32 - Integer.numberOfLeadingZeros(nav_state)];
 	}
 
 	public void clear() {
