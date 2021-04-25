@@ -69,7 +69,7 @@ public class Status extends Segment {
 			      						               "GND","LOCK" };
 	
 	private static final String[] MSP_PX4MODE_TEXTS = { "MANUAL","ALTHOLD","POSHOLD","MISSION","LOITER","RTL","RCRECOVER","RTGS","ENGFAIL","GPSFAIL",
-			                                            "ACRO","UNKNOWN", "DESCEND","TERMINATION","STABILIZED","RATTITUDE","TAKEOFF","LAND","FOLLOW",
+			                                            "ACRO","UNKNOWN", "DESCEND","TERMINATION","OFFBOARD","STABILIZED","RATTITUDE","TAKEOFF","LAND","FOLLOW",
 			                                            "PRECLAND"};
 
 
@@ -273,7 +273,7 @@ public class Status extends Segment {
 	public String getModeString() {
 		if(!isStatus(MSP_ARMED))
 	        return ""; 
-	    return MSP_PX4MODE_TEXTS[32 - Integer.numberOfLeadingZeros(nav_state)];
+	    return MSP_PX4MODE_TEXTS[nav_state];
 	}
 
 	public void clear() {
