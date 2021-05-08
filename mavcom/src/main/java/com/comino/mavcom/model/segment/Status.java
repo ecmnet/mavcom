@@ -61,12 +61,12 @@ public class Status extends Segment {
 	public static final int MSP_LPOS_VALID         		    	= 12;
 	public static final int MSP_PARAMS_LOADED      		    	= 13;
 	
-	private static final String[] MSP_STATUS_TEXTS = { "Connected", "GCL connected", "MSP actve", "RC Attached", "Joystick attached", 
-			                                          "Offboard started", "SITL", "Proxy enabled", "Armed", "Landed", "In air", 
-			                                          "GPOS valid", "LPOS valid", "Parameter loaded" };
+	private static final String[] MSP_STATUS_TEXTS  = { "Connected", "GCL connected", "MSP actve", "RC Attached", "Joystick attached", 
+			                                            "Offboard started", "SITL", "Proxy enabled", "Armed", "Landed", "In air", 
+			                                            "GPOS valid", "LPOS valid", "Parameter loaded" };
 	
-	private static final String[] MSP_SENSOR_TEXTS = { "EKF2","LIDAR","SONAR","GPS","FLOW","MSP","CV","PX4","SLAM","BASE","RTK",
-			      						               "GND","LOCK" };
+	private static final String[] MSP_SENSOR_TEXTS  = { "EKF2","LIDAR","SONAR","GPS","FLOW","MSP","CV","PX4","SLAM","BASE","RTK",
+			      						                "GND","LOCK" };
 	
 	private static final String[] MSP_PX4MODE_TEXTS = { "MANUAL","ALTHOLD","POSHOLD","MISSION","LOITER","RTL","RCRECOVER","RTGS","ENGFAIL","GPSFAIL",
 			                                            "ACRO","UNKNOWN", "DESCEND","TERMINATION","OFFBOARD","STABILIZED","RATTITUDE","TAKEOFF","LAND","FOLLOW",
@@ -142,8 +142,10 @@ public class Status extends Segment {
 	public float    wifi_quality 	= Float.NaN;
 
 	public long     gcl_tms         = 0;
-	public String   version    		= "";
-	public String   build    		= "";
+	
+	public static String   version  = "";
+	public static String   build    = "";
+	public static String   fw_build = "";
 
 
 	public void set(Status s) {
