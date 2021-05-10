@@ -24,7 +24,7 @@ public class msg_smart_battery_info extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_SMART_BATTERY_INFO;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 87;
+    payload_length = 109;
 }
 
   /**
@@ -88,7 +88,7 @@ public class msg_smart_battery_info extends MAVLinkMessage {
     return result;
   }
   /**
-   * Static device name. Encode as manufacturer and product names separated using an underscore.
+   * Static device name in ASCII characters, 0 terminated. All 0: field not provided. Encode as manufacturer name then product name separated using an underscore.
    */
   public char[] device_name = new char[50];
   public void setDevice_name(String tmp) {
@@ -104,6 +104,42 @@ public class msg_smart_battery_info extends MAVLinkMessage {
     String result="";
     for (int i=0; i<50; i++) {
       if (device_name[i] != 0) result=result+device_name[i]; else break;
+    }
+    return result;
+  }
+  /**
+   * Maximum pack discharge current. 0: field not provided.
+   */
+  public long discharge_maximum_current;
+  /**
+   * Maximum pack discharge burst current. 0: field not provided.
+   */
+  public long discharge_maximum_burst_current;
+  /**
+   * Maximum per-cell voltage when charged. 0: field not provided.
+   */
+  public int charging_maximum_voltage;
+  /**
+   * Number of battery cells in series. 0: field not provided.
+   */
+  public int cells_in_series;
+  /**
+   * Manufacture date (DD/MM/YYYY) in ASCII characters, 0 terminated. All 0: field not provided.
+   */
+  public char[] manufacture_date = new char[11];
+  public void setManufacture_date(String tmp) {
+    int len = Math.min(tmp.length(), 11);
+    for (int i=0; i<len; i++) {
+      manufacture_date[i] = tmp.charAt(i);
+    }
+    for (int i=len; i<11; i++) {
+      manufacture_date[i] = 0;
+    }
+  }
+  public String getManufacture_date() {
+    String result="";
+    for (int i=0; i<11; i++) {
+      if (manufacture_date[i] != 0) result=result+manufacture_date[i]; else break;
     }
     return result;
   }
@@ -127,12 +163,19 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   for (int i=0; i<50; i++) {
     device_name[i] = (char)dis.readByte();
   }
+  discharge_maximum_current = (int)dis.readInt()&0x00FFFFFFFF;
+  discharge_maximum_burst_current = (int)dis.readInt()&0x00FFFFFFFF;
+  charging_maximum_voltage = (int)dis.readUnsignedShort()&0x00FFFF;
+  cells_in_series = (int)dis.readUnsignedByte()&0x00FF;
+  for (int i=0; i<11; i++) {
+    manufacture_date[i] = (char)dis.readByte();
+  }
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+87];
+  byte[] buffer = new byte[12+109];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -160,15 +203,22 @@ public byte[] encode() throws IOException {
   for (int i=0; i<50; i++) {
     dos.writeByte(device_name[i]);
   }
+  dos.writeInt((int)(discharge_maximum_current&0x00FFFFFFFF));
+  dos.writeInt((int)(discharge_maximum_burst_current&0x00FFFFFFFF));
+  dos.writeShort(charging_maximum_voltage&0x00FFFF);
+  dos.writeByte(cells_in_series&0x00FF);
+  for (int i=0; i<11; i++) {
+    dos.writeByte(manufacture_date[i]);
+  }
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 87);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 109);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[97] = crcl;
-  buffer[98] = crch;
+  buffer[119] = crcl;
+  buffer[120] = crch;
   dos.close();
   return buffer;
 }
@@ -185,6 +235,11 @@ return "MAVLINK_MSG_ID_SMART_BATTERY_INFO : " +   "  capacity_full_specification
 +  "  type="+type
 +  "  serial_number="+getSerial_number()
 +  "  device_name="+getDevice_name()
++  "  discharge_maximum_current="+discharge_maximum_current
++  "  discharge_maximum_burst_current="+discharge_maximum_burst_current
++  "  charging_maximum_voltage="+charging_maximum_voltage
++  "  cells_in_series="+cells_in_series
++  "  manufacture_date="+getManufacture_date()
 ;}
 
 }

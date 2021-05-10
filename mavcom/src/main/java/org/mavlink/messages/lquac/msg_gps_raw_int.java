@@ -65,7 +65,7 @@ public class msg_gps_raw_int extends MAVLinkMessage {
    */
   public int fix_type;
   /**
-   * Number of satellites visible. If unknown, set to 255
+   * Number of satellites visible. If unknown, set to UINT8_MAX
    */
   public int satellites_visible;
   /**
@@ -89,7 +89,7 @@ public class msg_gps_raw_int extends MAVLinkMessage {
    */
   public long hdg_acc;
   /**
-   * Yaw in earth frame from north. Use 0 if this GPS does not provide yaw. Use 65535 if this GPS is configured to provide yaw and is currently unable to provide it. Use 36000 for north.
+   * Yaw in earth frame from north. Use 0 if this GPS does not provide yaw. Use UINT16_MAX if this GPS is configured to provide yaw and is currently unable to provide it. Use 36000 for north.
    */
   public int yaw;
 /**

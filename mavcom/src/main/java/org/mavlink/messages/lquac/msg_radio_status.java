@@ -36,11 +36,11 @@ public class msg_radio_status extends MAVLinkMessage {
    */
   public int fixed;
   /**
-   * Local (message sender) recieved signal strength indication in device-dependent units/scale. Values: [0-254], 255: invalid/unknown.
+   * Local (message sender) recieved signal strength indication in device-dependent units/scale. Values: [0-254], UINT8_MAX: invalid/unknown.
    */
   public int rssi;
   /**
-   * Remote (message receiver) signal strength indication in device-dependent units/scale. Values: [0-254], 255: invalid/unknown.
+   * Remote (message receiver) signal strength indication in device-dependent units/scale. Values: [0-254], UINT8_MAX: invalid/unknown.
    */
   public int remrssi;
   /**
@@ -48,11 +48,11 @@ public class msg_radio_status extends MAVLinkMessage {
    */
   public int txbuf;
   /**
-   * Local background noise level. These are device dependent RSSI values (scale as approx 2x dB on SiK radios). Values: [0-254], 255: invalid/unknown.
+   * Local background noise level. These are device dependent RSSI values (scale as approx 2x dB on SiK radios). Values: [0-254], UINT8_MAX: invalid/unknown.
    */
   public int noise;
   /**
-   * Remote background noise level. These are device dependent RSSI values (scale as approx 2x dB on SiK radios). Values: [0-254], 255: invalid/unknown.
+   * Remote background noise level. These are device dependent RSSI values (scale as approx 2x dB on SiK radios). Values: [0-254], UINT8_MAX: invalid/unknown.
    */
   public int remnoise;
 /**

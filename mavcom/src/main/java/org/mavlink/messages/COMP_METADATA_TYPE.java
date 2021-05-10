@@ -24,4 +24,8 @@ public interface COMP_METADATA_TYPE {
      * Meta data which specifies potential external peripherals that do not talk MAVLink
      */
     public final static int COMP_METADATA_TYPE_PERIPHERALS = 3;
+    /**
+     * Meta data for events interface
+     */
+    public final static int COMP_METADATA_TYPE_EVENTS = 4;
 }

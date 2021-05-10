@@ -664,12 +664,12 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_PARACHUTE = 208;
     /**
-     * Mission command to perform motor test.
-     * PARAM 1 : Motor instance number. (from 1 to max number of motors on the vehicle)
-     * PARAM 2 : Throttle type.
-     * PARAM 3 : Throttle.
-     * PARAM 4 : Timeout.
-     * PARAM 5 : Motor count. (number of motors to test to test in sequence, waiting for the timeout above between them; 0=1 motor, 1=1 motor, 2=2 motors...)
+     * Command to perform motor test.
+     * PARAM 1 : Motor instance number (from 1 to max number of motors on the vehicle).
+     * PARAM 2 : Throttle type (whether the Throttle Value in param3 is a percentage, PWM value, etc.)
+     * PARAM 3 : Throttle value.
+     * PARAM 4 : Timeout between tests that are run in sequence.
+     * PARAM 5 : Motor count. Number of motors to test in sequence: 0/1=one motor, 2= two motors, etc. The Timeout (param4) is used between tests.
      * PARAM 6 : Motor test order.
      * PARAM 7 : Empty
      */

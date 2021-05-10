@@ -44,7 +44,7 @@ public class msg_logging_data_acked extends MAVLinkMessage {
    */
   public int length;
   /**
-   * offset into data where first message starts. This can be used for recovery, when a previous message got lost (set to 255 if no start exists).
+   * offset into data where first message starts. This can be used for recovery, when a previous message got lost (set to UINT8_MAX if no start exists).
    */
   public int first_message_offset;
   /**

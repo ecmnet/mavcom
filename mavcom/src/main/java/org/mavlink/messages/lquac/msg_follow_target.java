@@ -56,7 +56,7 @@ public class msg_follow_target extends MAVLinkMessage {
    */
   public float[] acc = new float[3];
   /**
-   * (1 0 0 0 for unknown)
+   * (0 0 0 0 for unknown)
    */
   public float[] attitude_q = new float[4];
   /**

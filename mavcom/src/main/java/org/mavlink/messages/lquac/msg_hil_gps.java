@@ -53,7 +53,7 @@ public class msg_hil_gps extends MAVLinkMessage {
    */
   public int epv;
   /**
-   * GPS ground speed. If unknown, set to: 65535
+   * GPS ground speed. If unknown, set to: UINT16_MAX
    */
   public int vel;
   /**
@@ -69,7 +69,7 @@ public class msg_hil_gps extends MAVLinkMessage {
    */
   public int vd;
   /**
-   * Course over ground (NOT heading, but direction of movement), 0.0..359.99 degrees. If unknown, set to: 65535
+   * Course over ground (NOT heading, but direction of movement), 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
    */
   public int cog;
   /**
@@ -77,7 +77,7 @@ public class msg_hil_gps extends MAVLinkMessage {
    */
   public int fix_type;
   /**
-   * Number of satellites visible. If unknown, set to 255
+   * Number of satellites visible. If unknown, set to UINT8_MAX
    */
   public int satellites_visible;
   /**

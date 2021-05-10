@@ -36,7 +36,7 @@ public class msg_uavcan_node_info extends MAVLinkMessage {
    */
   public long uptime_sec;
   /**
-   * Version control system (VCS) revision identifier (e.g. git short commit hash). Zero if unknown.
+   * Version control system (VCS) revision identifier (e.g. git short commit hash). 0 if unknown.
    */
   public long sw_vcs_commit;
   /**

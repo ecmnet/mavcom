@@ -1069,9 +1069,9 @@
       <decimal>1</decimal>
       <increment>0.1</increment>
     </parameter>
-    <parameter name="COM_ARM_CHK_ESCS" default="1" type="INT32" boolean="true">
-      <short_desc>Require all the ESCs to be detected to arm</short_desc>
-      <long_desc>This param is specific for ESCs reporting status. Normal ESCs configurations are not affected by the change of this param.</long_desc>
+    <parameter name="COM_ARM_CHK_ESCS" default="0" type="INT32" boolean="true">
+      <short_desc>Enable checks on ESCs that report telemetry</short_desc>
+      <long_desc>If this parameter is set, the system will check ESC's online status and failures. This param is specific for ESCs reporting status. It shall be used only if ESCs support telemetry.</long_desc>
     </parameter>
     <parameter name="COM_ARM_EKF_HGT" default="1.0" type="FLOAT">
       <short_desc>Maximum EKF height innovation test ratio that will allow arming</short_desc>
@@ -1167,9 +1167,9 @@
       <unit>s</unit>
       <decimal>2</decimal>
     </parameter>
-    <parameter name="COM_DISARM_PRFLT" default="25.0" type="FLOAT">
-      <short_desc>Time-out for auto disarm if too slow to takeoff</short_desc>
-      <long_desc>A non-zero, positive value specifies the time after arming, in seconds, within which the vehicle must take off (after which it will automatically disarm). This is set to 25 seconds to ensure a system will not disarm if the pilot is not immediately taking off, but not so long that a system is completely forgotten about. A zero or negative value means that automatic disarming triggered by a pre-takeoff timeout is disabled.</long_desc>
+    <parameter name="COM_DISARM_PRFLT" default="10.0" type="FLOAT">
+      <short_desc>Time-out for auto disarm if not taking off</short_desc>
+      <long_desc>A non-zero, positive value specifies the time in seconds, within which the vehicle is expected to take off after arming. In case the vehicle didn't takeoff within the timout it disamrs again. A negative value disables autmoatic disarming triggered by a pre-takeoff timeout.</long_desc>
       <unit>s</unit>
       <decimal>2</decimal>
     </parameter>
@@ -1905,6 +1905,22 @@
     </parameter>
   </group>
   <group name="DShot">
+    <parameter name="DSHOT_3D_DEAD_H" default="1000" type="INT32">
+      <short_desc>DSHOT 3D deadband high</short_desc>
+      <long_desc>When the actuator_output is between DSHOT_3D_DEAD_L and DSHOT_3D_DEAD_H, motor will not spin. This value is with respect to the mixer_module range (0-1999), not the DSHOT values.</long_desc>
+      <min>1000</min>
+      <max>1999</max>
+    </parameter>
+    <parameter name="DSHOT_3D_DEAD_L" default="1000" type="INT32">
+      <short_desc>DSHOT 3D deadband low</short_desc>
+      <long_desc>When the actuator_output is between DSHOT_3D_DEAD_L and DSHOT_3D_DEAD_H, motor will not spin. This value is with respect to the mixer_module range (0-1999), not the DSHOT values.</long_desc>
+      <min>0</min>
+      <max>1000</max>
+    </parameter>
+    <parameter name="DSHOT_3D_ENABLE" default="0" type="INT32" boolean="true">
+      <short_desc>Allows for 3d mode when using DShot and suitable mixer</short_desc>
+      <long_desc>WARNING: ESC must be configured for 3D mode, and DSHOT_MIN set to 0. This splits the throttle ranges in two. Direction 1) 48 is the slowest, 1047 is the fastest. Direction 2) 1049 is the slowest, 2047 is the fastest. When mixer outputs 1000 or value inside DSHOT 3D deadband, DShot 0 is sent.</long_desc>
+    </parameter>
     <parameter name="DSHOT_CONFIG" default="0" type="INT32">
       <short_desc>Configure DShot</short_desc>
       <long_desc>This enables/disables DShot. The different modes define different speeds, for example DShot150 = 150kb/s. Not all ESCs support all modes. Note: this enables DShot on the FMU outputs. For boards with an IO it is the AUX outputs.</long_desc>
@@ -3767,7 +3783,7 @@
       <short_desc>Protocol for Main GPS</short_desc>
       <long_desc>Select the GPS protocol over serial. Auto-detection will probe all protocols, and thus is a bit slower.</long_desc>
       <min>0</min>
-      <max>4</max>
+      <max>5</max>
       <reboot_required>true</reboot_required>
       <values>
         <value code="0">Auto detect</value>
@@ -3775,6 +3791,7 @@
         <value code="2">MTK</value>
         <value code="3">Ashtech / Trimble</value>
         <value code="4">Emlid Reach</value>
+        <value code="5">Femtomes</value>
       </values>
     </parameter>
     <parameter name="GPS_2_CONFIG" default="0" type="INT32">
@@ -3813,7 +3830,7 @@
       <short_desc>Protocol for Secondary GPS</short_desc>
       <long_desc>Select the GPS protocol over serial. Auto-detection will probe all protocols, and thus is a bit slower.</long_desc>
       <min>0</min>
-      <max>4</max>
+      <max>5</max>
       <reboot_required>true</reboot_required>
       <values>
         <value code="0">Auto detect</value>
@@ -3821,6 +3838,7 @@
         <value code="2">MTK</value>
         <value code="3">Ashtech / Trimble</value>
         <value code="4">Emlid Reach</value>
+        <value code="5">Femtomes</value>
       </values>
     </parameter>
     <parameter name="GPS_DUMP_COMM" default="0" type="INT32">
@@ -4082,6 +4100,14 @@
       <short_desc>Multicopter max rotation</short_desc>
       <long_desc>Maximum allowed angular velocity around each axis allowed in the landed state.</long_desc>
       <unit>deg/s</unit>
+      <decimal>1</decimal>
+    </parameter>
+    <parameter name="LNDMC_TRIG_TIME" default="1.0" type="FLOAT">
+      <short_desc>Multicopter land detection trigger time</short_desc>
+      <long_desc>Total time it takes to go through all three land detection stages: ground contact, maybe landed, landed when all necessary conditions are constantly met.</long_desc>
+      <min>0.1</min>
+      <max>10.0</max>
+      <unit>s</unit>
       <decimal>1</decimal>
     </parameter>
     <parameter name="LNDMC_XY_VEL_MAX" default="1.5" type="FLOAT">
@@ -5135,7 +5161,7 @@
       <max>15</max>
       <unit>m</unit>
     </parameter>
-    <parameter name="CP_GO_NO_DATA" default="0" type="FLOAT" boolean="true">
+    <parameter name="CP_GO_NO_DATA" default="0" type="INT32" boolean="true">
       <short_desc>Boolean to allow moving into directions where there is no sensor data (outside FOV)</short_desc>
       <long_desc>Only used in Position mode.</long_desc>
     </parameter>
@@ -8583,6 +8609,32 @@
     </parameter>
     <parameter name="RC_MAP_POSCTL_SW" default="0" type="INT32">
       <short_desc>Position Control switch channel</short_desc>
+      <min>0</min>
+      <max>18</max>
+      <values>
+        <value code="0">Unassigned</value>
+        <value code="1">Channel 1</value>
+        <value code="2">Channel 2</value>
+        <value code="3">Channel 3</value>
+        <value code="4">Channel 4</value>
+        <value code="5">Channel 5</value>
+        <value code="6">Channel 6</value>
+        <value code="7">Channel 7</value>
+        <value code="8">Channel 8</value>
+        <value code="9">Channel 9</value>
+        <value code="10">Channel 10</value>
+        <value code="11">Channel 11</value>
+        <value code="12">Channel 12</value>
+        <value code="13">Channel 13</value>
+        <value code="14">Channel 14</value>
+        <value code="15">Channel 15</value>
+        <value code="16">Channel 16</value>
+        <value code="17">Channel 17</value>
+        <value code="18">Channel 18</value>
+      </values>
+    </parameter>
+    <parameter name="RC_MAP_RATT_SW" default="0" type="INT32">
+      <short_desc>Rattitude switch channel (deprecated)</short_desc>
       <min>0</min>
       <max>18</max>
       <values>
@@ -13210,11 +13262,14 @@
     <parameter name="RV_YAW_P" default="0.1" type="FLOAT">
       <short_desc>RV_YAW_P</short_desc>
     </parameter>
-    <parameter name="UCAN1_BMS0_PID" default="0" type="INT32">
-      <short_desc>UCAN1_BMS0_PID</short_desc>
+    <parameter name="UCAN1_BMS_BP_PID" default="0" type="INT32">
+      <short_desc>UCAN1_BMS_BP_PID</short_desc>
     </parameter>
-    <parameter name="UCAN1_BMS1_PID" default="0" type="INT32">
-      <short_desc>UCAN1_BMS1_PID</short_desc>
+    <parameter name="UCAN1_BMS_BS_PID" default="0" type="INT32">
+      <short_desc>UCAN1_BMS_BS_PID</short_desc>
+    </parameter>
+    <parameter name="UCAN1_BMS_ES_PID" default="0" type="INT32">
+      <short_desc>UCAN1_BMS_ES_PID</short_desc>
     </parameter>
     <parameter name="UCAN1_ESC0_PID" default="0" type="INT32">
       <short_desc>UCAN1_ESC0_PID</short_desc>
@@ -13231,8 +13286,14 @@
     <parameter name="UCAN1_GPS_PUB" default="0" type="INT32">
       <short_desc>UCAN1_GPS_PUB</short_desc>
     </parameter>
+    <parameter name="UCAN1_LG_BMS_PID" default="0" type="INT32">
+      <short_desc>UCAN1_LG_BMS_PID</short_desc>
+    </parameter>
     <parameter name="UCAN1_SERVO_PUB" default="0" type="INT32">
       <short_desc>UCAN1_SERVO_PUB</short_desc>
+    </parameter>
+    <parameter name="UCAN1_UORB_GPS" default="0" type="INT32">
+      <short_desc>UCAN1_UORB_GPS</short_desc>
     </parameter>
     <parameter name="UUV_SKIP_CTRL" default="0" type="INT32">
       <short_desc>Skip the controller</short_desc>

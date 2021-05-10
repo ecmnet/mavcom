@@ -68,7 +68,7 @@ public class msg_rc_channels_scaled extends MAVLinkMessage {
    */
   public int port;
   /**
-   * Receive signal strength indicator in device-dependent units/scale. Values: [0-254], 255: invalid/unknown.
+   * Receive signal strength indicator in device-dependent units/scale. Values: [0-254], UINT8_MAX: invalid/unknown.
    */
   public int rssi;
 /**

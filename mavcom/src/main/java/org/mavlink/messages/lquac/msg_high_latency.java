@@ -96,7 +96,7 @@ public class msg_high_latency extends MAVLinkMessage {
    */
   public int climb_rate;
   /**
-   * Number of satellites visible. If unknown, set to 255
+   * Number of satellites visible. If unknown, set to UINT8_MAX
    */
   public int gps_nsat;
   /**
