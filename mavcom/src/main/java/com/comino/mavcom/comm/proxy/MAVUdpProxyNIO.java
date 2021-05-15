@@ -58,7 +58,7 @@ import com.comino.mavcom.model.segment.Status;
 
 public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	
-	private static final int BUFFER = 64;
+	private static final int BUFFER = 32;
 
 	private SocketAddress 			bindPort = null;
 	private SocketAddress 			peerPort;
@@ -240,7 +240,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 					}
 
 					if (key.isReadable()) {
-						try {
+//						try {
 							if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
 								if(rxBuffer.position()>0) {
 									((Buffer)rxBuffer).flip();
@@ -265,13 +265,17 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 									}
 								}
 							}
-						} catch(Exception io) {  }
+//						} catch(Exception io) { 
+//							System.err.println(io.getMessage());
+//						//	isConnected = false; 
+//							break;
+//						}
 					}
 				}
 			}
 			close();
 		} catch(Exception e) {
-			
+			System.out.println("Connection broken: "+e.getMessage());
 			close();
 			isConnected = false;
 		}
@@ -311,11 +315,11 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
 			return;
 		
-		if(channel != null && channel.socket().isConnected() && isConnected) {
+		if(channel != null && channel.socket().isBound() && isConnected) {
 			try {
 				if(length > 0)
 				  channel.write(ByteBuffer.wrap(buffer,0,length));
-			} catch (Exception e) {  }
+			} catch (Exception e) { System.out.println("Could not write: "+e.getMessage()); isConnected = false; }
 		} 
 	}
 

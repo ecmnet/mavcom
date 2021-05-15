@@ -215,7 +215,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			}
 		});
 		
-		wq.addCyclicTask("LP", 500, this);	
+		wq.addCyclicTask("LP", 200, this);	
 
 	}
 
