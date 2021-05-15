@@ -142,6 +142,7 @@ public class Status extends Segment {
 	public float    wifi_quality 	= Float.NaN;
 
 	public long     gcl_tms         = 0;
+	public short    mem_m           = 0;
 	
 	public static String   version  = "";
 	public static String   build    = "";
@@ -170,6 +171,8 @@ public class Status extends Segment {
 
 		msp_temp = s.msp_temp;
 		bat_temp = s.bat_temp;
+		
+		mem_m    = s.mem_m;
 	}
 
 
@@ -296,6 +299,7 @@ public class Status extends Segment {
 		est_state     = 0;
 		bat_state     = 0;
 		bat_temp      = 0;
+		mem_m         = 0;
 	}
 
 
