@@ -325,9 +325,6 @@ public class MAVController implements IMAVController, Runnable {
 	@Override
 	public void writeLogMessage(LogMessage m) {
 
-		if(!m.isNew())
-			return;
-
 		if(comm!=null)
 			comm.writeMessage(m);
 

@@ -150,8 +150,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		switch(mode) {
 		case MAVController.MODE_NORMAL:
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			      comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
-			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
+			//      comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
+					comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 
@@ -435,6 +435,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		if(!proxy.isConnected())  {
 			proxy.close(); proxy.open();
+			System.out.println("Re-connect");
 		}
 		if(!comm.isConnected()) {
 			model.sys.setStatus(Status.MSP_ACTIVE, false);

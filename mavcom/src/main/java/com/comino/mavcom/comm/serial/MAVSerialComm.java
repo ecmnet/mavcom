@@ -122,14 +122,17 @@ public class MAVSerialComm implements IMAVComm {
 		if(found) {
 			this.port = serialPort.getSystemPortName();
 			System.out.println(port+" found");
-		} else
+		} else {
 			System.out.println("! No Serial port found...");
+			return;
+		}
 
 		this.parser     = new MAVLinkToModelParser(model, this);
 		this.reader     = new MAVLinkBlockingReader(3, parser);
 
-		this.is = new BufferedInputStream(serialPort.getInputStream(),BUFFER*1024);
-		this.os = new BufferedOutputStream(serialPort.getOutputStream(),1024);
+		
+		this.is = new BufferedInputStream(serialPort.getInputStream(),BUFFER*1024*2);
+		this.os = new BufferedOutputStream(serialPort.getOutputStream(),2048);
 
 	}
 
@@ -157,6 +160,8 @@ public class MAVSerialComm implements IMAVComm {
 		System.out.println("Serial port "+this.getClass().getSimpleName()+" opened: "+port+": "+baudrate+" baud");
 		System.out.println(serialPort.getPortDescription());
 		System.out.println("Buffersize (read/write): "+serialPort.getDeviceReadBufferSize()+"/"+serialPort.getDeviceWriteBufferSize());
+		
+		
 		return true;
 	}
 
@@ -225,8 +230,8 @@ public class MAVSerialComm implements IMAVComm {
 					try {
 						avail = is.available();
 						if(avail > 0) {
-							is.read(buf, 0, avail);
-							if(avail < 3000) {
+							avail = is.read(buf, 0, avail);
+							if(avail < 5000) {
 								if(byteListener != null)
 									byteListener.write(buf, avail);
 								reader.put(buf, avail);
@@ -237,12 +242,13 @@ public class MAVSerialComm implements IMAVComm {
 					}
 				}
 			});
+			
 			serialPort.openPort();
 			model.sys.setStatus(Status.MSP_CONNECTED, true);
 
 		} catch (Exception e2) {
 			e2.printStackTrace();
-			serialPort.closePort();
+			close();
 			return false;
 		}
 		return true;

@@ -58,11 +58,11 @@ import com.comino.mavcom.model.segment.Status;
 
 public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	
-	private static final int BUFFER = 32;
+	private static final int BUFFER = 64;
 
 	private SocketAddress 			bindPort = null;
 	private SocketAddress 			peerPort;
-	private DatagramChannel 			channel = null;
+	private DatagramChannel 		channel = null;
 
 	private HashMap<Class<?>,List<IMAVLinkListener>> listeners = null;
 
@@ -113,7 +113,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 				try {
 					channel = DatagramChannel.open();
 					channel.socket().bind(bindPort);
-				//	channel.socket().setTrafficClass(0x08);
+					channel.socket().setTrafficClass(0x08);
 					channel.socket().setSendBufferSize(BUFFER*1024);
 					channel.socket().setReceiveBufferSize(BUFFER*1024);
 					channel.configureBlocking(false);
@@ -307,7 +307,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 	public void write(byte[] buffer, int length) {
 		
-		// Dio not foreward data if GCL is not connected
+		// Do not foreward data if GCL is not connected
 		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
 			return;
 		
