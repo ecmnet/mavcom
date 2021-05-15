@@ -58,7 +58,7 @@ import com.comino.mavcom.model.segment.Status;
 
 public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	
-	private static final int BUFFER = 32;
+	private static final int BUFFER = 64;
 
 	private SocketAddress 			bindPort = null;
 	private SocketAddress 			peerPort;
@@ -259,7 +259,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 											comm.write(msg);
 									}
 
-									if((System.currentTimeMillis() - start) > 200) {
+									if((System.currentTimeMillis() - start) > 500) {
 										transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
 										bcount = 0; start = System.currentTimeMillis();
 									}
@@ -275,7 +275,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			}
 			close();
 		} catch(Exception e) {
-			System.out.println("Connection broken: "+e.getMessage());
+			System.out.println("Connection broken: ");
 			close();
 			isConnected = false;
 		}
@@ -288,7 +288,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 	public void write(MAVLinkMessage msg)  {
 		
-		if(msg!=null && channel!=null && channel.isConnected() && isConnected) {
+		if(msg!=null && channel!=null && channel.isOpen() && isConnected) {
 			try {
 				channel.write(ByteBuffer.wrap(msg.encode()));
 
@@ -309,17 +309,17 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	}
 	
 
-	public void write(byte[] buffer, int length) {
+	public synchronized void write(byte[] buffer, int length) {
 		
 		// Do not foreward data if GCL is not connected
 		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
 			return;
 		
-		if(channel != null && channel.socket().isBound() && isConnected) {
+		if(channel != null && channel.isOpen() && isConnected) {
 			try {
 				if(length > 0)
 				  channel.write(ByteBuffer.wrap(buffer,0,length));
-			} catch (Exception e) { System.out.println("Could not write: "+e.getMessage()); isConnected = false; }
+			} catch (Exception e) { }
 		} 
 	}
 

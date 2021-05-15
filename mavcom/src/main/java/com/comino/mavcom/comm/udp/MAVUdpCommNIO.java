@@ -213,7 +213,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 							reader.put(proxyBuffer, msg_length);
 							bcount = bcount + msg_length;
 						}
-						if((System.currentTimeMillis() - start) > 200) {
+						if((System.currentTimeMillis() - start) > 1000) {
 							transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
 							bcount = 0; start = System.currentTimeMillis();
 						}
