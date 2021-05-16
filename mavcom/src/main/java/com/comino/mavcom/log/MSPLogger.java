@@ -77,6 +77,7 @@ public class MSPLogger {
 	}
 
 	public synchronized void writeLocalMsg(String msg, int severity) {
+		    System.out.println("["+LogMessage.severity_texts[severity]+"]\t"+msg);
 			if(severity == MAV_SEVERITY.MAV_SEVERITY_DEBUG && !debug_msg_enabled)
 				return;
 			LogMessage m = new LogMessage();
