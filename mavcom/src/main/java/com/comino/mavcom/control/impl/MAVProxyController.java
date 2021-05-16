@@ -434,8 +434,13 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	public void run() {
 
 		if(!proxy.isConnected())  {
-			proxy.close(); proxy.open();
-			System.out.println("Re-connect");
+			
+		//	System.out.println("Re-connect");
+			
+			proxy.close(); 
+			if(!proxy.open())
+				return;
+	
 		}
 		if(!comm.isConnected()) {
 			model.sys.setStatus(Status.MSP_ACTIVE, false);

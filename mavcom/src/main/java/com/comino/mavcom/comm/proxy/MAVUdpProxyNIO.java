@@ -54,10 +54,11 @@ import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVLinkReader;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
+import com.comino.mavutils.legacy.ExecutorService;
 
 
 public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
-	
+
 	private static final int BUFFER = 64;
 
 	private SocketAddress 			bindPort = null;
@@ -103,51 +104,59 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			return true;
 		}
 
-		((Buffer)rxBuffer).clear(); 
+			((Buffer)rxBuffer).clear(); 
 
-		while(!isConnected) {
-			try {
+			while(!isConnected) {
 
-				isConnected = true;
-				//						System.out.println("Connect to UDP channel");
 				try {
-					channel = DatagramChannel.open();
-					channel.socket().bind(bindPort);
-					channel.socket().setTrafficClass(0x08);
-					channel.socket().setSendBufferSize(BUFFER*1024);
-					channel.socket().setReceiveBufferSize(BUFFER*1024);
-					channel.configureBlocking(false);
-					
 					Thread.sleep(100);
-
-				} catch(java.net.BindException b) {
-					System.err.println("Connection error: "+b.getLocalizedMessage());
-					System.exit(-1);
-				} catch (Exception e) {
-//					e.printStackTrace();
-					continue;
+				} catch (InterruptedException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
 				}
-				channel.connect(peerPort);
-				selector = Selector.open();
-				((Buffer)rxBuffer).clear();
 
-
-				Thread t = new Thread(this);
-				t.setName("Proxy worker");
-				t.start();
-
-
-				return true;
-			} catch(Exception e) {
-				System.err.println("Open "+e.getLocalizedMessage());
 				try {
-					channel.disconnect();
-					channel.close();
-				} catch (IOException e1) { }
-				isConnected = false;
+
+					//						System.out.println("Connect to UDP channel");
+					try {
+						channel = DatagramChannel.open();
+						channel.socket().bind(bindPort);
+						channel.socket().setTrafficClass(0x08);
+						channel.socket().setSendBufferSize(BUFFER*1024);
+						channel.socket().setReceiveBufferSize(BUFFER*1024);
+						channel.configureBlocking(false);
+
+
+					} catch(java.net.BindException b) {
+						System.err.println("Connection error: "+b.getLocalizedMessage());
+						System.exit(-1);
+					} catch (Exception e) {
+						//					e.printStackTrace();
+						continue;
+					}
+					channel.connect(peerPort);
+					selector = Selector.open();
+					((Buffer)rxBuffer).clear();
+
+					if(channel.isConnected())
+						isConnected = true;
+
+
+				} catch(Exception e) {
+					System.err.println("Open "+e.getLocalizedMessage());
+					try {
+						channel.disconnect();
+						channel.close();
+					} catch (IOException e1) { }
+					isConnected = false;
+				}
 			}
-		}
-		return false;
+
+			Thread t = new Thread(this);
+			t.setName("Proxy worker");
+			t.start();
+
+		return true;
 	}
 
 	public boolean isConnected() {
@@ -211,12 +220,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 
 			bcount = 0;
 
-			if(comm.isConnected()) {
-				//				msg_heartbeat hb = new msg_heartbeat(2,1);
-				//				hb.isValid = true;
-				//				comm.write(hb);
-			} else {
-				
+			if(!comm.isConnected()) {
 				isConnected = false;
 				return;
 			}
@@ -224,7 +228,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 			start = System.currentTimeMillis();
 			while(isConnected) {
 
-				if(selector.select(5000)==0) {
+				if(selector.select(1000)==0) {
 					isConnected = false;
 					continue;
 				}
@@ -240,45 +244,37 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 					}
 
 					if (key.isReadable()) {
-//						try {
-							if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
-								if(rxBuffer.position()>0) {
-									((Buffer)rxBuffer).flip();
-									while(rxBuffer.hasRemaining()) {
-										bcount++;
-										reader.put(rxBuffer.get());
+						//						try {
+						if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
+							if(rxBuffer.position()>0) {
+								((Buffer)rxBuffer).flip();
+								while(rxBuffer.hasRemaining()) {
+									bcount++;
+									reader.put(rxBuffer.get());
+								}
+								rxBuffer.compact();
+								while((msg=reader.getNextMessage())!=null) {
+									listener_list = listeners.get(msg.getClass());
+									if(listener_list!=null) {
+										for(IMAVLinkListener listener : listener_list)
+											listener.received(msg);
 									}
-									rxBuffer.compact();
-									while((msg=reader.getNextMessage())!=null) {
-										listener_list = listeners.get(msg.getClass());
-										if(listener_list!=null) {
-											for(IMAVLinkListener listener : listener_list)
-												listener.received(msg);
-										}
-										if(comm.isConnected())
-											comm.write(msg);
-									}
+									if(comm.isConnected())
+										comm.write(msg);
+								}
 
-									if((System.currentTimeMillis() - start) > 500) {
-										transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
-										bcount = 0; start = System.currentTimeMillis();
-									}
+								if((System.currentTimeMillis() - start) > 500) {
+									transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
+									bcount = 0; start = System.currentTimeMillis();
 								}
 							}
-//						} catch(Exception io) { 
-//							System.err.println(io.getMessage());
-//						//	isConnected = false; 
-//							break;
-//						}
+						}
 					}
 				}
 			}
-			close();
-		} catch(Exception e) {
-			System.out.println("Connection broken: ");
-			close();
-			isConnected = false;
-		}
+		} catch(Exception e) { }
+		close();
+		isConnected = false;
 	}
 
 
@@ -287,7 +283,7 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	}
 
 	public void write(MAVLinkMessage msg)  {
-		
+
 		if(msg!=null && channel!=null && channel.isOpen() && isConnected) {
 			try {
 				channel.write(ByteBuffer.wrap(msg.encode()));
@@ -307,18 +303,18 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable {
 	public long getTransferRate() {
 		return transfer_speed;
 	}
-	
+
 
 	public synchronized void write(byte[] buffer, int length) {
-		
+
 		// Do not foreward data if GCL is not connected
 		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
 			return;
-		
+
 		if(channel != null && channel.isOpen() && isConnected) {
 			try {
 				if(length > 0)
-				  channel.write(ByteBuffer.wrap(buffer,0,length));
+					channel.write(ByteBuffer.wrap(buffer,0,length));
 			} catch (Exception e) { }
 		} 
 	}
