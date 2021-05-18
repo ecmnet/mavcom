@@ -53,9 +53,9 @@ import org.mavlink.messages.lquac.msg_serial_control;
 import org.mavlink.messages.lquac.msg_statustext;
 
 import com.comino.mavcom.comm.IMAVComm;
-import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO;
+import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO2;
 import com.comino.mavcom.comm.serial.MAVSerialComm;
-import com.comino.mavcom.comm.udp.MAVUdpCommNIO;
+import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.control.IMAVMSPController;
@@ -80,7 +80,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 
 	protected   DataModel model = null;
-	protected   MAVUdpProxyNIO proxy = null;
+	protected   MAVUdpProxyNIO2 proxy = null;
 
 	private static final int BAUDRATE_5   = 57600;
 	private static final int BAUDRATE_9   = 921600;
@@ -157,7 +157,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 			try { Thread.sleep(100); } catch (InterruptedException e) { }
 
-			proxy = new MAVUdpProxyNIO(model,"172.168.178.2",14550,"172.168.178.1",14555,comm);
+			proxy = new MAVUdpProxyNIO2(model,"172.168.178.2",14550,"172.168.178.1",14555,comm);
 			peerAddress = "172.168.178.1";
 			System.out.println("Proxy Controller loaded: "+peerAddress);
 			model.sys.setStatus(Status.MSP_SITL,false);
@@ -165,8 +165,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		case MAVController.MODE_SITL:
 			model.sys.setStatus(Status.MSP_SITL,true);
-			comm = MAVUdpCommNIO.getInstance(model, "127.0.0.1",14580, 14540);
-			proxy = new MAVUdpProxyNIO(model,"127.0.0.1",14650,"0.0.0.0",14656,comm);
+			comm = MAVUdpCommNIO2.getInstance(model, "127.0.0.1",14580, 14540);
+			proxy = new MAVUdpProxyNIO2(model,"127.0.0.1",14650,"0.0.0.0",14656,comm);
 			peerAddress = "127.0.0.1";
 			System.out.println("Proxy Controller (SITL mode) loaded");
 			break;
@@ -176,7 +176,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
-			proxy = new MAVUdpProxyNIO(model,"127.0.0.1",14650,"0.0.0.0",14656,comm);
+			proxy = new MAVUdpProxyNIO2(model,"127.0.0.1",14650,"0.0.0.0",14656,comm);
 			peerAddress = "127.0.0.1";
 			System.out.println("Proxy Controller (serial mode) loaded: "+peerAddress);
 			model.sys.setStatus(Status.MSP_SITL,false);
@@ -189,9 +189,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			//			comm.open();
 			//			try { Thread.sleep(500); } catch (InterruptedException e) { }
 
-			comm = MAVUdpCommNIO.getInstance(model, "172.168.178.2",14580, 14540);
+			comm = MAVUdpCommNIO2.getInstance(model, "172.168.178.2",14580, 14540);
 			//			comm = MAVUdpCommNIO.getInstance(model, "172.168.178.2",14280, 14030);
-			proxy = new MAVUdpProxyNIO(model,"172.168.178.2",14650,"172.168.178.22",14656,comm);
+			proxy = new MAVUdpProxyNIO2(model,"172.168.178.2",14650,"172.168.178.22",14656,comm);
 			peerAddress = "172.168.178.22";
 			System.out.println("Proxy Controller loaded (Server): "+peerAddress);
 			break;
@@ -432,27 +432,24 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void run() {
+		
+		sendMAVLinkMessage(beat_px4);
+		
+		sendMAVLinkMessage(beat_obs);
 
 		if(!proxy.isConnected())  {
-			
-		//	System.out.println("Re-connect");
 			
 			proxy.close(); 
 			if(!proxy.open())
 				return;
 	
 		}
+		
 		if(!comm.isConnected()) {
 			model.sys.setStatus(Status.MSP_ACTIVE, false);
 			comm.open();
 		} else
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
-
-		sendMAVLinkMessage(beat_px4);
-
-		sendMAVLinkMessage(beat_obs);
-
-
 	}
 
 	@Override

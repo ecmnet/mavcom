@@ -39,7 +39,7 @@ import java.util.Map;
 
 import org.mavlink.messages.MAVLinkMessage;
 
-import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO;
+import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO2;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
@@ -58,7 +58,7 @@ public interface IMAVComm {
 
 	void write(MAVLinkMessage msg) throws IOException;
 	
-	public void setProxyListener(MAVUdpProxyNIO proxy);
+	public void setProxyListener(MAVUdpProxyNIO2 proxy);
 
 	public void addMAVLinkListener(IMAVLinkListener listener);
 

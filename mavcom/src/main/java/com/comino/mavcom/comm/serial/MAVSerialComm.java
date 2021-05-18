@@ -45,7 +45,7 @@ import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_timesync;
 
 import com.comino.mavcom.comm.IMAVComm;
-import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO;
+import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO2;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
@@ -75,7 +75,7 @@ public class MAVSerialComm implements IMAVComm {
 	private MAVLinkBlockingReader reader;
 
 	private static   IMAVComm com = null;
-	private MAVUdpProxyNIO byteListener = null;
+	private MAVUdpProxyNIO2 byteListener = null;
 
 	private int baudrate = 921600;
 
@@ -317,7 +317,7 @@ public class MAVSerialComm implements IMAVComm {
 
 
 	@Override
-	public void setProxyListener(MAVUdpProxyNIO listener) {
+	public void setProxyListener(MAVUdpProxyNIO2 listener) {
 		this.byteListener = listener;
 
 	}
