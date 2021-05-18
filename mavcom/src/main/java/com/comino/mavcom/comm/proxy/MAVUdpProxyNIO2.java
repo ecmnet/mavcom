@@ -104,7 +104,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 			channel = DatagramChannel.open();
 			channel.bind(bindPort);
 			channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
-			channel.socket().setSendBufferSize(32*1024);
+			channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
 			channel.configureBlocking(false);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -221,16 +221,16 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 							state = RUNNING;
 
 					} catch (SocketException e) {
-						try { channel.close(); selector.close();  } catch (Exception e1) {  }
+				//		try { channel.close(); selector.close();  } catch (Exception e1) {  }
 						state = WAITING;
-						e.printStackTrace();
+				//		e.printStackTrace();
 					} catch (ClosedChannelException e) {
 						state = WAITING;
 					//	e.printStackTrace();
 					} catch (IOException e) {
-						try { channel.close(); selector.close();  } catch (IOException e1) { }
+				//		try { channel.close(); selector.close();  } catch (IOException e1) { }
 						state = WAITING;
-						e.printStackTrace();
+				//		e.printStackTrace();
 					}
 				}
 				
@@ -243,7 +243,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 					}
 
 					try {
-						if(selector.select(3000)==0) {
+						if(selector.select()==0) {
 							state = WAITING;
 							continue;
 						}

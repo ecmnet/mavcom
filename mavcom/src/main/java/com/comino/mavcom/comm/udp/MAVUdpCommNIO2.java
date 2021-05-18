@@ -71,16 +71,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		hb.isValid = true;
 
 		System.out.println("Vehicle (NIO4): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
-		
-		try {
-			channel = DatagramChannel.open();
-			channel.bind(bindPort);
-			channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
-			channel.socket().setSendBufferSize(32*1024);
-			channel.configureBlocking(false);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
 		new Thread(new Worker()).start();
 
@@ -91,8 +81,10 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public boolean open() {
 		try {
 			state = WAITING;
+            System.out.println("Try to connect...");
 			if(selector!=null)
 				selector.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -117,9 +109,11 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	}
 
 	@Override
-	public void write(MAVLinkMessage msg) throws IOException {
-		if(state == RUNNING)
-			channel.write(ByteBuffer.wrap(msg.encode()));
+	public void write(MAVLinkMessage msg) {
+		try {
+			if(state == RUNNING)
+				channel.write(ByteBuffer.wrap(msg.encode()));
+		} catch (IOException e) { 	}
 	}
 
 	@Override
@@ -166,7 +160,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public void writeMessage(LogMessage m) {
 		parser.writeMessage(m);
 	}
-	
+
 	public String toString() {
 		return "State: "+state+" ("+transfer_speed +")";
 	}
@@ -182,6 +176,17 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 		@Override
 		public void run() {
+			
+			try {
+				channel = DatagramChannel.open();
+				channel.socket().setReuseAddress(true);
+				channel.bind(bindPort);
+				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
+				channel.socket().setSendBufferSize(32*1024);
+				channel.configureBlocking(false);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 			while(true) {
 
@@ -190,8 +195,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
-						
-						
+
+
 						//	channel.socket().setTrafficClass(0x08);
 						channel.disconnect();
 						channel.connect(peerPort);
@@ -207,25 +212,21 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						e.printStackTrace();
 					} catch (ClosedChannelException e) {
 						state = WAITING;
-					//	e.printStackTrace();
+						//	e.printStackTrace();
 					} catch (IOException e) {
 						try { channel.close(); selector.close();  } catch (IOException e1) { }
 						state = WAITING;
 						e.printStackTrace();
 					}
 				}
-				
-				try {
-					write(hb);
-				} catch (IOException e1) {
-					state = WAITING;
-				}
+
+				write(hb);
 
 				start = System.currentTimeMillis();
 				while(state == RUNNING) {
 
 					try {
-						if(selector.select(3000)==0) {
+						if(selector.select()==0) {
 							state = WAITING;
 							continue;
 						}
