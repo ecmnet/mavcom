@@ -81,7 +81,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public boolean open() {
 		try {
 			state = WAITING;
-            System.out.println("Try to connect...");
 			if(selector!=null)
 				selector.close();
 
@@ -182,7 +181,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 				channel.socket().setReuseAddress(true);
 				channel.bind(bindPort);
 				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
-				channel.socket().setSendBufferSize(32*1024);
+				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
 				channel.configureBlocking(false);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -207,14 +206,14 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 							state = RUNNING;
 
 					} catch (SocketException e) {
-						try { channel.close(); selector.close();  } catch (Exception e1) {  }
+						try { selector.close(); channel.close();  } catch (Exception e1) {  }
 						state = WAITING;
 						e.printStackTrace();
 					} catch (ClosedChannelException e) {
 						state = WAITING;
 						//	e.printStackTrace();
 					} catch (IOException e) {
-						try { channel.close(); selector.close();  } catch (IOException e1) { }
+						try { selector.close(); channel.close();  } catch (IOException e1) { }
 						state = WAITING;
 						e.printStackTrace();
 					}
