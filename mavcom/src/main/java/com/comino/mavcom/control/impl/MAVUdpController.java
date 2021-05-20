@@ -81,6 +81,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 
 	@Override
 	public boolean close() {
+		comm.shutdown();
 		this.connected = false;
 		return true;
 	}

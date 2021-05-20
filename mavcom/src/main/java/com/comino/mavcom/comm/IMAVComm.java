@@ -55,6 +55,8 @@ public interface IMAVComm {
 	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap();
 
 	void close();
+	
+	void shutdown();
 
 	void write(MAVLinkMessage msg) throws IOException;
 	

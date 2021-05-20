@@ -106,6 +106,18 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public void close() {
 		state = WAITING;
 	}
+	
+	@Override
+	public void shutdown() {
+		try {
+			System.out.println("[mgc] Closing channel...");
+			state = WAITING;
+			channel.disconnect();
+			channel.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
 
 	@Override
 	public void write(MAVLinkMessage msg) {
@@ -187,7 +199,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 				e.printStackTrace();
 			}
 
-			while(true) {
+			while(channel.isOpen()) {
 
 				while(state == WAITING) {
 					model.sys.setStatus(Status.MSP_CONNECTED,false);

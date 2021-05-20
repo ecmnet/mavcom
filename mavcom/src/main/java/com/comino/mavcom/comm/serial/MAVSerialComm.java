@@ -314,6 +314,12 @@ public class MAVSerialComm implements IMAVComm {
 
 		return 0;
 	}
+	
+	@Override
+	public void shutdown() {
+		
+		
+	}
 
 
 	@Override
@@ -398,7 +404,5 @@ public class MAVSerialComm implements IMAVComm {
 
 
 	}
-
-
 
 }
