@@ -49,6 +49,7 @@ public interface IMAVController {
 
 	public boolean connect();
 	public boolean close();
+	public void    shutdown();
 
 	public boolean isSimulation();
 	public boolean isConnected();

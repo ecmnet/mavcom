@@ -332,6 +332,12 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		proxy.close(); comm.close();
 		return true;
 	}
+	
+
+	@Override
+	public void shutdown() {
+		proxy.shutdown();
+	}
 
 
 	@Override

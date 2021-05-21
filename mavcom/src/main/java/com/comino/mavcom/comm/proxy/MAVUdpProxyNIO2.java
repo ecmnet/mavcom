@@ -140,6 +140,17 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 	public void close() {
 		state = WAITING;
 	}
+	
+	public void shutdown() {
+		try {
+			System.out.println("[mgc] Closing channel...");
+			state = WAITING;
+			channel.disconnect();
+			channel.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+	}
 
 	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
 

@@ -207,6 +207,12 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					((Buffer)rxBuffer).clear();
 					try {
 
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
 						//	channel.socket().setTrafficClass(0x08);
 						channel.disconnect();
@@ -227,7 +233,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					} catch (IOException e) {
 						try { selector.close(); channel.close();  } catch (IOException e1) { }
 						state = WAITING;
-						e.printStackTrace();
+//						e.printStackTrace();
 					}
 				}
 

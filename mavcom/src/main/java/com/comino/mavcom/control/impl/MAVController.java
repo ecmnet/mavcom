@@ -323,14 +323,19 @@ public class MAVController implements IMAVController, Runnable {
 
 
 	@Override
+	public void shutdown() {
+		comm.shutdown();	
+		if(file_log_enabled)
+			ps_log.close();
+	}
+
+
+	@Override
 	public void writeLogMessage(LogMessage m) {
 
 		if(comm!=null)
 			comm.writeMessage(m);
-
-		System.out.println(m);
-		model.msg.set(m);
-		
+		model.msg.set(m);	
 	}
 
 
