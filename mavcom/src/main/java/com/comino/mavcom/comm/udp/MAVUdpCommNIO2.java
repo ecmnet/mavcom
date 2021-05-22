@@ -49,6 +49,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	private Selector        selector     = null;
 
 	private MAVUdpProxyNIO2 byteListener = null;
+	private Thread worker                = null;
 
 	private final ByteBuffer rxBuffer    = ByteBuffer.allocate(BUFFER_SIZE*1024);
 	private final byte[]    proxyBuffer  = new byte[rxBuffer.capacity()];
@@ -71,14 +72,15 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		hb.isValid = true;
 
 		System.out.println("Vehicle (NIO4): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
-
-		new Thread(new Worker()).start();
-
 	}
 
 
 	@Override
 	public boolean open() {
+		if(worker==null) {
+			worker = new Thread(new Worker());
+			worker.start();
+		}
 		try {
 			state = WAITING;
 			if(selector!=null)
