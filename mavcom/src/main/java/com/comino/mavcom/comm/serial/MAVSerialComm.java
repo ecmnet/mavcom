@@ -161,7 +161,6 @@ public class MAVSerialComm implements IMAVComm {
 		System.out.println(serialPort.getPortDescription());
 		System.out.println("Buffersize (read/write): "+serialPort.getDeviceReadBufferSize()+"/"+serialPort.getDeviceWriteBufferSize());
 		
-		
 		return true;
 	}
 

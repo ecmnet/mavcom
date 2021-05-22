@@ -100,16 +100,6 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 
 		System.out.println("Proxy (NIO3): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
 
-		try {
-			channel = DatagramChannel.open();
-			channel.bind(bindPort);
-			channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
-			channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
-			channel.configureBlocking(false);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 		new Thread(new Worker()).start();
 
 	}
@@ -215,10 +205,23 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 
 		@Override
 		public void run() {
+			
+			try {
+				channel = DatagramChannel.open();
+				channel.bind(bindPort);
+				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
+				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
+				channel.configureBlocking(false);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 			while(true) {
 
 				while(state == WAITING) {
+					
+					try { Thread.sleep(50); } catch (InterruptedException e) { }
+					
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
