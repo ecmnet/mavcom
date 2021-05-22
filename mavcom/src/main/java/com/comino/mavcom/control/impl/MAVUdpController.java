@@ -42,6 +42,7 @@ import org.mavlink.messages.lquac.msg_heartbeat;
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.model.segment.Status;
+import com.comino.mavutils.workqueue.WorkQueue;
 
 
 public class MAVUdpController extends MAVController implements IMAVController, Runnable {
@@ -95,7 +96,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 
 	@Override
 	public void run() {
-
+        super.run();
 		try {
 			if(!comm.isConnected()) {
 				this.connected = false;

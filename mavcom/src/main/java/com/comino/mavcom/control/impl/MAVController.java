@@ -104,6 +104,7 @@ public class MAVController implements IMAVController, Runnable {
 		controller = this;
 		model = new DataModel();
 		status_manager = new StatusManager(model);
+		wq.addCyclicTask("LP",200,this);
 
 	}
 	
@@ -142,7 +143,6 @@ public class MAVController implements IMAVController, Runnable {
 				writeLogToFile(msg.toString());
 			});
 
-			wq.addCyclicTask("LP",500,this);
 			return this.filename;
 		}
 		return null;
