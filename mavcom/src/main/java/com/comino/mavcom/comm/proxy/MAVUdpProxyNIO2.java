@@ -220,7 +220,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 
 				while(state == WAITING) {
 					
-					try { Thread.sleep(50); } catch (InterruptedException e) { }
+					try { Thread.sleep(100); } catch (InterruptedException e) { }
 					
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
@@ -257,7 +257,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 					}
 
 					try {
-						if(selector.select()==0) {
+						if(selector.select(3000)==0) {
 							state = WAITING;
 							continue;
 						}
@@ -270,7 +270,6 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 							selectedKeys.remove();
 
 							if (!key.isValid()) {
-								state = WAITING;
 								continue;
 							}
 

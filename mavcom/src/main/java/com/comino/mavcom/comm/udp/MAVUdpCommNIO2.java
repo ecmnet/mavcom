@@ -193,7 +193,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			try {
 				channel = DatagramChannel.open();
 				channel.socket().setReuseAddress(true);
-				channel.bind(bindPort);
+//				channel.bind(bindPort);
 				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
 				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
 				channel.configureBlocking(false);
@@ -213,6 +213,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 						//	channel.socket().setTrafficClass(0x08);
 						channel.disconnect();
+						if(!channel.socket().isBound())
+						  channel.socket().bind(bindPort);
 						channel.connect(peerPort);
 						selector = Selector.open();
 						channel.register(selector, SelectionKey.OP_READ);
@@ -253,7 +255,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 							selectedKeys.remove();
 
 							if (!key.isValid()) {
-								state = WAITING;
 								continue;
 							}
 
