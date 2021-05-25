@@ -170,7 +170,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 
 	public void write(MAVLinkMessage msg)  {
 		try {
-			if(state == RUNNING)
+			if(state == RUNNING && channel.isConnected())
 				channel.write(ByteBuffer.wrap(msg.encode()));
 		} catch (IOException e) { }
 	}
