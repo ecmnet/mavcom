@@ -79,7 +79,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 
 	private boolean					proxy_enabled = false;
 
-	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(BUFFER_SIZE*1024);
+	private final ByteBuffer 		rxBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE*1024);
 
 	private List<IMAVLinkListener> listener_list = null;
 	private long                   transfer_speed = 0;
@@ -225,8 +225,9 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
-						
 						channel.disconnect();
+						if(!channel.socket().isBound())
+							  channel.socket().bind(bindPort);
 						channel.connect(peerPort);
 						selector = Selector.open();
 						channel.register(selector, SelectionKey.OP_READ);
@@ -257,7 +258,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 					}
 
 					try {
-						if(selector.select(3000)==0) {
+						if(selector.select(1000)==0) {
 							state = WAITING;
 							continue;
 						}

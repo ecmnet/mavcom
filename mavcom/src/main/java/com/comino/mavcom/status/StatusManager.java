@@ -46,8 +46,8 @@ public class StatusManager implements Runnable {
 
 	private static final long TIMEOUT_IMU             = 5000000;
 	private static final long TIMEOUT_VISION          = 3000000;
-	private static final long TIMEOUT_CONNECTED       = 6000000;
-	private static final long TIMEOUT_GCL_CONNECTED   = 6000000;
+	private static final long TIMEOUT_CONNECTED       = 1000000;
+	private static final long TIMEOUT_GCL_CONNECTED   = 1000000;
 	private static final long TIMEOUT_RC_ATTACHED     = 5000000;
 	private static final long TIMEOUT_JOY_ATTACHED    = 2000000;
 	private static final long TIMEOUT_GPOS            = 20000000;
@@ -360,7 +360,7 @@ public class StatusManager implements Runnable {
 
 		if (checkTimeOut(model.sys.gcl_tms, TIMEOUT_GCL_CONNECTED) && model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, (false));
-			System.out.println(("GCL lost: "+(model.sys.gcl_tms - DataModel.getSynchronizedPX4Time_us())/1000)+"ms");
+			System.out.println(("GCL lost at "+(model.sys.gcl_tms - DataModel.getSynchronizedPX4Time_us())/1000)+"ms");
 			System.out.println(model.sys);
 		}
 

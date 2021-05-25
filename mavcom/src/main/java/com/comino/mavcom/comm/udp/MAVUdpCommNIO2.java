@@ -51,7 +51,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	private MAVUdpProxyNIO2 byteListener = null;
 	private Thread worker                = null;
 
-	private final ByteBuffer rxBuffer    = ByteBuffer.allocate(BUFFER_SIZE*1024);
+	private final ByteBuffer rxBuffer    = ByteBuffer.allocateDirect(BUFFER_SIZE*1024);
 	private final byte[]    proxyBuffer  = new byte[rxBuffer.capacity()];
 
 	private final static msg_heartbeat hb = new msg_heartbeat(255,1);
@@ -204,7 +204,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			while(channel.isOpen()) {
 
 				while(state == WAITING) {
-					model.sys.setStatus(Status.MSP_CONNECTED,false);
+			//		model.sys.setStatus(Status.MSP_CONNECTED,false);
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
