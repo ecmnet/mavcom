@@ -1,7 +1,10 @@
 package com.comino.mavcom.comm.udp;
 
 import java.io.IOException;
+import java.net.BindException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -9,6 +12,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -42,8 +46,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	private final DataModel model;
 	private final MAVLinkToModelParser parser;
 	private final InetSocketAddress peerPort;
-	private final InetSocketAddress bindPort;
 	private final MAVLinkBlockingReader reader;
+
+	private final int bindPort;
 
 	private DatagramChannel channel      = null;
 	private Selector        selector     = null;
@@ -63,11 +68,13 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	}
 
 	private MAVUdpCommNIO2(DataModel model, String peerAddress, int pPort, int bPort) {
+
+
 		this.model    = model;
 		this.parser   = new MAVLinkToModelParser(model,this);
 		this.peerPort = new InetSocketAddress(peerAddress,pPort);
-		this.bindPort = new InetSocketAddress(bPort);
 		this.reader   = new MAVLinkBlockingReader(2, parser);
+		this.bindPort = bPort;
 
 		hb.isValid = true;
 
@@ -108,7 +115,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public void close() {
 		state = WAITING;
 	}
-	
+
 	@Override
 	public void shutdown() {
 		try {
@@ -117,14 +124,13 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			channel.disconnect();
 			channel.close();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}	
 	}
 
 	@Override
 	public void write(MAVLinkMessage msg) {
 		try {
-			if(state == RUNNING)
+			if(state == RUNNING && channel.isConnected())
 				channel.write(ByteBuffer.wrap(msg.encode()));
 		} catch (IOException e) { 	}
 	}
@@ -178,6 +184,37 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		return "State: "+state+" ("+transfer_speed +")";
 	}
 
+	private String getLocalAdress(String prefix) {
+
+		InetAddress localAddress = null;
+		boolean      found = false;
+
+		Enumeration<?> e;
+		try {
+			e = NetworkInterface.getNetworkInterfaces();
+			while(e.hasMoreElements() && !found)
+			{
+				NetworkInterface n = (NetworkInterface) e.nextElement();
+				Enumeration<?> ee = n.getInetAddresses();
+				while (ee.hasMoreElements()) {
+					localAddress = (InetAddress) ee.nextElement();
+					if(localAddress.getHostAddress().startsWith(prefix.substring(0,2))) {
+						found = true;
+						break;
+					}
+				}
+			}
+		} catch (SocketException e1) {
+			return null;
+		}
+
+		if(found) {
+			System.out.println("LocalAdress: "+localAddress.getHostAddress());
+			return localAddress.getHostAddress();
+		}
+		return null;
+	}
+
 
 	private class Worker implements Runnable {
 
@@ -186,16 +223,17 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		long bcount = 0; 
 		int msg_length; 
 		long start; 
+		String localAddress;
 
 		@Override
 		public void run() {
-			
+
 			try {
 				channel = DatagramChannel.open();
 				channel.socket().setReuseAddress(true);
-//				channel.bind(bindPort);
 				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
 				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
+				channel.socket().setSoTimeout(1000);
 				channel.configureBlocking(false);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -204,7 +242,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			while(channel.isOpen()) {
 
 				while(state == WAITING) {
-			//		model.sys.setStatus(Status.MSP_CONNECTED,false);
+					//		model.sys.setStatus(Status.MSP_CONNECTED,false);
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
@@ -213,8 +251,14 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 						//	channel.socket().setTrafficClass(0x08);
 						channel.disconnect();
-						if(!channel.socket().isBound())
-						  channel.socket().bind(bindPort);
+
+						if(!channel.socket().isBound()) {
+							localAddress = getLocalAdress(peerPort.getHostString());
+							if(localAddress!=null)
+								channel.socket().bind(new InetSocketAddress(localAddress,bindPort));
+							else
+								continue;
+						}
 						channel.connect(peerPort);
 						selector = Selector.open();
 						channel.register(selector, SelectionKey.OP_READ);
@@ -222,6 +266,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						if(channel.isConnected())
 							state = RUNNING;
 
+					} catch (BindException b) {
+						state = WAITING;
 					} catch (SocketException e) {
 						try { selector.close(); channel.close();  } catch (Exception e1) {  }
 						state = WAITING;
