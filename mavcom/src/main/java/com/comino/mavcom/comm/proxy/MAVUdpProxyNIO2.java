@@ -61,10 +61,10 @@ import com.comino.mavcom.model.segment.Status;
 
 
 public class MAVUdpProxyNIO2 implements IMAVLinkListener {
-	
+
 	private static final int BROADCAST_PORT = 4445;
 
-	private static final int BUFFER_SIZE = 64;
+	private static final int BUFFER_SIZE = 128;
 
 	private static final int WAITING     = 0;
 	private static final int RUNNING     = 1;
@@ -95,8 +95,8 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 
 		peerPort = new InetSocketAddress(peerAddress, pPort);
 		bindPort = new InetSocketAddress(bindAddress, bPort);
-	
-		
+
+
 		reader = new MAVLinkReader(1);
 
 		this.comm = comm;
@@ -111,13 +111,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 	}
 
 	public boolean open() {
-		try {
 			state = WAITING;
-			if(selector!=null)
-				selector.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return true;
 	}
 
@@ -156,9 +150,9 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 			socket.send(packet);
 			socket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println(bindPort.getAddress().getHostAddress()+": "+e.getMessage());
 		}
-		
+
 	}
 
 	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
@@ -228,9 +222,10 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 			try {
 				channel = DatagramChannel.open();
 				channel.bind(bindPort);
-				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
+				channel.socket().setReceiveBufferSize(32*1024);
 				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
 				channel.configureBlocking(false);
+				selector = Selector.open();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -245,10 +240,13 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 					((Buffer)rxBuffer).clear();
 					try {
 						channel.disconnect();
-						if(!channel.socket().isBound())
+						if(!channel.socket().isBound()) {
 							channel.socket().bind(bindPort);
-						channel.connect(peerPort);
+						}
+						if(selector.isOpen())
+							selector.close();
 						selector = Selector.open();
+						channel.connect(peerPort);
 						channel.register(selector, SelectionKey.OP_READ);
 
 						if(channel.isConnected())
@@ -277,7 +275,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 					}
 
 					try {
-						if(selector.select(1000)==0) {
+						if(selector.select(2000)==0) {
 							state = WAITING;
 							continue;
 						}
@@ -322,6 +320,9 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 							}
 						}
 					} catch (IOException e) {
+						try {
+							selector.close();
+						} catch (IOException e1) { 	}
 						state = WAITING;
 					}	
 				}				

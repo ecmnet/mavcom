@@ -34,10 +34,10 @@ import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 
 public class MAVUdpCommNIO2 implements IMAVComm {
-	
+
 	private static final int BROADCAST_PORT = 4445;
 
-	private static final int BUFFER_SIZE = 128;
+	private static final int BUFFER_SIZE = 512;
 
 	private static final int WAITING     = 0;
 	private static final int RUNNING     = 1;
@@ -82,6 +82,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		this.bindPort = bPort;
 
 		hb.isValid = true;
+		worker = new Thread(new Worker());
+		worker.start();
 
 		System.out.println("Vehicle (NIO4): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
 	}
@@ -89,10 +91,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	@Override
 	public boolean open() {
-		if(worker==null) {
-			worker = new Thread(new Worker());
-			worker.start();
-		}
 		try {
 			state = WAITING;
 			if(selector!=null)
@@ -119,6 +117,12 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	@Override
 	public void close() {
 		state = WAITING;
+		try {
+			channel.disconnect();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -162,7 +166,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	@Override
 	public boolean isConnected() {
-		return state == RUNNING;
+		return channel.isConnected();
 	}
 
 	@Override
@@ -197,7 +201,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		private int msg_length; 
 		private long start; 
 		private String localAddress;
-		
+
 
 		@Override
 		public void run() {
@@ -206,8 +210,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 				channel = DatagramChannel.open();
 				channel.socket().setReuseAddress(true);
 				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
-				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
+				channel.socket().setSendBufferSize(32*1024);
 				channel.socket().setSoTimeout(1000);
+				selector = Selector.open();
 				channel.configureBlocking(false);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -217,19 +222,24 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 				while(state == WAITING) {
 
+					try { Thread.sleep(100); } catch (InterruptedException e) { }
+
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
-						
+
 						channel.disconnect();
 						localAddress = getLocalAdress(listenToBroadcast(BROADCAST_PORT));
 						
+
 						if(!channel.socket().isBound()) {
 							if(localAddress!=null)
 								channel.socket().bind(new InetSocketAddress(localAddress,bindPort));
 							continue;
 						}
 						channel.connect(peerPort);
+						if(selector.isOpen())
+							selector.close();
 						selector = Selector.open();
 						channel.register(selector, SelectionKey.OP_READ);
 
@@ -239,13 +249,13 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					} catch (BindException b) {
 						state = WAITING;
 					} catch (SocketException e) {
-						try { selector.close(); channel.close();  } catch (Exception e1) {  }
+						//		try { selector.close();  } catch (Exception e1) {  }
 						state = WAITING;
 						e.printStackTrace();
 					} catch (ClosedChannelException e) {
 						state = WAITING;
 					} catch (IOException e) {
-						try { selector.close(); channel.close();  } catch (IOException e1) { }
+						//			try { selector.close();  } catch (IOException e1) { }
 						state = WAITING;
 						e.printStackTrace();
 					}
@@ -294,6 +304,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 							}	
 						}
 					} catch (IOException e) {
+						try {
+							selector.close();
+						} catch (IOException e1) { 	}
 						state = WAITING;
 					}	
 				}				
@@ -330,7 +343,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			}
 			return null;
 		}
-		
+
 		private String listenToBroadcast(int port) throws IOException {
 			DatagramSocket socket;
 			byte[] buf = new byte[256];
@@ -352,22 +365,25 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	public static void main(String[] args) {
 		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new DataModel(), "172.168.178.1", 14555, 14550);
-		comm.open();
+
+
+
 		
 
-		long time = System.currentTimeMillis();
-
 		try {
-
-			System.out.println("Started");
-
-			while(System.currentTimeMillis()< (time+60000)) {
-				if(comm.isConnected())
-					System.out.println(comm.isConnected()+" => "+comm+" => ANGLEX="+comm.model.hud.aX+" ANGLEY="+comm.model.hud.aY);
-				Thread.sleep(200);
-				comm.write(hb);
+			while(true) {
+				comm.open();
+				System.out.println("Started");
+				long time = System.currentTimeMillis();
+				while(System.currentTimeMillis()< (time+3000)) {
+					if(comm.isConnected())
+						System.out.println(comm.isConnected()+" => "+comm+" => ANGLEX="+comm.model.hud.aX+" ANGLEY="+comm.model.hud.aY);
+					Thread.sleep(200);
+					comm.write(hb);
+				}
+				comm.close();
+				Thread.sleep(5000);
 			}
-			comm.close();
 
 		} catch (Exception e) {
 			comm.close();

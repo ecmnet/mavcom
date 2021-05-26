@@ -441,12 +441,18 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	public void run() {
 
 		sendMAVLinkMessage(beat_px4);
+		
+		sendMAVLinkMessage(beat_obs);
 
 		if(!proxy.isConnected())  {
 			proxy.close(); 
 			if(!proxy.open())
 				return;
 		}
+		
+		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
+			proxy.broadcast();
+		
 
 		if(!comm.isConnected()) {
 			model.sys.setStatus(Status.MSP_ACTIVE, false);
@@ -454,10 +460,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		} else
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
 		
-		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
-			proxy.broadcast();
-		 else
-			sendMAVLinkMessage(beat_obs);
 	}
 
 	@Override
