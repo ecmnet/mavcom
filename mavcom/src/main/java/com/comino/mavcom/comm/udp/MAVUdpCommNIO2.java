@@ -220,14 +220,11 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
-
-						try { Thread.sleep(200); } catch (InterruptedException e) { }
-
-						//	channel.socket().setTrafficClass(0x08);
+						
 						channel.disconnect();
-
+						localAddress = getLocalAdress(listenToBroadcast(BROADCAST_PORT));
+						
 						if(!channel.socket().isBound()) {
-							localAddress = getLocalAdress(listenToBroadcast(BROADCAST_PORT));
 							if(localAddress!=null)
 								channel.socket().bind(new InetSocketAddress(localAddress,bindPort));
 							continue;
@@ -345,8 +342,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			socket.close();
 			String received =  new String(packet.getData(), 0, packet.getLength());
 			if (received.equals("LQUAC")) {			
-				System.out.println("Address: "+packet.getAddress().getHostAddress());
-				return packet.getAddress().getHostAddress();
+				System.out.println("Address: "+address.getHostAddress());
+				return address.getHostAddress();
 			}
 			return null;	
 		}
