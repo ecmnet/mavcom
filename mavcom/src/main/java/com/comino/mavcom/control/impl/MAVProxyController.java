@@ -34,6 +34,7 @@
 
 package com.comino.mavcom.control.impl;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +152,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		case MAVController.MODE_NORMAL:
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
 			//     comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
-					comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 
@@ -214,7 +215,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 				proxy.write((MAVLinkMessage)o);
 			}
 		});
-		
+
 		wq.addCyclicTask("LP", 200, this);	
 
 	}
@@ -263,8 +264,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		return sendMAVLinkMessage(cmd);
 	}
-	
-	
+
+
 
 	@Override
 	public int getMode() {
@@ -332,7 +333,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		proxy.close(); comm.close();
 		return true;
 	}
-	
+
 
 	@Override
 	public void shutdown() {
@@ -438,24 +439,25 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void run() {
-		
+
 		sendMAVLinkMessage(beat_px4);
-		
-		sendMAVLinkMessage(beat_obs);
 
 		if(!proxy.isConnected())  {
-			
 			proxy.close(); 
 			if(!proxy.open())
 				return;
-	
 		}
-		
+
 		if(!comm.isConnected()) {
 			model.sys.setStatus(Status.MSP_ACTIVE, false);
 			comm.open();
 		} else
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
+		
+		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
+			proxy.broadcast();
+		 else
+			sendMAVLinkMessage(beat_obs);
 	}
 
 	@Override

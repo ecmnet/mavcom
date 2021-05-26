@@ -2,10 +2,13 @@ package com.comino.mavcom.comm.udp;
 
 import java.io.IOException;
 import java.net.BindException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
@@ -31,6 +34,8 @@ import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 
 public class MAVUdpCommNIO2 implements IMAVComm {
+	
+	private static final int BROADCAST_PORT = 4445;
 
 	private static final int BUFFER_SIZE = 128;
 
@@ -184,46 +189,15 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		return "State: "+state+" ("+transfer_speed +")";
 	}
 
-	private String getLocalAdress(String prefix) {
-
-		InetAddress localAddress = null;
-		boolean      found = false;
-
-		Enumeration<?> e;
-		try {
-			e = NetworkInterface.getNetworkInterfaces();
-			while(e.hasMoreElements() && !found)
-			{
-				NetworkInterface n = (NetworkInterface) e.nextElement();
-				Enumeration<?> ee = n.getInetAddresses();
-				while (ee.hasMoreElements()) {
-					localAddress = (InetAddress) ee.nextElement();
-					if(localAddress.getHostAddress().startsWith(prefix.substring(0,2))) {
-						found = true;
-						break;
-					}
-				}
-			}
-		} catch (SocketException e1) {
-			return null;
-		}
-
-		if(found) {
-			System.out.println("LocalAdress: "+localAddress.getHostAddress());
-			return localAddress.getHostAddress();
-		}
-		return null;
-	}
-
-
 	private class Worker implements Runnable {
 
-		SelectionKey key = null;
-		Iterator<?> selectedKeys = null;
-		long bcount = 0; 
-		int msg_length; 
-		long start; 
-		String localAddress;
+		private SelectionKey key = null;
+		private Iterator<?> selectedKeys = null;
+		private int bcount = 0; 
+		private int msg_length; 
+		private long start; 
+		private String localAddress;
+		
 
 		@Override
 		public void run() {
@@ -242,22 +216,21 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			while(channel.isOpen()) {
 
 				while(state == WAITING) {
-					//		model.sys.setStatus(Status.MSP_CONNECTED,false);
+
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
 
-						try { Thread.sleep(100); } catch (InterruptedException e) { }
+						try { Thread.sleep(200); } catch (InterruptedException e) { }
 
 						//	channel.socket().setTrafficClass(0x08);
 						channel.disconnect();
 
 						if(!channel.socket().isBound()) {
-							localAddress = getLocalAdress(peerPort.getHostString());
+							localAddress = getLocalAdress(listenToBroadcast(BROADCAST_PORT));
 							if(localAddress!=null)
 								channel.socket().bind(new InetSocketAddress(localAddress,bindPort));
-							else
-								continue;
+							continue;
 						}
 						channel.connect(peerPort);
 						selector = Selector.open();
@@ -274,7 +247,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						e.printStackTrace();
 					} catch (ClosedChannelException e) {
 						state = WAITING;
-						e.printStackTrace();
 					} catch (IOException e) {
 						try { selector.close(); channel.close();  } catch (IOException e1) { }
 						state = WAITING;
@@ -331,11 +303,60 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			}	
 		}
 
+		private String getLocalAdress(String peer) {
+
+			InetAddress localAddress = null;
+			boolean      found = false;
+
+			Enumeration<?> e;
+			try {
+				e = NetworkInterface.getNetworkInterfaces();
+				while(e.hasMoreElements() && !found)
+				{
+					NetworkInterface n = (NetworkInterface) e.nextElement();
+					Enumeration<?> ee = n.getInetAddresses();
+					while (ee.hasMoreElements()) {
+						localAddress = (InetAddress) ee.nextElement();
+						if(localAddress.getHostAddress().startsWith(peer.substring(0,2))) {
+							found = true;
+							break;
+						}
+					}
+				}
+			} catch (SocketException e1) {
+				return null;
+			}
+
+			if(found) {
+				System.out.println("LocalAdress: "+localAddress.getHostAddress());
+				return localAddress.getHostAddress();
+			}
+			return null;
+		}
+		
+		private String listenToBroadcast(int port) throws IOException {
+			DatagramSocket socket;
+			byte[] buf = new byte[256];
+			socket = new DatagramSocket(port);
+			DatagramPacket packet = new DatagramPacket(buf, buf.length);
+			System.out.println("Waiting for remote broadcast");
+			socket.receive(packet);
+			InetAddress address = packet.getAddress();
+			socket.close();
+			String received =  new String(packet.getData(), 0, packet.getLength());
+			if (received.equals("LQUAC")) {			
+				System.out.println("Address: "+packet.getAddress().getHostAddress());
+				return packet.getAddress().getHostAddress();
+			}
+			return null;	
+		}
 	}
+
 
 	public static void main(String[] args) {
 		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new DataModel(), "172.168.178.1", 14555, 14550);
 		comm.open();
+		
 
 		long time = System.currentTimeMillis();
 

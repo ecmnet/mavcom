@@ -35,8 +35,10 @@
 package com.comino.mavcom.comm.proxy;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -59,14 +61,16 @@ import com.comino.mavcom.model.segment.Status;
 
 
 public class MAVUdpProxyNIO2 implements IMAVLinkListener {
+	
+	private static final int BROADCAST_PORT = 4445;
 
 	private static final int BUFFER_SIZE = 64;
 
 	private static final int WAITING     = 0;
 	private static final int RUNNING     = 1;
 
-	private SocketAddress 			bindPort = null;
-	private SocketAddress 			peerPort;
+	private InetSocketAddress 	    bindPort = null;
+	private InetSocketAddress 	    peerPort;
 	private DatagramChannel 		channel = null;
 
 	private HashMap<Class<?>,List<IMAVLinkListener>> listeners = null;
@@ -91,6 +95,8 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 
 		peerPort = new InetSocketAddress(peerAddress, pPort);
 		bindPort = new InetSocketAddress(bindAddress, bPort);
+	
+		
 		reader = new MAVLinkReader(1);
 
 		this.comm = comm;
@@ -130,7 +136,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 	public void close() {
 		state = WAITING;
 	}
-	
+
 	public void shutdown() {
 		try {
 			System.out.println("[mgc] Closing channel...");
@@ -140,6 +146,19 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
+	}
+
+	public  void broadcast()  {
+		try {
+			DatagramSocket socket = new DatagramSocket(BROADCAST_PORT, bindPort.getAddress());
+			socket.setBroadcast(true);
+			DatagramPacket packet = new DatagramPacket("LQUAC".getBytes(), 5, InetAddress.getByName("255.255.255.255"), BROADCAST_PORT);
+			socket.send(packet);
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
@@ -189,14 +208,14 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 
 	public void write(byte[] buffer, int length) {
 		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
-		return;
-		
+			return;
+
 		try {
 			if(length > 0 && state == RUNNING && channel != null && channel.isConnected() )
 				channel.write(ByteBuffer.wrap(buffer,0,length));
 		} catch (IOException e) { }
 	}
-	
+
 	private class Worker implements Runnable {
 
 		SelectionKey key = null;
@@ -205,7 +224,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 
 		@Override
 		public void run() {
-			
+
 			try {
 				channel = DatagramChannel.open();
 				channel.bind(bindPort);
@@ -219,15 +238,15 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 			while(true) {
 
 				while(state == WAITING) {
-					
+
 					try { Thread.sleep(100); } catch (InterruptedException e) { }
-					
+
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
 						channel.disconnect();
 						if(!channel.socket().isBound())
-							  channel.socket().bind(bindPort);
+							channel.socket().bind(bindPort);
 						channel.connect(peerPort);
 						selector = Selector.open();
 						channel.register(selector, SelectionKey.OP_READ);
@@ -236,22 +255,22 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 							state = RUNNING;
 
 					} catch (SocketException e) {
-				//		try { channel.close(); selector.close();  } catch (Exception e1) {  }
+						//		try { channel.close(); selector.close();  } catch (Exception e1) {  }
 						state = WAITING;
-				//		e.printStackTrace();
+						//		e.printStackTrace();
 					} catch (ClosedChannelException e) {
 						state = WAITING;
-					//	e.printStackTrace();
+						//	e.printStackTrace();
 					} catch (IOException e) {
-				//		try { channel.close(); selector.close();  } catch (IOException e1) { }
+						//		try { channel.close(); selector.close();  } catch (IOException e1) { }
 						state = WAITING;
-				//		e.printStackTrace();
+						//		e.printStackTrace();
 					}
 				}
-				
+
 				start = System.currentTimeMillis();
 				while(state == RUNNING) {
-					
+
 					if(!comm.isConnected()) {
 						state = WAITING;
 						continue;
