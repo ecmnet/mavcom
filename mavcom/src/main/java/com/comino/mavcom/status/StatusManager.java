@@ -373,6 +373,7 @@ public class StatusManager implements Runnable {
 
 		if (checkTimeOut(model.sys.tms, TIMEOUT_CONNECTED) && model.sys.isStatus(Status.MSP_CONNECTED)) {
 			model.sys.setStatus(Status.MSP_CONNECTED, false);
+			model.sys.clear();
 			System.out.println("..Connection timeout");
 			System.out.println(("MSP lost: "+(model.sys.tms - DataModel.getSynchronizedPX4Time_us())/1000)+"ms");
 			System.out.println(model.sys);

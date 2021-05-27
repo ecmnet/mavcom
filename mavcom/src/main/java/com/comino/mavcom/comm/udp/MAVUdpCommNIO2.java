@@ -310,7 +310,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 							}	
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
 						try {
 							selector.close();
 						} catch (IOException e1) { 	}
