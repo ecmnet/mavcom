@@ -54,13 +54,14 @@ import java.util.List;
 import org.mavlink.messages.MAVLinkMessage;
 
 import com.comino.mavcom.comm.IMAVComm;
+import com.comino.mavcom.comm.IMAVProxy;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVLinkReader;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
 
-public class MAVUdpProxyNIO2 implements IMAVLinkListener {
+public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 
 	private static final int BROADCAST_PORT = 4445;
 
@@ -143,6 +144,9 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener {
 	}
 
 	public  void broadcast()  {
+		if(bindPort.getAddress().isAnyLocalAddress()) {
+			return;
+		}	
 		try {
 			DatagramSocket socket = new DatagramSocket(BROADCAST_PORT, bindPort.getAddress());
 			socket.setBroadcast(true);

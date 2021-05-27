@@ -60,7 +60,7 @@ public interface IMAVComm {
 
 	void write(MAVLinkMessage msg) throws IOException;
 	
-	public void setProxyListener(MAVUdpProxyNIO2 proxy);
+	public void setProxyListener(IMAVProxy proxy);
 
 	public void addMAVLinkListener(IMAVLinkListener listener);
 

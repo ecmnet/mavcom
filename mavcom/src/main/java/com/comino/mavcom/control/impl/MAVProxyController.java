@@ -54,8 +54,11 @@ import org.mavlink.messages.lquac.msg_serial_control;
 import org.mavlink.messages.lquac.msg_statustext;
 
 import com.comino.mavcom.comm.IMAVComm;
+import com.comino.mavcom.comm.IMAVProxy;
+import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO;
 import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO2;
 import com.comino.mavcom.comm.serial.MAVSerialComm;
+import com.comino.mavcom.comm.udp.MAVUdpCommNIO;
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.control.IMAVController;
@@ -81,7 +84,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 
 	protected   DataModel model = null;
-	protected   MAVUdpProxyNIO2 proxy = null;
+	protected   IMAVProxy proxy = null;
 
 	private static final int BAUDRATE_5   = 57600;
 	private static final int BAUDRATE_9   = 921600;

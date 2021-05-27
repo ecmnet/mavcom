@@ -23,6 +23,7 @@ import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_heartbeat;
 
 import com.comino.mavcom.comm.IMAVComm;
+import com.comino.mavcom.comm.IMAVProxy;
 import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO2;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.log.IMAVMessageListener;
@@ -58,7 +59,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	private DatagramChannel channel      = null;
 	private Selector        selector     = null;
 
-	private MAVUdpProxyNIO2 byteListener = null;
+	private IMAVProxy       byteListener = null;
 	private Thread worker                = null;
 
 	private final ByteBuffer rxBuffer    = ByteBuffer.allocateDirect(BUFFER_SIZE*1024);
@@ -118,7 +119,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public void close() {
 		state = WAITING;
 		try {
-			channel.disconnect();
+			if(channel!=null)
+				channel.disconnect();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -145,7 +147,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	}
 
 	@Override
-	public void setProxyListener(MAVUdpProxyNIO2 proxy) {
+	public void setProxyListener(IMAVProxy proxy) {
 		this.byteListener = proxy;
 	}
 
@@ -229,13 +231,17 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					try {
 
 						channel.disconnect();
-						localAddress = getLocalAdress(listenToBroadcast(BROADCAST_PORT));
-						
 
 						if(!channel.socket().isBound()) {
-							if(localAddress!=null)
-								channel.socket().bind(new InetSocketAddress(localAddress,bindPort));
-							continue;
+							if(peerPort.getAddress().isLoopbackAddress()) {
+								channel.socket().bind(new InetSocketAddress(bindPort));
+							}
+							else {
+								localAddress = getLocalAdress(BROADCAST_PORT);
+								if(localAddress!=null)
+									channel.socket().bind(new InetSocketAddress(localAddress,bindPort));
+								continue;
+							}
 						}
 						channel.connect(peerPort);
 						if(selector.isOpen())
@@ -304,6 +310,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 							}	
 						}
 					} catch (IOException e) {
+						e.printStackTrace();
 						try {
 							selector.close();
 						} catch (IOException e1) { 	}
@@ -313,13 +320,14 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			}	
 		}
 
-		private String getLocalAdress(String peer) {
+		private String getLocalAdress(int port) {
 
 			InetAddress localAddress = null;
 			boolean      found = false;
 
 			Enumeration<?> e;
 			try {
+				String peer = listenToBroadcast(port);
 				e = NetworkInterface.getNetworkInterfaces();
 				while(e.hasMoreElements() && !found)
 				{
@@ -327,13 +335,13 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					Enumeration<?> ee = n.getInetAddresses();
 					while (ee.hasMoreElements()) {
 						localAddress = (InetAddress) ee.nextElement();
-						if(localAddress.getHostAddress().startsWith(peer.substring(0,2))) {
+						if(localAddress.getHostAddress().startsWith(peer.substring(0,3))) {
 							found = true;
 							break;
 						}
 					}
 				}
-			} catch (SocketException e1) {
+			} catch (IOException e1) {
 				return null;
 			}
 
@@ -345,6 +353,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		}
 
 		private String listenToBroadcast(int port) throws IOException {
+
 			DatagramSocket socket;
 			byte[] buf = new byte[256];
 			socket = new DatagramSocket(port);
@@ -368,7 +377,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 
 
-		
+
 
 		try {
 			while(true) {
