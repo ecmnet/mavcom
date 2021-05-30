@@ -71,6 +71,7 @@ import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.StatusManager;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
+import com.comino.mavutils.hw.HardwareAbstraction;
 import com.comino.mavutils.workqueue.WorkQueue;
 
 public class MAVProxyController implements IMAVMSPController, Runnable {
@@ -161,7 +162,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 			try { Thread.sleep(100); } catch (InterruptedException e) { }
 
-			proxy = new MAVUdpProxyNIO2(model,"172.168.178.2",14550,"172.168.178.1",14555,comm);
+			if(HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON)
+			  proxy = new MAVUdpProxyNIO2(model,"172.168.178.2",14550,"172.168.178.22",14555,comm);
+			else
+			  proxy = new MAVUdpProxyNIO2(model,"172.168.178.2",14550,"172.168.178.1",14555,comm);	
 			peerAddress = "172.168.178.1";
 			System.out.println("Proxy Controller loaded: "+peerAddress);
 			model.sys.setStatus(Status.MSP_SITL,false);

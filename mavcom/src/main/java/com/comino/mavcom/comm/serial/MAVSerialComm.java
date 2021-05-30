@@ -95,6 +95,9 @@ public class MAVSerialComm implements IMAVComm {
 
 		this.model = model; int i=0;
 		this.baudrate = baudrate;
+		
+		this.parser     = new MAVLinkToModelParser(model, this);
+		this.reader     = new MAVLinkBlockingReader(3, parser);
 
 		System.out.print("Searching ports... ");
 
@@ -104,6 +107,7 @@ public class MAVSerialComm implements IMAVComm {
 			for(i=0;i<ports.length;i++) {
 				if(ports[i].getSystemPortName().contains("tty.SLAB")
 						|| ports[i].getSystemPortName().contains("tty.usb")
+						|| ports[i].getSystemPortName().contains("ttyTHS1")
 						|| ports[i].getSystemPortName().contains("ttyS1")
 						|| ports[i].getSystemPortName().contains("ttyS4")
 						|| ports[i].getSystemPortName().contains("ttyACM0")
@@ -127,9 +131,6 @@ public class MAVSerialComm implements IMAVComm {
 			System.out.println("! No Serial port found...");
 			return;
 		}
-
-		this.parser     = new MAVLinkToModelParser(model, this);
-		this.reader     = new MAVLinkBlockingReader(3, parser);
 
 		
 		this.is = new BufferedInputStream(serialPort.getInputStream(),BUFFER*1024*2);

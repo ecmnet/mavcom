@@ -372,7 +372,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 
 	public static void main(String[] args) {
-		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new DataModel(), "172.168.178.1", 14555, 14550);
+		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new DataModel(), "172.168.178.22", 14555, 14550);
 
 
 
