@@ -38,12 +38,12 @@ public class Polar3D_F32 {
 	}
 
 
-    public void set(Polar3D_F32 t) {
-    	this.angle_xy = t.angle_xy;
-    	this.angle_xz = t.angle_xz;
-    	this.value = t.value;
-    	this.isValid = t.isValid;
-    }
+	public void set(Polar3D_F32 t) {
+		this.angle_xy = t.angle_xy;
+		this.angle_xz = t.angle_xz;
+		this.value = t.value;
+		this.isValid = t.isValid;
+	}
 
 	public void set(float vx, float vy, float vz) {
 
@@ -55,27 +55,27 @@ public class Polar3D_F32 {
 		this.angle_xy = getDirection(vy, vx);
 
 		if(this.value !=0)
-		  this.angle_xz = (float)Math.asin((vz)/this.value);
+			this.angle_xz = (float)Math.asin((vz)/this.value);
 		else
-		  this.angle_xz = 0;
+			this.angle_xz = 0;
 
 		this.angle_xy = MSPMathUtils.normAngle2(this.angle_xy);
 		this.angle_xz = MSPMathUtils.normAngle2(this.angle_xz);
 	}
 
-//	public void scaleXY(float factor) {
-//		get();
-//
-//		v.x = v.x * factor;
-//		v.y = v.y * factor;
-//
-//		this.value    = (float)Math.sqrt((v.x)*(v.x) + (v.y)*(v.y) + (v.z)*(v.z));
-//		this.angle_xy = getDirection(v.y, v.x);
-//		this.angle_xz = (float)Math.asin((v.z)/this.value);
-//
-//		this.angle_xy = MSPMathUtils.normAngle2(this.angle_xy);
-//		this.angle_xz = MSPMathUtils.normAngle2(this.angle_xz);
-//	}
+	//	public void scaleXY(float factor) {
+	//		get();
+	//
+	//		v.x = v.x * factor;
+	//		v.y = v.y * factor;
+	//
+	//		this.value    = (float)Math.sqrt((v.x)*(v.x) + (v.y)*(v.y) + (v.z)*(v.z));
+	//		this.angle_xy = getDirection(v.y, v.x);
+	//		this.angle_xz = (float)Math.asin((v.z)/this.value);
+	//
+	//		this.angle_xy = MSPMathUtils.normAngle2(this.angle_xy);
+	//		this.angle_xz = MSPMathUtils.normAngle2(this.angle_xz);
+	//	}
 
 	public boolean isValid() {
 		return Float.isFinite(value) && isValid;
@@ -102,7 +102,10 @@ public class Polar3D_F32 {
 
 		this.value    = (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
 		this.angle_xy = getDirection(t.y-c.y, t.x-c.x);
-		this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
+		if(value != 0)
+			this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
+		else
+			this.angle_xz = 0;
 
 		this.angle_xy = MSPMathUtils.normAngle(this.angle_xy);
 		this.angle_xz = MSPMathUtils.normAngle(this.angle_xz);
@@ -117,7 +120,10 @@ public class Polar3D_F32 {
 
 		this.value    = (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
 		this.angle_xy = getDirection((float)t.y-c.y, (float)t.x-c.x);
-		this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
+		if(value != 0)
+			this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
+		else
+			this.angle_xz = 0;
 
 		this.angle_xy = MSPMathUtils.normAngle(this.angle_xy);
 		this.angle_xz = MSPMathUtils.normAngle(this.angle_xz);
@@ -132,7 +138,10 @@ public class Polar3D_F32 {
 
 		this.value    = (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
 		this.angle_xy = getDirection(t.y-c.y, t.x-c.x);
-		this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
+		if(value != 0)
+			this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
+		else
+			this.angle_xz = 0;
 
 		this.angle_xy = MSPMathUtils.normAngle(this.angle_xy);
 		this.angle_xz = MSPMathUtils.normAngle(this.angle_xz);
