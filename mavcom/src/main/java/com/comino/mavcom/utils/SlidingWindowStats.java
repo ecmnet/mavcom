@@ -69,6 +69,9 @@ public class SlidingWindowStats {
 	public double sampleStdDev() {
         return Math.sqrt(this.sampleVariance());
     }
+	public double marginError95(){
+		return 1.96*(this.sampleStdDev()/Math.sqrt(this.count()));
+	}
 	
 	public String toString() {
 	   StringBuilder b = new StringBuilder();
@@ -78,6 +81,7 @@ public class SlidingWindowStats {
 	   b.append("Variance (Pop.):    "+populationVariance()); b.append('\n');
 	   b.append("Std.Dev (Sample):   "+sampleStdDev()); b.append('\n');
 	   b.append("Std.Dev (Pop.):     "+populationStdDev()); b.append('\n');
+	   b.append("Error (95%):        "+marginError95()); b.append('\n');
 	   return b.toString();
 	}
 	
