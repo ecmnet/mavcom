@@ -50,6 +50,7 @@ public class PX4Parameters implements IMAVLinkListener {
 			return;
 
 		msg_param_value msg = (msg_param_value)_msg;
+		
 
 		if(msg.param_id[0]=='_')
 			return;
@@ -59,8 +60,6 @@ public class PX4Parameters implements IMAVLinkListener {
 			attributes = new ParameterAttributes(msg.getParam_id(),"Default Group");
 		attributes.value = ParamUtils.paramToVal(msg.param_type, msg.param_value);
 		attributes.vtype = msg.param_type;
-
-		parameterList.put(attributes.name,attributes);
 
 
 		if(msg.param_index >= msg.param_count-1 && !isLoaded) {
