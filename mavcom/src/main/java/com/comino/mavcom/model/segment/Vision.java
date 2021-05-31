@@ -50,6 +50,8 @@ public class Vision extends Segment {
 	public static final int FIDUCIAL_LOCKED     = 4;
 	
 	public static final int FIDUCIAL_ACTIVE     = 15;
+	
+	private static final String[] MSP_VISION_TEXTS  = { "No available", "Resetting", "Pos. valid", "Published", "Fiducial locked" };
 
 
 	// Vision position
@@ -224,6 +226,17 @@ public class Vision extends Segment {
 		this.r = (float)a.getRoll();
 		this.p = (float)a.getPitch();
 		this.h = (float)a.getYaw();
+	}
+	
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append("!---------------------------------------------------!\n");
+		b.append("Vision flags:\n");
+		for(int i=0;i<MSP_VISION_TEXTS.length;i++) {
+		   b.append((flags >> i) & 0x1).append(" = ").append(MSP_VISION_TEXTS[i]).append("\n"); 
+		}
+		b.append("!---------------------------------------------------!\n");
+		return b.toString();
 	}
 
 
