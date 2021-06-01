@@ -51,7 +51,7 @@ public class Vision extends Segment {
 	
 	public static final int FIDUCIAL_ACTIVE     = 15;
 	
-	private static final String[] MSP_VISION_TEXTS  = { "No available", "Resetting", "Pos. valid", "Published", "Fiducial locked" };
+	private static final String[] MSP_VISION_TEXTS  = { "Not available", "Resetting", "Pos. valid", "Published", "Fiducial locked" };
 
 
 	// Vision position
