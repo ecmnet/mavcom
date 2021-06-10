@@ -105,7 +105,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 
 		listeners = new HashMap<Class<?>,List<IMAVLinkListener>>();
 
-		System.out.println("Proxy (NIO3): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
+		System.out.println("Proxy (NIO2): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
 
 		new Thread(new Worker()).start();
 
@@ -226,7 +226,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 			try {
 				channel = DatagramChannel.open();
 				channel.bind(bindPort);
-				channel.socket().setReceiveBufferSize(32*1024);
+				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
 				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
 				channel.configureBlocking(false);
 				selector = Selector.open();
@@ -238,7 +238,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 
 				while(state == WAITING) {
 
-					try { Thread.sleep(100); } catch (InterruptedException e) { }
+					try { Thread.sleep(10); } catch (InterruptedException e) { }
 
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
