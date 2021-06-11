@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.mavlink.messages.ESTIMATOR_STATUS_FLAGS;
+
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
@@ -160,6 +162,8 @@ public class StatusManager implements Runnable {
 	public void run() {
 
 		checkTimeouts();
+		
+		model.sys.setStatus(Status.MSP_READY_FOR_FLIGHT, checkFlightReadiness());
 
 		status_current.set(model.sys);
 		
@@ -322,6 +326,39 @@ public class StatusManager implements Runnable {
 				wq.addSingleTask("NP", 0, actions.poll());
 			}
 		}
+	}
+	
+	private boolean checkFlightReadiness() {
+		
+		if(model.sys.isStatus(Status.MSP_ACTIVE) && !model.sys.isStatus(Status.MSP_SITL)) {
+			
+			// Checks for MSP driven vehicles
+			
+			if(!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY))
+				return false;
+			
+			if(!model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY))
+				return false;
+			
+			if(!model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY))
+				return false;
+		}
+		
+		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
+			return false;
+		
+		if(!model.sys.isStatus(Status.MSP_LPOS_VALID))
+			return false;
+		
+		int flags = (int)model.est.flags;
+
+		if(flags == 0
+				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_ACCEL_ERROR)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_ACCEL_ERROR
+				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	private void checkTimeouts() {
