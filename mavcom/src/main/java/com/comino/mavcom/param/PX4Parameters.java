@@ -71,8 +71,12 @@ public class PX4Parameters implements IMAVLinkListener {
 		}
 	}
 
-	public void requestRefresh() {
+	public void requestRefresh(boolean reload) {
+		if(!reload && isLoaded)
+			return;
+		System.out.println("Parameter requested..");
 		isLoaded = false;
+		control.getCurrentModel().sys.setStatus(Status.MSP_PARAMS_LOADED, false);
 		parameterList.clear();
 		msg_param_request_list msg = new msg_param_request_list(1,1);
 		msg.target_component = 1;
@@ -89,15 +93,13 @@ public class PX4Parameters implements IMAVLinkListener {
 	}
 
 	public ParameterAttributes getParam(String paramName) {
-		if(isLoaded)
-		  return this.parameterList.get(paramName);
-		return null;
+		  return this.parameterList.get(paramName.toUpperCase());
 	}
 	
 	public float getParamValue(String paramName, float default_value) {
 		if(!isLoaded)
 		  return default_value;
-	    ParameterAttributes att = this.parameterList.get(paramName);
+	    ParameterAttributes att = this.parameterList.get(paramName.toUpperCase());
 	    if(att!=null)
 	    	return (float)att.value;
 	    return default_value;
@@ -125,6 +127,18 @@ public class PX4Parameters implements IMAVLinkListener {
 		msg.param_value = ParamUtils.valToParam(att.vtype, val);
 		control.sendMAVLinkMessage(msg);
 		return true;
+	}
+	
+	public String toString() {
+		final StringBuilder b = new StringBuilder();
+		b.append("!---------------------------------------------------!\n");
+		b.append("! PX4 parameters:                                   !\n");
+		b.append("!---------------------------------------------------!\n");
+		parameterList.forEach((n,a) -> {
+			b.append(String.format("%-30s",n)); b.append(a.value); b.append("\n");
+		});
+		b.append("!---------------------------------------------------!\n");
+		return b.toString();
 	}
 
 }

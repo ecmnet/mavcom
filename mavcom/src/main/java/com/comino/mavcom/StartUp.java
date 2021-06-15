@@ -119,7 +119,7 @@ public class StartUp implements Runnable {
 
 		control.getStatusManager().addListener(Status.MSP_CONNECTED, (n) -> {
 	      if(n.isStatus(Status.MSP_CONNECTED))
-	    	  params.requestRefresh();
+	    	  params.requestRefresh(false);
 		});
 
 	}
