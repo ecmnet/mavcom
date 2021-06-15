@@ -66,10 +66,6 @@ public class Status extends Segment {
 	private static final String[] MSP_STATUS_TEXTS  = { "Connected", "GCL connected", "MSP actve", "RC Attached", "Joystick attached", 
 			                                            "Offboard started", "SITL", "Proxy enabled", "Armed", "Landed", "In air", 
 			                                            "GPOS valid", "LPOS valid", "Parameter loaded", "Reserved","Ready for flight" };
-	private static final String[] MSP_NAVSTAT_TEXTS  = { "Manual mode", "Altitude control","Position control", "Auto mission","Auto loiter",
-			                                             "Auto return", "RC recover", "Auto return data loss", "Auto return engine fail",
-			                                             "Auto return gps fail", "Acro mode", "unused", "Descend mode", "Termination",
-			                                             "Stabilized mode", "Rattitude mode", "Takeoff" , "Land", "Auto Follow", "Precision land PX4"};
 	
 	private static final String[] MSP_SENSOR_TEXTS  = { "EKF2","LIDAR","SONAR","GPS","FLOW","MSP","CV","PX4","SLAM","BASE","RTK",
 			      						                "GND","LOCK" };
@@ -334,17 +330,4 @@ public class Status extends Segment {
 		b.append("!---------------------------------------------------!\n");
 		return b.toString();
 	}
-	
-	public String toStringNav() {
-		StringBuilder b = new StringBuilder();
-		b.append("!---------------------------------------------------!\n");
-		b.append("Navigation states:\n");
-		for(int i=0;i<MSP_NAVSTAT_TEXTS.length;i++) {
-		   b.append((nav_state >> i) & 0x1).append(" = ").append(MSP_NAVSTAT_TEXTS[i]).append("\n"); 
-		}
-		b.append("!---------------------------------------------------!\n");
-		return b.toString();
-	}
-
-
 }
