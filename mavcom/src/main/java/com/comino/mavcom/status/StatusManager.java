@@ -386,7 +386,10 @@ public class StatusManager implements Runnable {
 
 		if (checkTimeOut(model.vision.tms, TIMEOUT_VISION) && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
 			model.sys.setSensor(Status.MSP_OPCV_AVAILABILITY, false);
-			model.vision.clear();
+			model.vision.setStatus(Vision.AVAILABLE, false);
+			model.vision.setStatus(Vision.FIDUCIAL_LOCKED, false);
+			model.vision.setStatus(Vision.POS_VALID, false);
+			model.vision.setStatus(Vision.PUBLISHED, false);
 		}
 
 		if (checkTimeOut(model.gps.tms, TIMEOUT_GPS) && model.sys.isSensorAvailable(Status.MSP_GPS_AVAILABILITY)) {
