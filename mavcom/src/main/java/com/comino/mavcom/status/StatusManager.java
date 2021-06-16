@@ -41,6 +41,7 @@ import org.mavlink.messages.ESTIMATOR_STATUS_FLAGS;
 
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
+import com.comino.mavcom.model.segment.Vision;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.workqueue.WorkQueue;
 
@@ -87,14 +88,16 @@ public class StatusManager implements Runnable {
 	private long t_armed_start			     = 0;
 	
 	private final WorkQueue wq = WorkQueue.getInstance();
+	private boolean is_gcl = false;
 
 
-	public StatusManager(DataModel model) {
+	public StatusManager(DataModel model, boolean isGCL) {
 		this.model = model;
 		this.status_current = new Status();
 		this.status_old     = new Status();
 		this.list  = new ArrayList<StatusListenerEntry>();
 		this.actions = new ConcurrentLinkedQueue<Action>();
+		this.is_gcl  = isGCL;
 	}
 
 	public void start() {
@@ -163,7 +166,8 @@ public class StatusManager implements Runnable {
 
 		checkTimeouts();
 		
-		model.sys.setStatus(Status.MSP_READY_FOR_FLIGHT, checkFlightReadiness());
+		if(!is_gcl || !model.sys.isStatus(Status.MSP_ACTIVE))
+		  model.sys.setStatus(Status.MSP_READY_FOR_FLIGHT, checkFlightReadiness());
 
 		status_current.set(model.sys);
 		
@@ -337,7 +341,7 @@ public class StatusManager implements Runnable {
 			if(!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY))
 				return false;
 			
-			if(!model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY))
+			if(!model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY) && model.vision.isStatus(Vision.ENABLED))
 				return false;
 			
 			if(!model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY))

@@ -43,15 +43,16 @@ public class Vision extends Segment {
 
 	private static final long serialVersionUID = 270248566309263309L;
 
-	public static final int NOT_AVAILABLE       = 0;
-	public static final int RESETTING           = 1;
-	public static final int POS_VALID           = 2;
-	public static final int PUBLISHED           = 3;
-	public static final int FIDUCIAL_LOCKED     = 4;
+	public static final int ENABLED             = 0;
+	public static final int AVAILABLE           = 1;
+	public static final int RESETTING           = 2;
+	public static final int POS_VALID           = 3;
+	public static final int PUBLISHED           = 4;
+	public static final int FIDUCIAL_LOCKED     = 5;
 	
 	public static final int FIDUCIAL_ACTIVE     = 15;
 	
-	private static final String[] MSP_VISION_TEXTS  = { "Not available", "Resetting", "Pos. valid", "Published", "Fiducial locked" };
+	private static final String[] MSP_VISION_TEXTS  = { "Enabled","Available", "Resetting", "Pos. valid", "Published", "Fiducial locked" };
 
 
 	// Vision position

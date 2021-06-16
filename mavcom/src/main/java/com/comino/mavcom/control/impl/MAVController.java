@@ -103,7 +103,7 @@ public class MAVController implements IMAVController, Runnable {
 	public MAVController() {
 		controller = this;
 		model = new DataModel();
-		status_manager = new StatusManager(model);
+		status_manager = new StatusManager(model, true);
 		wq.addCyclicTask("LP",200,this);
 
 	}

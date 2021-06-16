@@ -114,7 +114,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		this.mode = mode;
 		controller = this;
 		model = new DataModel();
-		status_manager = new StatusManager(model);
+		status_manager = new StatusManager(model, false);
 		messageListener = new ArrayList<IMAVMessageListener>();
 
 		model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, true);
@@ -278,7 +278,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	public int getMode() {
 		return mode;
 	}
-
 
 	@Override
 	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge ack, float...params) {
