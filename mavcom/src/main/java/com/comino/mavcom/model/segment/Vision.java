@@ -48,11 +48,12 @@ public class Vision extends Segment {
 	public static final int RESETTING           = 2;
 	public static final int POS_VALID           = 3;
 	public static final int PUBLISHED           = 4;
-	public static final int FIDUCIAL_LOCKED     = 5;
+	public static final int FIDUCIAL_ENABLED	= 5;
+	public static final int FIDUCIAL_LOCKED     = 6;
+
 	
-	public static final int FIDUCIAL_ACTIVE     = 15;
-	
-	private static final String[] MSP_VISION_TEXTS  = { "Enabled","Available", "Resetting", "Pos. valid", "Published", "Fiducial locked" };
+	private static final String[] MSP_VISION_TEXTS  = { "Enabled","Available", "Resetting", "Position valid", "Published", "Fiducual enabled",
+			                                            "Fiducial locked" };
 
 
 	// Vision position
@@ -178,6 +179,10 @@ public class Vision extends Segment {
 	}
 
 	public void  setStatus(int box, boolean val) {
+		if(box == ENABLED && !val) {
+			flags = 0;
+			return;
+		}
 		if(val)
 			flags = (int) (flags | (1<<box));
 		else
