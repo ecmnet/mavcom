@@ -278,8 +278,6 @@ public class Status extends Segment {
 	}
 	
 	public String getModeString() {
-		if(!isStatus(MSP_ARMED))
-	        return ""; 
 	    return MSP_PX4MODE_TEXTS[nav_state];
 	}
 
@@ -327,6 +325,8 @@ public class Status extends Segment {
 		for(int i=0;i<MSP_STATUS_TEXTS.length;i++) {
 		   b.append((status >> i) & 0x1).append(" = ").append(MSP_STATUS_TEXTS[i]).append("\n"); 
 		}
+		b.append("!---------------------------------------------------!\n");
+		b.append("Navigation state: ").append(getModeString()).append("\n");
 		b.append("!---------------------------------------------------!\n");
 		return b.toString();
 	}
