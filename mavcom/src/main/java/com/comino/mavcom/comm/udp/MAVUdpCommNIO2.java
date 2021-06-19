@@ -224,13 +224,16 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 				while(state == WAITING) {
 
-					try { Thread.sleep(100); } catch (InterruptedException e) { }
 
+					try { Thread.sleep(100); } catch (InterruptedException e) { }
+					
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
 
 						channel.disconnect();
+						
+						try { Thread.sleep(50); } catch (InterruptedException e) { }
 
 						if(!channel.socket().isBound()) {
 							if(peerPort.getAddress().isLoopbackAddress()) {
@@ -244,6 +247,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 							}
 						}
 						channel.connect(peerPort);
+						
 						if(selector.isOpen())
 							selector.close();
 						selector = Selector.open();

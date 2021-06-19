@@ -70,7 +70,7 @@ public class MSPConfig {
 		this.path = path;
 		this.fileName = filename;
 		this.prop = new Properties();
-		System.out.println("\nInitializing ("+filename+", Java "+System.getProperty("java.version")+" [new packaging])...");
+		System.out.println("\nInitializing ("+filename+", Java "+System.getProperty("java.version")+" "+System.getProperty("java.vm.vendor"));
 		refreshProperties();
 		this.version = prop.getProperty("build","tmp");
 		this.version_date = prop.getProperty("build_date","NA");
