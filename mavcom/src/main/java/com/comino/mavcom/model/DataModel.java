@@ -40,6 +40,7 @@ import java.lang.reflect.Field;
 import com.comino.mavcom.model.segment.Attitude;
 import com.comino.mavcom.model.segment.Battery;
 import com.comino.mavcom.model.segment.Debug;
+import com.comino.mavcom.model.segment.Esc;
 import com.comino.mavcom.model.segment.EstStatus;
 import com.comino.mavcom.model.segment.GPS;
 import com.comino.mavcom.model.segment.Grid;
@@ -93,6 +94,7 @@ public class DataModel extends Segment implements Serializable {
 	public   Grid           grid  = null;
 	public   Slam           slam  = null;
 	public   Waypoints       way  = null;
+	public   Esc             esc  = null;
 
 
 	public DataModel()  {
@@ -118,6 +120,7 @@ public class DataModel extends Segment implements Serializable {
 		this.slam           = new Slam();
 		this.grid           = new Grid();
 		this.way            = new Waypoints(); way.clear();
+		this.esc            = new Esc();
 	}
 
 	public DataModel(DataModel m) {
@@ -148,6 +151,7 @@ public class DataModel extends Segment implements Serializable {
 		this.slam           = m.slam.clone();
 		this.grid           = m.grid.clone();
 		this.way            = m.way.clone();
+		this.esc            = m.esc.clone();
 	}
 
 
@@ -175,6 +179,7 @@ public class DataModel extends Segment implements Serializable {
 		this.slam.set(m.slam);
 		this.grid.set(m.grid);
 		this.way.set(m.way);
+		this.esc.set(m.esc);
 	}
 
 	public DataModel clone() {
@@ -203,6 +208,7 @@ public class DataModel extends Segment implements Serializable {
 		this.est.clear();
 		this.slam.clear();
 		this.way.clear();
+		this.esc.clear();
 	}
 
 	public float getValue(String classkey) {
