@@ -105,22 +105,17 @@ public class MAVLinkToModelParser {
 			@Override
 			public void received(Object o) {
 
-			//	wq.addSingleTask("LP", () -> {
-					msg_command_ack ack = (msg_command_ack) o;
+				//	wq.addSingleTask("LP", () -> {
+				msg_command_ack ack = (msg_command_ack) o;
 
-					if(cmd_ack.containsKey(ack.command)) {
-						System.out.println("Command: "+ack.command+" => "+ack.result);
-						IMAVCmdAcknowledge acknowlede = cmd_ack.get(ack.command);
-						wq.addSingleTask("LP", () -> acknowlede.received(ack.command, ack.result) );
-						cmd_ack.remove(ack.command);
-					}
-
-					if(model.sys.isStatus(Status.MSP_PROXY)) {
-						return;
-					}
+				if(cmd_ack.containsKey(ack.command)) {
+					IMAVCmdAcknowledge acknowlede = cmd_ack.get(ack.command);
+					wq.addSingleTask("HP", () -> acknowlede.received(ack.command, ack.result) );
+					cmd_ack.remove(ack.command);
 
 					if(logger==null)
 						logger = MSPLogger.getInstance();
+					
 					switch (ack.result) {
 					case MAV_RESULT.MAV_RESULT_ACCEPTED:
 						logger.writeLocalMsg("Command " + ack.command + " is accepted",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
@@ -143,6 +138,7 @@ public class MAVLinkToModelParser {
 					default:
 						logger.writeLocalMsg("Command " + ack.command + " -> unknown result",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 					}
+				}
 			}
 		});
 
