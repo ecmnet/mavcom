@@ -84,7 +84,7 @@ public class MAVLinkToModelParser {
 
 	private long time_sync_cycle;
 
-	private IMAVCmdAcknowledge cmd_ack = null;
+	private Map<Integer,IMAVCmdAcknowledge> cmd_ack = new HashMap<Integer,IMAVCmdAcknowledge>();
 
 	private final WorkQueue wq = WorkQueue.getInstance();
 
@@ -105,12 +105,14 @@ public class MAVLinkToModelParser {
 			@Override
 			public void received(Object o) {
 
-				wq.addSingleTask("LP", () -> {
+			//	wq.addSingleTask("LP", () -> {
 					msg_command_ack ack = (msg_command_ack) o;
 
-					if(cmd_ack!=null) {
-						cmd_ack.received(ack.command, ack.result);
-						cmd_ack = null;
+					if(cmd_ack.containsKey(ack.command)) {
+						System.out.println("Command: "+ack.command+" => "+ack.result);
+						IMAVCmdAcknowledge acknowlede = cmd_ack.get(ack.command);
+						wq.addSingleTask("LP", () -> acknowlede.received(ack.command, ack.result) );
+						cmd_ack.remove(ack.command);
 					}
 
 					if(model.sys.isStatus(Status.MSP_PROXY)) {
@@ -141,7 +143,6 @@ public class MAVLinkToModelParser {
 					default:
 						logger.writeLocalMsg("Command " + ack.command + " -> unknown result",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 					}
-				});
 			}
 		});
 
@@ -244,14 +245,14 @@ public class MAVLinkToModelParser {
 
 	public boolean isConnected() {
 		if (!model.sys.isStatus(Status.MSP_CONNECTED)) {
-			model.clear();
+			model.clear(); 
 			return false;
 		}
 		return model.sys.isStatus(Status.MSP_CONNECTED);
 	}
 
-	public void setCmdAcknowledgeListener(IMAVCmdAcknowledge ack) {
-		this.cmd_ack = ack;
+	public void setCmdAcknowledgeListener(int command,IMAVCmdAcknowledge ack) {
+		this.cmd_ack.put(command, ack);
 	}
 
 	public void reset() {

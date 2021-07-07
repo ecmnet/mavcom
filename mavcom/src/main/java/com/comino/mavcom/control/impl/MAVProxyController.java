@@ -281,7 +281,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge ack, float...params) {
-		comm.setCmdAcknowledgeListener(ack);
+		comm.setCmdAcknowledgeListener(command,ack);
 		return sendMAVLinkCmd(command, params);
 	}
 

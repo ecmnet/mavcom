@@ -66,7 +66,7 @@ public interface IMAVComm {
 
 	public void addMAVMessageListener(IMAVMessageListener listener);
 
-	public void setCmdAcknowledgeListener(IMAVCmdAcknowledge ack);
+	public void setCmdAcknowledgeListener(int command, IMAVCmdAcknowledge ack);
 
 	public boolean isConnected();
 

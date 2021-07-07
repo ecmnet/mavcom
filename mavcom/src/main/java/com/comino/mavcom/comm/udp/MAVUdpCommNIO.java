@@ -355,8 +355,8 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	}
 
 	@Override
-	public void setCmdAcknowledgeListener(IMAVCmdAcknowledge ack) {
-		parser.setCmdAcknowledgeListener(ack);
+	public void setCmdAcknowledgeListener(int command,IMAVCmdAcknowledge ack) {
+		parser.setCmdAcknowledgeListener(command,ack);
 	}
 
 	@Override
