@@ -1,9 +1,10 @@
 package com.comino.mavcom.config;
 
-public class MSPParams {
+public final class MSPParams {
 	
 	// autopilot
 	
+	public static final String AUTOPILOT_CLASS          = "autopilot_class";
 	public static final String AUTOPILOT_FORGET_MAP     = "autopilot_forget_map";
 	public static final String AUTOPILOT_FLOW_CHECK     = "autopilot_flow_check";
 	public static final String AUTOPILOT_TAKEOFF_PROC   = "autopilot_takeoff_procedure";
@@ -16,6 +17,11 @@ public class MSPParams {
 	public static final String PUBLISH_ODOMETRY 		= "publish_odometry";
 	public static final String PUBLISH_MICROSLAM        = "publish_microslam";
 	public static final String PUBLISH_MICROGRID        = "publish_microgrid";
+	
+	
+	// Vision general
+	
+	public static final String VISION_ENABLED          = "vision_enabled";
 	
 	
 	// T265 settings
