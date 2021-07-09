@@ -348,11 +348,13 @@ public class StatusManager implements Runnable {
 				return false;
 		}
 		
-		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
+		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
 			return false;
+		}
 		
-		if(!model.sys.isStatus(Status.MSP_LPOS_VALID))
+		if(!model.sys.isStatus(Status.MSP_LPOS_VALID)) {
 			return false;
+		}
 		
 		int flags = (int)model.est.flags;
 
