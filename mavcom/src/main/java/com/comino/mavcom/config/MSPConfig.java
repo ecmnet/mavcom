@@ -46,7 +46,6 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 public class MSPConfig {
-	
 
 	private static MSPConfig config = null;
 	private String fileName = null;
