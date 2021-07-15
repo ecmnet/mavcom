@@ -163,14 +163,14 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_FOLLOW_REPOSITION = 33;
     /**
-     * Start orbiting on the circumference of a circle defined by the parameters. Setting any value NaN results in using defaults.
-     * PARAM 1 : Radius of the circle. positive: Orbit clockwise. negative: Orbit counter-clockwise.
-     * PARAM 2 : Tangential Velocity. NaN: Vehicle configuration default.
+     * Start orbiting on the circumference of a circle defined by the parameters. Setting values to NaN/INT32_MAX (as appropriate) results in using defaults.
+     * PARAM 1 : Radius of the circle. Positive: orbit clockwise. Negative: orbit counter-clockwise. NaN: Use vehicle default radius, or current radius if already orbiting.
+     * PARAM 2 : Tangential Velocity. NaN: Use vehicle default velocity, or current velocity if already orbiting.
      * PARAM 3 : Yaw behavior of the vehicle.
-     * PARAM 4 : Reserved (e.g. for dynamic center beacon options)
-     * PARAM 5 : Center point latitude (if no MAV_FRAME specified) / X coordinate according to MAV_FRAME. NaN: Use current vehicle position or current center if already orbiting.
-     * PARAM 6 : Center point longitude (if no MAV_FRAME specified) / Y coordinate according to MAV_FRAME. NaN: Use current vehicle position or current center if already orbiting.
-     * PARAM 7 : Center point altitude (MSL) (if no MAV_FRAME specified) / Z coordinate according to MAV_FRAME. NaN: Use current vehicle position or current center if already orbiting.
+     * PARAM 4 : Orbit around the centre point for this many radians (i.e. for a three-quarter orbit set 270*Pi/180). 0: Orbit forever. NaN: Use vehicle default, or current value if already orbiting.
+     * PARAM 5 : Center point latitude (if no MAV_FRAME specified) / X coordinate according to MAV_FRAME. INT32_MAX (or NaN if sent in COMMAND_LONG): Use current vehicle position, or current center if already orbiting.
+     * PARAM 6 : Center point longitude (if no MAV_FRAME specified) / Y coordinate according to MAV_FRAME. INT32_MAX (or NaN if sent in COMMAND_LONG): Use current vehicle position, or current center if already orbiting.
+     * PARAM 7 : Center point altitude (MSL) (if no MAV_FRAME specified) / Z coordinate according to MAV_FRAME. NaN: Use current vehicle altitude.
      */
     public final static int MAV_CMD_DO_ORBIT = 34;
     /**
@@ -219,7 +219,7 @@ public interface MAV_CMD {
     public final static int MAV_CMD_NAV_VTOL_TAKEOFF = 84;
     /**
      * Land using VTOL mode
-     * PARAM 1 : Empty
+     * PARAM 1 : Landing behaviour.
      * PARAM 2 : Empty
      * PARAM 3 : Approach altitude (with the same reference as the Altitude field). NaN if unspecified.
      * PARAM 4 : Yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
@@ -897,6 +897,10 @@ public interface MAV_CMD {
      * PARAM 2 : 0: arm-disarm unless prevented by safety checks (i.e. when landed), 21196: force arming/disarming (e.g. allow arming to override preflight checks and disarming in flight)
      */
     public final static int MAV_CMD_COMPONENT_ARM_DISARM = 400;
+    /**
+     * Instructs system to run pre-arm checks. This command should return MAV_RESULT_TEMPORARILY_REJECTED in the case the system is armed, otherwise MAV_RESULT_ACCEPTED. Note that the return value from executing this command does not indicate whether the vehicle is armable or not, just whether the system has successfully run/is currently running the checks.  The result of the checks is reflected in the SYS_STATUS message.
+     */
+    public final static int MAV_CMD_RUN_PREARM_CHECKS = 401;
     /**
      * Turns illuminators ON/OFF. An illuminator is a light source that is used for lighting up dark areas external to the sytstem: e.g. a torch or searchlight (as opposed to a light source for illuminating the system itself, e.g. an indicator light).
      * PARAM 1 : 0: Illuminators OFF, 1: Illuminators ON

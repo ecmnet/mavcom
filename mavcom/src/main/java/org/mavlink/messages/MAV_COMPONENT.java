@@ -427,6 +427,10 @@ public interface MAV_COMPONENT {
      */
     public final static int MAV_COMP_ID_FLARM = 160;
     /**
+     * Parachute component.
+     */
+    public final static int MAV_COMP_ID_PARACHUTE = 161;
+    /**
      * Gimbal #2.
      */
     public final static int MAV_COMP_ID_GIMBAL2 = 171;
@@ -462,6 +466,18 @@ public interface MAV_COMPONENT {
      * Component that lives on the onboard computer (companion computer) and has some generic functionalities, such as settings system parameters and monitoring the status of some processes that don't directly speak mavlink and so on.
      */
     public final static int MAV_COMP_ID_ONBOARD_COMPUTER = 191;
+    /**
+     * Component that lives on the onboard computer (companion computer) and has some generic functionalities, such as settings system parameters and monitoring the status of some processes that don't directly speak mavlink and so on.
+     */
+    public final static int MAV_COMP_ID_ONBOARD_COMPUTER2 = 192;
+    /**
+     * Component that lives on the onboard computer (companion computer) and has some generic functionalities, such as settings system parameters and monitoring the status of some processes that don't directly speak mavlink and so on.
+     */
+    public final static int MAV_COMP_ID_ONBOARD_COMPUTER3 = 193;
+    /**
+     * Component that lives on the onboard computer (companion computer) and has some generic functionalities, such as settings system parameters and monitoring the status of some processes that don't directly speak mavlink and so on.
+     */
+    public final static int MAV_COMP_ID_ONBOARD_COMPUTER4 = 194;
     /**
      * Component that finds an optimal path between points based on a certain constraint (e.g. minimum snap, shortest path, cost, etc.).
      */

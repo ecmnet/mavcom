@@ -769,21 +769,21 @@
       </entry>
     </enum>
     <enum name="COMP_METADATA_TYPE">
-      <description>Possible values for COMPONENT_INFORMATION.comp_metadata_type.</description>
+      <description>Supported component metadata types. These are used in the "general" metadata file returned by COMPONENT_INFORMATION to provide information about supported metadata types. The types are not used directly in MAVLink messages.</description>
       <entry value="0" name="COMP_METADATA_TYPE_GENERAL">
-        <description>General information which also includes information on other optional supported COMP_METADATA_TYPE's. Must be supported. Only downloadable from vehicle.</description>
+        <description>General information about the component. General metadata includes information about other COMP_METADATA_TYPEs supported by the component. This type must be supported and must be downloadable from vehicle.</description>
       </entry>
       <entry value="1" name="COMP_METADATA_TYPE_PARAMETER">
         <description>Parameter meta data.</description>
       </entry>
       <entry value="2" name="COMP_METADATA_TYPE_COMMANDS">
-        <description>Meta data which specifies the commands the vehicle supports. (WIP)</description>
+        <description>Meta data that specifies which commands and command parameters the vehicle supports. (WIP)</description>
       </entry>
       <entry value="3" name="COMP_METADATA_TYPE_PERIPHERALS">
-        <description>Meta data which specifies potential external peripherals that do not talk MAVLink</description>
+        <description>Meta data that specifies external non-MAVLink peripherals.</description>
       </entry>
       <entry value="4" name="COMP_METADATA_TYPE_EVENTS">
-        <description>Meta data for events interface</description>
+        <description>Meta data for the events interface.</description>
       </entry>
     </enum>
     <enum name="PARAM_TRANSACTION_TRANSPORT">
@@ -956,14 +956,14 @@
       <entry value="34" name="MAV_CMD_DO_ORBIT" hasLocation="true" isDestination="true">
         <wip/>
         <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
-        <description>Start orbiting on the circumference of a circle defined by the parameters. Setting any value NaN results in using defaults.</description>
-        <param index="1" label="Radius" units="m">Radius of the circle. positive: Orbit clockwise. negative: Orbit counter-clockwise.</param>
-        <param index="2" label="Velocity" units="m/s">Tangential Velocity. NaN: Vehicle configuration default.</param>
+        <description>Start orbiting on the circumference of a circle defined by the parameters. Setting values to NaN/INT32_MAX (as appropriate) results in using defaults.</description>
+        <param index="1" label="Radius" units="m">Radius of the circle. Positive: orbit clockwise. Negative: orbit counter-clockwise. NaN: Use vehicle default radius, or current radius if already orbiting.</param>
+        <param index="2" label="Velocity" units="m/s">Tangential Velocity. NaN: Use vehicle default velocity, or current velocity if already orbiting.</param>
         <param index="3" label="Yaw Behavior" enum="ORBIT_YAW_BEHAVIOUR">Yaw behavior of the vehicle.</param>
-        <param index="4">Reserved (e.g. for dynamic center beacon options)</param>
-        <param index="5" label="Latitude/X">Center point latitude (if no MAV_FRAME specified) / X coordinate according to MAV_FRAME. NaN: Use current vehicle position or current center if already orbiting.</param>
-        <param index="6" label="Longitude/Y">Center point longitude (if no MAV_FRAME specified) / Y coordinate according to MAV_FRAME. NaN: Use current vehicle position or current center if already orbiting.</param>
-        <param index="7" label="Altitude/Z">Center point altitude (MSL) (if no MAV_FRAME specified) / Z coordinate according to MAV_FRAME. NaN: Use current vehicle position or current center if already orbiting.</param>
+        <param index="4" label="Orbits" units="rad" minValue="0" default="0">Orbit around the centre point for this many radians (i.e. for a three-quarter orbit set 270*Pi/180). 0: Orbit forever. NaN: Use vehicle default, or current value if already orbiting.</param>
+        <param index="5" label="Latitude/X">Center point latitude (if no MAV_FRAME specified) / X coordinate according to MAV_FRAME. INT32_MAX (or NaN if sent in COMMAND_LONG): Use current vehicle position, or current center if already orbiting.</param>
+        <param index="6" label="Longitude/Y">Center point longitude (if no MAV_FRAME specified) / Y coordinate according to MAV_FRAME. INT32_MAX (or NaN if sent in COMMAND_LONG): Use current vehicle position, or current center if already orbiting.</param>
+        <param index="7" label="Altitude/Z">Center point altitude (MSL) (if no MAV_FRAME specified) / Z coordinate according to MAV_FRAME. NaN: Use current vehicle altitude.</param>
       </entry>
       <entry value="80" name="MAV_CMD_NAV_ROI" hasLocation="true" isDestination="false">
         <deprecated since="2018-01" replaced_by="MAV_CMD_DO_SET_ROI_*"/>
@@ -1008,7 +1008,7 @@
       </entry>
       <entry value="85" name="MAV_CMD_NAV_VTOL_LAND" hasLocation="true" isDestination="true">
         <description>Land using VTOL mode</description>
-        <param index="1">Empty</param>
+        <param index="1" label="Land Options" enum="NAV_VTOL_LAND_OPTIONS">Landing behaviour.</param>
         <param index="2">Empty</param>
         <param index="3" label="Approach Altitude" units="m">Approach altitude (with the same reference as the Altitude field). NaN if unspecified.</param>
         <param index="4" label="Yaw" units="deg">Yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).</param>
@@ -1639,6 +1639,9 @@
         <description>Arms / Disarms a component</description>
         <param index="1" label="Arm" minValue="0" maxValue="1" increment="1">0: disarm, 1: arm</param>
         <param index="2" label="Force" minValue="0" maxValue="21196" increment="21196">0: arm-disarm unless prevented by safety checks (i.e. when landed), 21196: force arming/disarming (e.g. allow arming to override preflight checks and disarming in flight)</param>
+      </entry>
+      <entry value="401" name="MAV_CMD_RUN_PREARM_CHECKS" hasLocation="false" isDestination="false">
+        <description>Instructs system to run pre-arm checks. This command should return MAV_RESULT_TEMPORARILY_REJECTED in the case the system is armed, otherwise MAV_RESULT_ACCEPTED. Note that the return value from executing this command does not indicate whether the vehicle is armable or not, just whether the system has successfully run/is currently running the checks.  The result of the checks is reflected in the SYS_STATUS message.</description>
       </entry>
       <entry value="405" name="MAV_CMD_ILLUMINATOR_ON_OFF" hasLocation="false" isDestination="false">
         <wip/>
@@ -4289,6 +4292,19 @@
         <description>Unit is sometimes working, sometimes not.</description>
       </entry>
     </enum>
+    <enum name="NAV_VTOL_LAND_OPTIONS">
+      <entry value="0" name="NAV_VTOL_LAND_OPTIONS_DEFAULT">
+        <description>Default autopilot landing behaviour.</description>
+      </entry>
+      <entry value="1" name="NAV_VTOL_LAND_OPTIONS_FW_DESCENT">
+        <description>Descend in fixed wing mode, transitioning to multicopter mode for vertical landing when close to the ground.
+          The fixed wing descent pattern is at the discretion of the vehicle (e.g. transition altitude, loiter direction, radius, and speed, etc.).        
+        </description>
+      </entry>
+      <entry value="2" name="NAV_VTOL_LAND_OPTIONS_HOVER_DESCENT">
+        <description>Land in multicopter mode on reaching the landing co-ordinates (the whole landing is by "hover descent").</description>
+      </entry>
+    </enum>
     <enum name="MAV_WINCH_STATUS_FLAG" bitmask="true">
       <description>Winch status flags used in WINCH_STATUS</description>
       <entry value="1" name="MAV_WINCH_STATUS_HEALTHY">
@@ -4784,7 +4800,7 @@
       <field type="float[9]" name="covariance" invalid="[NaN,]">Row-major representation of a 3x3 attitude covariance matrix (states: roll, pitch, yaw; first three entries are the first ROW, next three entries are the second row, etc.). If unknown, assign NaN value to first element in the array.</field>
     </message>
     <message id="62" name="NAV_CONTROLLER_OUTPUT">
-      <description>The state of the fixed wing navigation and position controller.</description>
+      <description>The state of the navigation and position controller.</description>
       <field type="float" name="nav_roll" units="deg">Current desired roll</field>
       <field type="float" name="nav_pitch" units="deg">Current desired pitch</field>
       <field type="int16_t" name="nav_bearing" units="deg">Current desired heading</field>
@@ -4925,7 +4941,7 @@
       <field type="float" name="climb" units="m/s">Current climb rate.</field>
     </message>
     <message id="75" name="COMMAND_INT">
-      <description>Message encoding a command with parameters as scaled integers. Scaling depends on the actual command value. The command microservice is documented at https://mavlink.io/en/services/command.html</description>
+      <description>Message encoding a command with parameters as scaled integers. Scaling depends on the actual command value. NaN or INT32_MAX may be used in float/integer params (respectively) to indicate optional/default values (e.g. to use the component's current latitude, yaw rather than a specific value). The command microservice is documented at https://mavlink.io/en/services/command.html</description>
       <field type="uint8_t" name="target_system">System ID</field>
       <field type="uint8_t" name="target_component">Component ID</field>
       <field type="uint8_t" name="frame" enum="MAV_FRAME">The coordinate system of the COMMAND.</field>

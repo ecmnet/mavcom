@@ -156,4 +156,8 @@ public interface MAV_TYPE {
      * Battery
      */
     public final static int MAV_TYPE_BATTERY = 36;
+    /**
+     * Parachute
+     */
+    public final static int MAV_TYPE_PARACHUTE = 37;
 }

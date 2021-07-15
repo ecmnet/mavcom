@@ -5,11 +5,11 @@
 package org.mavlink.messages;
 /**
  * Interface COMP_METADATA_TYPE
- * Possible values for COMPONENT_INFORMATION.comp_metadata_type.
+ * Supported component metadata types. These are used in the "general" metadata file returned by COMPONENT_INFORMATION to provide information about supported metadata types. The types are not used directly in MAVLink messages.
  **/
 public interface COMP_METADATA_TYPE {
     /**
-     * General information which also includes information on other optional supported COMP_METADATA_TYPE's. Must be supported. Only downloadable from vehicle.
+     * General information about the component. General metadata includes information about other COMP_METADATA_TYPEs supported by the component. This type must be supported and must be downloadable from vehicle.
      */
     public final static int COMP_METADATA_TYPE_GENERAL = 0;
     /**
@@ -17,15 +17,15 @@ public interface COMP_METADATA_TYPE {
      */
     public final static int COMP_METADATA_TYPE_PARAMETER = 1;
     /**
-     * Meta data which specifies the commands the vehicle supports. (WIP)
+     * Meta data that specifies which commands and command parameters the vehicle supports. (WIP)
      */
     public final static int COMP_METADATA_TYPE_COMMANDS = 2;
     /**
-     * Meta data which specifies potential external peripherals that do not talk MAVLink
+     * Meta data that specifies external non-MAVLink peripherals.
      */
     public final static int COMP_METADATA_TYPE_PERIPHERALS = 3;
     /**
-     * Meta data for events interface
+     * Meta data for the events interface.
      */
     public final static int COMP_METADATA_TYPE_EVENTS = 4;
 }
