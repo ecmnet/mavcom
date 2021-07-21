@@ -40,7 +40,7 @@ public class Battery extends Segment {
 
 	private static final long serialVersionUID = -4051617731611229443L;
 
-	public float  b0              = Float.NaN;// Voltage
+	public float  b0              = Float.NaN; // Voltage
 	public float  c0			  = Float.NaN; // Current
 	public float  a0			  = Float.NaN; // Accumulated consumption
 	public float  p               = Float.NaN;

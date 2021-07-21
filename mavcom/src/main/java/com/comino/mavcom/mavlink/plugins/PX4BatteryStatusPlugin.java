@@ -21,7 +21,7 @@ public class PX4BatteryStatusPlugin extends MAVLinkPluginBase {
 				model.battery.p = (short) bat.battery_remaining;
 			}
 
-			if(bat.current_battery > 0)
+			if(bat.current_battery > 10)
 				model.battery.c0 = bat.current_battery / 100f;
 			else
 				model.battery.c0 = Float.NaN;
