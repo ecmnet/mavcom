@@ -14,6 +14,10 @@
               <entry value="98" name="MSP_CMD_SHUTDOWN">
                   <description>Shutdown the MSP companion</description>
               </entry>
+              <entry value="97" name="MSP_CMD_SETDATETIME">
+                  <description>Sets companion date and time</description>
+                  <param index="1">DateTimeUTC (310720211145)</param>
+              </entry>
               <entry value="70" name="MSP_CMD_OFFBOARD">
                   <description>Control offboard updater</description>
                   <param index="1">component command</param>

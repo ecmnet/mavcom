@@ -17,6 +17,11 @@ public interface MSP_CMD {
      */
     public final static int MSP_CMD_SHUTDOWN = 98;
     /**
+     * Sets companion date and time
+     * PARAM 1 : DateTimeUTC (310720211145)
+     */
+    public final static int MSP_CMD_SETDATETIME = 97;
+    /**
      * Control offboard updater
      * PARAM 1 : component command
      */
