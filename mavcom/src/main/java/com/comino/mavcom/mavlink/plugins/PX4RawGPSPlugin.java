@@ -5,8 +5,11 @@ import org.mavlink.messages.lquac.msg_gps_raw_int;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.GPS;
 import com.comino.mavcom.model.segment.Status;
+import com.comino.mavutils.MSPMathUtils;
 
 public class PX4RawGPSPlugin extends MAVLinkPluginBase {
+	
+	private final static float[] p = new float[2];
 
 	public PX4RawGPSPlugin() {
 		super(msg_gps_raw_int.class);
@@ -37,6 +40,12 @@ public class PX4RawGPSPlugin extends MAVLinkPluginBase {
 			model.gps.altitude = (short) (gps.alt / 1000);
 			model.gps.fixtype = (byte) gps.fix_type;
 			model.gps.tms = DataModel.getSynchronizedPX4Time_us();
+			
+			if(MSPMathUtils.is_projection_initialized()) {
+				MSPMathUtils.map_projection_project(model.gps.latitude, model.gps.longitude, p);
+				model.gps.lx = p[0];
+				model.gps.ly = p[1];
+			}
 
 			model.sys.setSensor(Status.MSP_GPS_AVAILABILITY, true);
 			model.sys.setSensor(Status.MSP_RTK_AVAILABILITY, (gps.fix_type & 0xF) > 4);
