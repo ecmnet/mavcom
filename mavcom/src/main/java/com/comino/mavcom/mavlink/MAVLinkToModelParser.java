@@ -181,9 +181,9 @@ public class MAVLinkToModelParser {
 						// System.out.println("TS1="+sync.ts1+" TC="+sync.tc1+"
 						// TO="+time_offset_ns+" OFS="+offset_ns+"
 						// PX4="+now_ns+" DT="+Math.abs(dt/1e9d));
-						if (dt > 10000000L || dt < -10000000L) {
+						if (dt > 100000000L || dt < -100000000L) {
 							time_offset_ns = offset_ns;
-							//	System.out.println("[sys]  Clock skew detected: " + dt);
+							System.out.println("[sys]  Clock skew detected: " + (dt/1000)+"us");
 							model.sys.tms = DataModel.getSynchronizedPX4Time_us();
 						} else {
 							time_offset_ns = (long) (OFFSET_AVG_ALPHA * offset_ns
