@@ -243,7 +243,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 								localAddress = getLocalAdress(BROADCAST_PORT);
 								if(localAddress!=null)
 									channel.socket().bind(new InetSocketAddress(localAddress,bindPort));
-								continue;
+								else
+									channel.socket().bind(new InetSocketAddress(bindPort));
+									continue;
 							}
 						}
 						channel.connect(peerPort);
@@ -345,6 +347,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					}
 				}
 			} catch (IOException e1) {
+				e1.printStackTrace();
 				return null;
 			}
 
@@ -352,6 +355,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 				System.out.println("LocalAdress: "+localAddress.getHostAddress());
 				return localAddress.getHostAddress();
 			}
+			System.out.println("No adapter found");
 			return null;
 		}
 

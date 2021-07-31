@@ -28,6 +28,10 @@ public class Attitude3D_F64 {
 	public void setFromMatrix(DMatrixRMaj rotation) {
 		ConvertRotation3D_F64.matrixToEuler(rotation, EulerType.XYZ, att);
 	}
+	
+	public void setFromMatrix(DMatrixRMaj rotation, EulerType type) {
+		ConvertRotation3D_F64.matrixToEuler(rotation, type, att);
+	}
 
 	public void subtract(Attitude3D_F64 offset) {
 		att[0] -= offset.att[0];
@@ -70,6 +74,10 @@ public class Attitude3D_F64 {
 		if(deg<0) deg += 360;
 		return deg;
 
+	}
+	
+	public String toString() {
+		return "P:"+getInDegree(PITCH)+"R:"+getInDegree(ROLL)+"Y:"+getInDegree(YAW);
 	}
 
 
