@@ -150,7 +150,16 @@ public class MAVLinkToModelParser {
 				m.text = (new String(msg.text)).trim();
 				m.tms = DataModel.getSynchronizedPX4Time_us();
 				m.severity = msg.severity;
-				model.msg.set(m);
+				
+				// if new message follows tha last one within 10ms, check severity and keep that one
+				// with higher severity
+				if(model.msg!=null && (m.tms - model.msg.tms ) < 10000) {
+				  if(m.severity < model.msg.severity) {
+					  model.msg.set(m);  
+				  }
+				} else 
+				  model.msg.set(m);
+				
 				writeMessage(m);
 			}
 		});

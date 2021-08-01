@@ -147,8 +147,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		});
 
 		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_FALLING, (a) -> {
-			System.out.println("Connection to GCS lost...");
 			proxy.enableProxy(false);
+			System.out.println("Connection to GCS lost...");
 		});
 
 

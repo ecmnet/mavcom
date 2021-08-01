@@ -96,7 +96,6 @@ public class DataModel extends Segment implements Serializable {
 	public   Waypoints       way  = null;
 	public   Esc             esc  = null;
 
-
 	public DataModel()  {
 		this.attitude       = new Attitude();
 		this.battery   		= new Battery();
