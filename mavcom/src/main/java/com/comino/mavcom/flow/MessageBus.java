@@ -26,13 +26,15 @@ public class MessageBus{
 			streams.put(subscriber.getType(), p);
 		}
 		p.subscribe(subscriber.get());
+		System.out.println("Subscription: "+subscriber.getClass().getName()+" -> "+subscriber.getType());
 	}
 
 	public <T> void publish(T data) {
 		@SuppressWarnings("unchecked")
 		SubmissionPublisher<T> p = (SubmissionPublisher<T>) streams.get(data.getClass());
-		if(p!=null && p.hasSubscribers())
+		if(p!=null && p.hasSubscribers()) {
 			p.submit(data);
+		}
 
 	}
 

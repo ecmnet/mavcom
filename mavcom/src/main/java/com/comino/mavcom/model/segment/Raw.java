@@ -49,6 +49,7 @@ public class Raw extends Segment {
 	public float fgX    = Float.NaN;	    // Flow Gyro
 	public float fgY    = Float.NaN;
 	public float fgZ    = Float.NaN;
+	public long  ius    = 0;               // Integratoon timespan
 
 
 
@@ -62,6 +63,7 @@ public class Raw extends Segment {
 		fgY     = a.fgY;
 		fgZ     = a.fgZ;
 		dicov   = a.dicov;
+		ius     = a.ius;
 
 	}
 
@@ -76,6 +78,7 @@ public class Raw extends Segment {
 		at.fgY      = fgY;
 		at.fgZ      = fgZ;
 		at.dicov    = dicov;
+		at.ius      = ius;
 
 		return at;
 	}
@@ -93,6 +96,7 @@ public class Raw extends Segment {
 		fgY     = Float.NaN;
 		fgZ     = Float.NaN;
 		dicov   = Float.NaN;
+		ius     = 0;
 	}
 
 }

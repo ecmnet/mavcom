@@ -57,7 +57,7 @@ public class StatusManager implements Runnable {
 	private static final long TIMEOUT_LPOS            = 2000000;
 	private static final long TIMEOUT_GPS             = 2000000;
 	private static final long TIMEOUT_SLAM            = 2000000;
-	private static final long TIMEOUT_LIDAR           = 1500000;
+	private static final long TIMEOUT_LIDAR           = 2000000;
 
 	public static final byte  TYPE_ALL             = 0;
 	public static final byte  TYPE_PX4_STATUS      = 1;
@@ -338,14 +338,17 @@ public class StatusManager implements Runnable {
 			
 			// Checks for MSP driven vehicles
 			
-			if(!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY))
+			if(!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY)) {
 				return false;
+			}
 			
-			if(!model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY) && model.vision.isStatus(Vision.ENABLED))
+			if(!model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY) && model.vision.isStatus(Vision.ENABLED)) {
 				return false;
+			}
 			
-			if(!model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY))
+			if(!model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
 				return false;
+			}
 		}
 		
 		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {

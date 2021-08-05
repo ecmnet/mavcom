@@ -28,6 +28,9 @@ public final class MSPParams {
 	
 	public static final String T265_PRECISION_LOCK      = "t265_precision_lock";
 	public static final String T265_FIDUCIAL_SIZE       = "t265_fiducial_size";
+	public static final String T265_FIDUCIAL_OFFSET_X   = "t265_fiducial_offset_x";
+	public static final String T265_FIDUCIAL_OFFSET_Y   = "t265_fiducial_offset_y";
+	public static final String T265_FIDUCIAL_OFFSET_Z   = "t265_fiducial_offset_z";
 	public static final String T265_OFFSET_X            = "t265_offset_x";
 	public static final String T265_OFFSET_Y            = "t265_offset_y";
 	public static final String T265_OFFSET_Z            = "t265_offset_z";
