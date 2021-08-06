@@ -192,15 +192,16 @@ public class MAVLinkToModelParser {
 					} else if (sync.tc1 > 0) {
 						long offset_ns = (sync.ts1 + now_ns - sync.tc1 * 2L) / 2L;
 						long dt = time_offset_ns - offset_ns;
-						if (dt > 100000000L || dt < -100000000L) {
+						if (dt > 30000000L || dt < -30000000L) {
 							time_offset_ns = offset_ns;
-						//	System.out.println("[sys]  Clock skew detected: " + (dt/1000)+"us");
-							model.sys.tms = DataModel.getSynchronizedPX4Time_us();
+							System.out.println("[sys]  Clock skew detected: " + (dt/1000)+"us");
 						} else {
 							time_offset_ns = (long) (OFFSET_AVG_ALPHA * offset_ns
 									+ (1.0d - OFFSET_AVG_ALPHA) * time_offset_ns);
+							DataModel.t_offset_ns = time_offset_ns;
 						}
-						DataModel.t_offset_ns = time_offset_ns;
+					
+//						DataModel.t_offset_ns = time_offset_ns;
 					//	System.out.println("OFFSET="+DataModel.t_offset_ns+":"+sync.ts1);
 						// PX4="+model.sys.getSynchronizedPX4Time_us());
 					}
@@ -213,7 +214,7 @@ public class MAVLinkToModelParser {
 
 		System.out.println("MAVMSP parser: " + msglisteners.size() + " MAVLink messagetypes registered");
 
-		model.sys.tms = DataModel.getSynchronizedPX4Time_us();
+		model.sys.tms = System.currentTimeMillis()*1000L;
 
 	}
 
@@ -289,7 +290,7 @@ public class MAVLinkToModelParser {
 
 		if (msg != null) {
 
-			model.sys.tms = DataModel.getSynchronizedPX4Time_us();
+			model.sys.tms = System.currentTimeMillis()*1000L;
 
 			try {
 

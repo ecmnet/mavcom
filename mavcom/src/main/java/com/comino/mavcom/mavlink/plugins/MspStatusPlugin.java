@@ -25,6 +25,7 @@ public class MspStatusPlugin extends MAVLinkPluginBase {
 		model.sys.build = status.getVersion();
 		model.sys.t_takeoff_ms = status.takeoff_ms;
 
+		model.sys.setStatus(Status.MSP_ACTIVE, true);
 		model.sys.setStatus(Status.MSP_CONNECTED, true);
 	}
 }

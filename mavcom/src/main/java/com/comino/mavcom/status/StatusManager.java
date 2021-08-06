@@ -50,10 +50,10 @@ public class StatusManager implements Runnable {
 	private static final long TIMEOUT_IMU             = 5000000;
 	private static final long TIMEOUT_VISION          = 3000000;
 	private static final long TIMEOUT_CONNECTED       = 1000000;
-	private static final long TIMEOUT_GCL_CONNECTED   = 2000000;
+	private static final long TIMEOUT_GCL_CONNECTED   = 3000000;
 	private static final long TIMEOUT_RC_ATTACHED     = 5000000;
 	private static final long TIMEOUT_JOY_ATTACHED    = 2000000;
-	private static final long TIMEOUT_GPOS            = 20000000;
+	private static final long TIMEOUT_GPOS            = 2000000;
 	private static final long TIMEOUT_LPOS            = 2000000;
 	private static final long TIMEOUT_GPS             = 2000000;
 	private static final long TIMEOUT_SLAM            = 2000000;
@@ -86,7 +86,7 @@ public class StatusManager implements Runnable {
 	private boolean isRunning                = false;
 
 	private long t_armed_start			     = 0;
-	
+
 	private final WorkQueue wq = WorkQueue.getInstance();
 	private boolean is_gcl = false;
 
@@ -165,12 +165,12 @@ public class StatusManager implements Runnable {
 	public void run() {
 
 		checkTimeouts();
-		
+
 		if(!is_gcl || !model.sys.isStatus(Status.MSP_ACTIVE))
-		  model.sys.setStatus(Status.MSP_READY_FOR_FLIGHT, checkFlightReadiness());
+			model.sys.setStatus(Status.MSP_READY_FOR_FLIGHT, checkFlightReadiness());
 
 		status_current.set(model.sys);
-		
+
 
 		if (status_current.isStatus(Status.MSP_ARMED)) {
 			if(status_current.isStatusChanged(status_old, 1<<Status.MSP_ARMED))
@@ -188,9 +188,9 @@ public class StatusManager implements Runnable {
 		try {
 
 			for (StatusListenerEntry entry : list) {
-				
+
 				switch(entry.type) {
-				
+
 				case TYPE_PX4_STATUS:
 					switch(entry.state) {
 					case EDGE_BOTH:
@@ -239,7 +239,7 @@ public class StatusManager implements Runnable {
 					}
 
 					break;
-					
+
 				case TYPE_RESERVED:
 
 					// TODO: Implement MSP_STATUS
@@ -302,14 +302,14 @@ public class StatusManager implements Runnable {
 						break;
 					}
 					break;
-					
+
 				case TYPE_BATTERY:
-					
+
 					if(status_current.bat_state != status_old.bat_state && status_current.bat_state == entry.mask) {
 						actions.add(new Action(entry.listener, status_current));
 						entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 					}	
-					
+
 					break;
 				}
 			}
@@ -318,47 +318,47 @@ public class StatusManager implements Runnable {
 		}
 
 		status_old.set(status_current);
-		
+
 		run_callbacks();
 
 	}
 
 	private void run_callbacks() {
-		
+
 		if(!actions.isEmpty()) {
 			while(!actions.isEmpty()) {
 				wq.addSingleTask("NP", 0, actions.poll());
 			}
 		}
 	}
-	
+
 	private boolean checkFlightReadiness() {
-		
+
 		if(model.sys.isStatus(Status.MSP_CONNECTED) && !model.sys.isStatus(Status.MSP_SITL)) {
-			
+
 			// Checks for MSP driven vehicles
-			
+
 			if(!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY)) {
 				return false;
 			}
-			
+
 			if(!model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY) && model.vision.isStatus(Vision.ENABLED)) {
 				return false;
 			}
-			
+
 			if(!model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
 				return false;
 			}
 		}
-		
+
 		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
 			return false;
 		}
-		
+
 		if(!model.sys.isStatus(Status.MSP_LPOS_VALID)) {
 			return false;
 		}
-		
+
 		int flags = (int)model.est.flags;
 
 		if(flags == 0
@@ -366,11 +366,12 @@ public class StatusManager implements Runnable {
 				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
 	private void checkTimeouts() {
+	
 
 		if (checkTimeOut(model.attitude.tms, TIMEOUT_IMU) && model.sys.isSensorAvailable(Status.MSP_IMU_AVAILABILITY)) {
 			model.sys.setSensor(Status.MSP_IMU_AVAILABILITY, false);
@@ -407,10 +408,10 @@ public class StatusManager implements Runnable {
 			model.slam.clear();
 		}
 
-		if (checkTimeOut(model.sys.gcl_tms, TIMEOUT_GCL_CONNECTED) && model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
-			model.sys.setStatus(Status.MSP_GCL_CONNECTED, (false));
-			System.out.println(("GCL lost at "+(model.sys.gcl_tms - DataModel.getSynchronizedPX4Time_us())/1000)+"ms");
-			System.out.println(model.sys);
+		if (checkTimeOutSystem(model.sys.gcl_tms, TIMEOUT_GCL_CONNECTED) && model.sys.isStatus(Status.MSP_GCL_CONNECTED) ) {
+				model.sys.setStatus(Status.MSP_GCL_CONNECTED, (false));
+				System.out.println(("GCL lost at "+(model.sys.gcl_tms - DataModel.getSynchronizedPX4Time_us())/1000)+"ms");
+				System.out.println(model.sys);
 		}
 
 		if(!model.sys.isStatus(Status.MSP_SITL)) {
@@ -420,10 +421,10 @@ public class StatusManager implements Runnable {
 			}
 		}
 
-		if (checkTimeOut(model.sys.tms, TIMEOUT_CONNECTED) && model.sys.isStatus(Status.MSP_CONNECTED)) {
+		if (checkTimeOutSystem(model.sys.tms, TIMEOUT_CONNECTED) && model.sys.isStatus(Status.MSP_CONNECTED)) {
 			model.sys.setStatus(Status.MSP_CONNECTED, false);
 			model.sys.clear();
-		//	System.out.println("..Connection timeout "+(model.sys.tms+TIMEOUT_CONNECTED)+" vs "+DataModel.getSynchronizedPX4Time_us()+" > "+model.sys.tms);
+			//	System.out.println("..Connection timeout "+(model.sys.tms+TIMEOUT_CONNECTED)+" vs "+DataModel.getSynchronizedPX4Time_us()+" > "+model.sys.tms);
 			System.out.println(("MSP lost: "+(DataModel.getSynchronizedPX4Time_us() - model.sys.tms)/1000)+"ms");
 			System.out.println(model.sys);
 			model.sys.wifi_quality = 0;
@@ -437,20 +438,26 @@ public class StatusManager implements Runnable {
 		return DataModel.getSynchronizedPX4Time_us() > (tms + timeout);
 	}
 	
+	private boolean checkTimeOutSystem(long tms, long timeout) {
+		if(tms==0)
+			return false;
+		return (System.currentTimeMillis()*1000L) > (tms + timeout);
+	}
+
 	private class Action implements Runnable {
-		
+
 		public Status status;
 		public IMSPStatusChangedListener listener;
-		
+
 		public Action(IMSPStatusChangedListener listener, Status status) {
 			this.listener = listener;
 			this.status   = status.clone();
 		}
-		
+
 		public void run() {
 			listener.update(status);
 		}
-		
+
 	}
 
 	private class StatusListenerEntry {
