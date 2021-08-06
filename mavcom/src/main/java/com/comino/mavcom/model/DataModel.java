@@ -36,6 +36,7 @@ package com.comino.mavcom.model;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.time.Instant;
 
 import com.comino.mavcom.model.segment.Attitude;
 import com.comino.mavcom.model.segment.Battery;
@@ -223,7 +224,9 @@ public class DataModel extends Segment implements Serializable {
 	}
 	
 	public static long getSynchronizedPX4Time_us() {
-		return (System.currentTimeMillis()*1000l) - (t_offset_ns/1000L);
+		Instant ins = Instant.now();
+		long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();
+		return (now_ns - t_offset_ns )/1000L;
 	}
 
 	public static void main(String[] args) {

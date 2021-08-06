@@ -36,6 +36,7 @@ package com.comino.mavcom.mavlink;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.nio.channels.ByteChannel;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -168,18 +169,21 @@ public class MAVLinkToModelParser {
 
 		registerListener(msg_timesync.class, new IMAVLinkListener() {
 
+			msg_timesync sync_s = new msg_timesync(255, 1);
+			
 			@Override
 			public void received(Object o) {
 				try {
 
 					if(!link.isSerial())
 						return;
-
-					long now_ns = System.currentTimeMillis() * 1000000L;
+					
+					Instant ins = Instant.now();
+					long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();
+					
 					msg_timesync sync = (msg_timesync) o;
 
-					if (sync.tc1 == 0 && (System.currentTimeMillis() - time_sync_cycle) > TIME_SYNC_CYCLE_MS) {
-						msg_timesync sync_s = new msg_timesync(255, 1);
+					if (sync.tc1 == 0 ) {
 						sync_s.tc1 = now_ns;
 						sync_s.ts1 = sync.ts1;
 						link.write(sync_s);
@@ -188,9 +192,6 @@ public class MAVLinkToModelParser {
 					} else if (sync.tc1 > 0) {
 						long offset_ns = (sync.ts1 + now_ns - sync.tc1 * 2L) / 2L;
 						long dt = time_offset_ns - offset_ns;
-						// System.out.println("TS1="+sync.ts1+" TC="+sync.tc1+"
-						// TO="+time_offset_ns+" OFS="+offset_ns+"
-						// PX4="+now_ns+" DT="+Math.abs(dt/1e9d));
 						if (dt > 100000000L || dt < -100000000L) {
 							time_offset_ns = offset_ns;
 							System.out.println("[sys]  Clock skew detected: " + (dt/1000)+"us");
@@ -200,7 +201,7 @@ public class MAVLinkToModelParser {
 									+ (1.0d - OFFSET_AVG_ALPHA) * time_offset_ns);
 						}
 						DataModel.t_offset_ns = time_offset_ns;
-						//		System.out.println("OFFSET="+model.sys.t_offset_ns+":"+sync.ts1);
+					//	System.out.println("OFFSET="+DataModel.t_offset_ns+":"+sync.ts1);
 						// PX4="+model.sys.getSynchronizedPX4Time_us());
 					}
 					//	time_sync_cycle = System.currentTimeMillis();

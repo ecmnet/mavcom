@@ -196,19 +196,19 @@ public class StatusManager implements Runnable {
 					case EDGE_BOTH:
 						if(status_current.isStatusChanged(status_old, entry.mask)) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					case EDGE_RISING:
 						if(status_current.isStatusChanged(status_old, entry.mask, true)) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					case EDGE_FALLING:
 						if(status_current.isStatusChanged(status_old, entry.mask, false)) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					}
@@ -220,20 +220,20 @@ public class StatusManager implements Runnable {
 						if((status_current.nav_state != entry.mask && status_old.nav_state == entry.mask ) ||
 								(status_current.nav_state == entry.mask && status_old.nav_state != entry.mask )) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					case EDGE_RISING:
 						if(status_current.nav_state == entry.mask && status_old.nav_state!=entry.mask) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					case EDGE_FALLING:
 
 						if(status_current.nav_state != entry.mask && status_old.nav_state==entry.mask) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					}
@@ -251,20 +251,20 @@ public class StatusManager implements Runnable {
 					case EDGE_BOTH:
 						if(status_current.isSensorChanged(status_old, entry.mask) ) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					case EDGE_RISING:
 						if(status_current.isSensorChanged(status_old, entry.mask, true)) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					case EDGE_FALLING:
 
 						if(status_current.isSensorChanged(status_old, entry.mask, false)) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					}
@@ -273,7 +273,7 @@ public class StatusManager implements Runnable {
 				case TYPE_MSP_AUTOPILOT:
 					if(status_current.isAutopilotModeChanged(status_old, entry.mask)) {
 						actions.add(new Action(entry.listener, status_current));
-						entry.last_triggered = System.currentTimeMillis();
+						entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 					}
 					break;
 
@@ -284,20 +284,20 @@ public class StatusManager implements Runnable {
 						if(((status_current.est_state & entry.mask) == 0 && (status_old.est_state & entry.mask) != 0 ) ||
 								((status_current.est_state & entry.mask)!=0 && (status_old.est_state & entry.mask) == 0 )) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					case EDGE_FALLING:
 						if((status_current.est_state & entry.mask) == 0 && (status_old.est_state & entry.mask) != 0 ) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					case EDGE_RISING:
 
 						if((status_current.est_state & entry.mask)!=0 && (status_old.est_state & entry.mask) == 0 ) {
 							actions.add(new Action(entry.listener, status_current));
-							entry.last_triggered = System.currentTimeMillis();
+							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
 						break;
 					}
@@ -307,7 +307,7 @@ public class StatusManager implements Runnable {
 					
 					if(status_current.bat_state != status_old.bat_state && status_current.bat_state == entry.mask) {
 						actions.add(new Action(entry.listener, status_current));
-						entry.last_triggered = System.currentTimeMillis();
+						entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 					}	
 					
 					break;
@@ -423,8 +423,8 @@ public class StatusManager implements Runnable {
 		if (checkTimeOut(model.sys.tms, TIMEOUT_CONNECTED) && model.sys.isStatus(Status.MSP_CONNECTED)) {
 			model.sys.setStatus(Status.MSP_CONNECTED, false);
 			model.sys.clear();
-			System.out.println("..Connection timeout");
-			System.out.println(("MSP lost: "+(model.sys.tms - DataModel.getSynchronizedPX4Time_us())/1000)+"ms");
+		//	System.out.println("..Connection timeout "+(model.sys.tms+TIMEOUT_CONNECTED)+" vs "+DataModel.getSynchronizedPX4Time_us()+" > "+model.sys.tms);
+			System.out.println(("MSP lost: "+(DataModel.getSynchronizedPX4Time_us() - model.sys.tms)/1000)+"ms");
 			System.out.println(model.sys);
 			model.sys.wifi_quality = 0;
 			model.sys.tms = DataModel.getSynchronizedPX4Time_us();
@@ -434,7 +434,7 @@ public class StatusManager implements Runnable {
 	private boolean checkTimeOut(long tms, long timeout) {
 		if(tms==0)
 			return false;
-		return DataModel.getSynchronizedPX4Time_us() > (tms + timeout) || DataModel.getSynchronizedPX4Time_us() < tms;
+		return DataModel.getSynchronizedPX4Time_us() > (tms + timeout);
 	}
 	
 	private class Action implements Runnable {
