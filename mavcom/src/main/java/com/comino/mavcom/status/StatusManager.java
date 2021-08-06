@@ -334,7 +334,7 @@ public class StatusManager implements Runnable {
 	
 	private boolean checkFlightReadiness() {
 		
-		if(model.sys.isStatus(Status.MSP_ACTIVE) && !model.sys.isStatus(Status.MSP_SITL)) {
+		if(model.sys.isStatus(Status.MSP_CONNECTED) && !model.sys.isStatus(Status.MSP_SITL)) {
 			
 			// Checks for MSP driven vehicles
 			
