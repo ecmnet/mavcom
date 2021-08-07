@@ -5,10 +5,11 @@ import java.time.Instant;
 import org.mavlink.messages.lquac.msg_timesync;
 
 import com.comino.mavcom.comm.IMAVComm;
-import com.comino.mavcom.comm.IMAVProxy;
-import com.comino.mavcom.control.IMAVMSPController;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavutils.workqueue.WorkQueue;
+
+// TODO: Better implementation
+// http://docs.ros.org/en/lunar/api/mavros/html/sys__time_8cpp_source.html
 
 public class MAVTimeSync implements Runnable  {
 
@@ -27,7 +28,7 @@ public class MAVTimeSync implements Runnable  {
 
 		if(comm.isSerial()) {
 			comm.registerListener(msg_timesync.class, (o) -> handle_time_sync((msg_timesync)o));
-			wq.addCyclicTask("NP", 100, this);
+			wq.addCyclicTask("HP", 100, this);
 		}
 
 	}
