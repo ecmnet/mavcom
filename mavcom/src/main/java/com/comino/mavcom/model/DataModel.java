@@ -228,6 +228,16 @@ public class DataModel extends Segment implements Serializable {
 		long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();
 		return (now_ns - t_offset_ns )/1000L;
 	}
+	
+	public static long getSynchronizedPX4Time_us(long tms_ms) {
+		return tms_ms*1000L - t_offset_ns/1000L;
+	}
+	
+	public static long getUnixTime_us() {
+		Instant ins = Instant.now();
+		long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();
+		return now_ns/1000L;
+	}
 
 	public static void main(String[] args) {
 		DataModel m = new DataModel();

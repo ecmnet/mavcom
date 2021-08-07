@@ -39,6 +39,8 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.mavlink.messages.MAVLinkMessage;
@@ -285,6 +287,10 @@ public class MAVSerialComm implements IMAVComm {
 	public void addMAVMessageListener(IMAVMessageListener listener) {
 		parser.addMAVMessageListener(listener);
 
+	}
+	
+	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
+		parser.registerListener(clazz, listener);
 	}
 
 	@Override

@@ -65,8 +65,6 @@ import com.comino.mavutils.workqueue.WorkQueue;
 
 public class MAVLinkToModelParser {
 
-
-	private static int TIME_SYNC_CYCLE_MS = 1000;
 	private static double OFFSET_AVG_ALPHA = 0.6d;
 
 	private DataModel model;
@@ -74,17 +72,11 @@ public class MAVLinkToModelParser {
 
 	private Map<Class<?>, MAVLinkMessage>                mavList = null;
 
-	private IMAVComm link = null;
-
-	private Map<Class<?>, List<IMAVLinkListener>> 	   msglisteners 		= null;
+	private Map<Class<?>, List<IMAVLinkListener>> 	    msglisteners 		= null;
 	private List<IMAVLinkListener> 	  					mavListener 		= null;
 	private List<IMAVMessageListener> 					messageListener 	= null;
 
 	private long time_offset_ns = 0;
-
-	private LogMessage lastMessage = null;
-
-	private long time_sync_cycle;
 
 	private Map<Integer,IMAVCmdAcknowledge> cmd_ack = new HashMap<Integer,IMAVCmdAcknowledge>();
 
@@ -93,7 +85,6 @@ public class MAVLinkToModelParser {
 	public MAVLinkToModelParser(DataModel model, IMAVComm link) {
 
 		this.model = model;
-		this.link = link;
 		this.mavList = new HashMap<Class<?>, MAVLinkMessage>();
 
 		this.mavListener = new ArrayList<IMAVLinkListener>();
@@ -117,7 +108,7 @@ public class MAVLinkToModelParser {
 
 					if(logger==null)
 						logger = MSPLogger.getInstance();
-					
+
 					switch (ack.result) {
 					case MAV_RESULT.MAV_RESULT_ACCEPTED:
 						logger.writeLocalMsg("Command " + ack.command + " is accepted",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
@@ -152,63 +143,17 @@ public class MAVLinkToModelParser {
 				m.text = (new String(msg.text)).trim();
 				m.tms = DataModel.getSynchronizedPX4Time_us();
 				m.severity = msg.severity;
-				
+
 				// if new message follows tha last one within 10ms, check severity and keep that one
 				// with higher severity
 				if(model.msg!=null && (m.tms - model.msg.tms ) < 10000) {
-				  if(m.severity < model.msg.severity) {
-					  model.msg.set(m);  
-				  }
-				} else 
-				  model.msg.set(m);
-				
-				writeMessage(m);
-			}
-		});
-
-
-		registerListener(msg_timesync.class, new IMAVLinkListener() {
-
-			msg_timesync sync_s = new msg_timesync(255, 1);
-			
-			@Override
-			public void received(Object o) {
-				try {
-
-					if(!link.isSerial())
-						return;
-					
-					Instant ins = Instant.now();
-					long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();
-					
-					msg_timesync sync = (msg_timesync) o;
-
-					if (sync.tc1 == 0 ) {
-						sync_s.tc1 = now_ns;
-						sync_s.ts1 = sync.ts1;
-						link.write(sync_s);
-						return;
-
-					} else if (sync.tc1 > 0) {
-						long offset_ns = (sync.ts1 + now_ns - sync.tc1 * 2L) / 2L;
-						long dt = time_offset_ns - offset_ns;
-						if (dt > 30000000L || dt < -30000000L) {
-							time_offset_ns = offset_ns;
-							System.out.println("[sys]  Clock skew detected: " + (dt/1000)+"us");
-						} else {
-							time_offset_ns = (long) (OFFSET_AVG_ALPHA * offset_ns
-									+ (1.0d - OFFSET_AVG_ALPHA) * time_offset_ns);
-							DataModel.t_offset_ns = time_offset_ns;
-						}
-					
-//						DataModel.t_offset_ns = time_offset_ns;
-					//	System.out.println("OFFSET="+DataModel.t_offset_ns+":"+sync.ts1);
-						// PX4="+model.sys.getSynchronizedPX4Time_us());
+					if(m.severity < model.msg.severity) {
+						model.msg.set(m);  
 					}
-					//	time_sync_cycle = System.currentTimeMillis();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} else 
+					model.msg.set(m);
+
+				writeMessage(m);
 			}
 		});
 
@@ -274,7 +219,7 @@ public class MAVLinkToModelParser {
 		}
 	}
 
-	private void registerListener(Class<?> clazz, IMAVLinkListener listener) {
+	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
 		List<IMAVLinkListener> listenerList = null;
 		if (!msglisteners.containsKey(clazz)) {
 			listenerList = new ArrayList<IMAVLinkListener>();

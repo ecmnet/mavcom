@@ -263,11 +263,15 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		parser.addMAVLinkListener(listener);
 
 	}
-
+	
 	@Override
 	public void addMAVMessageListener(IMAVMessageListener listener) {
 		parser.addMAVMessageListener(listener);
 
+	}
+	
+	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
+		parser.registerListener(clazz, listener);
 	}
 
 	@Override

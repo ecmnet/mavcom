@@ -66,6 +66,7 @@ import com.comino.mavcom.control.IMAVMSPController;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
+import com.comino.mavcom.mavlink.MAVTimeSync;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
@@ -99,6 +100,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	private StatusManager 				status_manager 	= null;
 	private List<IMAVMessageListener> 	messageListener = null;
+	private MAVTimeSync                 timesync        = null;
 
 	private final WorkQueue wq = WorkQueue.getInstance();
 
@@ -221,6 +223,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 				proxy.write((MAVLinkMessage)o);
 			}
 		});
+		
+		timesync = new MAVTimeSync(comm);
 
 		wq.addCyclicTask("LP", 200, this);	
 
