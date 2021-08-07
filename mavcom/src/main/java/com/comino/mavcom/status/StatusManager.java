@@ -345,6 +345,10 @@ public class StatusManager implements Runnable {
 			if(!model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY) && model.vision.isStatus(Vision.ENABLED)) {
 				return false;
 			}
+			
+			if((Float.isNaN(model.vision.x) || Float.isNaN(model.vision.y) || Float.isNaN(model.vision.z)) && model.vision.isStatus(Vision.ENABLED)) {
+				return false;
+			}
 
 			if(!model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
 				return false;
