@@ -224,8 +224,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			}
 		});
 		
-		timesync = new MAVTimeSync(comm);
-
+		wq.addSingleTask("LP", 500, () -> {  timesync = new MAVTimeSync(comm); });
 		wq.addCyclicTask("LP", 200, this);	
 
 	}

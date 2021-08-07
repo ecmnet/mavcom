@@ -13,7 +13,7 @@ import com.comino.mavutils.workqueue.WorkQueue;
 
 public class MAVTimeSync implements Runnable  {
 
-	private static double OFFSET_AVG_ALPHA = 0.6d;
+	private static double OFFSET_AVG_ALPHA = 0.1d;
 
 	private final IMAVComm comm;
 	private final WorkQueue wq = WorkQueue.getInstance();
@@ -29,6 +29,7 @@ public class MAVTimeSync implements Runnable  {
 		if(comm.isSerial()) {
 			comm.registerListener(msg_timesync.class, (o) -> handle_time_sync((msg_timesync)o));
 			wq.addCyclicTask("HP", 100, this);
+			System.out.println("Time synchronization started...");
 		}
 
 	}
