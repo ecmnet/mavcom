@@ -212,7 +212,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 
 		// Register processing of PING sent by GCL
-		proxy.registerListener(msg_heartbeat.class, (o) -> {
+		proxy.registerListener(msg_heartbeat.class, (o) -> {	
 			model.sys.gcl_tms = System.currentTimeMillis()*1000L;
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
 		});

@@ -32,6 +32,7 @@ public class MspMicroSlamPlugin extends MAVLinkPluginBase {
 		model.slam.flags = (short)slam.flags;
 		model.slam.fps  = slam.fps;
 		model.slam.tms = DataModel.getSynchronizedPX4Time_us();
+		if(slam.quality > 0)
 		model.sys.setSensor(Status.MSP_SLAM_AVAILABILITY, true);
 
 	}

@@ -24,6 +24,8 @@ public class PX4DistanceSensorPlugin extends MAVLinkPluginBase {
 			else
 			   model.distance.di = Float.NaN;
 			model.distance.dicov = lidar.covariance / 100f;
+			model.distance.min   = lidar.min_distance / 100f;
+			model.distance.max   = lidar.max_distance / 100f;
 			model.distance.tms = DataModel.getSynchronizedPX4Time_us();
 		} else {
 			// Map hereflow distance to flow distance

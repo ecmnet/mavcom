@@ -50,7 +50,7 @@ public class StatusManager implements Runnable {
 	private static final long TIMEOUT_IMU             = 1000000;
 	private static final long TIMEOUT_VISION          = 3000000;
 	private static final long TIMEOUT_CONNECTED       = 3000000;
-	private static final long TIMEOUT_GCL_CONNECTED   = 3000000;
+	private static final long TIMEOUT_GCL_CONNECTED   = 2000000;
 	private static final long TIMEOUT_RC_ATTACHED     = 5000000;
 	private static final long TIMEOUT_JOY_ATTACHED    = 2000000;
 	private static final long TIMEOUT_GPOS            = 2000000;
@@ -434,7 +434,7 @@ public class StatusManager implements Runnable {
 			}
 		}
 
-		if (checkTimeOutSystem(model.sys.tms, TIMEOUT_CONNECTED) && model.sys.isStatus(Status.MSP_CONNECTED)) {
+		if (checkTimeOut(model.sys.tms, TIMEOUT_CONNECTED) && model.sys.isStatus(Status.MSP_CONNECTED)) {
 			model.sys.setStatus(Status.MSP_CONNECTED, false);
 			model.sys.clear();
 			//	System.out.println("..Connection timeout "+(model.sys.tms+TIMEOUT_CONNECTED)+" vs "+DataModel.getSynchronizedPX4Time_us()+" > "+model.sys.tms);
