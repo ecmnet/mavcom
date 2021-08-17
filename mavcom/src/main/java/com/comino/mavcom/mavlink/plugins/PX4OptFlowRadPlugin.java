@@ -27,8 +27,5 @@ public class PX4OptFlowRadPlugin extends MAVLinkPluginBase {
 		  model.sys.setSensor(Status.MSP_PIX4FLOW_AVAILABILITY, true);
 		  model.flow.tms = DataModel.getSynchronizedPX4Time_us();
 		}
-		
-//     	bus.publish(model.raw);
-
 	}
 }
