@@ -41,6 +41,7 @@ import java.time.Instant;
 import com.comino.mavcom.model.segment.Attitude;
 import com.comino.mavcom.model.segment.Battery;
 import com.comino.mavcom.model.segment.Debug;
+import com.comino.mavcom.model.segment.Distance;
 import com.comino.mavcom.model.segment.Esc;
 import com.comino.mavcom.model.segment.EstStatus;
 import com.comino.mavcom.model.segment.GPS;
@@ -48,7 +49,7 @@ import com.comino.mavcom.model.segment.Grid;
 import com.comino.mavcom.model.segment.Hud;
 import com.comino.mavcom.model.segment.Imu;
 import com.comino.mavcom.model.segment.LogMessage;
-import com.comino.mavcom.model.segment.Raw;
+import com.comino.mavcom.model.segment.Flow;
 import com.comino.mavcom.model.segment.Rc;
 import com.comino.mavcom.model.segment.Servo;
 import com.comino.mavcom.model.segment.Slam;
@@ -83,7 +84,8 @@ public class DataModel extends Segment implements Serializable {
 	public   Telemetry telemetry  = null;
 	public	 GPS	         gps  = null;
 	public	 GPS	        base  = null;
-	public	 Raw			 raw  = null;
+	public	 Flow		    flow  = null;
+	public   Distance    distance = null;
 	public   Status          sys  = null;
 	public	 Servo			servo = null;
 	public	 Rc				  rc  = null;
@@ -108,7 +110,8 @@ public class DataModel extends Segment implements Serializable {
 		this.telemetry 		= new Telemetry();
 		this.gps       		= new GPS();
 		this.base           = new GPS();
-		this.raw            = new Raw();
+		this.flow            = new Flow();
+		this.distance       = new Distance();
 		this.sys       		= new Status();
 		this.servo			= new Servo();
 		this.rc             = new Rc();
@@ -138,7 +141,7 @@ public class DataModel extends Segment implements Serializable {
 		this.telemetry 		= m.telemetry.clone();
 		this.gps       		= m.gps.clone();
 		this.base           = m.base.clone();
-		this.raw            = m.raw.clone();
+		this.flow            = m.flow.clone();
 		this.sys       		= m.sys.clone();
 		this.servo			= m.servo.clone();
 		this.rc             = m.rc.clone();
@@ -152,6 +155,7 @@ public class DataModel extends Segment implements Serializable {
 		this.grid           = m.grid.clone();
 		this.way            = m.way.clone();
 		this.esc            = m.esc.clone();
+		this.distance       = m.distance.clone();
 	}
 
 
@@ -166,7 +170,7 @@ public class DataModel extends Segment implements Serializable {
 		this.telemetry.set(m.telemetry);
 		this.gps.set(m.gps);
 		this.base.set(m.base);
-		this.raw.set(raw);
+		this.flow.set(flow);
 		this.sys.set(m.sys);
 		this.servo.set(m.servo);
 		this.rc.set(m.rc);
@@ -180,6 +184,7 @@ public class DataModel extends Segment implements Serializable {
 		this.grid.set(m.grid);
 		this.way.set(m.way);
 		this.esc.set(m.esc);
+		this.distance.set(m.distance);
 	}
 
 	public DataModel clone() {
@@ -209,6 +214,7 @@ public class DataModel extends Segment implements Serializable {
 		this.slam.clear();
 		this.way.clear();
 		this.esc.clear();
+		this.distance.clear();
 	}
 
 	public float getValue(String classkey) {

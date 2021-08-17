@@ -235,7 +235,7 @@ public class MAVLinkToModelParser {
 
 		if (msg != null) {
 
-			model.sys.tms = System.currentTimeMillis()*1000L;
+			model.sys.tms = DataModel.getSynchronizedPX4Time_us();//System.currentTimeMillis()*1000L;
 
 			try {
 

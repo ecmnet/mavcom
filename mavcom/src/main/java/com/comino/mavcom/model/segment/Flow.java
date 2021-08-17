@@ -36,16 +36,14 @@ package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
 
-public class Raw extends Segment {
+public class Flow extends Segment {
 
 	private static final long serialVersionUID = -1123989934184248219L;
 
-	public float di     = Float.NaN;		// LIDAR distance
 	public float fX     = Float.NaN;		// Flow integrated X
 	public float fY     = Float.NaN;		// Flow integrated Y
 	public float fq		= Float.NaN;
 	public float fd		= Float.NaN;		// Flow distance
-	public float dicov	= Float.NaN;		// LIDAR covariance
 	public float fgX    = Float.NaN;	    // Flow Gyro
 	public float fgY    = Float.NaN;
 	public float fgZ    = Float.NaN;
@@ -53,31 +51,27 @@ public class Raw extends Segment {
 
 
 
-	public void set(Raw a) {
+	public void set(Flow a) {
 		fX    	= a.fX;
 		fY    	= a.fY;
-		di   	= a.di;
 		fq      = a.fq;
 		fd      = a.fd;
 		fgX     = a.fgX;
 		fgY     = a.fgY;
 		fgZ     = a.fgZ;
-		dicov   = a.dicov;
 		ius     = a.ius;
 
 	}
 
-	public Raw clone() {
-		Raw at = new Raw();
+	public Flow clone() {
+		Flow at = new Flow();
 		at.fX 		= fX;
 		at.fY 		= fY;
-		at.di		= di;
 		at.fq		= fq;
 		at.fd       = fd;
 		at.fgX      = fgX;
 		at.fgY      = fgY;
 		at.fgZ      = fgZ;
-		at.dicov    = dicov;
 		at.ius      = ius;
 
 		return at;
@@ -89,13 +83,11 @@ public class Raw extends Segment {
 	public void clear() {
 		fX    	= Float.NaN;
 		fY    	= Float.NaN;
-		di   	= Float.NaN;
 		fq      = Float.NaN;
 		fd      = Float.NaN;
 		fgX     = Float.NaN;
 		fgY     = Float.NaN;
 		fgZ     = Float.NaN;
-		dicov   = Float.NaN;
 		ius     = 0;
 	}
 

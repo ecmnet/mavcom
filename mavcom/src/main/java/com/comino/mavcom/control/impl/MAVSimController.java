@@ -164,7 +164,7 @@ public class MAVSimController extends MAVController implements IMAVController {
 			model.vision.y = model.state.l_y + (float)Math.random()*0.2f-0.1f;
 			model.vision.z = model.state.l_z + (float)Math.random()*0.2f-0.1f;
 
-			model.raw.di = (float)Math.random()*0.5f+1;
+			model.flow.fd = (float)Math.random()*0.5f+1;
 			model.attitude.r = 0;
 			model.attitude.p = (float)(Math.PI/4);
 			model.attitude.y = (float)(count/1000f % (2*Math.PI));

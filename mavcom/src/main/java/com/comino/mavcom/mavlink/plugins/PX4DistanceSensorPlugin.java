@@ -20,14 +20,14 @@ public class PX4DistanceSensorPlugin extends MAVLinkPluginBase {
 		if(lidar.max_distance > 200 ) {
 			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, true);
 			if(lidar.current_distance> 1)
-			  model.raw.di = lidar.current_distance / 100f;
+			  model.distance.di = lidar.current_distance / 100f;
 			else
-			   model.raw.di = Float.NaN;
-			model.raw.dicov = lidar.covariance / 100f;
-			model.raw.tms = DataModel.getSynchronizedPX4Time_us();
+			   model.distance.di = Float.NaN;
+			model.distance.dicov = lidar.covariance / 100f;
+			model.distance.tms = DataModel.getSynchronizedPX4Time_us();
 		} else {
 			// Map hereflow distance to flow distance
-			model.raw.fd = lidar.current_distance / 100f;
+			model.flow.fd = lidar.current_distance / 100f;
 		}
 		
 		

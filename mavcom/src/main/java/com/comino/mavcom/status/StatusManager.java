@@ -47,17 +47,18 @@ import com.comino.mavutils.workqueue.WorkQueue;
 
 public class StatusManager implements Runnable {
 
-	private static final long TIMEOUT_IMU             = 5000000;
+	private static final long TIMEOUT_IMU             = 1000000;
 	private static final long TIMEOUT_VISION          = 3000000;
-	private static final long TIMEOUT_CONNECTED       = 1000000;
+	private static final long TIMEOUT_CONNECTED       = 3000000;
 	private static final long TIMEOUT_GCL_CONNECTED   = 3000000;
 	private static final long TIMEOUT_RC_ATTACHED     = 5000000;
 	private static final long TIMEOUT_JOY_ATTACHED    = 2000000;
 	private static final long TIMEOUT_GPOS            = 2000000;
 	private static final long TIMEOUT_LPOS            = 2000000;
 	private static final long TIMEOUT_GPS             = 2000000;
-	private static final long TIMEOUT_SLAM            = 2000000;
+	private static final long TIMEOUT_SLAM            = 5000000;
 	private static final long TIMEOUT_LIDAR           = 2000000;
+	private static final long TIMEOUT_FLOW            = 2000000;
 
 	public static final byte  TYPE_ALL             = 0;
 	public static final byte  TYPE_PX4_STATUS      = 1;
@@ -337,6 +338,9 @@ public class StatusManager implements Runnable {
 		if(model.sys.isStatus(Status.MSP_CONNECTED) && !model.sys.isStatus(Status.MSP_SITL)) {
 
 			// Checks for MSP driven vehicles
+			
+			if(model.est.posVertAccuracy > 0.10f && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY))
+				return false;
 
 			if(!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY)) {
 				return false;
@@ -389,9 +393,14 @@ public class StatusManager implements Runnable {
 			model.sys.setStatus(Status.MSP_GPOS_VALID, false);
 		}
 
-		if (checkTimeOut(model.raw.tms, TIMEOUT_LIDAR) && model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
+		if (checkTimeOut(model.distance.tms, TIMEOUT_LIDAR) && model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
 			//System.out.println("LIDAR timeout");
 			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, false);
+		}
+		
+		if (checkTimeOut(model.flow.tms, TIMEOUT_FLOW) && model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY)) {
+			//System.out.println("LIDAR timeout");
+			model.sys.setSensor(Status.MSP_PIX4FLOW_AVAILABILITY, false);
 		}
 
 		if (checkTimeOut(model.vision.tms, TIMEOUT_VISION) && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
