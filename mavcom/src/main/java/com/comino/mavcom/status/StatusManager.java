@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.mavlink.messages.ESTIMATOR_STATUS_FLAGS;
+import org.mavlink.messages.MSP_AUTOCONTROL_MODE;
 
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
@@ -49,7 +50,7 @@ public class StatusManager implements Runnable {
 
 	private static final long TIMEOUT_IMU             = 1000000;
 	private static final long TIMEOUT_VISION          = 3000000;
-	private static final long TIMEOUT_CONNECTED       = 3000000;
+	private static final long TIMEOUT_CONNECTED       = 2000000;
 	private static final long TIMEOUT_GCL_CONNECTED   = 2000000;
 	private static final long TIMEOUT_RC_ATTACHED     = 5000000;
 	private static final long TIMEOUT_JOY_ATTACHED    = 2000000;
@@ -335,7 +336,8 @@ public class StatusManager implements Runnable {
 
 	private boolean checkFlightReadiness() {
 
-		if(model.sys.isStatus(Status.MSP_CONNECTED) && !model.sys.isStatus(Status.MSP_SITL)) {
+		if(model.sys.isStatus(Status.MSP_CONNECTED) && !model.sys.isStatus(Status.MSP_SITL) && !model.sys.isAutopilotMode(MSP_AUTOCONTROL_MODE.FCUM)) 
+			{
 
 			// Checks for MSP driven vehicles
 			
