@@ -76,7 +76,7 @@ public class msg_trajectory_representation_waypoints extends MAVLinkMessage {
    */
   public float[] vel_yaw = new float[5];
   /**
-   * Scheduled action for each waypoint, UINT16_MAX if not being used.
+   * MAV_CMD command id of waypoint, set to UINT16_MAX if not being used.
    */
   public int[] command = new int[5];
   /**

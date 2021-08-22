@@ -44,4 +44,8 @@ public interface MSP_AUTOCONTROL_MODE {
      * Precision locking
      */
     public final static int PRECISION_LOCK = 11;
+    /**
+     * FCUM experimental mode
+     */
+    public final static int FCUM = 90;
 }

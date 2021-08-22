@@ -120,6 +120,9 @@
                <entry value="11" name="PRECISION_LOCK">
                   <description>Precision locking</description>
               </entry>
+              <entry value="90" name="FCUM">
+                  <description>FCUM experimental mode</description>
+              </entry>
            </enum>
 
            <enum name="MSP_AUTOCONTROL_ACTION">

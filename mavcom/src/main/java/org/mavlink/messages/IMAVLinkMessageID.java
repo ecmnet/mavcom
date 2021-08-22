@@ -54,6 +54,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_DATA_STREAM = 67;
   public static int MAVLINK_MSG_ID_SCALED_IMU3 = 129;
   public static int MAVLINK_MSG_ID_TERRAIN_CHECK = 135;
+  public static int MAVLINK_MSG_ID_HYGROMETER_SENSOR = 12920;
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_SELF_ID = 12903;
   public static int MAVLINK_MSG_ID_CAMERA_TRACKING_GEO_STATUS = 276;
   public static int MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_BEZIER = 333;

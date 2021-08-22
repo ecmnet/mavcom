@@ -1337,6 +1337,17 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_UAVCAN_GET_NODE_INFO = 5200;
     /**
+     * Trigger the start of an ADSB-out IDENT. This should only be used when requested to do so by an Air Traffic Controller in controlled airspace. This starts the IDENT which is then typically held for 18 seconds by the hardware per the Mode A, C, and S transponder spec.
+     * PARAM 1 : Reserved (set to 0)
+     * PARAM 2 : Reserved (set to 0)
+     * PARAM 3 : Reserved (set to 0)
+     * PARAM 4 : Reserved (set to 0)
+     * PARAM 5 : Reserved (set to 0)
+     * PARAM 6 : Reserved (set to 0)
+     * PARAM 7 : Reserved (set to 0)
+     */
+    public final static int MAV_CMD_DO_ADSB_OUT_IDENT = 10001;
+    /**
      * Deploy payload on a Lat / Lon / Alt position. This includes the navigation to reach the required release position and velocity.
      * PARAM 1 : Operation mode. 0: prepare single payload deploy (overwriting previous requests), but do not execute it. 1: execute payload deploy immediately (rejecting further deploy commands during execution, but allowing abort). 2: add payload deploy to existing deployment list.
      * PARAM 2 : Desired approach vector in compass heading. A negative value indicates the system can define the approach vector at will.

@@ -706,7 +706,7 @@
       <reboot_required>True</reboot_required>
     </parameter>
     <parameter name="BAT_ADC_CHANNEL" default="-1" type="INT32">
-      <short_desc>This parameter is deprecated. Please use BAT1_ADC_CHANNEL</short_desc>
+      <short_desc>This parameter is deprecated. Please use BAT1_I_CHANNEL</short_desc>
     </parameter>
     <parameter name="BAT_CRIT_THR" default="0.07" type="FLOAT">
       <short_desc>Critical threshold</short_desc>
@@ -716,7 +716,6 @@
       <unit>norm</unit>
       <decimal>2</decimal>
       <increment>0.01</increment>
-      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="BAT_EMERGEN_THR" default="0.05" type="FLOAT">
       <short_desc>Emergency threshold</short_desc>
@@ -726,7 +725,6 @@
       <unit>norm</unit>
       <decimal>2</decimal>
       <increment>0.01</increment>
-      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="BAT_LOW_THR" default="0.15" type="FLOAT">
       <short_desc>Low threshold</short_desc>
@@ -736,7 +734,18 @@
       <unit>norm</unit>
       <decimal>2</decimal>
       <increment>0.01</increment>
-      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="BAT_N_CELLS" default="3" type="INT32" category="System">
+      <short_desc>This parameter is deprecated. Please use BAT1_N_CELLS instead</short_desc>
+    </parameter>
+    <parameter name="BAT_V_CHARGED" default="4.05" type="FLOAT" category="System">
+      <short_desc>This parameter is deprecated. Please use BAT1_V_CHARGED instead</short_desc>
+    </parameter>
+    <parameter name="BAT_V_EMPTY" default="3.5" type="FLOAT" category="System">
+      <short_desc>This parameter is deprecated. Please use BAT1_V_EMPTY instead</short_desc>
+    </parameter>
+    <parameter name="BAT_V_LOAD_DROP" default="0.3" type="FLOAT" category="System">
+      <short_desc>This parameter is deprecated. Please use BAT1_V_LOAD_DROP instead</short_desc>
     </parameter>
     <parameter name="BAT_V_OFFS_CURR" default="0.0" type="FLOAT">
       <short_desc>Offset in volt as seen by the ADC input of the current sensor</short_desc>
@@ -852,7 +861,7 @@
       <short_desc>Camera trigger pin extended</short_desc>
       <long_desc>This Bit mask selects which FMU pin is used (range: AUX9-AUX32) If the value is not 0 it takes precedence over TRIG_PINS. If bits above 8 are set that value is used as the selector for trigger pins. greater then 8. 0x00000300 Would be Pins 9,10. If the value is</long_desc>
       <min>0</min>
-      <max>4294967040</max>
+      <max>2147483647</max>
       <decimal>0</decimal>
       <reboot_required>true</reboot_required>
     </parameter>
@@ -916,7 +925,6 @@
       <long_desc>Setting this parameter to 22027 will disable IO safety. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
       <min>0</min>
       <max>22027</max>
-      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="CBRK_RATE_CTRL" default="0" type="INT32" category="Developer">
       <short_desc>Circuit breaker for rate controller output</short_desc>
@@ -930,28 +938,24 @@
       <long_desc>Setting this parameter to 894281 will disable the power valid checks in the commander. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
       <min>0</min>
       <max>894281</max>
-      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="CBRK_USB_CHK" default="197848" type="INT32" category="Developer">
       <short_desc>Circuit breaker for USB link check</short_desc>
       <long_desc>Setting this parameter to 197848 will disable the USB connected checks in the commander, setting it to 0 keeps them enabled (recommended). We are generally recommending to not fly with the USB link connected and production vehicles should set this parameter to zero to prevent users from flying USB powered. However, for R&amp;D purposes it has proven over the years to work just fine.</long_desc>
       <min>0</min>
       <max>197848</max>
-      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="CBRK_VELPOSERR" default="0" type="INT32" category="Developer">
       <short_desc>Circuit breaker for position error check</short_desc>
       <long_desc>Setting this parameter to 201607 will disable the position and velocity accuracy checks in the commander. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
       <min>0</min>
       <max>201607</max>
-      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="CBRK_VTOLARMING" default="0" type="INT32" category="Developer">
       <short_desc>Circuit breaker for arming in fixed-wing mode check</short_desc>
       <long_desc>Setting this parameter to 159753 will enable arming in fixed-wing mode for VTOLs. WARNING: ENABLING THIS CIRCUIT BREAKER IS AT OWN RISK</long_desc>
       <min>0</min>
       <max>159753</max>
-      <reboot_required>true</reboot_required>
     </parameter>
   </group>
   <group name="Commander">
@@ -1380,7 +1384,6 @@
       <min>1</min>
       <max>100</max>
       <unit>s</unit>
-      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="COM_POS_FS_EPH" default="5" type="FLOAT">
       <short_desc>Horizontal position error threshold</short_desc>
@@ -1403,7 +1406,6 @@
       <min>1</min>
       <max>100</max>
       <unit>s</unit>
-      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="COM_POWER_COUNT" default="1" type="INT32">
       <short_desc>Required number of redundant power modules</short_desc>
@@ -2794,6 +2796,23 @@
       <decimal>3</decimal>
     </parameter>
   </group>
+  <group name="ESC">
+    <parameter name="ESC_BL_VER" default="0" type="INT32">
+      <short_desc>Required esc bootloader version</short_desc>
+      <min>0</min>
+      <max>65535</max>
+    </parameter>
+    <parameter name="ESC_FW_VER" default="0" type="INT32">
+      <short_desc>Required esc firmware version</short_desc>
+      <min>0</min>
+      <max>65535</max>
+    </parameter>
+    <parameter name="ESC_HW_VER" default="0" type="INT32">
+      <short_desc>Required esc hardware version</short_desc>
+      <min>0</min>
+      <max>65535</max>
+    </parameter>
+  </group>
   <group name="Events">
     <parameter name="EV_TSK_RC_LOSS" default="0" type="INT32" boolean="true">
       <short_desc>RC Loss Alarm</short_desc>
@@ -3676,7 +3695,6 @@
     <parameter name="FD_ESCS_EN" default="1" type="INT32" boolean="true">
       <short_desc>Enable checks on ESCs that report their arming state</short_desc>
       <long_desc>If enabled, failure detector will verify that all the ESCs have successfully armed when the vehicle has transitioned to the armed state. Timeout for receiving an acknowledgement from the ESCs is 0.3s, if no feedback is received the failure detector will auto disarm the vehicle.</long_desc>
-      <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="FD_EXT_ATS_EN" default="0" type="INT32" boolean="true">
       <short_desc>Enable PWM input on for engaging failsafe from an external automatic trigger system (ATS)</short_desc>
@@ -3793,6 +3811,7 @@
         <value code="3">Ashtech / Trimble</value>
         <value code="4">Emlid Reach</value>
         <value code="5">Femtomes</value>
+        <value code="6">NMEA (generic)</value>
       </values>
     </parameter>
     <parameter name="GPS_2_CONFIG" default="0" type="INT32">
@@ -3840,16 +3859,18 @@
         <value code="3">Ashtech / Trimble</value>
         <value code="4">Emlid Reach</value>
         <value code="5">Femtomes</value>
+        <value code="6">NMEA (generic)</value>
       </values>
     </parameter>
     <parameter name="GPS_DUMP_COMM" default="0" type="INT32">
-      <short_desc>Dump GPS communication to a file</short_desc>
-      <long_desc>If this is set to 1, all GPS communication data will be published via uORB, and written to the log file as gps_dump message.</long_desc>
+      <short_desc>Log GPS communication data</short_desc>
+      <long_desc>If this is set to 1, all GPS communication data will be published via uORB, and written to the log file as gps_dump message. If this is set to 2, the main GPS is configured to output RTCM data, which is then logged as gps_dump and can be used for PPK.</long_desc>
       <min>0</min>
-      <max>1</max>
+      <max>2</max>
       <values>
         <value code="0">Disable</value>
-        <value code="1">Enable</value>
+        <value code="1">Full communication</value>
+        <value code="2">RTCM output (PPK)</value>
       </values>
     </parameter>
     <parameter name="GPS_UBX_DYNMODEL" default="7" type="INT32">
@@ -4144,7 +4165,7 @@
     </parameter>
     <parameter name="LTEST_MEAS_UNC" default="0.005" type="FLOAT">
       <short_desc>Landing target measurement uncertainty</short_desc>
-      <long_desc>Variance of the landing target measurement from the driver. Higher values results in less agressive following of the measurement and a smoother output as well as fewer rejected measurements.</long_desc>
+      <long_desc>Variance of the landing target measurement from the driver. Higher values result in less aggressive following of the measurement and a smoother output as well as fewer rejected measurements.</long_desc>
       <unit>tan(rad)^2</unit>
       <decimal>4</decimal>
     </parameter>
@@ -4179,7 +4200,7 @@
     </parameter>
     <parameter name="LTEST_VEL_UNC_IN" default="0.1" type="FLOAT">
       <short_desc>Initial landing target velocity uncertainty</short_desc>
-      <long_desc>Initial variance of the relative landing target velocity in x and y direction</long_desc>
+      <long_desc>Initial variance of the relative landing target velocity in x and y directions</long_desc>
       <min>0.001</min>
       <unit>(m/s)^2</unit>
       <decimal>3</decimal>
@@ -4431,7 +4452,7 @@
       <decimal>4</decimal>
     </parameter>
     <parameter name="LPE_VIS_DELAY" default="0.1" type="FLOAT">
-      <short_desc>Vision delay compensaton</short_desc>
+      <short_desc>Vision delay compensation</short_desc>
       <long_desc>Set to zero to enable automatic compensation from measurement timestamps</long_desc>
       <min>0</min>
       <max>0.1</max>
@@ -4783,7 +4804,7 @@
   <group name="Mission">
     <parameter name="MIS_DIST_1WP" default="900" type="FLOAT">
       <short_desc>Maximal horizontal distance from home to first waypoint</short_desc>
-      <long_desc>Failsafe check to prevent running mission stored from previous flight at a new takeoff location. Set a value of zero or less to disable. The mission will not be started if the current waypoint is more distant than MIS_DIS_1WP from the home position.</long_desc>
+      <long_desc>Failsafe check to prevent running mission stored from previous flight at a new takeoff location. Set a value of zero or less to disable. The mission will not be started if the current waypoint is more distant than MIS_DIST_1WP from the home position.</long_desc>
       <min>0</min>
       <max>10000</max>
       <unit>m</unit>
@@ -7142,7 +7163,7 @@
     </parameter>
     <parameter name="PLD_MAX_SRCH" default="3" type="INT32">
       <short_desc>Maximum number of search attempts</short_desc>
-      <long_desc>Maximum number of times to seach for the landing target if it is lost during the precision landing.</long_desc>
+      <long_desc>Maximum number of times to search for the landing target if it is lost during the precision landing.</long_desc>
       <min>0</min>
       <max>100</max>
     </parameter>
@@ -9332,6 +9353,11 @@
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
+    <parameter name="CAL_ACC0_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Accelerometer calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
+    </parameter>
     <parameter name="CAL_ACC0_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis offset</short_desc>
     </parameter>
@@ -9415,6 +9441,11 @@
         <value code="39">Pitch 315°</value>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
+    </parameter>
+    <parameter name="CAL_ACC1_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Accelerometer calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
     </parameter>
     <parameter name="CAL_ACC1_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis offset</short_desc>
@@ -9500,6 +9531,11 @@
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
+    <parameter name="CAL_ACC2_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Accelerometer calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
+    </parameter>
     <parameter name="CAL_ACC2_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis offset</short_desc>
     </parameter>
@@ -9583,6 +9619,11 @@
         <value code="39">Pitch 315°</value>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
+    </parameter>
+    <parameter name="CAL_ACC3_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Accelerometer calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
     </parameter>
     <parameter name="CAL_ACC3_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Accelerometer X-axis offset</short_desc>
@@ -9668,6 +9709,11 @@
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
+    <parameter name="CAL_GYRO0_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Gyroscope calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
+    </parameter>
     <parameter name="CAL_GYRO0_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro X-axis offset</short_desc>
     </parameter>
@@ -9742,6 +9788,11 @@
         <value code="39">Pitch 315°</value>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
+    </parameter>
+    <parameter name="CAL_GYRO1_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Gyroscope calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
     </parameter>
     <parameter name="CAL_GYRO1_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro X-axis offset</short_desc>
@@ -9818,6 +9869,11 @@
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
+    <parameter name="CAL_GYRO2_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Gyroscope calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
+    </parameter>
     <parameter name="CAL_GYRO2_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro X-axis offset</short_desc>
     </parameter>
@@ -9893,6 +9949,11 @@
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
+    <parameter name="CAL_GYRO3_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Gyroscope calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
+    </parameter>
     <parameter name="CAL_GYRO3_XOFF" default="0.0" type="FLOAT" volatile="true" category="System">
       <short_desc>Gyro X-axis offset</short_desc>
     </parameter>
@@ -9967,6 +10028,11 @@
         <value code="39">Pitch 315°</value>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
+    </parameter>
+    <parameter name="CAL_MAG0_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Magnetometer calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
     </parameter>
     <parameter name="CAL_MAG0_XCOMP" default="0.0" type="FLOAT" category="System">
       <short_desc>X Axis throttle compensation for Mag 0</short_desc>
@@ -10073,6 +10139,11 @@
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
+    <parameter name="CAL_MAG1_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Magnetometer calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
+    </parameter>
     <parameter name="CAL_MAG1_XCOMP" default="0.0" type="FLOAT" category="System">
       <short_desc>X Axis throttle compensation for Mag 1</short_desc>
       <long_desc>Coefficient describing linear relationship between X component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
@@ -10178,6 +10249,11 @@
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
     </parameter>
+    <parameter name="CAL_MAG2_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Magnetometer calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
+    </parameter>
     <parameter name="CAL_MAG2_XCOMP" default="0.0" type="FLOAT" category="System">
       <short_desc>X Axis throttle compensation for Mag 2</short_desc>
       <long_desc>Coefficient describing linear relationship between X component of magnetometer in body frame axis and either current or throttle depending on value of CAL_MAG_COMP_TYP. Unit for throttle-based compensation is [G] and for current-based compensation [G/kA]</long_desc>
@@ -10282,6 +10358,11 @@
         <value code="39">Pitch 315°</value>
         <value code="40">Roll 90°, Pitch 315°</value>
       </values>
+    </parameter>
+    <parameter name="CAL_MAG3_TEMP" default="-1000." type="FLOAT" volatile="true" category="System">
+      <short_desc>Magnetometer calibration temperature</short_desc>
+      <long_desc>Temperature during last calibration.</long_desc>
+      <unit>celcius</unit>
     </parameter>
     <parameter name="CAL_MAG3_XCOMP" default="0.0" type="FLOAT" category="System">
       <short_desc>X Axis throttle compensation for Mag 3</short_desc>
@@ -10719,6 +10800,10 @@
       <short_desc>SMBUS Smart battery driver BQ40Z50 and BQ40Z80</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
+    <parameter name="SENS_EN_ETSASPD" default="0" type="INT32" boolean="true">
+      <short_desc>Eagle Tree airspeed sensor (external I2C)</short_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
     <parameter name="SENS_EN_LL40LS" default="0" type="INT32">
       <short_desc>Lidar-Lite (LL40LS)</short_desc>
       <min>0</min>
@@ -10744,6 +10829,14 @@
         <value code="1">Autodetect</value>
       </values>
     </parameter>
+    <parameter name="SENS_EN_MS4525" default="0" type="INT32" boolean="true">
+      <short_desc>TE MS4525 differential pressure sensor (external I2C)</short_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="SENS_EN_MS5525" default="0" type="INT32" boolean="true">
+      <short_desc>TE MS5525 differential pressure sensor (external I2C)</short_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
     <parameter name="SENS_EN_PAW3902" default="0" type="INT32" boolean="true">
       <short_desc>PAW3902 &amp; PAW3903 Optical Flow</short_desc>
       <reboot_required>true</reboot_required>
@@ -10758,6 +10851,10 @@
     </parameter>
     <parameter name="SENS_EN_PX4FLOW" default="0" type="INT32" boolean="true">
       <short_desc>PX4 Flow Optical Flow</short_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="SENS_EN_SDP3X" default="0" type="INT32" boolean="true">
+      <short_desc>Sensirion SDP3X differential pressure sensor (external I2C)</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="SENS_EN_SF0X" default="1" type="INT32">
@@ -11997,6 +12094,14 @@
       <short_desc>thruster time constant tau</short_desc>
       <long_desc>the time taken for the thruster to step from 0 to 100% should be about 4 times tau</long_desc>
       <unit>s</unit>
+    </parameter>
+    <parameter name="SIH_VEHICLE_TYPE" default="0" type="INT32">
+      <short_desc>Vehicle type</short_desc>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">MC</value>
+        <value code="1">FW</value>
+      </values>
     </parameter>
   </group>
   <group name="System">
