@@ -163,11 +163,14 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 			try { Thread.sleep(100); } catch (InterruptedException e) { }
 
-			if(HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON)
+			if(HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) {
 			  proxy = new MAVUdpProxyNIO2(model,"172.168.178.2",14550,"172.168.178.22",14555,comm);
-			else
+			  peerAddress = "172.168.178.22";
+			}
+			else {
 			  proxy = new MAVUdpProxyNIO2(model,"172.168.178.2",14550,"172.168.178.1",14555,comm);	
-			peerAddress = "172.168.178.1";
+			  peerAddress = "172.168.178.1";
+			}
 			System.out.println("Proxy Controller loaded: "+peerAddress);
 			model.sys.setStatus(Status.MSP_SITL,false);
 			break;

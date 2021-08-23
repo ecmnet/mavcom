@@ -366,11 +366,12 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		private String listenToBroadcast(int port) throws IOException {
 
 			DatagramSocket socket;
-			byte[] buf = new byte[256];
+			byte[] buf = new byte[5];
 			socket = new DatagramSocket(port);
 			DatagramPacket packet = new DatagramPacket(buf, buf.length);
-			System.out.println("Waiting for remote broadcast");
+			System.out.println("Waiting for remote broadcast...");
 			socket.receive(packet);
+			System.out.println("Remote broadcast received. Binding..");
 			InetAddress address = packet.getAddress();
 			socket.close();
 			String received =  new String(packet.getData(), 0, packet.getLength());
