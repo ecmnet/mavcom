@@ -47,5 +47,5 @@ public interface MSP_AUTOCONTROL_MODE {
     /**
      * FCUM experimental mode
      */
-    public final static int FCUM = 90;
+    public final static int FCUM = 12;
 }

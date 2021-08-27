@@ -24,7 +24,7 @@ public class msg_esc_info extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_ESC_INFO;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 42;
+    payload_length = 46;
 }
 
   /**
@@ -44,6 +44,10 @@ public class msg_esc_info extends MAVLinkMessage {
    */
   public int[] failure_flags = new int[4];
   /**
+   * Temperature of each ESC. INT16_MAX: if data not supplied by ESC.
+   */
+  public int[] temperature = new int[4];
+  /**
    * Index of the first ESC in this message. minValue = 0, maxValue = 60, increment = 4.
    */
   public int index;
@@ -59,10 +63,6 @@ public class msg_esc_info extends MAVLinkMessage {
    * Information regarding online/offline status of each ESC.
    */
   public int info;
-  /**
-   * Temperature measured by each ESC. UINT8_MAX if data not supplied by ESC.
-   */
-  public int[] temperature = new int[4];
 /**
  * Decode message with raw data
  */
@@ -75,19 +75,19 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   for (int i=0; i<4; i++) {
     failure_flags[i] = (int)dis.readUnsignedShort()&0x00FFFF;
   }
+  for (int i=0; i<4; i++) {
+    temperature[i] = (int)dis.readShort();
+  }
   index = (int)dis.readUnsignedByte()&0x00FF;
   count = (int)dis.readUnsignedByte()&0x00FF;
   connection_type = (int)dis.readUnsignedByte()&0x00FF;
   info = (int)dis.readUnsignedByte()&0x00FF;
-  for (int i=0; i<4; i++) {
-    temperature[i] = (int)dis.readUnsignedByte()&0x00FF;
-  }
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+42];
+  byte[] buffer = new byte[12+46];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -107,22 +107,22 @@ public byte[] encode() throws IOException {
   for (int i=0; i<4; i++) {
     dos.writeShort(failure_flags[i]&0x00FFFF);
   }
+  for (int i=0; i<4; i++) {
+    dos.writeShort(temperature[i]&0x00FFFF);
+  }
   dos.writeByte(index&0x00FF);
   dos.writeByte(count&0x00FF);
   dos.writeByte(connection_type&0x00FF);
   dos.writeByte(info&0x00FF);
-  for (int i=0; i<4; i++) {
-    dos.writeByte(temperature[i]&0x00FF);
-  }
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 42);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 46);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[52] = crcl;
-  buffer[53] = crch;
+  buffer[56] = crcl;
+  buffer[57] = crch;
   dos.close();
   return buffer;
 }
@@ -137,14 +137,14 @@ return "MAVLINK_MSG_ID_ESC_INFO : " +   "  time_usec="+time_usec
 +  "  failure_flags[1]="+failure_flags[1]
 +  "  failure_flags[2]="+failure_flags[2]
 +  "  failure_flags[3]="+failure_flags[3]
-+  "  index="+index
-+  "  count="+count
-+  "  connection_type="+connection_type
-+  "  info="+info
 +  "  temperature[0]="+temperature[0]
 +  "  temperature[1]="+temperature[1]
 +  "  temperature[2]="+temperature[2]
 +  "  temperature[3]="+temperature[3]
++  "  index="+index
++  "  count="+count
++  "  connection_type="+connection_type
++  "  info="+info
 ;}
 
 }

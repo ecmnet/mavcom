@@ -47,12 +47,13 @@ public class Vision extends Segment {
 	public static final int AVAILABLE           = 1;
 	public static final int RESETTING           = 2;
 	public static final int POS_VALID           = 3;
-	public static final int PUBLISHED           = 4;
-	public static final int FIDUCIAL_ENABLED	= 5;
-	public static final int FIDUCIAL_LOCKED     = 6;
+	public static final int SPEED_VALID         = 4;
+	public static final int PUBLISHED           = 5;
+	public static final int FIDUCIAL_ENABLED	= 6;
+	public static final int FIDUCIAL_LOCKED     = 7;
 
 	
-	private static final String[] MSP_VISION_TEXTS  = { "Enabled","Available", "Resetting", "Position valid", "Published", "Fiducual enabled",
+	private static final String[] MSP_VISION_TEXTS  = { "Enabled","Available", "Resetting", "Position valid", "Speed valid", "Published", "Fiducual enabled",
 			                                            "Fiducial locked" };
 
 
