@@ -53,6 +53,10 @@ public class SimplePoseJumpDetector {
 			return false;
 		}
 	}
+	
+	public String toString() {
+		return "Diff="+d1+"/"+d2;
+	}
 
 	public void reset() {
 		is_initialized = false;
