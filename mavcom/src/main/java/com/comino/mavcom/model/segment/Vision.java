@@ -55,6 +55,8 @@ public class Vision extends Segment {
 	
 	private static final String[] MSP_VISION_TEXTS  = { "Enabled","Available", "Resetting", "Position valid", "Speed valid", "Published", "Fiducual enabled",
 			                                            "Fiducial locked" };
+	
+	private static final String[] MSP_VISION_TSEXTS = { "RESET", "EVPOS", "EVSPEED"};
 
 
 	// Vision position
@@ -233,6 +235,17 @@ public class Vision extends Segment {
 		this.r = (float)a.getRoll();
 		this.p = (float)a.getPitch();
 		this.h = (float)a.getYaw();
+	}
+	
+	public String getShortText() {
+		if(isStatus(Vision.POS_VALID))
+			return MSP_VISION_TSEXTS[1];
+		else if(isStatus(Vision.SPEED_VALID))
+			return MSP_VISION_TSEXTS[2];
+		else if(isStatus(Vision.RESETTING))
+			return MSP_VISION_TSEXTS[0];
+		else 
+			return "";	
 	}
 	
 	public String toString() {
