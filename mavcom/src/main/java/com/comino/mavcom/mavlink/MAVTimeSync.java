@@ -26,7 +26,7 @@ public class MAVTimeSync implements Runnable  {
 	public MAVTimeSync(IMAVComm comm) {
 		this.comm = comm;
 
-		if(comm.isSerial()) {
+		if(comm.isSerial() && comm.isConnected()) {
 			comm.registerListener(msg_timesync.class, (o) -> handle_time_sync((msg_timesync)o));
 			wq.addCyclicTask("HP", 100, this);
 			System.out.println("Time synchronization started...");

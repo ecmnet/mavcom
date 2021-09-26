@@ -195,17 +195,22 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		case MAVController.MODE_SERVER:
 
-			model.sys.setStatus(Status.MSP_SITL,true);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
+			comm.open();
+			sendMAVLinkMessage(beat_px4);
 
-			//			comm = MAVSerialComm.getInstance(model, BAUDRATE_5, false);
-			//			comm.open();
-			//			try { Thread.sleep(500); } catch (InterruptedException e) { }
+			try { Thread.sleep(100); } catch (InterruptedException e) { }
 
-			comm = MAVUdpCommNIO2.getInstance(model, "172.168.178.2",14580, 14540);
-			//			comm = MAVUdpCommNIO.getInstance(model, "172.168.178.2",14280, 14030);
-			proxy = new MAVUdpProxyNIO2(model,"172.168.178.2",14650,"172.168.178.22",14656,comm);
-			peerAddress = "172.168.178.22";
-			System.out.println("Proxy Controller loaded (Server): "+peerAddress);
+			if(HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) {
+			  proxy = new MAVUdpProxyNIO2(model,"192.168.178.60",14550,"192.168.178.86",14555,comm);
+			  peerAddress = "192.168.178.86";
+			}
+			else {
+			  proxy = new MAVUdpProxyNIO2(model,"172.168.178.60",14550,"192.168.178.86",14555,comm);	
+			  peerAddress = "192.168.178.86";
+			}
+			System.out.println("Proxy Controller loaded: "+peerAddress);
+			model.sys.setStatus(Status.MSP_SITL,false);
 			break;
 		}
 
@@ -366,7 +371,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public boolean isSimulation() {
-		return mode != MAVController.MODE_NORMAL;
+		return model.sys.isStatus(Status.MSP_SITL);
 	}
 
 	@Override
