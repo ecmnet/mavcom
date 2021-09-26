@@ -77,7 +77,6 @@ import org.mavlink.messages.lquac.msg_rc_channels_scaled;
 import org.mavlink.messages.lquac.msg_altitude;
 import org.mavlink.messages.lquac.msg_camera_tracking_image_status;
 import org.mavlink.messages.lquac.msg_wheel_distance;
-import org.mavlink.messages.lquac.msg_mission_changed;
 import org.mavlink.messages.lquac.msg_raw_rpm;
 import org.mavlink.messages.lquac.msg_camera_capture_status;
 import org.mavlink.messages.lquac.msg_logging_ack;
@@ -91,7 +90,6 @@ import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_mission_request_list;
 import org.mavlink.messages.lquac.msg_gps_status;
 import org.mavlink.messages.lquac.msg_winch_status;
-import org.mavlink.messages.lquac.msg_param_ack_transaction;
 import org.mavlink.messages.lquac.msg_scaled_pressure;
 import org.mavlink.messages.lquac.msg_hil_optical_flow;
 import org.mavlink.messages.lquac.msg_actuator_output_status;
@@ -156,7 +154,6 @@ import org.mavlink.messages.lquac.msg_raw_pressure;
 import org.mavlink.messages.lquac.msg_onboard_computer_status;
 import org.mavlink.messages.lquac.msg_autopilot_state_for_gimbal_device;
 import org.mavlink.messages.lquac.msg_utm_global_position;
-import org.mavlink.messages.lquac.msg_cellular_status;
 import org.mavlink.messages.lquac.msg_high_latency2;
 import org.mavlink.messages.lquac.msg_local_position_ned;
 import org.mavlink.messages.lquac.msg_ais_vessel;
@@ -288,7 +285,6 @@ import org.mavlink.messages.lquac.msg_altitude;
 import org.mavlink.messages.lquac.msg_msp_command;
 import org.mavlink.messages.lquac.msg_camera_tracking_image_status;
 import org.mavlink.messages.lquac.msg_wheel_distance;
-import org.mavlink.messages.lquac.msg_mission_changed;
 import org.mavlink.messages.lquac.msg_raw_rpm;
 import org.mavlink.messages.lquac.msg_camera_capture_status;
 import org.mavlink.messages.lquac.msg_logging_ack;
@@ -302,7 +298,6 @@ import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_mission_request_list;
 import org.mavlink.messages.lquac.msg_gps_status;
 import org.mavlink.messages.lquac.msg_winch_status;
-import org.mavlink.messages.lquac.msg_param_ack_transaction;
 import org.mavlink.messages.lquac.msg_scaled_pressure;
 import org.mavlink.messages.lquac.msg_hil_optical_flow;
 import org.mavlink.messages.lquac.msg_actuator_output_status;
@@ -369,7 +364,6 @@ import org.mavlink.messages.lquac.msg_raw_pressure;
 import org.mavlink.messages.lquac.msg_onboard_computer_status;
 import org.mavlink.messages.lquac.msg_autopilot_state_for_gimbal_device;
 import org.mavlink.messages.lquac.msg_utm_global_position;
-import org.mavlink.messages.lquac.msg_cellular_status;
 import org.mavlink.messages.lquac.msg_high_latency2;
 import org.mavlink.messages.lquac.msg_local_position_ned;
 import org.mavlink.messages.lquac.msg_ais_vessel;
@@ -718,10 +712,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_wheel_distance(sysId, componentId);
       msg.decode(dis);
       break;
-  case MAVLINK_MSG_ID_MISSION_CHANGED:
-      msg = new msg_mission_changed(sysId, componentId);
-      msg.decode(dis);
-      break;
   case MAVLINK_MSG_ID_RAW_RPM:
       msg = new msg_raw_rpm(sysId, componentId);
       msg.decode(dis);
@@ -772,10 +762,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_WINCH_STATUS:
       msg = new msg_winch_status(sysId, componentId);
-      msg.decode(dis);
-      break;
-  case MAVLINK_MSG_ID_PARAM_ACK_TRANSACTION:
-      msg = new msg_param_ack_transaction(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_SCALED_PRESSURE:
@@ -1040,10 +1026,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_UTM_GLOBAL_POSITION:
       msg = new msg_utm_global_position(sysId, componentId);
-      msg.decode(dis);
-      break;
-  case MAVLINK_MSG_ID_CELLULAR_STATUS:
-      msg = new msg_cellular_status(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_HIGH_LATENCY2:

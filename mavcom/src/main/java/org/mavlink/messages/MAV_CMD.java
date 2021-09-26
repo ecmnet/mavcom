@@ -1049,13 +1049,6 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_JUMP_TAG = 601;
     /**
-     * Request to start or end a parameter transaction. Multiple kinds of transport layers can be used to exchange parameters in the transaction (param, param_ext and mavftp). The command response can either be a success/failure or an in progress in case the receiving side takes some time to apply the parameters.
-     * PARAM 1 : Action to be performed (start, commit, cancel, etc.)
-     * PARAM 2 : Possible transport layers to set and get parameters via mavlink during a parameter transaction.
-     * PARAM 3 : Identifier for a specific transaction.
-     */
-    public final static int MAV_CMD_PARAM_TRANSACTION = 900;
-    /**
      * High level setpoint to be sent to a gimbal manager to set a gimbal attitude. It is possible to set combinations of the values below. E.g. an angle as well as a desired angular rate can be used to get to this angle at a certain angular rate, or an angular rate only will result in continuous turning. NaN is to be used to signal unset. Note: a gimbal is never to react to this command but only the gimbal manager.
      * PARAM 1 : Pitch angle (positive to pitch up, relative to vehicle for FOLLOW mode, relative to world horizon for LOCK mode).
      * PARAM 2 : Yaw angle (positive to yaw to the right, relative to vehicle for FOLLOW mode, absolute to North for LOCK mode).

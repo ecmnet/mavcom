@@ -82,7 +82,6 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_MSP_COMMAND = 181;
   public static int MAVLINK_MSG_ID_CAMERA_TRACKING_IMAGE_STATUS = 275;
   public static int MAVLINK_MSG_ID_WHEEL_DISTANCE = 9000;
-  public static int MAVLINK_MSG_ID_MISSION_CHANGED = 52;
   public static int MAVLINK_MSG_ID_RAW_RPM = 339;
   public static int MAVLINK_MSG_ID_CAMERA_CAPTURE_STATUS = 262;
   public static int MAVLINK_MSG_ID_LOGGING_ACK = 268;
@@ -96,7 +95,6 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_MISSION_REQUEST_LIST = 43;
   public static int MAVLINK_MSG_ID_GPS_STATUS = 25;
   public static int MAVLINK_MSG_ID_WINCH_STATUS = 9005;
-  public static int MAVLINK_MSG_ID_PARAM_ACK_TRANSACTION = 19;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE = 29;
   public static int MAVLINK_MSG_ID_HIL_OPTICAL_FLOW = 114;
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_LOCATION = 12901;
@@ -164,7 +162,6 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_ONBOARD_COMPUTER_STATUS = 390;
   public static int MAVLINK_MSG_ID_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE = 286;
   public static int MAVLINK_MSG_ID_UTM_GLOBAL_POSITION = 340;
-  public static int MAVLINK_MSG_ID_CELLULAR_STATUS = 334;
   public static int MAVLINK_MSG_ID_HIGH_LATENCY2 = 235;
   public static int MAVLINK_MSG_ID_LOCAL_POSITION_NED = 32;
   public static int MAVLINK_MSG_ID_AIS_VESSEL = 301;
