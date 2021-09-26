@@ -17,7 +17,7 @@ public class PX4OptFlowRadPlugin extends MAVLinkPluginBase {
 		msg_optical_flow_rad flow = (msg_optical_flow_rad) o;
 		model.flow.fX = flow.integrated_x;
 		model.flow.fY = flow.integrated_y;
-		model.flow.fq = flow.quality;
+		model.flow.fq = flow.quality / 255.0f;
 		
 		if(flow.distance > 0)
 		  model.flow.fd = flow.distance;
