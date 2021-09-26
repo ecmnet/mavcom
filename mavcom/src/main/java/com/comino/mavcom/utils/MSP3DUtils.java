@@ -191,6 +191,10 @@ public class MSP3DUtils {
 		last.set(current);
 		return current;
 	}
+	
+	public static boolean hasNaN(Vector3D_F64 vector) {
+		return Double.isNaN(vector.x) || Double.isNaN(vector.y) || Double.isNaN(vector.z);
+	}
 
 	public static boolean hasNaN(Vector4D_F32 vector) {
 		return Float.isNaN(vector.x) || Float.isNaN(vector.y) || Float.isNaN(vector.z);
