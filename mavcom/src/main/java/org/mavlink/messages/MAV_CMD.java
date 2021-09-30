@@ -845,8 +845,8 @@ public interface MAV_CMD {
      * Request the reboot or shutdown of system components.
      * PARAM 1 : 0: Do nothing for autopilot, 1: Reboot autopilot, 2: Shutdown autopilot, 3: Reboot autopilot and keep it in the bootloader until upgraded.
      * PARAM 2 : 0: Do nothing for onboard computer, 1: Reboot onboard computer, 2: Shutdown onboard computer, 3: Reboot onboard computer and keep it in the bootloader until upgraded.
-     * PARAM 3 : WIP: 0: Do nothing for camera, 1: Reboot onboard camera, 2: Shutdown onboard camera, 3: Reboot onboard camera and keep it in the bootloader until upgraded
-     * PARAM 4 : WIP: 0: Do nothing for mount (e.g. gimbal), 1: Reboot mount, 2: Shutdown mount, 3: Reboot mount and keep it in the bootloader until upgraded
+     * PARAM 3 : 0: Do nothing for component, 1: Reboot component, 2: Shutdown component, 3: Reboot component and keep it in the bootloader until upgraded
+     * PARAM 4 : MAVLink Component ID targeted in param3 (0 for all components).
      * PARAM 5 : Reserved (set to 0)
      * PARAM 6 : Reserved (set to 0)
      * PARAM 7 : WIP: ID (e.g. camera ID -1 for all IDs)

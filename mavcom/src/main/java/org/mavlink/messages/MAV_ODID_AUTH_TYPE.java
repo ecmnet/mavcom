@@ -28,4 +28,8 @@ public interface MAV_ODID_AUTH_TYPE {
      * Authentication is provided by Network Remote ID.
      */
     public final static int MAV_ODID_AUTH_TYPE_NETWORK_REMOTE_ID = 4;
+    /**
+     * The exact authentication type is indicated by the first byte of authentication_data and these type values are managed by ICAO.
+     */
+    public final static int MAV_ODID_AUTH_TYPE_SPECIFIC_AUTHENTICATION = 5;
 }

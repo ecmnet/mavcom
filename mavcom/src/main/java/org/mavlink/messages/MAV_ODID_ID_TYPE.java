@@ -24,4 +24,8 @@ public interface MAV_ODID_ID_TYPE {
      * UTM (Unmanned Traffic Management) assigned UUID (RFC4122).
      */
     public final static int MAV_ODID_ID_TYPE_UTM_ASSIGNED_UUID = 3;
+    /**
+     * A 20 byte ID for a specific flight/session. The exact ID type is indicated by the first byte of uas_id and these type values are managed by ICAO.
+     */
+    public final static int MAV_ODID_ID_TYPE_SPECIFIC_SESSION_ID = 4;
 }

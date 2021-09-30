@@ -5,7 +5,21 @@
 package org.mavlink.messages;
 /**
  * Interface MAV_FRAME
- * 
+ * Co-ordinate frames used by MAVLink. Not all frames are supported by all commands, messages, or vehicles.
+      
+      Global frames use the following naming conventions:
+      - `GLOBAL`: Global co-ordinate frame with WGS84 latitude/longitude and altitude positive over mean sea level (MSL) by default. 
+        The following modifiers may be used with `GLOBAL`:
+        - `RELATIVE_ALT`: Altitude is relative to the vehicle home position rather than MSL
+        - `TERRAIN_ALT`: Altitude is relative to ground level rather than MSL
+        - `INT`: Latitude/longitude (in degrees) are scaled by multiplying by 1E7  
+
+      Local frames use the following naming conventions:
+      - `LOCAL`: Origin of local frame is fixed relative to earth. Unless otherwise specified this origin is the origin of the vehicle position-estimator ("EKF").
+      - `BODY`: Origin of local frame travels with the vehicle. NOTE, `BODY` does NOT indicate alignment of frame axis with vehicle attitude.
+      - `OFFSET`: Deprecated synonym for `BODY` (origin travels with the vehicle). Not to be used for new frames.
+
+      Some deprecated frames do not follow these conventions (e.g. MAV_FRAME_BODY_NED and MAV_FRAME_BODY_OFFSET_NED).
  **/
 public interface MAV_FRAME {
     /**
@@ -13,7 +27,7 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_GLOBAL = 0;
     /**
-     * Local coordinate frame, Z-down (x: North, y: East, z: Down).
+     * NED local tangent frame (x: North, y: East, z: Down) with origin fixed relative to earth.
      */
     public final static int MAV_FRAME_LOCAL_NED = 1;
     /**
@@ -25,27 +39,27 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_GLOBAL_RELATIVE_ALT = 3;
     /**
-     * Local coordinate frame, Z-up (x: East, y: North, z: Up).
+     * ENU local tangent frame (x: East, y: North, z: Up) with origin fixed relative to earth.
      */
     public final static int MAV_FRAME_LOCAL_ENU = 4;
     /**
-     * Global (WGS84) coordinate frame (scaled) + MSL altitude. First value / x: latitude in degrees*1.0e-7, second value / y: longitude in degrees*1.0e-7, third value / z: positive altitude over mean sea level (MSL).
+     * Global (WGS84) coordinate frame (scaled) + MSL altitude. First value / x: latitude in degrees*1E7, second value / y: longitude in degrees*1E7, third value / z: positive altitude over mean sea level (MSL).
      */
     public final static int MAV_FRAME_GLOBAL_INT = 5;
     /**
-     * Global (WGS84) coordinate frame (scaled) + altitude relative to the home position. First value / x: latitude in degrees*10e-7, second value / y: longitude in degrees*10e-7, third value / z: positive altitude with 0 being at the altitude of the home location.
+     * Global (WGS84) coordinate frame (scaled) + altitude relative to the home position. First value / x: latitude in degrees*1E7, second value / y: longitude in degrees*1E7, third value / z: positive altitude with 0 being at the altitude of the home location.
      */
     public final static int MAV_FRAME_GLOBAL_RELATIVE_ALT_INT = 6;
     /**
-     * Offset to the current local frame. Anything expressed in this frame should be added to the current local frame position.
+     * NED local tangent frame (x: North, y: East, z: Down) with origin that travels with the vehicle.
      */
     public final static int MAV_FRAME_LOCAL_OFFSET_NED = 7;
     /**
-     * Setpoint in body NED frame. This makes sense if all position control is externalized - e.g. useful to command 2 m/s^2 acceleration to the right.
+     * Same as MAV_FRAME_LOCAL_NED when used to represent position values. Same as MAV_FRAME_BODY_FRD when used with velocity/accelaration values.
      */
     public final static int MAV_FRAME_BODY_NED = 8;
     /**
-     * Offset in body NED frame. This makes sense if adding setpoints to the current flight path, to avoid an obstacle - e.g. useful to command 2 m/s^2 acceleration to the east.
+     * This is the same as MAV_FRAME_BODY_FRD.
      */
     public final static int MAV_FRAME_BODY_OFFSET_NED = 9;
     /**
@@ -53,11 +67,11 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_GLOBAL_TERRAIN_ALT = 10;
     /**
-     * Global (WGS84) coordinate frame (scaled) with AGL altitude (at the waypoint coordinate). First value / x: latitude in degrees*10e-7, second value / y: longitude in degrees*10e-7, third value / z: positive altitude in meters with 0 being at ground level in terrain model.
+     * Global (WGS84) coordinate frame (scaled) with AGL altitude (at the waypoint coordinate). First value / x: latitude in degrees*1E7, second value / y: longitude in degrees*1E7, third value / z: positive altitude in meters with 0 being at ground level in terrain model.
      */
     public final static int MAV_FRAME_GLOBAL_TERRAIN_ALT_INT = 11;
     /**
-     * Body fixed frame of reference, Z-down (x: Forward, y: Right, z: Down).
+     * FRD local tangent frame (x: Forward, y: Right, z: Down) with origin that travels with vehicle. The forward axis is aligned to the front of the vehicle in the horizontal plane.
      */
     public final static int MAV_FRAME_BODY_FRD = 12;
     /**
@@ -89,11 +103,11 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_RESERVED_19 = 19;
     /**
-     * Forward, Right, Down coordinate frame. This is a local frame with Z-down and arbitrary F/R alignment (i.e. not aligned with NED/earth frame).
+     * FRD local tangent frame (x: Forward, y: Right, z: Down) with origin fixed relative to earth. The forward axis is aligned to the front of the vehicle in the horizontal plane.
      */
     public final static int MAV_FRAME_LOCAL_FRD = 20;
     /**
-     * Forward, Left, Up coordinate frame. This is a local frame with Z-up and arbitrary F/L alignment (i.e. not aligned with ENU/earth frame).
+     * FLU local tangent frame (x: Forward, y: Left, z: Up) with origin fixed relative to earth. The forward axis is aligned to the front of the vehicle in the horizontal plane.
      */
     public final static int MAV_FRAME_LOCAL_FLU = 21;
 }

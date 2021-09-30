@@ -1926,6 +1926,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="MOT_POLE_COUNT" default="14" type="INT32">
@@ -3782,6 +3783,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="GPS_1_GNSS" default="0" type="INT32">
@@ -3830,6 +3832,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="GPS_2_GNSS" default="0" type="INT32">
@@ -4030,6 +4033,22 @@
       <unit>normalized_thrust/s</unit>
       <decimal>4</decimal>
     </parameter>
+    <parameter name="HTE_VXY_THR" default="10.0" type="FLOAT">
+      <short_desc>Horizontal velocity threshold for sensitivity reduction</short_desc>
+      <long_desc>Above this speed, the measurement noise is linearly increased to reduce the sensitivity of the estimator from biased measurement. Set to a low value on vehicles with large lifting surfaces.</long_desc>
+      <min>1.0</min>
+      <max>20.0</max>
+      <unit>m/s</unit>
+      <decimal>1</decimal>
+    </parameter>
+    <parameter name="HTE_VZ_THR" default="2.0" type="FLOAT">
+      <short_desc>Vertical velocity threshold for sensitivity reduction</short_desc>
+      <long_desc>Above this speed, the measurement noise is linearly increased to reduce the sensitivity of the estimator from biased measurement. Set to a low value on vehicles affected by air drag when climbing or descending.</long_desc>
+      <min>1.0</min>
+      <max>10.0</max>
+      <unit>m/s</unit>
+      <decimal>1</decimal>
+    </parameter>
   </group>
   <group name="Iridium SBD">
     <parameter name="ISBD_CONFIG" default="0" type="INT32">
@@ -4048,6 +4067,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="ISBD_READ_INT" default="0" type="INT32">
@@ -4521,6 +4541,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
         <value code="1000">Ethernet</value>
       </values>
     </parameter>
@@ -4593,6 +4614,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
         <value code="1000">Ethernet</value>
       </values>
     </parameter>
@@ -4665,6 +4687,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
         <value code="1000">Ethernet</value>
       </values>
     </parameter>
@@ -4727,8 +4750,8 @@
       <long_desc>Disabling the parameter hash check functionality will make the mavlink instance stream parameters continuously.</long_desc>
     </parameter>
     <parameter name="MAV_HB_FORW_EN" default="1" type="INT32" boolean="true">
-      <short_desc>Hearbeat message forwarding</short_desc>
-      <long_desc>The mavlink hearbeat message will not be forwarded if this parameter is set to 'disabled'. The main reason for disabling heartbeats to be forwarded is because they confuse dronekit.</long_desc>
+      <short_desc>Heartbeat message forwarding</short_desc>
+      <long_desc>The mavlink heartbeat message will not be forwarded if this parameter is set to 'disabled'. The main reason for disabling heartbeats to be forwarded is because they confuse dronekit.</long_desc>
     </parameter>
     <parameter name="MAV_ODOM_LP" default="0" type="INT32" boolean="true">
       <short_desc>Activate ODOMETRY loopback</short_desc>
@@ -7212,6 +7235,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="RTPS_MAV_CONFIG" default="0" type="INT32">
@@ -7230,6 +7254,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
   </group>
@@ -8357,26 +8382,8 @@
     </parameter>
   </group>
   <group name="Radio Switches">
-    <parameter name="RC_ACRO_TH" default="0.75" type="FLOAT">
-      <short_desc>Threshold for selecting acro mode</short_desc>
-      <long_desc>0-1 indicate where in the full channel range the threshold sits 0 : min 1 : max sign indicates polarity of comparison positive : true when channel&gt;th negative : true when channel&lt;th</long_desc>
-      <min>-1</min>
-      <max>1</max>
-    </parameter>
     <parameter name="RC_ARMSWITCH_TH" default="0.75" type="FLOAT">
       <short_desc>Threshold for the arm switch</short_desc>
-      <long_desc>0-1 indicate where in the full channel range the threshold sits 0 : min 1 : max sign indicates polarity of comparison positive : true when channel&gt;th negative : true when channel&lt;th</long_desc>
-      <min>-1</min>
-      <max>1</max>
-    </parameter>
-    <parameter name="RC_ASSIST_TH" default="0.25" type="FLOAT">
-      <short_desc>Threshold for selecting assist mode</short_desc>
-      <long_desc>0-1 indicate where in the full channel range the threshold sits 0 : min 1 : max sign indicates polarity of comparison positive : true when channel&gt;th negative : true when channel&lt;th</long_desc>
-      <min>-1</min>
-      <max>1</max>
-    </parameter>
-    <parameter name="RC_AUTO_TH" default="0.75" type="FLOAT">
-      <short_desc>Threshold for selecting auto mode</short_desc>
       <long_desc>0-1 indicate where in the full channel range the threshold sits 0 : min 1 : max sign indicates polarity of comparison positive : true when channel&gt;th negative : true when channel&lt;th</long_desc>
       <min>-1</min>
       <max>1</max>
@@ -8399,14 +8406,8 @@
       <min>-1</min>
       <max>1</max>
     </parameter>
-    <parameter name="RC_MAN_TH" default="0.75" type="FLOAT">
-      <short_desc>Threshold for the manual switch</short_desc>
-      <long_desc>0-1 indicate where in the full channel range the threshold sits 0 : min 1 : max sign indicates polarity of comparison positive : true when channel&gt;th negative : true when channel&lt;th</long_desc>
-      <min>-1</min>
-      <max>1</max>
-    </parameter>
     <parameter name="RC_MAP_ACRO_SW" default="0" type="INT32">
-      <short_desc>Acro switch channel</short_desc>
+      <short_desc>Acro switch channel (deprecated)</short_desc>
       <min>0</min>
       <max>18</max>
       <values>
@@ -8616,7 +8617,7 @@
       </values>
     </parameter>
     <parameter name="RC_MAP_MAN_SW" default="0" type="INT32">
-      <short_desc>Manual switch channel mapping</short_desc>
+      <short_desc>Manual switch channel mapping (deprecated)</short_desc>
       <min>0</min>
       <max>18</max>
       <values>
@@ -8642,7 +8643,7 @@
       </values>
     </parameter>
     <parameter name="RC_MAP_MODE_SW" default="0" type="INT32">
-      <short_desc>Mode switch channel mapping</short_desc>
+      <short_desc>Mode switch channel mapping (deprecated)</short_desc>
       <long_desc>This is the main flight mode selector. The channel index (starting from 1 for channel 1) indicates which channel should be used for deciding about the main mode. A value of zero indicates the switch is not assigned.</long_desc>
       <min>0</min>
       <max>18</max>
@@ -8695,7 +8696,7 @@
       </values>
     </parameter>
     <parameter name="RC_MAP_POSCTL_SW" default="0" type="INT32">
-      <short_desc>Position Control switch channel</short_desc>
+      <short_desc>Position Control switch channel (deprecated)</short_desc>
       <min>0</min>
       <max>18</max>
       <values>
@@ -8773,7 +8774,7 @@
       </values>
     </parameter>
     <parameter name="RC_MAP_STAB_SW" default="0" type="INT32">
-      <short_desc>Stabilize switch channel mapping</short_desc>
+      <short_desc>Stabilize switch channel mapping  (deprecated)</short_desc>
       <min>0</min>
       <max>18</max>
       <values>
@@ -8830,20 +8831,8 @@
       <min>-1</min>
       <max>1</max>
     </parameter>
-    <parameter name="RC_POSCTL_TH" default="0.75" type="FLOAT">
-      <short_desc>Threshold for selecting posctl mode</short_desc>
-      <long_desc>0-1 indicate where in the full channel range the threshold sits 0 : min 1 : max sign indicates polarity of comparison positive : true when channel&gt;th negative : true when channel&lt;th</long_desc>
-      <min>-1</min>
-      <max>1</max>
-    </parameter>
     <parameter name="RC_RETURN_TH" default="0.75" type="FLOAT">
       <short_desc>Threshold for selecting return to launch mode</short_desc>
-      <long_desc>0-1 indicate where in the full channel range the threshold sits 0 : min 1 : max sign indicates polarity of comparison positive : true when channel&gt;th negative : true when channel&lt;th</long_desc>
-      <min>-1</min>
-      <max>1</max>
-    </parameter>
-    <parameter name="RC_STAB_TH" default="0.5" type="FLOAT">
-      <short_desc>Threshold for the stabilize switch</short_desc>
       <long_desc>0-1 indicate where in the full channel range the threshold sits 0 : min 1 : max sign indicates polarity of comparison positive : true when channel&gt;th negative : true when channel&lt;th</long_desc>
       <min>-1</min>
       <max>1</max>
@@ -8955,6 +8944,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
   </group>
@@ -9240,6 +9230,15 @@
     </parameter>
   </group>
   <group name="SD Logging">
+    <parameter name="SDLOG_ALGORITHM" default="2" type="INT32">
+      <short_desc>Logfile Encryption algorithm</short_desc>
+      <long_desc>Selects the algorithm used for logfile encryption</long_desc>
+      <values>
+        <value code="0">Disabled</value>
+        <value code="2">XChaCha20</value>
+        <value code="3">AES</value>
+      </values>
+    </parameter>
     <parameter name="SDLOG_BOOT_BAT" default="0" type="INT32" boolean="true">
       <short_desc>Battery-only Logging</short_desc>
       <long_desc>When enabled, logging will not start from boot if battery power is not detected (e.g. powered via USB on a test bench). This prevents extraneous flight logs from being created during bench testing. Note that this only applies to log-from-boot modes. This has no effect on arm-based modes.</long_desc>
@@ -9250,6 +9249,18 @@
       <min>0</min>
       <max>1000</max>
       <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="SDLOG_EXCH_KEY" default="1" type="INT32">
+      <short_desc>Logfile Encryption key exchange key</short_desc>
+      <long_desc>If the logfile is encrypted using a symmetric key algorithm, the used encryption key is generated at logging start and stored on the sdcard RSA2048 encrypted using this key.</long_desc>
+      <min>0</min>
+      <max>255</max>
+    </parameter>
+    <parameter name="SDLOG_KEY" default="2" type="INT32">
+      <short_desc>Logfile Encryption key index</short_desc>
+      <long_desc>Selects the key in keystore, used for encrypting the log. When using a symmetric encryption algorithm, the key is generated at logging start and kept stored in this index. For symmetric algorithms, the key is volatile and valid only for the duration of logging. The key is stored in encrypted format on the sdcard alongside the logfile, using an RSA2048 key defined by the SDLOG_EXCHANGE_KEY</long_desc>
+      <min>0</min>
+      <max>255</max>
     </parameter>
     <parameter name="SDLOG_MISSION" default="0" type="INT32">
       <short_desc>Mission Log</short_desc>
@@ -10706,6 +10717,20 @@
       <decimal>10</decimal>
       <increment>.000000001</increment>
     </parameter>
+    <parameter name="INA238_CURRENT" default="327.68" type="FLOAT">
+      <short_desc>INA238 Power Monitor Max Current</short_desc>
+      <min>0.1</min>
+      <max>327.68</max>
+      <decimal>2</decimal>
+      <increment>0.1</increment>
+    </parameter>
+    <parameter name="INA238_SHUNT" default="0.0003" type="FLOAT">
+      <short_desc>INA238 Power Monitor Shunt</short_desc>
+      <min>0.000000001</min>
+      <max>0.1</max>
+      <decimal>10</decimal>
+      <increment>.000000001</increment>
+    </parameter>
     <parameter name="PCF8583_ADDR" default="80" type="INT32">
       <short_desc>PCF8583 rotorfreq (i2c) i2c address</short_desc>
       <reboot_required>true</reboot_required>
@@ -10827,6 +10852,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="SENS_CM8JL65_R_0" default="25" type="INT32">
@@ -10868,6 +10894,11 @@
     <parameter name="SENS_EN_INA228" default="0" type="INT32" boolean="true">
       <short_desc>Enable INA228 Power Monitor</short_desc>
       <long_desc>For systems a INA228 Power Monitor, this should be set to true</long_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="SENS_EN_INA238" default="0" type="INT32" boolean="true">
+      <short_desc>Enable INA238 Power Monitor</short_desc>
+      <long_desc>For systems a INA238 Power Monitor, this should be set to true</long_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="SENS_EN_LL40LS" default="0" type="INT32">
@@ -11080,6 +11111,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="SENS_MAG_MODE" default="1" type="INT32" category="System">
@@ -11532,6 +11564,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="SENS_TEMP_ID" default="0" type="INT32" category="System">
@@ -11553,6 +11586,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="SENS_TFMINI_CFG" default="0" type="INT32">
@@ -11571,6 +11605,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="SENS_ULAND_CFG" default="0" type="INT32">
@@ -11589,6 +11624,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="VOXLPM_SHUNT_BAT" default="0.00063" type="FLOAT">
@@ -11625,6 +11661,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="SER_GPS1_BAUD" default="0" type="INT32">
@@ -11696,6 +11733,39 @@
     <parameter name="SER_GPS3_BAUD" default="0" type="INT32">
       <short_desc>Baudrate for the GPS 3 Serial Port</short_desc>
       <long_desc>Configure the Baudrate for the GPS 3 Serial Port. Note: certain drivers such as the GPS can determine the Baudrate automatically.</long_desc>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">Auto</value>
+        <value code="50">50 8N1</value>
+        <value code="75">75 8N1</value>
+        <value code="110">110 8N1</value>
+        <value code="134">134 8N1</value>
+        <value code="150">150 8N1</value>
+        <value code="200">200 8N1</value>
+        <value code="300">300 8N1</value>
+        <value code="600">600 8N1</value>
+        <value code="1200">1200 8N1</value>
+        <value code="1800">1800 8N1</value>
+        <value code="2400">2400 8N1</value>
+        <value code="4800">4800 8N1</value>
+        <value code="9600">9600 8N1</value>
+        <value code="19200">19200 8N1</value>
+        <value code="38400">38400 8N1</value>
+        <value code="57600">57600 8N1</value>
+        <value code="115200">115200 8N1</value>
+        <value code="230400">230400 8N1</value>
+        <value code="460800">460800 8N1</value>
+        <value code="500000">500000 8N1</value>
+        <value code="921600">921600 8N1</value>
+        <value code="1000000">1000000 8N1</value>
+        <value code="1500000">1500000 8N1</value>
+        <value code="2000000">2000000 8N1</value>
+        <value code="3000000">3000000 8N1</value>
+      </values>
+    </parameter>
+    <parameter name="SER_PPB_BAUD" default="57600" type="INT32">
+      <short_desc>Baudrate for the Pixhawk Payload Bus Serial Port</short_desc>
+      <long_desc>Configure the Baudrate for the Pixhawk Payload Bus Serial Port. Note: certain drivers such as the GPS can determine the Baudrate automatically.</long_desc>
       <reboot_required>true</reboot_required>
       <values>
         <value code="0">Auto</value>
@@ -12171,18 +12241,6 @@
     </parameter>
   </group>
   <group name="System">
-    <parameter name="LED_RGB1_MAXBRT" default="31" type="INT32">
-      <short_desc>RGB Led brightness limit</short_desc>
-      <long_desc>Set to 0 to disable, 1 for minimum brightness up to 31 (max)</long_desc>
-      <min>0</min>
-      <max>31</max>
-    </parameter>
-    <parameter name="LED_RGB_MAXBRT" default="15" type="INT32">
-      <short_desc>RGB Led brightness limit</short_desc>
-      <long_desc>Set to 0 to disable, 1 for minimum brightness up to 15 (max)</long_desc>
-      <min>0</min>
-      <max>15</max>
-    </parameter>
     <parameter name="SYS_AUTOCONFIG" default="0" type="INT32">
       <short_desc>Automatically configure default values</short_desc>
       <long_desc>Set to 1 to reset parameters on next system startup (setting defaults). Platform-specific values are used if available. RC* parameters are preserved.</long_desc>
@@ -12281,26 +12339,22 @@
         <value code="3">Q attitude estimator (no position)</value>
       </values>
     </parameter>
-    <parameter name="SYS_RESTART_TYPE" default="2" type="INT32" volatile="true" category="System">
-      <short_desc>Set restart type</short_desc>
-      <long_desc>Set by px4io to indicate type of restart</long_desc>
-      <min>0</min>
-      <max>2</max>
-      <values>
-        <value code="0">Data survives resets</value>
-        <value code="1">Data survives in-flight resets only</value>
-        <value code="2">Data does not survive reset</value>
-      </values>
+    <parameter name="SYS_RGB_MAXBRT" default="1." type="FLOAT">
+      <short_desc>RGB Led brightness limit</short_desc>
+      <long_desc>Set to 0 to disable, 1 for maximum brightness</long_desc>
+      <unit>%</unit>
     </parameter>
     <parameter name="SYS_STCK_EN" default="1" type="INT32" boolean="true">
       <short_desc>Enable stack checking</short_desc>
     </parameter>
-    <parameter name="SYS_USE_IO" default="1" type="INT32" boolean="true">
+    <parameter name="SYS_USE_IO" default="1" type="INT32">
       <short_desc>Set usage of IO board</short_desc>
-      <long_desc>Can be used to use a standard startup script but with a FMU only set-up. Set to 0 to force the FMU only set-up.</long_desc>
-      <min>0</min>
-      <max>1</max>
+      <long_desc>Can be used to use a configure the use of the IO board.</long_desc>
       <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">IO PWM disabled (RC only)</value>
+        <value code="1">IO enabled (RC &amp; PWM)</value>
+      </values>
     </parameter>
   </group>
   <group name="Telemetry">
@@ -12325,6 +12379,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
     <parameter name="TEL_HOTT_CONFIG" default="0" type="INT32">
@@ -12343,6 +12398,7 @@
         <value code="203">GPS 3</value>
         <value code="300">Radio Controller</value>
         <value code="301">Wifi Port</value>
+        <value code="401">Pixhawk Payload Bus</value>
       </values>
     </parameter>
   </group>
