@@ -156,11 +156,11 @@ public class Polar3D_F32 {
 	}
 
 	public void get(Vector3D_F32 t) {
-		get(); t.set(v);
+		get(); t.setTo(v);
 	}
 
 	public Vector3D_F32 get() {
-		v.set((float)( Math.cos(angle_xy) * Math.cos(angle_xz)), (float)(Math.sin(angle_xy)* Math.cos(angle_xz)),(float)Math.sin(angle_xz));
+		v.setTo((float)( Math.cos(angle_xy) * Math.cos(angle_xz)), (float)(Math.sin(angle_xy)* Math.cos(angle_xz)),(float)Math.sin(angle_xz));
 		v.scale(value);
 		return v;
 	}

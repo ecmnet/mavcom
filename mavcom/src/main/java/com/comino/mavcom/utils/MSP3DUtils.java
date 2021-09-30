@@ -27,7 +27,7 @@ public class MSP3DUtils {
 	private static Point3D_F64  tmp_p = new Point3D_F64();
 
 	public static Point3D_F64 toNED(Point3D_F64 p) {
-		tmp_p.set(p);
+		tmp_p.setTo(p);
 		p.x =  tmp_p.z;
 		p.y =  tmp_p.x;
 		p.z = -tmp_p.y;
@@ -115,32 +115,32 @@ public class MSP3DUtils {
 	}
 
 	public static Vector3D_F32 convertTo3D(Vector4D_F32 v, Vector3D_F32 t) {
-		t.set(v.x,v.y,v.z);
+		t.setTo(v.x,v.y,v.z);
 		return t;
 	}
 
 	public static boolean convertCurrentState(DataModel model, Vector4D_F32 vector) {
-		vector.set(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.y);
+		vector.setTo(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.y);
 		return isFinite(vector);
 	}
 
 	public static boolean convertCurrentState(DataModel model, Vector3D_F64 vector) {
-		vector.set(model.state.l_x, model.state.l_y, model.state.l_z);
+		vector.setTo(model.state.l_x, model.state.l_y, model.state.l_z);
 		return isFinite(vector);
 	}
 
 	public static boolean convertTargetState(DataModel model, Vector4D_F32 vector) {
-		vector.set(model.target_state.l_x, model.target_state.l_y, model.target_state.l_z, model.attitude.y);
+		vector.setTo(model.target_state.l_x, model.target_state.l_y, model.target_state.l_z, model.attitude.y);
 		return isFinite(vector);
 	}
 
 	public static boolean convertCurrentSpeed(DataModel model, Vector4D_F32 vector) {
-		vector.set(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
+		vector.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
 		return isFinite(vector);
 	}
 
 	public static boolean convertCurrentSpeed(DataModel model, Vector3D_F64 vector) {
-		vector.set(model.state.l_vx, model.state.l_vy, model.state.l_vz);
+		vector.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz);
 		return isFinite(vector);
 	}
 
@@ -155,15 +155,15 @@ public class MSP3DUtils {
 	}
 
 	public static void setNaN(Vector4D_F32 vector) {
-		vector.set(Float.NaN,Float.NaN,Float.NaN,Float.NaN);
+		vector.setTo(Float.NaN,Float.NaN,Float.NaN,Float.NaN);
 	}
 
 	public static void setNaN(Vector3D_F64 vector) {
-		vector.set(Double.NaN,Double.NaN,Double.NaN);
+		vector.setTo(Double.NaN,Double.NaN,Double.NaN);
 	}
 
 	public static void setNaN(Se3_F64 s) {
-		s.T.set(Double.NaN,Double.NaN,Double.NaN);
+		s.T.setTo(Double.NaN,Double.NaN,Double.NaN);
 		for(int i=0;i<s.R.getNumElements();i++)
 			s.R.set(i, Double.NaN);
 	}
@@ -177,7 +177,7 @@ public class MSP3DUtils {
 			current.z = factor * current.z + (1 - factor) * last.z;
 		if(Float.isFinite(last.w))
 			current.w = factor * current.w + (1 - factor) * last.w;
-		last.set(current);
+		last.setTo(current);
 		return current;
 	}
 	
@@ -188,7 +188,7 @@ public class MSP3DUtils {
 			current.y = factor * current.y + (1 - factor) * last.y;
 		if(Double.isFinite(last.z))
 			current.z = factor * current.z + (1 - factor) * last.z;
-		last.set(current);
+		last.setTo(current);
 		return current;
 	}
 	
@@ -310,7 +310,7 @@ public class MSP3DUtils {
 
 
 	public static Vector3D_F32 convertToVector3D(float angle_xy, float angle_xz, float speed, Vector3D_F32 result) {
-		result.set((float)( Math.cos(angle_xy) * Math.cos(angle_xz)), (float)(Math.sin(angle_xy)* Math.cos(angle_xz)),(float)Math.sin(angle_xz));
+		result.setTo((float)( Math.cos(angle_xy) * Math.cos(angle_xz)), (float)(Math.sin(angle_xy)* Math.cos(angle_xz)),(float)Math.sin(angle_xz));
 		result.scale(speed);
 		return result;
 	}

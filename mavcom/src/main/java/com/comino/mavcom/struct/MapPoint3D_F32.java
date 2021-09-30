@@ -1,4 +1,4 @@
-package com.comino.mavcom.model.struct;
+package com.comino.mavcom.struct;
 
 import georegression.struct.GeoTuple3D_F32;
 
@@ -42,7 +42,7 @@ public class MapPoint3D_F32 extends GeoTuple3D_F32<MapPoint3D_F32> {
 	}
 
 	public void set( float x, float y, float z, int value ) {
-		set(x,y,z);
+		setTo(x,y,z);
 		this.value = value > 31 ? 31 : value ;
 		this.tms   = System.currentTimeMillis();
 	}

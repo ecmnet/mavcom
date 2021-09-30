@@ -89,12 +89,12 @@ public class Polar4D_F32 {
 	}
 
 	public void get(Vector3D_F32 t) {
-		t.set((float)( Math.cos(angle_xy) * Math.cos(angle_xz)), (float)(Math.sin(angle_xy)* Math.cos(angle_xz)),(float)Math.sin(angle_xz));
+		t.setTo((float)( Math.cos(angle_xy) * Math.cos(angle_xz)), (float)(Math.sin(angle_xy)* Math.cos(angle_xz)),(float)Math.sin(angle_xz));
 		t.scale(value);
 	}
 
 	public void get(Vector4D_F32 t) {
-		t.set((float)( Math.cos(angle_xy) * Math.cos(angle_xz)) * value,
+		t.setTo((float)( Math.cos(angle_xy) * Math.cos(angle_xz)) * value,
 			  (float)(Math.sin(angle_xy)* Math.cos(angle_xz)) * value,
 			  (float)Math.sin(angle_xz) * value,
 			  yaw);
