@@ -45,6 +45,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import boofcv.BoofVersion;
+
 public class MSPConfig {
 
 	private static MSPConfig config = null;
@@ -69,7 +71,8 @@ public class MSPConfig {
 		this.path = path;
 		this.fileName = filename;
 		this.prop = new Properties();
-		System.out.println("\nInitializing ("+filename+", Java "+System.getProperty("java.version")+" "+System.getProperty("java.vm.vendor"));
+		System.out.println("\nInitializing ("+filename+", Java "+System.getProperty("java.version")+" "+System.getProperty("java.vm.vendor")+
+				           " build on BoofCV "+BoofVersion.VERSION);
 		refreshProperties();
 		this.version = prop.getProperty("build","tmp");
 		this.version_date = prop.getProperty("build_date","NA");
