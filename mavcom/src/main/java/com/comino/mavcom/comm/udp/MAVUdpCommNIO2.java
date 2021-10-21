@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.StandardSocketOptions;
 import java.net.UnknownHostException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -219,6 +220,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 				channel.socket().setSendBufferSize(32*1024);
 				channel.socket().setSoTimeout(1000);
 				selector = Selector.open();
+		//		channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
 				channel.configureBlocking(false);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -273,7 +275,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					} catch (IOException e) {
 						//			try { selector.close();  } catch (IOException e1) { }
 						state = WAITING;
-						e.printStackTrace();
+						
 					}
 				}
 

@@ -40,6 +40,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.net.StandardSocketOptions;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
@@ -229,6 +230,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
 				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
 				channel.configureBlocking(false);
+//				channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
 				selector = Selector.open();
 			} catch (IOException e) {
 				e.printStackTrace();
