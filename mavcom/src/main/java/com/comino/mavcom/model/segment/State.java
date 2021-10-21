@@ -157,6 +157,7 @@ public class State extends Segment {
 		g_vz	= t.g_vz;
 
 		c_frame = t.c_frame;
+		tms     = t.tms;
 	}
 
 	public void clear() {
