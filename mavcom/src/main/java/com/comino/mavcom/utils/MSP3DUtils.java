@@ -10,6 +10,7 @@ import com.comino.mavcom.struct.Polar4D_F32;
 import georegression.geometry.ConvertRotation3D_F32;
 import georegression.geometry.ConvertRotation3D_F64;
 import georegression.struct.EulerType;
+import georegression.struct.GeoTuple3D_F64;
 import georegression.struct.point.Point3D_F64;
 import georegression.struct.point.Point3D_I32;
 import georegression.struct.point.Vector3D_F32;
@@ -65,6 +66,25 @@ public class MSP3DUtils {
 	public static float distance3D(Point3D_I32 t, Point3D_I32 c) {
 		return (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
 	}
+	
+	
+	public static float angleXY(GeoTuple3D_F64<?> t) {
+
+		float dx = (float)t.getX() ;
+		float dy = (float)t.getY() ;
+
+		if(dx == 0 && dy >= 0)
+			return  (float)Math.PI/2;
+		if(dx == 0 && dy < 0)
+			return -(float)Math.PI/2;
+
+		if((dx >= 0 && dy > 0) || (dx >= 0 && dy < 0))
+			return (float)Math.atan(dy/dx);
+		if((dx < 0 && dy >= 0) || (dx < 0 && dy < 0))
+			return (float)(Math.atan(dy/dx)+Math.PI);
+
+		return 0;
+	}
 
 
 	public static float angleXY(Vector3D_F32 t, Vector3D_F32 c) {
@@ -89,6 +109,11 @@ public class MSP3DUtils {
 
 		float dx = t.getX() - c.getX();
 		float dy = t.getY() - c.getY();
+		
+		if(dx == 0 && dy >= 0)
+			return  (float)Math.PI/2;
+		if(dx == 0 && dy < 0)
+			return -(float)Math.PI/2;
 
 		if((dx >= 0 && dy > 0) || (dx >= 0 && dy < 0))
 			return (float)Math.atan(dy/dx);
