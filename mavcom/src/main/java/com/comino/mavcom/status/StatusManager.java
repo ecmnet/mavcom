@@ -83,7 +83,7 @@ public class StatusManager implements Runnable {
 	private  Status status_old 		   = null;
 
 	private List<StatusListenerEntry>                     list  = null;
-	private ConcurrentLinkedQueue<Action>               actions = null;
+	private volatile ConcurrentLinkedQueue<Action>      actions = null;
 
 	private boolean isRunning                = false;
 
@@ -325,11 +325,11 @@ public class StatusManager implements Runnable {
 
 	}
 
-	private void run_callbacks() {
+	private synchronized void run_callbacks() {
 
 		if(!actions.isEmpty()) {
 			while(!actions.isEmpty()) {
-				wq.addSingleTask("NP", 0, actions.poll());
+				wq.addSingleTask("HP", 0, actions.poll());
 			}
 		}
 	}
@@ -371,11 +371,11 @@ public class StatusManager implements Runnable {
 
 		int flags = (int)model.est.flags;
 
-		if(flags == 0
-				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_ACCEL_ERROR)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_ACCEL_ERROR
-				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH) {
-			return false;
-		}
+//		if(flags == 0
+//				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_ACCEL_ERROR)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_ACCEL_ERROR
+//				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH) {
+//			return false;
+//		}
 
 		return true;
 	}
