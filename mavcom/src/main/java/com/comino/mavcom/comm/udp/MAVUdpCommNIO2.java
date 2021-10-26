@@ -269,7 +269,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					} catch (SocketException e) {
 						//		try { selector.close();  } catch (Exception e1) {  }
 						state = WAITING;
-						e.printStackTrace();
+						
 					} catch (ClosedChannelException e) {
 						state = WAITING;
 					} catch (IOException e) {
