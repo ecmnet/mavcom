@@ -712,6 +712,21 @@
         <description>Storage type is other, not listed type.</description>
       </entry>
     </enum>
+    <enum name="STORAGE_USAGE_FLAG">
+      <description>Flags to indicate usage for a particular storage (see `STORAGE_INFORMATION.storage_usage` and `MAV_CMD_SET_STORAGE_USAGE`).</description>
+      <entry value="1" name="STORAGE_USAGE_FLAG_SET">
+        <description>Always set to 1 (indicates `STORAGE_INFORMATION.storage_usage` is supported).</description>
+      </entry>
+      <entry value="2" name="STORAGE_USAGE_FLAG_PHOTO">
+        <description>Storage for saving photos.</description>
+      </entry>
+      <entry value="4" name="STORAGE_USAGE_FLAG_VIDEO">
+        <description>Storage for saving videos.</description>
+      </entry>
+      <entry value="8" name="STORAGE_USAGE_FLAG_LOGS">
+        <description>Storage for saving logs.</description>
+      </entry>
+    </enum>
     <enum name="ORBIT_YAW_BEHAVIOUR">
       <description>Yaw behaviour during orbit flight.</description>
       <entry value="0" name="ORBIT_YAW_BEHAVIOUR_HOLD_FRONT_TO_CIRCLE_CENTER">
@@ -1009,7 +1024,7 @@
         <param index="4" label="Yaw" units="deg">Yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).</param>
         <param index="5" label="Latitude">Latitude</param>
         <param index="6" label="Longitude">Longitude</param>
-        <param index="7" label="Ground Altitude" units="m">Altitude (ground level)</param>
+        <param index="7" label="Ground Altitude" units="m">Altitude (ground level) relative to the current coordinate frame. NaN to use system default landing altitude (ignore value).</param>
       </entry>
       <!-- IDs 90 and 91 are reserved until the end of 2014,
                     as they were used in some conflicting proposals
@@ -1589,18 +1604,7 @@
         <param index="6">Reserved (set to 0)</param>
         <param index="7">WIP: ID (e.g. camera ID -1 for all IDs)</param>
       </entry>
-      <entry value="247" name="MAV_CMD_DO_UPGRADE" hasLocation="false" isDestination="false">
-        <wip/>
-        <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
-        <description>Request a target system to start an upgrade of one (or all) of its components. For example, the command might be sent to a companion computer to cause it to upgrade a connected flight controller. The system doing the upgrade will report progress using the normal command protocol sequence for a long running operation. Command protocol information: https://mavlink.io/en/services/command.html.</description>
-        <param index="1" label="Component ID" enum="MAV_COMPONENT">Component id of the component to be upgraded. If set to 0, all components should be upgraded.</param>
-        <param index="2" label="Reboot" minValue="0" maxValue="1" increment="1">0: Do not reboot component after the action is executed, 1: Reboot component after the action is executed.</param>
-        <param index="3">Reserved</param>
-        <param index="4">Reserved</param>
-        <param index="5">Reserved</param>
-        <param index="6">Reserved</param>
-        <param index="7">WIP: upgrade progress report rate (can be used for more granular control).</param>
-      </entry>
+      <!-- id "247" reserved for MAV_CMD_DO_UPGRADE in development.xml -->
       <entry value="252" name="MAV_CMD_OVERRIDE_GOTO" hasLocation="true" isDestination="true">
         <description>Override current mission with command to pause mission, pause mission and move to position, continue/resume mission. When param 1 indicates that the mission is paused (MAV_GOTO_DO_HOLD), param 2 defines whether it holds in place or moves to another position.</description>
         <param index="1" label="Continue" enum="MAV_GOTO">MAV_GOTO_DO_HOLD: pause mission and either hold or move to specified position (depending on param2), MAV_GOTO_DO_CONTINUE: resume mission.</param>
@@ -1745,8 +1749,6 @@
         <param index="7" reserved="true" default="NaN"/>
       </entry>
       <entry value="531" name="MAV_CMD_SET_CAMERA_ZOOM" hasLocation="false" isDestination="false">
-        <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
-        <wip/>
         <description>Set camera zoom. Camera must respond with a CAMERA_SETTINGS message (on success).</description>
         <param index="1" label="Zoom Type" enum="CAMERA_ZOOM_TYPE">Zoom type</param>
         <param index="2" label="Zoom Value">Zoom value. The range of valid values depend on the zoom type.</param>
@@ -1755,14 +1757,21 @@
         <param index="7" reserved="true" default="NaN"/>
       </entry>
       <entry value="532" name="MAV_CMD_SET_CAMERA_FOCUS" hasLocation="false" isDestination="false">
-        <!-- This message is work-in-progress and it can therefore change. It should NOT be used in stable production environments. -->
-        <wip/>
         <description>Set camera focus. Camera must respond with a CAMERA_SETTINGS message (on success).</description>
         <param index="1" label="Focus Type" enum="SET_FOCUS_TYPE">Focus type</param>
         <param index="2" label="Focus Value">Focus value</param>
         <param index="3" reserved="true" default="NaN"/>
         <param index="4" reserved="true" default="NaN"/>
         <param index="7" reserved="true" default="NaN"/>
+      </entry>
+      <entry value="533" name="MAV_CMD_SET_STORAGE_USAGE" hasLocation="false" isDestination="false">
+        <description>Set that a particular storage is the preferred location for saving photos, videos, and/or other media (e.g. to set that an SD card is used for storing videos).
+          There can only be one preferred save location for each particular media type: setting a media usage flag will clear/reset that same flag if set on any other storage.
+          If no flag is set the system should use its default storage.
+          A target system can choose to always use default storage, in which case it should ACK the command with MAV_RESULT_UNSUPPORTED.
+          A target system can choose to not allow a particular storage to be set as preferred storage, in which case it should ACK the command with MAV_RESULT_DENIED.</description>
+        <param index="1" label="Storage ID" minValue="0" increment="1">Storage ID (1 for first, 2 for second, etc.)</param>
+        <param index="2" label="Usage" enum="STORAGE_USAGE_FLAG">Usage flags</param>
       </entry>
       <entry value="600" name="MAV_CMD_JUMP_TAG" hasLocation="false" isDestination="false">
         <description>Tagged jump target. Can be jumped to with MAV_CMD_DO_JUMP_TAG.</description>
@@ -3618,6 +3627,72 @@
         <description>The fields next_lat, next_lon and next_alt contain valid data.</description>
       </entry>
     </enum>
+    <!-- cellular status information -->
+    <enum name="CELLULAR_STATUS_FLAG">
+      <description>These flags encode the cellular network status</description>
+      <entry value="0" name="CELLULAR_STATUS_FLAG_UNKNOWN">
+        <description>State unknown or not reportable.</description>
+      </entry>
+      <entry value="1" name="CELLULAR_STATUS_FLAG_FAILED">
+        <description>Modem is unusable</description>
+      </entry>
+      <entry value="2" name="CELLULAR_STATUS_FLAG_INITIALIZING">
+        <description>Modem is being initialized</description>
+      </entry>
+      <entry value="3" name="CELLULAR_STATUS_FLAG_LOCKED">
+        <description>Modem is locked</description>
+      </entry>
+      <entry value="4" name="CELLULAR_STATUS_FLAG_DISABLED">
+        <description>Modem is not enabled and is powered down</description>
+      </entry>
+      <entry value="5" name="CELLULAR_STATUS_FLAG_DISABLING">
+        <description>Modem is currently transitioning to the CELLULAR_STATUS_FLAG_DISABLED state</description>
+      </entry>
+      <entry value="6" name="CELLULAR_STATUS_FLAG_ENABLING">
+        <description>Modem is currently transitioning to the CELLULAR_STATUS_FLAG_ENABLED state</description>
+      </entry>
+      <entry value="7" name="CELLULAR_STATUS_FLAG_ENABLED">
+        <description>Modem is enabled and powered on but not registered with a network provider and not available for data connections</description>
+      </entry>
+      <entry value="8" name="CELLULAR_STATUS_FLAG_SEARCHING">
+        <description>Modem is searching for a network provider to register</description>
+      </entry>
+      <entry value="9" name="CELLULAR_STATUS_FLAG_REGISTERED">
+        <description>Modem is registered with a network provider, and data connections and messaging may be available for use</description>
+      </entry>
+      <entry value="10" name="CELLULAR_STATUS_FLAG_DISCONNECTING">
+        <description>Modem is disconnecting and deactivating the last active packet data bearer. This state will not be entered if more than one packet data bearer is active and one of the active bearers is deactivated</description>
+      </entry>
+      <entry value="11" name="CELLULAR_STATUS_FLAG_CONNECTING">
+        <description>Modem is activating and connecting the first packet data bearer. Subsequent bearer activations when another bearer is already active do not cause this state to be entered</description>
+      </entry>
+      <entry value="12" name="CELLULAR_STATUS_FLAG_CONNECTED">
+        <description>One or more packet data bearers is active and connected</description>
+      </entry>
+    </enum>
+    <enum name="CELLULAR_NETWORK_FAILED_REASON">
+      <description>These flags are used to diagnose the failure state of CELLULAR_STATUS</description>
+      <entry value="0" name="CELLULAR_NETWORK_FAILED_REASON_NONE">
+        <description>No error</description>
+      </entry>
+      <entry value="1" name="CELLULAR_NETWORK_FAILED_REASON_UNKNOWN">
+        <description>Error state is unknown</description>
+      </entry>
+      <entry value="2" name="CELLULAR_NETWORK_FAILED_REASON_SIM_MISSING">
+        <description>SIM is required for the modem but missing</description>
+      </entry>
+      <entry value="3" name="CELLULAR_NETWORK_FAILED_REASON_SIM_ERROR">
+        <description>SIM is available, but not usuable for connection</description>
+      </entry>
+    </enum>
+    <enum name="CELLULAR_NETWORK_RADIO_TYPE">
+      <description>Cellular network radio type</description>
+      <entry value="0" name="CELLULAR_NETWORK_RADIO_TYPE_NONE"/>
+      <entry value="1" name="CELLULAR_NETWORK_RADIO_TYPE_GSM"/>
+      <entry value="2" name="CELLULAR_NETWORK_RADIO_TYPE_CDMA"/>
+      <entry value="3" name="CELLULAR_NETWORK_RADIO_TYPE_WCDMA"/>
+      <entry value="4" name="CELLULAR_NETWORK_RADIO_TYPE_LTE"/>
+    </enum>
     <enum name="PRECISION_LAND_MODE">
       <description>Precision land modes (used in MAV_CMD_NAV_LAND).</description>
       <entry value="0" name="PRECISION_LAND_MODE_DISABLED">
@@ -4234,7 +4309,7 @@
       </entry>
       <entry value="1" name="NAV_VTOL_LAND_OPTIONS_FW_DESCENT">
         <description>Descend in fixed wing mode, transitioning to multicopter mode for vertical landing when close to the ground.
-          The fixed wing descent pattern is at the discretion of the vehicle (e.g. transition altitude, loiter direction, radius, and speed, etc.).        
+          The fixed wing descent pattern is at the discretion of the vehicle (e.g. transition altitude, loiter direction, radius, and speed, etc.).
         </description>
       </entry>
       <entry value="2" name="NAV_VTOL_LAND_OPTIONS_HOVER_DESCENT">
@@ -4276,6 +4351,102 @@
       <description>Flags for CURRENT_EVENT_SEQUENCE.</description>
       <entry value="1" name="MAV_EVENT_CURRENT_SEQUENCE_FLAGS_RESET">
         <description>A sequence reset has happened (e.g. vehicle reboot).</description>
+      </entry>
+    </enum>
+    <enum name="HIL_SENSOR_UPDATED_FLAGS" bitmask="true">
+      <description>Flags in the HIL_SENSOR message indicate which fields have updated since the last message</description>
+      <entry value="0" name="HIL_SENSOR_UPDATED_NONE">
+        <description>None of the fields in HIL_SENSOR have been updated</description>
+      </entry>
+      <entry value="1" name="HIL_SENSOR_UPDATED_XACC">
+        <description>The value in the xacc field has been updated</description>
+      </entry>
+      <entry value="2" name="HIL_SENSOR_UPDATED_YACC">
+        <description>The value in the yacc field has been updated</description>
+      </entry>
+      <entry value="4" name="HIL_SENSOR_UPDATED_ZACC">
+        <description>The value in the zacc field has been updated</description>
+      </entry>
+      <entry value="8" name="HIL_SENSOR_UPDATED_XGYRO">
+        <description>The value in the xgyro field has been updated</description>
+      </entry>
+      <entry value="16" name="HIL_SENSOR_UPDATED_YGYRO">
+        <description>The value in the ygyro field has been updated</description>
+      </entry>
+      <entry value="32" name="HIL_SENSOR_UPDATED_ZGYRO">
+        <description>The value in the zgyro field has been updated</description>
+      </entry>
+      <entry value="64" name="HIL_SENSOR_UPDATED_XMAG">
+        <description>The value in the xmag field has been updated</description>
+      </entry>
+      <entry value="128" name="HIL_SENSOR_UPDATED_YMAG">
+        <description>The value in the ymag field has been updated</description>
+      </entry>
+      <entry value="256" name="HIL_SENSOR_UPDATED_ZMAG">
+        <description>The value in the zmag field has been updated</description>
+      </entry>
+      <entry value="512" name="HIL_SENSOR_UPDATED_ABS_PRESSURE">
+        <description>The value in the abs_pressure field has been updated</description>
+      </entry>
+      <entry value="1024" name="HIL_SENSOR_UPDATED_DIFF_PRESSURE">
+        <description>The value in the diff_pressure field has been updated</description>
+      </entry>
+      <entry value="2048" name="HIL_SENSOR_UPDATED_PRESSURE_ALT">
+        <description>The value in the pressure_alt field has been updated</description>
+      </entry>
+      <entry value="4096" name="HIL_SENSOR_UPDATED_TEMPERATURE">
+        <description>The value in the temperature field has been updated</description>
+      </entry>
+      <entry value="2147483648" name="HIL_SENSOR_UPDATED_RESET">
+        <description>Full reset of attitude/position/velocities/etc was performed in sim (Bit 31).</description>
+      </entry>
+    </enum>
+    <enum name="HIGHRES_IMU_UPDATED_FLAGS" bitmask="true">
+      <description>Flags in the HIGHRES_IMU message indicate which fields have updated since the last message</description>
+      <entry value="0" name="HIGHRES_IMU_UPDATED_NONE">
+        <description>None of the fields in HIGHRES_IMU have been updated</description>
+      </entry>
+      <entry value="1" name="HIGHRES_IMU_UPDATED_XACC">
+        <description>The value in the xacc field has been updated</description>
+      </entry>
+      <entry value="2" name="HIGHRES_IMU_UPDATED_YACC">
+        <description>The value in the yacc field has been updated</description>
+      </entry>
+      <entry value="4" name="HIGHRES_IMU_UPDATED_ZACC">
+        <description>The value in the zacc field has been updated since</description>
+      </entry>
+      <entry value="8" name="HIGHRES_IMU_UPDATED_XGYRO">
+        <description>The value in the xgyro field has been updated</description>
+      </entry>
+      <entry value="16" name="HIGHRES_IMU_UPDATED_YGYRO">
+        <description>The value in the ygyro field has been updated</description>
+      </entry>
+      <entry value="32" name="HIGHRES_IMU_UPDATED_ZGYRO">
+        <description>The value in the zgyro field has been updated</description>
+      </entry>
+      <entry value="64" name="HIGHRES_IMU_UPDATED_XMAG">
+        <description>The value in the xmag field has been updated</description>
+      </entry>
+      <entry value="128" name="HIGHRES_IMU_UPDATED_YMAG">
+        <description>The value in the ymag field has been updated</description>
+      </entry>
+      <entry value="256" name="HIGHRES_IMU_UPDATED_ZMAG">
+        <description>The value in the zmag field has been updated</description>
+      </entry>
+      <entry value="512" name="HIGHRES_IMU_UPDATED_ABS_PRESSURE">
+        <description>The value in the abs_pressure field has been updated</description>
+      </entry>
+      <entry value="1024" name="HIGHRES_IMU_UPDATED_DIFF_PRESSURE">
+        <description>The value in the diff_pressure field has been updated</description>
+      </entry>
+      <entry value="2048" name="HIGHRES_IMU_UPDATED_PRESSURE_ALT">
+        <description>The value in the pressure_alt field has been updated</description>
+      </entry>
+      <entry value="4096" name="HIGHRES_IMU_UPDATED_TEMPERATURE">
+        <description>The value in the temperature field has been updated</description>
+      </entry>
+      <entry value="65535" name="HIGHRES_IMU_UPDATED_ALL">
+        <description>All fields in HIGHRES_IMU have been updated.</description>
       </entry>
     </enum>
   </enums>
@@ -5162,7 +5333,7 @@
       <field type="float" name="diff_pressure" units="hPa">Differential pressure</field>
       <field type="float" name="pressure_alt">Altitude calculated from pressure</field>
       <field type="float" name="temperature" units="degC">Temperature</field>
-      <field type="uint16_t" name="fields_updated" display="bitmask">Bitmap for fields that have updated since last message, bit 0 = xacc, bit 12: temperature</field>
+      <field type="uint16_t" name="fields_updated" enum="HIGHRES_IMU_UPDATED_FLAGS" display="bitmask">Bitmap for fields that have updated since last message</field>
       <extensions/>
       <field type="uint8_t" name="id" instance="true">Id. Ids are numbered from 0 and map to IMUs numbered from 1 (e.g. IMU1 will have a message with id=0)</field>
     </message>
@@ -5197,7 +5368,7 @@
       <field type="float" name="diff_pressure" units="hPa">Differential pressure (airspeed)</field>
       <field type="float" name="pressure_alt">Altitude calculated from pressure</field>
       <field type="float" name="temperature" units="degC">Temperature</field>
-      <field type="uint32_t" name="fields_updated" display="bitmask">Bitmap for fields that have updated since last message, bit 0 = xacc, bit 12: temperature, bit 31: full reset of attitude/position/velocities/etc was performed in sim.</field>
+      <field type="uint32_t" name="fields_updated" enum="HIL_SENSOR_UPDATED_FLAGS" display="bitmask">Bitmap for fields that have updated since last message</field>
       <extensions/>
       <field type="uint8_t" name="id">Sensor ID (zero indexed). Used for multiple sensor inputs</field>
     </message>
@@ -6014,6 +6185,10 @@
       <extensions/>
       <field type="uint8_t" name="type" enum="STORAGE_TYPE">Type of storage</field>
       <field type="char[32]" name="name">Textual storage name to be used in UI (microSD 1, Internal Memory, etc.) This is a NULL terminated string. If it is exactly 32 characters long, add a terminating NULL. If this string is empty, the generic type is shown to the user.</field>
+      <field type="uint8_t" name="storage_usage" enum="STORAGE_USAGE_FLAG">Flags indicating whether this instance is preferred storage for photos, videos, etc.
+        Note: Implementations should initially set the flags on the system-default storage id used for saving media (if possible/supported).
+        This setting can then be overridden using `MAV_CMD_SET_STORAGE_USAGE`.
+        If the media usage flags are not set, a GCS may assume storage ID 1 is the default storage for all media types.</field>
     </message>
     <message id="262" name="CAMERA_CAPTURE_STATUS">
       <description>Information about the status of a capture. Can be requested with a MAV_CMD_REQUEST_MESSAGE command.</description>
@@ -6456,7 +6631,17 @@
       <field type="float[5]" name="delta" units="s" invalid="[NaN]">Bezier time horizon. Set to NaN if velocity/acceleration should not be incorporated</field>
       <field type="float[5]" name="pos_yaw" units="rad" invalid="[NaN]">Yaw. Set to NaN for unchanged</field>
     </message>
-    <!-- id 344 reserved for CELLULAR_STATUS (development.xml) -->
+    <!-- cellular status information -->
+    <message id="334" name="CELLULAR_STATUS">
+      <description>Report current used cellular network status</description>
+      <field type="uint8_t" name="status" enum="CELLULAR_STATUS_FLAG">Cellular modem status</field>
+      <field type="uint8_t" name="failure_reason" enum="CELLULAR_NETWORK_FAILED_REASON">Failure reason when status in in CELLUAR_STATUS_FAILED</field>
+      <field type="uint8_t" name="type" enum="CELLULAR_NETWORK_RADIO_TYPE">Cellular network radio type: gsm, cdma, lte...</field>
+      <field type="uint8_t" name="quality" invalid="UINT8_MAX">Signal quality in percent. If unknown, set to UINT8_MAX</field>
+      <field type="uint16_t" name="mcc" invalid="UINT16_MAX">Mobile country code. If unknown, set to UINT16_MAX</field>
+      <field type="uint16_t" name="mnc" invalid="UINT16_MAX">Mobile network code. If unknown, set to UINT16_MAX</field>
+      <field type="uint16_t" name="lac" invalid="0">Location area code. If unknown, set to 0</field>
+    </message>
     <message id="335" name="ISBD_LINK_STATUS">
       <description>Status of the Iridium SBD link.</description>
       <field type="uint64_t" name="timestamp" units="us">Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.</field>

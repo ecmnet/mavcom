@@ -88,4 +88,8 @@ public interface MAV_AUTOPILOT {
      * AirRails - http://uaventure.com
      */
     public final static int MAV_AUTOPILOT_AIRRAILS = 19;
+    /**
+     * Fusion Reflex - https://fusion.engineering
+     */
+    public final static int MAV_AUTOPILOT_REFLEX = 20;
 }

@@ -24,7 +24,7 @@ public class msg_storage_information extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_STORAGE_INFORMATION;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 60;
+    payload_length = 61;
 }
 
   /**
@@ -87,6 +87,13 @@ public class msg_storage_information extends MAVLinkMessage {
     }
     return result;
   }
+  /**
+   * Flags indicating whether this instance is preferred storage for photos, videos, etc.
+        Note: Implementations should initially set the flags on the system-default storage id used for saving media (if possible/supported).
+        This setting can then be overridden using `MAV_CMD_SET_STORAGE_USAGE`.
+        If the media usage flags are not set, a GCS may assume storage ID 1 is the default storage for all media types.
+   */
+  public int storage_usage;
 /**
  * Decode message with raw data
  */
@@ -104,12 +111,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   for (int i=0; i<32; i++) {
     name[i] = (char)dis.readByte();
   }
+  storage_usage = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+60];
+  byte[] buffer = new byte[12+61];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -134,15 +142,16 @@ public byte[] encode() throws IOException {
   for (int i=0; i<32; i++) {
     dos.writeByte(name[i]);
   }
+  dos.writeByte(storage_usage&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 60);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 61);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[70] = crcl;
-  buffer[71] = crch;
+  buffer[71] = crcl;
+  buffer[72] = crch;
   dos.close();
   return buffer;
 }
@@ -158,6 +167,7 @@ return "MAVLINK_MSG_ID_STORAGE_INFORMATION : " +   "  time_boot_ms="+time_boot_m
 +  "  status="+status
 +  "  type="+type
 +  "  name="+getName()
++  "  storage_usage="+storage_usage
 ;}
 
 }

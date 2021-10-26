@@ -225,7 +225,7 @@ public interface MAV_CMD {
      * PARAM 4 : Yaw angle. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.).
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
-     * PARAM 7 : Altitude (ground level)
+     * PARAM 7 : Altitude (ground level) relative to the current coordinate frame. NaN to use system default landing altitude (ignore value).
      */
     public final static int MAV_CMD_NAV_VTOL_LAND = 85;
     /**
@@ -853,17 +853,6 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN = 246;
     /**
-     * Request a target system to start an upgrade of one (or all) of its components. For example, the command might be sent to a companion computer to cause it to upgrade a connected flight controller. The system doing the upgrade will report progress using the normal command protocol sequence for a long running operation. Command protocol information: https://mavlink.io/en/services/command.html.
-     * PARAM 1 : Component id of the component to be upgraded. If set to 0, all components should be upgraded.
-     * PARAM 2 : 0: Do not reboot component after the action is executed, 1: Reboot component after the action is executed.
-     * PARAM 3 : Reserved
-     * PARAM 4 : Reserved
-     * PARAM 5 : Reserved
-     * PARAM 6 : Reserved
-     * PARAM 7 : WIP: upgrade progress report rate (can be used for more granular control).
-     */
-    public final static int MAV_CMD_DO_UPGRADE = 247;
-    /**
      * Override current mission with command to pause mission, pause mission and move to position, continue/resume mission. When param 1 indicates that the mission is paused (MAV_GOTO_DO_HOLD), param 2 defines whether it holds in place or moves to another position.
      * PARAM 1 : MAV_GOTO_DO_HOLD: pause mission and either hold or move to specified position (depending on param2), MAV_GOTO_DO_CONTINUE: resume mission.
      * PARAM 2 : MAV_GOTO_HOLD_AT_CURRENT_POSITION: hold at current position, MAV_GOTO_HOLD_AT_SPECIFIED_POSITION: hold at specified position.
@@ -1037,6 +1026,16 @@ public interface MAV_CMD {
      * PARAM 7 : 
      */
     public final static int MAV_CMD_SET_CAMERA_FOCUS = 532;
+    /**
+     * Set that a particular storage is the preferred location for saving photos, videos, and/or other media (e.g. to set that an SD card is used for storing videos).
+          There can only be one preferred save location for each particular media type: setting a media usage flag will clear/reset that same flag if set on any other storage.
+          If no flag is set the system should use its default storage.
+          A target system can choose to always use default storage, in which case it should ACK the command with MAV_RESULT_UNSUPPORTED.
+          A target system can choose to not allow a particular storage to be set as preferred storage, in which case it should ACK the command with MAV_RESULT_DENIED.
+     * PARAM 1 : Storage ID (1 for first, 2 for second, etc.)
+     * PARAM 2 : Usage flags
+     */
+    public final static int MAV_CMD_SET_STORAGE_USAGE = 533;
     /**
      * Tagged jump target. Can be jumped to with MAV_CMD_DO_JUMP_TAG.
      * PARAM 1 : Tag.

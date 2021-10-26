@@ -162,6 +162,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_ONBOARD_COMPUTER_STATUS = 390;
   public static int MAVLINK_MSG_ID_AUTOPILOT_STATE_FOR_GIMBAL_DEVICE = 286;
   public static int MAVLINK_MSG_ID_UTM_GLOBAL_POSITION = 340;
+  public static int MAVLINK_MSG_ID_CELLULAR_STATUS = 334;
   public static int MAVLINK_MSG_ID_HIGH_LATENCY2 = 235;
   public static int MAVLINK_MSG_ID_LOCAL_POSITION_NED = 32;
   public static int MAVLINK_MSG_ID_AIS_VESSEL = 301;

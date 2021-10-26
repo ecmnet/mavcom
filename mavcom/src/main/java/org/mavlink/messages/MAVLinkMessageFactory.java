@@ -154,6 +154,7 @@ import org.mavlink.messages.lquac.msg_raw_pressure;
 import org.mavlink.messages.lquac.msg_onboard_computer_status;
 import org.mavlink.messages.lquac.msg_autopilot_state_for_gimbal_device;
 import org.mavlink.messages.lquac.msg_utm_global_position;
+import org.mavlink.messages.lquac.msg_cellular_status;
 import org.mavlink.messages.lquac.msg_high_latency2;
 import org.mavlink.messages.lquac.msg_local_position_ned;
 import org.mavlink.messages.lquac.msg_ais_vessel;
@@ -364,6 +365,7 @@ import org.mavlink.messages.lquac.msg_raw_pressure;
 import org.mavlink.messages.lquac.msg_onboard_computer_status;
 import org.mavlink.messages.lquac.msg_autopilot_state_for_gimbal_device;
 import org.mavlink.messages.lquac.msg_utm_global_position;
+import org.mavlink.messages.lquac.msg_cellular_status;
 import org.mavlink.messages.lquac.msg_high_latency2;
 import org.mavlink.messages.lquac.msg_local_position_ned;
 import org.mavlink.messages.lquac.msg_ais_vessel;
@@ -1026,6 +1028,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_UTM_GLOBAL_POSITION:
       msg = new msg_utm_global_position(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_CELLULAR_STATUS:
+      msg = new msg_cellular_status(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_HIGH_LATENCY2:

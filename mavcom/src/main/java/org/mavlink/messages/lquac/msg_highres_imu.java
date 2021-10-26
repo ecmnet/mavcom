@@ -84,7 +84,7 @@ public class msg_highres_imu extends MAVLinkMessage {
    */
   public float temperature;
   /**
-   * Bitmap for fields that have updated since last message, bit 0 = xacc, bit 12: temperature
+   * Bitmap for fields that have updated since last message
    */
   public int fields_updated;
   /**
