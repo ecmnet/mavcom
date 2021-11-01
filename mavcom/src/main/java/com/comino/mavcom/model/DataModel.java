@@ -56,6 +56,7 @@ import com.comino.mavcom.model.segment.Slam;
 import com.comino.mavcom.model.segment.State;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.model.segment.Telemetry;
+import com.comino.mavcom.model.segment.Trajectory;
 import com.comino.mavcom.model.segment.Vibration;
 import com.comino.mavcom.model.segment.Vision;
 import com.comino.mavcom.model.segment.Waypoints;
@@ -98,6 +99,7 @@ public class DataModel extends Segment implements Serializable {
 	public   Slam           slam  = null;
 	public   Waypoints       way  = null;
 	public   Esc             esc  = null;
+	public   Trajectory      traj = null;
 
 	public DataModel()  {
 		this.attitude       = new Attitude();
@@ -124,6 +126,7 @@ public class DataModel extends Segment implements Serializable {
 		this.grid           = new Grid();
 		this.way            = new Waypoints(); way.clear();
 		this.esc            = new Esc();
+		this.traj           = new Trajectory();
 	}
 
 	public DataModel(DataModel m) {
@@ -156,6 +159,7 @@ public class DataModel extends Segment implements Serializable {
 		this.way            = m.way.clone();
 		this.esc            = m.esc.clone();
 		this.distance       = m.distance.clone();
+		this.traj           = m.traj.clone();
 	}
 
 
@@ -185,6 +189,7 @@ public class DataModel extends Segment implements Serializable {
 		this.way.set(m.way);
 		this.esc.set(m.esc);
 		this.distance.set(m.distance);
+		this.traj.set(m.traj);
 	}
 
 	public DataModel clone() {
@@ -215,6 +220,7 @@ public class DataModel extends Segment implements Serializable {
 		this.way.clear();
 		this.esc.clear();
 		this.distance.clear();
+		this.traj.clear();
 	}
 
 	public float getValue(String classkey) {

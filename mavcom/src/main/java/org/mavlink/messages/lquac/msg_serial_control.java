@@ -24,7 +24,7 @@ public class msg_serial_control extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_SERIAL_CONTROL;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 79;
+    payload_length = 81;
 }
 
   /**
@@ -51,6 +51,14 @@ public class msg_serial_control extends MAVLinkMessage {
    * serial data
    */
   public int[] data = new int[70];
+  /**
+   * System ID
+   */
+  public int target_system;
+  /**
+   * Component ID
+   */
+  public int target_component;
 /**
  * Decode message with raw data
  */
@@ -63,12 +71,14 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   for (int i=0; i<70; i++) {
     data[i] = (int)dis.readUnsignedByte()&0x00FF;
   }
+  target_system = (int)dis.readUnsignedByte()&0x00FF;
+  target_component = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+79];
+  byte[] buffer = new byte[12+81];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -88,15 +98,17 @@ public byte[] encode() throws IOException {
   for (int i=0; i<70; i++) {
     dos.writeByte(data[i]&0x00FF);
   }
+  dos.writeByte(target_system&0x00FF);
+  dos.writeByte(target_component&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 79);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 81);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[89] = crcl;
-  buffer[90] = crch;
+  buffer[91] = crcl;
+  buffer[92] = crch;
   dos.close();
   return buffer;
 }
@@ -176,6 +188,8 @@ return "MAVLINK_MSG_ID_SERIAL_CONTROL : " +   "  baudrate="+baudrate
 +  "  data[67]="+data[67]
 +  "  data[68]="+data[68]
 +  "  data[69]="+data[69]
++  "  target_system="+target_system
++  "  target_component="+target_component
 ;}
 
 }

@@ -178,6 +178,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_SIM_STATE = 108;
   public static int MAVLINK_MSG_ID_SAFETY_ALLOWED_AREA = 55;
   public static int MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN = 49;
+  public static int MAVLINK_MSG_ID_MSP_TRAJECTORY = 185;
   public static int MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_PITCHYAW = 287;
   public static int MAVLINK_MSG_ID_TRAJECTORY_REPRESENTATION_WAYPOINTS = 332;
   public static int MAVLINK_MSG_ID_FOLLOW_TARGET = 144;

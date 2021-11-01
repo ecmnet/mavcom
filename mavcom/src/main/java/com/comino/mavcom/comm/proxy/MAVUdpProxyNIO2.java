@@ -40,6 +40,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.net.SocketOption;
 import java.net.StandardSocketOptions;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -51,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.mavlink.messages.MAVLinkMessage;
 
@@ -226,11 +228,14 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 
 			try {
 				channel = DatagramChannel.open();
+				final Set<SocketOption<?>> options = channel.supportedOptions();
+			    if (options.contains(StandardSocketOptions.TCP_NODELAY)) {
+			        channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
+			    }
 				channel.bind(bindPort);
 				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
 				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
 				channel.configureBlocking(false);
-//				channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
 				selector = Selector.open();
 			} catch (IOException e) {
 				e.printStackTrace();

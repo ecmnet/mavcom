@@ -381,6 +381,7 @@ import org.mavlink.messages.lquac.msg_logging_data_acked;
 import org.mavlink.messages.lquac.msg_sim_state;
 import org.mavlink.messages.lquac.msg_safety_allowed_area;
 import org.mavlink.messages.lquac.msg_gps_global_origin;
+import org.mavlink.messages.lquac.msg_msp_trajectory;
 import org.mavlink.messages.lquac.msg_gimbal_manager_set_pitchyaw;
 import org.mavlink.messages.lquac.msg_trajectory_representation_waypoints;
 import org.mavlink.messages.lquac.msg_follow_target;
@@ -1092,6 +1093,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_GPS_GLOBAL_ORIGIN:
       msg = new msg_gps_global_origin(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_MSP_TRAJECTORY:
+      msg = new msg_msp_trajectory(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_PITCHYAW:
