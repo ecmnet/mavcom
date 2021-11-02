@@ -43,6 +43,7 @@ public class Trajectory extends Segment {
 	// Polynomial Trajectory
 
    public float ls = 0;					// length in secs
+   public float fs = 0;					// already done in secs
    
    public float ax = 0;                 // alpha
    public float ay = 0;
@@ -57,7 +58,15 @@ public class Trajectory extends Segment {
    public float gx = 0;                 // gamma
    public float gy = 0;
    public float gz = 0;
-
+   
+   public float sx = 0;                 // gamma
+   public float sy = 0;
+   public float sz = 0;
+   
+   public float svx = 0;                 // gamma
+   public float svy = 0;
+   public float svz = 0;
+   
 
 	public Trajectory clone() {
 		Trajectory t = new Trajectory();
@@ -81,13 +90,22 @@ public class Trajectory extends Segment {
 		gy = t.gy;
 		gz = t.gz;
 		
+		sx = t.sx;
+		sy = t.sy;
+		sz = t.sz;
+		
+		svx = t.svx;
+		svy = t.svy;
+		svz = t.svz;
+		
+		
 	}
 
 	public void clear() {
 	   ls = -1f;
-       ax = 0; ay = 0; az = 0;
-       bx = 0; by = 0; bz = 0;
-       gx = 0; gy = 0; gz = 0;
+       ax = 0; ay = 0; az = 0; sx = 0; svx = 0;  
+       bx = 0; by = 0; bz = 0; sy = 0; svy = 0; 
+       gx = 0; gy = 0; gz = 0; sz = 0; svz = 0;  
 	}
 
 }
