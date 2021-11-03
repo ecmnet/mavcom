@@ -156,7 +156,11 @@ public class StatusManager implements Runnable {
 	}
 
 	public void reset() {
-		status_old.status &= 0x1;
+		status_old.status    &= 0x1;
+		status_old.px4_status = 0;
+		status_old.autopilot  = 0;
+		status_old.nav_state  = 0;
+		status_old.sensors    = 0;
 	}
 
 	public Status get() {
@@ -172,7 +176,6 @@ public class StatusManager implements Runnable {
 			model.sys.setStatus(Status.MSP_READY_FOR_FLIGHT, checkFlightReadiness());
 
 		status_current.set(model.sys);
-
 
 		if (status_current.isStatus(Status.MSP_ARMED)) {
 			if(status_current.isStatusChanged(status_old, 1<<Status.MSP_ARMED))
@@ -318,10 +321,10 @@ public class StatusManager implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		run_callbacks();
 
 		status_old.set(status_current);
-
-		run_callbacks();
 
 	}
 
@@ -329,7 +332,7 @@ public class StatusManager implements Runnable {
 
 		if(!actions.isEmpty()) {
 			while(!actions.isEmpty()) {
-				wq.addSingleTask("HP", 0, actions.poll());
+				wq.addSingleTask("NP", 0, actions.poll());
 			}
 		}
 	}
