@@ -197,11 +197,18 @@ public class DataModel extends Segment implements Serializable {
 	}
 
 	public void clear() {
-		this.attitude.clear();
+		reset();
+		this.sys.clear();
+		this.est.clear();
 		this.battery.clear();
+		this.tms = 0;
+		
+	}
+	
+	public void reset() {
+		this.attitude.clear();
 		this.hud.clear();
 		this.imu.clear();
-		this.sys.clear();
 		this.state.clear();
 		this.target_state.clear();
 		this.home_state.clear();
@@ -212,10 +219,8 @@ public class DataModel extends Segment implements Serializable {
 		this.rc.clear();
 		this.vibration.clear();
 		this.debug.clear();
-		this.tms = 0;
 		this.msg.clear();
 		this.vision.clear();
-		this.est.clear();
 		this.slam.clear();
 		this.way.clear();
 		this.esc.clear();

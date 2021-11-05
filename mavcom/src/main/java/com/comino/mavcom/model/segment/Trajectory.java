@@ -102,7 +102,7 @@ public class Trajectory extends Segment {
 	}
 
 	public void clear() {
-	   ls = -1f;
+	   ls = -1f; fs = -1f;
        ax = 0; ay = 0; az = 0; sx = 0; svx = 0;  
        bx = 0; by = 0; bz = 0; sy = 0; svy = 0; 
        gx = 0; gy = 0; gz = 0; sz = 0; svz = 0;  

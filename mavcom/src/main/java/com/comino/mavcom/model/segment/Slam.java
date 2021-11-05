@@ -123,5 +123,12 @@ public class Slam extends Segment {
 		this.pp = pp;
 		this.pv = pv;
 	}
+	
+//	public boolean isFlag(int ...box) {
+//		for(int b : box)
+//			if((flags & (1<<b))==0)
+//				return false;
+//		return true;
+//	}
 
 }
