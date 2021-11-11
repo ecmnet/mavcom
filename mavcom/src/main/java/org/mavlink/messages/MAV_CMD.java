@@ -881,6 +881,28 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_MISSION_START = 300;
     /**
+     * Actuator testing command. This is similar to MAV_CMD_DO_MOTOR_TEST but operates on the level of output functions, i.e. it is possible to test Motor1 independent from which output it is configured on. Autopilots typically refuse this command while armed.
+     * PARAM 1 : Output value: 1 means maximum positive output, 0 to center servos or minimum motor thrust (expected to spin), -1 for maximum negative (if not supported by the motors, i.e. motor is not reversible, smaller than 0 maps to NaN). And NaN maps to disarmed (stop the motors).
+     * PARAM 2 : Timeout after which the test command expires and the output is restored to the previous value. A timeout has to be set for safety reasons. A timeout of 0 means to restore the previous value immediately.
+     * PARAM 3 : 
+     * PARAM 4 : 
+     * PARAM 5 : Actuator Output function
+     * PARAM 6 : 
+     * PARAM 7 : 
+     */
+    public final static int MAV_CMD_ACTUATOR_TEST = 310;
+    /**
+     * Actuator configuration command.
+     * PARAM 1 : Actuator configuration action
+     * PARAM 2 : 
+     * PARAM 3 : 
+     * PARAM 4 : 
+     * PARAM 5 : Actuator Output function
+     * PARAM 6 : 
+     * PARAM 7 : 
+     */
+    public final static int MAV_CMD_CONFIGURE_ACTUATOR = 311;
+    /**
      * Arms / Disarms a component
      * PARAM 1 : 0: disarm, 1: arm
      * PARAM 2 : 0: arm-disarm unless prevented by safety checks (i.e. when landed), 21196: force arming/disarming (e.g. allow arming to override preflight checks and disarming in flight)

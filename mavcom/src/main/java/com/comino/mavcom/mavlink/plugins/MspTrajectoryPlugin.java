@@ -17,18 +17,23 @@ public class MspTrajectoryPlugin extends MAVLinkPluginBase {
 		
 		model.traj.ax = traj.ax;
 		model.traj.ay = traj.ay;
+		model.traj.az = traj.az;
 		
 		model.traj.bx = traj.bx;
 		model.traj.by = traj.by;
+		model.traj.bz = traj.bz;
 		
 		model.traj.gx = traj.gx;
 		model.traj.gy = traj.gy;
+		model.traj.gz = traj.gz;
 		
 		model.traj.sx = traj.sx;
 		model.traj.sy = traj.sy;
+		model.traj.sz = traj.sz;
 		
 		model.traj.svx = traj.svx;
 		model.traj.svy = traj.svy;
+		model.traj.svz = traj.svz;
 	
 
 		model.traj.tms = traj.tms;

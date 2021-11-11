@@ -12,7 +12,9 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_cellular_config
- * Configure cellular modems. This message is re-emitted as an acknowledgement by the modem. The message may also be explicitly requested using MAV_CMD_REQUEST_MESSAGE.
+ * Configure cellular modems.
+        This message is re-emitted as an acknowledgement by the modem.
+        The message may also be explicitly requested using MAV_CMD_REQUEST_MESSAGE.
  **/
 public class msg_cellular_config extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_CELLULAR_CONFIG = 336;

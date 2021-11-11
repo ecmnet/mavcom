@@ -279,14 +279,19 @@
                <field type="float"         name="fs" >Done in secs</field>
                <field type="float"         name="ax" >Alpha X</field>
                <field type="float"         name="ay" >Alpha Y</field>
+               <field type="float"         name="az" >Alpha Z</field>
                <field type="float"         name="bx" >Beta X</field>
                <field type="float"         name="by" >Beta Y</field>
+               <field type="float"         name="bz" >Beta Z</field>
                <field type="float"         name="gx" >Gamma X</field>
                <field type="float"         name="gy" >Gamma Y</field>
+               <field type="float"         name="gz" >Gamma Z</field>
                <field type="float"         name="sx" >Start X</field>
                <field type="float"         name="sy" >Start Y</field>
+               <field type="float"         name="sz" >Start Z</field>
                <field type="float"         name="svx" >Start VX</field>
                <field type="float"         name="svy" >Start VY</field>
+               <field type="float"         name="svz" >Start VZ</field>
                <field type="uint64_t"      name="tms">Timestamp</field>
            </message>
       </messages>

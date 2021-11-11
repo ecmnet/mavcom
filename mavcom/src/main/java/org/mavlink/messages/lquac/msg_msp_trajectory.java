@@ -24,7 +24,7 @@ public class msg_msp_trajectory extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_TRAJECTORY;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 56;
+    payload_length = 76;
 }
 
   /**
@@ -48,6 +48,10 @@ public class msg_msp_trajectory extends MAVLinkMessage {
    */
   public float ay;
   /**
+   * Alpha Z
+   */
+  public float az;
+  /**
    * Beta X
    */
   public float bx;
@@ -55,6 +59,10 @@ public class msg_msp_trajectory extends MAVLinkMessage {
    * Beta Y
    */
   public float by;
+  /**
+   * Beta Z
+   */
+  public float bz;
   /**
    * Gamma X
    */
@@ -64,6 +72,10 @@ public class msg_msp_trajectory extends MAVLinkMessage {
    */
   public float gy;
   /**
+   * Gamma Z
+   */
+  public float gz;
+  /**
    * Start X
    */
   public float sx;
@@ -72,6 +84,10 @@ public class msg_msp_trajectory extends MAVLinkMessage {
    */
   public float sy;
   /**
+   * Start Z
+   */
+  public float sz;
+  /**
    * Start VX
    */
   public float svx;
@@ -79,6 +95,10 @@ public class msg_msp_trajectory extends MAVLinkMessage {
    * Start VY
    */
   public float svy;
+  /**
+   * Start VZ
+   */
+  public float svz;
 /**
  * Decode message with raw data
  */
@@ -88,20 +108,25 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   fs = (float)dis.readFloat();
   ax = (float)dis.readFloat();
   ay = (float)dis.readFloat();
+  az = (float)dis.readFloat();
   bx = (float)dis.readFloat();
   by = (float)dis.readFloat();
+  bz = (float)dis.readFloat();
   gx = (float)dis.readFloat();
   gy = (float)dis.readFloat();
+  gz = (float)dis.readFloat();
   sx = (float)dis.readFloat();
   sy = (float)dis.readFloat();
+  sz = (float)dis.readFloat();
   svx = (float)dis.readFloat();
   svy = (float)dis.readFloat();
+  svz = (float)dis.readFloat();
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+56];
+  byte[] buffer = new byte[12+76];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -118,23 +143,28 @@ public byte[] encode() throws IOException {
   dos.writeFloat(fs);
   dos.writeFloat(ax);
   dos.writeFloat(ay);
+  dos.writeFloat(az);
   dos.writeFloat(bx);
   dos.writeFloat(by);
+  dos.writeFloat(bz);
   dos.writeFloat(gx);
   dos.writeFloat(gy);
+  dos.writeFloat(gz);
   dos.writeFloat(sx);
   dos.writeFloat(sy);
+  dos.writeFloat(sz);
   dos.writeFloat(svx);
   dos.writeFloat(svy);
+  dos.writeFloat(svz);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 56);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 76);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[66] = crcl;
-  buffer[67] = crch;
+  buffer[86] = crcl;
+  buffer[87] = crch;
   dos.close();
   return buffer;
 }
@@ -144,14 +174,19 @@ return "MAVLINK_MSG_ID_MSP_TRAJECTORY : " +   "  tms="+tms
 +  "  fs="+format((float)fs)
 +  "  ax="+format((float)ax)
 +  "  ay="+format((float)ay)
++  "  az="+format((float)az)
 +  "  bx="+format((float)bx)
 +  "  by="+format((float)by)
++  "  bz="+format((float)bz)
 +  "  gx="+format((float)gx)
 +  "  gy="+format((float)gy)
++  "  gz="+format((float)gz)
 +  "  sx="+format((float)sx)
 +  "  sy="+format((float)sy)
++  "  sz="+format((float)sz)
 +  "  svx="+format((float)svx)
 +  "  svy="+format((float)svy)
++  "  svz="+format((float)svz)
 ;}
 
 }

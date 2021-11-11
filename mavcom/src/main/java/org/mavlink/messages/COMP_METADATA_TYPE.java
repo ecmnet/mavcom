@@ -28,4 +28,8 @@ public interface COMP_METADATA_TYPE {
      * Meta data for the events interface.
      */
     public final static int COMP_METADATA_TYPE_EVENTS = 4;
+    /**
+     * Meta data for actuator configuration (motors, servos and vehicle geometry) and testing.
+     */
+    public final static int COMP_METADATA_TYPE_ACTUATORS = 5;
 }

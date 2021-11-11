@@ -31,7 +31,7 @@ public interface MAV_DATA_STREAM {
      */
     public final static int MAV_DATA_STREAM_RAW_CONTROLLER = 4;
     /**
-     * Enable LOCAL_POSITION, GLOBAL_POSITION/GLOBAL_POSITION_INT messages.
+     * Enable LOCAL_POSITION, GLOBAL_POSITION_INT messages.
      */
     public final static int MAV_DATA_STREAM_POSITION = 6;
     /**

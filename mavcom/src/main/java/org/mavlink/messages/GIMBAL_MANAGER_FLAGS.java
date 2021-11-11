@@ -5,7 +5,7 @@
 package org.mavlink.messages;
 /**
  * Interface GIMBAL_MANAGER_FLAGS
- * Flags for high level gimbal manager operation The first 16 bytes are identical to the GIMBAL_DEVICE_FLAGS.
+ * Flags for high level gimbal manager operation The first 16 bits are identical to the GIMBAL_DEVICE_FLAGS.
  **/
 public interface GIMBAL_MANAGER_FLAGS {
     /**
