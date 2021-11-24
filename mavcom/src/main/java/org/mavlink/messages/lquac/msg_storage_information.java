@@ -90,7 +90,7 @@ public class msg_storage_information extends MAVLinkMessage {
   /**
    * Flags indicating whether this instance is preferred storage for photos, videos, etc.
         Note: Implementations should initially set the flags on the system-default storage id used for saving media (if possible/supported).
-        This setting can then be overridden using `MAV_CMD_SET_STORAGE_USAGE`.
+        This setting can then be overridden using MAV_CMD_SET_STORAGE_USAGE.
         If the media usage flags are not set, a GCS may assume storage ID 1 is the default storage for all media types.
    */
   public int storage_usage;

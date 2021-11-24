@@ -160,4 +160,20 @@ public interface MAV_TYPE {
      * Parachute
      */
     public final static int MAV_TYPE_PARACHUTE = 37;
+    /**
+     * Log
+     */
+    public final static int MAV_TYPE_LOG = 38;
+    /**
+     * OSD
+     */
+    public final static int MAV_TYPE_OSD = 39;
+    /**
+     * IMU
+     */
+    public final static int MAV_TYPE_IMU = 40;
+    /**
+     * GPS
+     */
+    public final static int MAV_TYPE_GPS = 41;
 }

@@ -24,4 +24,16 @@ public interface SET_FOCUS_TYPE {
      * Focus value in metres. Note that there is no message to get the valid focus range of the camera, so this can type can only be used for cameras where the range is known (implying that this cannot reliably be used in a GCS for an arbitrary camera).
      */
     public final static int FOCUS_TYPE_METERS = 3;
+    /**
+     * Focus automatically.
+     */
+    public final static int FOCUS_TYPE_AUTO = 4;
+    /**
+     * Single auto focus. Mainly used for still pictures. Usually abbreviated as AF-S.
+     */
+    public final static int FOCUS_TYPE_AUTO_SINGLE = 5;
+    /**
+     * Continuous auto focus. Mainly used for dynamic scenes. Abbreviated as AF-C.
+     */
+    public final static int FOCUS_TYPE_AUTO_CONTINUOUS = 6;
 }

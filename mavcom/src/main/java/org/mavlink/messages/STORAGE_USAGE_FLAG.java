@@ -5,11 +5,11 @@
 package org.mavlink.messages;
 /**
  * Interface STORAGE_USAGE_FLAG
- * Flags to indicate usage for a particular storage (see `STORAGE_INFORMATION.storage_usage` and `MAV_CMD_SET_STORAGE_USAGE`).
+ * Flags to indicate usage for a particular storage (see STORAGE_INFORMATION.storage_usage and MAV_CMD_SET_STORAGE_USAGE).
  **/
 public interface STORAGE_USAGE_FLAG {
     /**
-     * Always set to 1 (indicates `STORAGE_INFORMATION.storage_usage` is supported).
+     * Always set to 1 (indicates STORAGE_INFORMATION.storage_usage is supported).
      */
     public final static int STORAGE_USAGE_FLAG_SET = 1;
     /**
