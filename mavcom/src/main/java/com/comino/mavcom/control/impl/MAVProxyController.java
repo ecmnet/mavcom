@@ -261,17 +261,12 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public boolean sendMAVLinkCmd(int command, float...params) {
-		return sendMAVLinkCmd(command,null,1,params);
-	}
+		return sendMAVLinkCmd(command,null,params);
+	}	
 
 	@Override
 	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, float...params) {
-		return sendMAVLinkCmd(command,callback,1,params);
-	}
 
-	@Override
-	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, int retries, float...params) {
-		
 		msg_command_long cmd = new msg_command_long(255,1);
 		cmd.target_system = 1;
 		cmd.target_component = 1;
@@ -287,14 +282,13 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			case 4: cmd.param5 = params[4]; break;
 			case 5: cmd.param6 = params[5]; break;
 			case 6: cmd.param7 = params[6]; break;
-
 			}
 		}
 		if(callback!=null)
-		 comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,retries));
-		
+			comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,1));
 		return sendMAVLinkMessage(cmd);
 	}
+
 
 	@Override
 	public int getMode() {

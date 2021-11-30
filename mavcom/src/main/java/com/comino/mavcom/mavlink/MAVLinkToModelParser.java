@@ -100,14 +100,17 @@ public class MAVLinkToModelParser {
 			public void received(Object o) {
 
 				//	wq.addSingleTask("LP", () -> {
-				final msg_command_ack ack = (msg_command_ack) o;
+				msg_command_ack ack = (msg_command_ack) o;
 
 				if(cmd_ack.containsKey(ack.command)) {
-					
+
 					final MAVAcknowledge acknowlede = cmd_ack.get(ack.command);
-					if(ack.result == MAV_RESULT.MAV_RESULT_FAILED && acknowlede.retries-- > 0) {
-						try { link.write(acknowlede.msg); } catch (IOException e) {	}
+					
+					if((ack.result == MAV_RESULT.MAV_RESULT_FAILED ||
+					    ack.result == MAV_RESULT.MAV_RESULT_TEMPORARILY_REJECTED) && acknowlede.getAndDecreaseRetries() > 0) {
+						try { link.write(acknowlede.msg); 
 						logger.writeLocalMsg("Command " + ack.command + " not accepted. Retry.",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+						} catch (IOException e) { System.err.println(e.getMessage()); }
 						return;		
 					}
 					wq.addSingleTask("HP", () -> acknowlede.callback.received(ack.command, ack.result) );
@@ -212,7 +215,8 @@ public class MAVLinkToModelParser {
 	}
 
 	public void setCmdAcknowledgeListener(int command,MAVAcknowledge ack) {
-		this.cmd_ack.put(command, ack);
+		if(!cmd_ack.containsKey(command))
+		    this.cmd_ack.put(command, ack);
 	}
 
 	public void reset() {
@@ -278,5 +282,5 @@ public class MAVLinkToModelParser {
 		//		}
 
 	}
-	
+
 }
