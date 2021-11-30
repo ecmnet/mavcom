@@ -43,6 +43,7 @@ import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO2;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
+import com.comino.mavcom.mavlink.MAVAcknowledge;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 
@@ -68,7 +69,7 @@ public interface IMAVComm {
 
 	void registerListener(Class<?> clazz, IMAVLinkListener listener);
 
-	public void setCmdAcknowledgeListener(int command, IMAVCmdAcknowledge ack);
+	public void setCmdAcknowledgeListener(int command, MAVAcknowledge ack);
 
 	public boolean isConnected();
 

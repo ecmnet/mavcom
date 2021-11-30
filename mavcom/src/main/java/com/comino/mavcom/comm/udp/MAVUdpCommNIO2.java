@@ -29,6 +29,7 @@ import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO2;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
+import com.comino.mavcom.mavlink.MAVAcknowledge;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.mavlink.MAVLinkToModelParser;
 import com.comino.mavcom.model.DataModel;
@@ -163,7 +164,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	}
 
 	@Override
-	public void setCmdAcknowledgeListener(int command,IMAVCmdAcknowledge ack) {
+	public void setCmdAcknowledgeListener(int command,MAVAcknowledge ack) {
 		parser.setCmdAcknowledgeListener(command,ack);
 	}
 	

@@ -48,6 +48,7 @@ import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAV_RESULT;
 import org.mavlink.messages.MAV_SEVERITY;
 import org.mavlink.messages.lquac.msg_command_ack;
+import org.mavlink.messages.lquac.msg_command_long;
 import org.mavlink.messages.lquac.msg_statustext;
 import org.mavlink.messages.lquac.msg_timesync;
 
@@ -78,11 +79,11 @@ public class MAVLinkToModelParser {
 
 	private long time_offset_ns = 0;
 
-	private Map<Integer,IMAVCmdAcknowledge> cmd_ack = new HashMap<Integer,IMAVCmdAcknowledge>();
+	private Map<Integer,MAVAcknowledge> cmd_ack = new HashMap<Integer,MAVAcknowledge>();
 
 	private final WorkQueue wq = WorkQueue.getInstance();
 
-	public MAVLinkToModelParser(DataModel model, IMAVComm link) {
+	public MAVLinkToModelParser(final DataModel model, final IMAVComm link) {
 
 		this.model = model;
 		this.mavList = new HashMap<Class<?>, MAVLinkMessage>();
@@ -99,11 +100,17 @@ public class MAVLinkToModelParser {
 			public void received(Object o) {
 
 				//	wq.addSingleTask("LP", () -> {
-				msg_command_ack ack = (msg_command_ack) o;
+				final msg_command_ack ack = (msg_command_ack) o;
 
 				if(cmd_ack.containsKey(ack.command)) {
-					IMAVCmdAcknowledge acknowlede = cmd_ack.get(ack.command);
-					wq.addSingleTask("HP", () -> acknowlede.received(ack.command, ack.result) );
+					
+					final MAVAcknowledge acknowlede = cmd_ack.get(ack.command);
+					if(ack.result == MAV_RESULT.MAV_RESULT_FAILED && acknowlede.retries-- > 0) {
+						try { link.write(acknowlede.msg); } catch (IOException e) {	}
+						logger.writeLocalMsg("Command " + ack.command + " not accepted. Retry.",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+						return;		
+					}
+					wq.addSingleTask("HP", () -> acknowlede.callback.received(ack.command, ack.result) );
 					cmd_ack.remove(ack.command);
 
 					if(logger==null)
@@ -204,7 +211,7 @@ public class MAVLinkToModelParser {
 		return model.sys.isStatus(Status.MSP_CONNECTED);
 	}
 
-	public void setCmdAcknowledgeListener(int command,IMAVCmdAcknowledge ack) {
+	public void setCmdAcknowledgeListener(int command,MAVAcknowledge ack) {
 		this.cmd_ack.put(command, ack);
 	}
 
@@ -271,4 +278,5 @@ public class MAVLinkToModelParser {
 		//		}
 
 	}
+	
 }

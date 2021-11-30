@@ -66,6 +66,7 @@ import com.comino.mavcom.control.IMAVMSPController;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
+import com.comino.mavcom.mavlink.MAVAcknowledge;
 import com.comino.mavcom.mavlink.MAVTimeSync;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
@@ -284,16 +285,35 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	}
 
 
+	@Override
+	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, float...params) {
+		
+		msg_command_long cmd = new msg_command_long(255,1);
+		cmd.target_system = 1;
+		cmd.target_component = 1;
+		cmd.command = command;
+		cmd.confirmation = 1;
 
+		for(int i=0; i<params.length;i++) {
+			switch(i) {
+			case 0: cmd.param1 = params[0]; break;
+			case 1: cmd.param2 = params[1]; break;
+			case 2: cmd.param3 = params[2]; break;
+			case 3: cmd.param4 = params[3]; break;
+			case 4: cmd.param5 = params[4]; break;
+			case 5: cmd.param6 = params[5]; break;
+			case 6: cmd.param7 = params[6]; break;
+
+			}
+		}
+		comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,1));
+		return sendMAVLinkMessage(cmd);
+	}
+	
+	
 	@Override
 	public int getMode() {
 		return mode;
-	}
-
-	@Override
-	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge ack, float...params) {
-		comm.setCmdAcknowledgeListener(command,ack);
-		return sendMAVLinkCmd(command, params);
 	}
 
 	@Override
