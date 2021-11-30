@@ -27,7 +27,7 @@ public class PX4HighResIMUPlugin extends MAVLinkPluginBase {
 		model.imu.magz = imu.zmag;
 		model.hud.ap = imu.pressure_alt;
 
-		model.imu.abs_pressure = imu.abs_pressure;
+		model.imu.abs_pressure = imu.abs_pressure / 100f;
 
 		model.sys.imu_temp = (byte) imu.temperature;
 		model.imu.tms = DataModel.getSynchronizedPX4Time_us();
