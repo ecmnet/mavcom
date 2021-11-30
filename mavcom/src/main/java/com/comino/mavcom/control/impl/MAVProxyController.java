@@ -235,7 +235,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		});
 
 		wq.addSingleTask("LP", 500, () -> {  timesync = new MAVTimeSync(comm); });
-	    wq.addCyclicTask("NP", 200, this);	
+		wq.addCyclicTask("NP", 200, this);	
 
 	}
 
@@ -284,10 +284,14 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		return sendMAVLinkMessage(cmd);
 	}
 
-
 	@Override
 	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, float...params) {
-		
+		return sendMAVLinkCmd(command,callback,1,params);
+	}
+
+	@Override
+	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, int retries, float...params) {
+
 		msg_command_long cmd = new msg_command_long(255,1);
 		cmd.target_system = 1;
 		cmd.target_component = 1;
@@ -303,14 +307,13 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			case 4: cmd.param5 = params[4]; break;
 			case 5: cmd.param6 = params[5]; break;
 			case 6: cmd.param7 = params[6]; break;
-
 			}
 		}
-		comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,1));
+		comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,retries));
 		return sendMAVLinkMessage(cmd);
 	}
-	
-	
+
+
 	@Override
 	public int getMode() {
 		return mode;

@@ -199,6 +199,11 @@ public class MAVController implements IMAVController, Runnable {
 
 	@Override
 	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, float...params) {
+		return sendMAVLinkCmd(command,callback,1,params);
+	}
+
+	@Override
+	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, int retries, float...params) {
 		
 		msg_command_long cmd = new msg_command_long(255,1);
 		cmd.target_system = 1;
@@ -218,7 +223,7 @@ public class MAVController implements IMAVController, Runnable {
 
 			}
 		}
-		comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,1));
+		comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,retries));
 		return sendMAVLinkMessage(cmd);
 	}
 
