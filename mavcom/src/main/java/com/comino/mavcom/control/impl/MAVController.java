@@ -174,27 +174,7 @@ public class MAVController implements IMAVController, Runnable {
 
 	@Override
 	public boolean sendMAVLinkCmd(int command, float...params) {
-
-		msg_command_long cmd = new msg_command_long(255,1);
-		cmd.target_system = 1;
-		cmd.target_component = 1;
-		cmd.command = command;
-		cmd.confirmation = 1;
-
-		for(int i=0; i<params.length;i++) {
-			switch(i) {
-			case 0: cmd.param1 = params[0]; break;
-			case 1: cmd.param2 = params[1]; break;
-			case 2: cmd.param3 = params[2]; break;
-			case 3: cmd.param4 = params[3]; break;
-			case 4: cmd.param5 = params[4]; break;
-			case 5: cmd.param6 = params[5]; break;
-			case 6: cmd.param7 = params[6]; break;
-
-			}
-		}
-
-		return sendMAVLinkMessage(cmd);
+		return sendMAVLinkCmd(command,null,1,params);
 	}
 
 	@Override
@@ -223,7 +203,9 @@ public class MAVController implements IMAVController, Runnable {
 
 			}
 		}
-		comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,retries));
+		if(callback!=null)
+		 comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,retries));
+		
 		return sendMAVLinkMessage(cmd);
 	}
 
