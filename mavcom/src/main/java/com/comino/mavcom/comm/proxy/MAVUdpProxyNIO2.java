@@ -35,6 +35,7 @@
 package com.comino.mavcom.comm.proxy;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -68,7 +69,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 
 	private static final int BROADCAST_PORT = 4445;
 
-	private static final int BUFFER_SIZE = 128;
+	private static final int BUFFER_SIZE = 256;
 
 	private static final int WAITING     = 0;
 	private static final int RUNNING     = 1;
@@ -237,6 +238,11 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
 				channel.configureBlocking(false);
 				selector = Selector.open();
+			} catch (BindException b) {
+				System.err.println("Already running: "+b.getMessage());
+				System.err.println("Exiting now...");
+				System.exit(-1);
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

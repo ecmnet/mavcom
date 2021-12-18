@@ -8,17 +8,20 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.SocketOption;
 import java.net.StandardSocketOptions;
 import java.net.UnknownHostException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
+import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_heartbeat;
@@ -40,7 +43,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	private static final int BROADCAST_PORT = 4445;
 
-	private static final int BUFFER_SIZE = 512;
+	private static final int BUFFER_SIZE = 128;
 
 	private static final int WAITING     = 0;
 	private static final int RUNNING     = 1;
@@ -216,9 +219,13 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 			try {
 				channel = DatagramChannel.open();
+				final Set<SocketOption<?>> options = channel.supportedOptions();
+			    if (options.contains(StandardSocketOptions.TCP_NODELAY)) {
+			        channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
+			    }
 				channel.socket().setReuseAddress(true);
 				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
-				channel.socket().setSendBufferSize(32*1024);
+				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
 				channel.socket().setSoTimeout(1000);
 				selector = Selector.open();
 		//		channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
@@ -265,19 +272,10 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						if(channel.isConnected())
 							state = RUNNING;
 
-					} catch (BindException b) {
+					} catch ( ClosedSelectorException  |  IOException e) {
 						state = WAITING;
-					} catch (SocketException e) {
-						//		try { selector.close();  } catch (Exception e1) {  }
-						state = WAITING;
-						
-					} catch (ClosedChannelException e) {
-						state = WAITING;
-					} catch (IOException e) {
-						//			try { selector.close();  } catch (IOException e1) { }
-						state = WAITING;
-						
 					}
+
 				}
 
 				write(hb);
