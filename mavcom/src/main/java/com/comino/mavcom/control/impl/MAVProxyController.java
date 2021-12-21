@@ -34,7 +34,6 @@
 
 package com.comino.mavcom.control.impl;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,10 +54,8 @@ import org.mavlink.messages.lquac.msg_statustext;
 
 import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.comm.IMAVProxy;
-import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO;
 import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO2;
 import com.comino.mavcom.comm.serial.MAVSerialComm;
-import com.comino.mavcom.comm.udp.MAVUdpCommNIO;
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.control.IMAVController;

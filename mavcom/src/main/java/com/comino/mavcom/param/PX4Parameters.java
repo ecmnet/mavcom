@@ -110,8 +110,8 @@ public class PX4Parameters implements IMAVLinkListener {
 		ParameterAttributes att = parameterList.get(name.toUpperCase());
 
 		if(att==null) {
-			System.err.println("Parameter "+name+" could not be set to "+val);
-			MSPLogger.getInstance().writeLocalMsg("Setting Parameter "+name+" failed", MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+			System.err.println("Parameter "+name+" could not be set to "+val+"("+parameterList.size()+")");
+			MSPLogger.getInstance().writeLocalMsg("Parameter "+name+" unknown. Not set.", MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 			return false;
 		}
 

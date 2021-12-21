@@ -3,7 +3,6 @@ package com.comino.mavcom.mavlink.plugins;
 import org.mavlink.messages.lquac.msg_msp_micro_grid;
 
 import com.comino.mavcom.model.DataModel;
-import com.comino.mavcom.model.segment.Status;
 
 public class MspMicroGridPlugin extends MAVLinkPluginBase {
 

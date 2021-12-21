@@ -36,7 +36,6 @@ package com.comino.mavcom.model.segment;
 
 // ok
 import com.comino.mavcom.model.segment.generic.Segment;
-import com.comino.mavutils.MSPMathUtils;
 
 public class GPS extends Segment {
 

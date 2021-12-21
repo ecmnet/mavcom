@@ -36,25 +36,19 @@ package com.comino.mavcom.mavlink;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.nio.channels.ByteChannel;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAV_RESULT;
 import org.mavlink.messages.MAV_SEVERITY;
 import org.mavlink.messages.lquac.msg_command_ack;
-import org.mavlink.messages.lquac.msg_command_long;
 import org.mavlink.messages.lquac.msg_statustext;
-import org.mavlink.messages.lquac.msg_timesync;
 
 import com.comino.mavcom.comm.IMAVComm;
-import com.comino.mavcom.control.IMAVCmdAcknowledge;
-import com.comino.mavcom.flow.MessageBus;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.mavlink.plugins.MAVLinkPluginBase;
@@ -110,7 +104,7 @@ public class MAVLinkToModelParser {
 					    ack.result == MAV_RESULT.MAV_RESULT_TEMPORARILY_REJECTED) && acknowlede.getAndDecreaseRetries() > 0) {
 						try { link.write(acknowlede.msg); 
 						logger.writeLocalMsg("Command " + ack.command + " not accepted. Retry.",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
-						} catch (IOException e) { System.err.println(e.getMessage()); }
+						} catch (Exception e) { System.err.println(e.getMessage()); }
 						return;		
 					}
 					wq.addSingleTask("HP", () -> acknowlede.callback.received(ack.command, ack.result) );

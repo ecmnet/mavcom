@@ -55,7 +55,6 @@ import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVLinkReader;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
-import com.comino.mavutils.legacy.ExecutorService;
 
 
 public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable, IMAVProxy {

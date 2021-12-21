@@ -34,7 +34,6 @@
 
 package com.comino.mavcom.mavlink;
 
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Vector;
 

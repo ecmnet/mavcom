@@ -1,19 +1,15 @@
 package com.comino.mavcom.comm.udp;
 
 import java.io.IOException;
-import java.net.BindException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.net.SocketOption;
 import java.net.StandardSocketOptions;
-import java.net.UnknownHostException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
@@ -28,8 +24,6 @@ import org.mavlink.messages.lquac.msg_heartbeat;
 
 import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.comm.IMAVProxy;
-import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO2;
-import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVAcknowledge;
@@ -37,7 +31,6 @@ import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.mavlink.MAVLinkToModelParser;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
-import com.comino.mavcom.model.segment.Status;
 
 public class MAVUdpCommNIO2 implements IMAVComm {
 
@@ -320,10 +313,10 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 								}
 							}	
 						}
-					} catch (IOException e) {
+					} catch (Exception e) {
 						try {
 							selector.close();
-						} catch (IOException e1) { 	}
+						} catch (Exception e1) { 	}
 						state = WAITING;
 					}	
 				}				

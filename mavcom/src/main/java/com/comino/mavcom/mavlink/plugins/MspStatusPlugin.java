@@ -24,8 +24,6 @@ public class MspStatusPlugin extends MAVLinkPluginBase {
 		model.sys.mem_m    = (short)status.memory;
 		model.sys.build = status.getVersion();
 		model.sys.t_takeoff_ms = status.takeoff_ms;
-		if( status.uptime_ms > 0)
-			model.sys.t_boot_ms = status.uptime_ms;
 
 		model.sys.setStatus(Status.MSP_ACTIVE, true);
 		model.sys.setStatus(Status.MSP_CONNECTED, true);
