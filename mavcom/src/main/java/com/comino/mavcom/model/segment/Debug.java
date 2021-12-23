@@ -36,6 +36,9 @@ package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
 
+import georegression.struct.point.Vector3D_F64;
+import georegression.struct.point.Vector4D_F64;
+
 public class Debug extends Segment {
 
 	private static final long serialVersionUID = -1026591471182262641L;
@@ -43,11 +46,10 @@ public class Debug extends Segment {
 	// positioning actual
 
 
-	public float	    x=0;
+	public float	x=0;
 	public float    y=0;
 	public float    z=0;
-
-
+	
 
 	public Debug clone() {
 		Debug t = new Debug();
@@ -62,6 +64,18 @@ public class Debug extends Segment {
 		x		= t.x;
 		y		= t.y;
 		z		= t.z;
+	}
+	
+	public void set(Vector3D_F64 t) {
+		x       = (float)t.x;
+		y       = (float)t.y;
+		x       = (float)t.z;
+	}
+	
+	public void set(Vector4D_F64 t) {
+		x       = (float)t.x;
+		y       = (float)t.y;
+		x       = (float)t.z;
 	}
 
 	public void clear() {
