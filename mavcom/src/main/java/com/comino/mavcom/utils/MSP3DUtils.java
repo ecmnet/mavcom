@@ -67,6 +67,9 @@ public class MSP3DUtils {
 		return (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
 	}
 	
+	public static float angleXZ(GeoTuple3D_F64<?> t) {
+		return (float)Math.asin((t.z)/t.norm());
+	}
 	
 	public static float angleXY(GeoTuple3D_F64<?> t) {
 
