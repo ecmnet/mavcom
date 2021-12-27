@@ -275,6 +275,7 @@
            </message>
             <message id="185" name="MSP_TRAJECTORY">
                <description>MSP Trajectory factors and length</description>
+               <field type="uint8_t"       name="id">Id</field>
                <field type="float"         name="ls" >Length in secs</field>
                <field type="float"         name="fs" >Done in secs</field>
                <field type="float"         name="ax" >Alpha X</field>
@@ -292,6 +293,7 @@
                <field type="float"         name="svx" >Start VX</field>
                <field type="float"         name="svy" >Start VY</field>
                <field type="float"         name="svz" >Start VZ</field>
+
                <field type="uint64_t"      name="tms">Timestamp</field>
            </message>
       </messages>

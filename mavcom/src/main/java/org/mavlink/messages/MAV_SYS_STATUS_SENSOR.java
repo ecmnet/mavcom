@@ -132,4 +132,8 @@ public interface MAV_SYS_STATUS_SENSOR {
      * 0x40000000 propulsion (actuator, esc, motor or propellor)
      */
     public final static int MAV_SYS_STATUS_SENSOR_PROPULSION = 1073741824;
+    /**
+     * 0x80000000 Extended bit-field are used for further sensor status bits (needs to be set in onboard_control_sensors_present only)
+     */
+    public final static int MAV_SYS_STATUS_EXTENSION_USED = -2147483648;
 }

@@ -943,7 +943,7 @@
       <max>180</max>
       <unit>deg</unit>
     </parameter>
-    <parameter name="COM_ARM_MAG_STR" default="1" type="INT32">
+    <parameter name="COM_ARM_MAG_STR" default="2" type="INT32">
       <short_desc>Enable mag strength preflight check</short_desc>
       <long_desc>Check if the estimator detects a strong magnetic disturbance (check enabled by EKF2_MAG_CHECK)</long_desc>
       <values>
@@ -1176,6 +1176,11 @@
       <max>60</max>
       <unit>s</unit>
     </parameter>
+    <parameter name="COM_HOME_EN" default="1" type="INT32" boolean="true">
+      <short_desc>Home position enabled</short_desc>
+      <long_desc>Set home position automatically if possible.</long_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
     <parameter name="COM_HOME_H_T" default="5.0" type="FLOAT">
       <short_desc>Home set horizontal threshold</short_desc>
       <long_desc>The home position will be set if the estimated positioning accuracy is below the threshold.</long_desc>
@@ -1366,15 +1371,17 @@
       <max>1500</max>
       <unit>ms</unit>
     </parameter>
-    <parameter name="COM_RC_IN_MODE" default="0" type="INT32">
+    <parameter name="COM_RC_IN_MODE" default="3" type="INT32">
       <short_desc>RC control input mode</short_desc>
       <long_desc>The default value of 0 requires a valid RC transmitter setup. Setting this to 1 allows joystick control and disables RC input handling and the associated checks. A value of 2 will generate RC control data from manual input received via MAVLink instead of directly forwarding the manual input data.</long_desc>
       <min>0</min>
-      <max>2</max>
+      <max>4</max>
       <values>
         <value code="0">RC Transmitter only</value>
-        <value code="1">Joystick only/No RC Checks</value>
-        <value code="2">RC and Joystick are accepted</value>
+        <value code="1">Joystick only</value>
+        <value code="2">RC and Joystick with fallback</value>
+        <value code="3">RC or Joystick keep first</value>
+        <value code="4">Stick input disabled</value>
       </values>
     </parameter>
     <parameter name="COM_RC_LOSS_T" default="0.5" type="FLOAT">
@@ -1905,7 +1912,7 @@
       <unit>gauss/s</unit>
       <decimal>6</decimal>
     </parameter>
-    <parameter name="EKF2_MAG_CHECK" default="0" type="INT32" boolean="true">
+    <parameter name="EKF2_MAG_CHECK" default="1" type="INT32" boolean="true">
       <short_desc>Magnetic field strength test selection</short_desc>
       <long_desc>When set, the EKF checks the strength of the magnetic field to decide whether the magnetometer data is valid. If GPS data is received, the magnetic field is compared to a World Magnetic Model (WMM), otherwise an average value is used. This check is useful to reject occasional hard iron disturbance.</long_desc>
     </parameter>
@@ -2773,10 +2780,10 @@
     </parameter>
     <parameter name="FW_L1_PERIOD" default="20.0" type="FLOAT">
       <short_desc>L1 period</short_desc>
-      <long_desc>This is the L1 distance and defines the tracking point ahead of the aircraft its following. A value of 18-25 meters works for most aircraft. Shorten slowly during tuning until response is sharp without oscillation.</long_desc>
-      <min>12.0</min>
+      <long_desc>Used to determine the L1 gain and controller time constant. This parameter is proportional to the L1 distance (which points ahead of the aircraft on the path it is following). A value of 18-25 seconds works for most aircraft. Shorten slowly during tuning until response is sharp without oscillation.</long_desc>
+      <min>7.0</min>
       <max>50.0</max>
-      <unit>m</unit>
+      <unit>s</unit>
       <decimal>1</decimal>
       <increment>0.5</increment>
     </parameter>
@@ -3407,6 +3414,11 @@
       <decimal>0</decimal>
       <reboot_required>true</reboot_required>
     </parameter>
+    <parameter name="PPS_CAP_ENABLE" default="0" type="INT32" boolean="true">
+      <short_desc>PPS Capture Enable</short_desc>
+      <long_desc>Enables the PPS capture module. This switches mode of FMU channel 7 to be the PPS input channel.</long_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
   </group>
   <group name="Geofence">
     <parameter name="GF_ACTION" default="2" type="INT32">
@@ -3532,31 +3544,31 @@
   </group>
   <group name="Land Detector">
     <parameter name="LNDFW_AIRSPD_MAX" default="6.00" type="FLOAT">
-      <short_desc>Airspeed max</short_desc>
+      <short_desc>Fixed-wing land detector: Max airspeed</short_desc>
       <long_desc>Maximum airspeed allowed in the landed state</long_desc>
-      <min>4</min>
+      <min>2</min>
       <max>20</max>
       <unit>m/s</unit>
       <decimal>1</decimal>
     </parameter>
     <parameter name="LNDFW_VEL_XY_MAX" default="5.0" type="FLOAT">
-      <short_desc>Fixedwing max horizontal velocity</short_desc>
-      <long_desc>Maximum horizontal velocity allowed in the landed state</long_desc>
+      <short_desc>Fixed-wing land detector: Max horizontal velocity threshold</short_desc>
+      <long_desc>Maximum horizontal velocity allowed in the landed state. A factor of 0.7 is applied in case of airspeed-less flying (either because no sensor is present or sensor data got invalid in flight).</long_desc>
       <min>0.5</min>
       <max>10</max>
       <unit>m/s</unit>
       <decimal>1</decimal>
     </parameter>
-    <parameter name="LNDFW_VEL_Z_MAX" default="3.0" type="FLOAT">
-      <short_desc>Fixedwing max climb rate</short_desc>
-      <long_desc>Maximum vertical velocity allowed in the landed state</long_desc>
+    <parameter name="LNDFW_VEL_Z_MAX" default="2.0" type="FLOAT">
+      <short_desc>Fixed-wing land detector: Max vertiacal velocity threshold</short_desc>
+      <long_desc>Maximum vertical velocity allowed in the landed state. A factor of 0.7 is applied in case of airspeed-less flying (either because no sensor is present or sensor data got invalid in flight).</long_desc>
       <min>0.1</min>
       <max>20</max>
       <unit>m/s</unit>
       <decimal>1</decimal>
     </parameter>
     <parameter name="LNDFW_XYACC_MAX" default="8.0" type="FLOAT">
-      <short_desc>Fixedwing max horizontal acceleration</short_desc>
+      <short_desc>Fixed-wing land detector: Max horizontal acceleration</short_desc>
       <long_desc>Maximum horizontal (x,y body axes) acceleration allowed in the landed state</long_desc>
       <min>2</min>
       <max>15</max>
@@ -3613,6 +3625,43 @@
       <short_desc>Total flight time in microseconds</short_desc>
       <long_desc>Total flight time of this autopilot. Lower 32 bits of the value. Flight time in microseconds = (LND_FLIGHT_T_HI &lt;&lt; 32) | LND_FLIGHT_T_LO.</long_desc>
       <min>0</min>
+    </parameter>
+  </group>
+  <group name="Landing Target Estimator">
+    <parameter name="LTEST_SENS_POS_X" default="0.0" type="FLOAT">
+      <short_desc>X Position of IRLOCK in body frame (forward)</short_desc>
+      <unit>m</unit>
+      <decimal>3</decimal>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="LTEST_SENS_POS_Y" default="0.0" type="FLOAT">
+      <short_desc>Y Position of IRLOCK in body frame (right)</short_desc>
+      <unit>m</unit>
+      <decimal>3</decimal>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="LTEST_SENS_POS_Z" default="0.0" type="FLOAT">
+      <short_desc>Z Position of IRLOCK in body frame (downward)</short_desc>
+      <unit>m</unit>
+      <decimal>3</decimal>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="LTEST_SENS_ROT" default="2" type="INT32">
+      <short_desc>Rotation of IRLOCK sensor relative to airframe</short_desc>
+      <long_desc>Default orientation of Yaw 90°</long_desc>
+      <min>-1</min>
+      <max>40</max>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">No rotation</value>
+        <value code="1">Yaw 45°</value>
+        <value code="2">Yaw 90°</value>
+        <value code="3">Yaw 135°</value>
+        <value code="4">Yaw 180°</value>
+        <value code="5">Yaw 225°</value>
+        <value code="6">Yaw 270°</value>
+        <value code="7">Yaw 315°</value>
+      </values>
     </parameter>
   </group>
   <group name="Landing target Estimator">
@@ -4375,13 +4424,13 @@
       <max>360.0</max>
       <decimal>1</decimal>
     </parameter>
-    <parameter name="MNT_RANGE_PITCH" default="360.0" type="FLOAT">
+    <parameter name="MNT_RANGE_PITCH" default="90.0" type="FLOAT">
       <short_desc>Range of pitch channel output in degrees (only in AUX output mode)</short_desc>
       <min>1.0</min>
       <max>720.0</max>
       <decimal>1</decimal>
     </parameter>
-    <parameter name="MNT_RANGE_ROLL" default="360.0" type="FLOAT">
+    <parameter name="MNT_RANGE_ROLL" default="90.0" type="FLOAT">
       <short_desc>Range of roll channel output in degrees (only in AUX output mode)</short_desc>
       <min>1.0</min>
       <max>720.0</max>
@@ -4404,6 +4453,15 @@
       <long_desc>Full stick input [-1..1] translats to [-yaw rate..yaw rate].</long_desc>
       <min>1.0</min>
       <max>90.0</max>
+    </parameter>
+    <parameter name="MNT_RC_IN_MODE" default="1" type="INT32">
+      <short_desc>Input mode for RC gimbal input</short_desc>
+      <min>0</min>
+      <max>1</max>
+      <values>
+        <value code="0">Angle</value>
+        <value code="1">Angular rate</value>
+      </values>
     </parameter>
   </group>
   <group name="Multicopter Attitude Control">
@@ -5122,7 +5180,7 @@
   <group name="PWM Outputs">
     <parameter name="MOT_SLEW_MAX" default="0.0" type="FLOAT">
       <short_desc>Minimum motor rise time (slew rate limit)</short_desc>
-      <long_desc>Minimum time allowed for the motor input signal to pass through a range of 1000 PWM units. A value x means that the motor signal can only go from 1000 to 2000 PWM in maximum x seconds. Zero means that slew rate limiting is disabled.</long_desc>
+      <long_desc>Minimum time allowed for the motor input signal to pass through a range of 1000 PWM units. A value x means that the motor signal can only go from 1000 to 2000 PWM in minimum x seconds. Zero means that slew rate limiting is disabled.</long_desc>
       <min>0.0</min>
       <unit>s/(1000*PWM)</unit>
     </parameter>
@@ -9686,6 +9744,31 @@
       </values>
     </parameter>
   </group>
+  <group name="Simulator">
+    <parameter name="SIM_BARO_OFF_P" default="0.0" type="FLOAT">
+      <short_desc>simulated barometer pressure offset</short_desc>
+    </parameter>
+    <parameter name="SIM_BARO_OFF_T" default="0.0" type="FLOAT">
+      <short_desc>simulated barometer temperature offset</short_desc>
+    </parameter>
+    <parameter name="SIM_GPS_USED" default="10" type="INT32">
+      <short_desc>simulated GPS number of satellites used</short_desc>
+      <min>0</min>
+      <max>50</max>
+    </parameter>
+    <parameter name="SIM_MAG_OFFSET_X" default="0.0" type="FLOAT">
+      <short_desc>simulated magnetometer X offset</short_desc>
+      <unit>gauss</unit>
+    </parameter>
+    <parameter name="SIM_MAG_OFFSET_Y" default="0.0" type="FLOAT">
+      <short_desc>simulated magnetometer Y offset</short_desc>
+      <unit>gauss</unit>
+    </parameter>
+    <parameter name="SIM_MAG_OFFSET_Z" default="0.0" type="FLOAT">
+      <short_desc>simulated magnetometer Z offset</short_desc>
+      <unit>gauss</unit>
+    </parameter>
+  </group>
   <group name="System">
     <parameter name="SYS_AUTOCONFIG" default="0" type="INT32">
       <short_desc>Automatically configure default values</short_desc>
@@ -9745,6 +9828,15 @@
       <short_desc>Enable Dynamic Control Allocation</short_desc>
       <long_desc>If disabled, the existing mixing implementation is used. If enabled, dynamic control allocation with runtime configuration of the mixing and output functions is used. Note: this is work-in-progress and not all vehicle types are supported yet.</long_desc>
       <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="SYS_DM_BACKEND" default="0" type="INT32" boolean="true">
+      <short_desc>Dataman storage backend</short_desc>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="-1">Disabled</value>
+        <value code="0">default (SD card)</value>
+        <value code="1">RAM (not persistent)</value>
+      </values>
     </parameter>
     <parameter name="SYS_FAC_CAL_MODE" default="0" type="INT32" boolean="true">
       <short_desc>Enable factory calibration mode</short_desc>
@@ -10816,8 +10908,8 @@
       <increment>0.01</increment>
     </parameter>
     <parameter name="VT_ELEV_MC_LOCK" default="1" type="INT32" boolean="true">
-      <short_desc>Lock elevons in multicopter mode</short_desc>
-      <long_desc>If set to 1 the elevons are locked in multicopter mode</long_desc>
+      <short_desc>Lock control surfaces in hover</short_desc>
+      <long_desc>If set to 1 the control surfaces are locked at the disarmed value in multicopter mode.</long_desc>
     </parameter>
     <parameter name="VT_FWD_THRUST_EN" default="0" type="INT32">
       <short_desc>Enable/disable usage of fixed-wing actuators in hover to generate forward force (instead of pitching down)</short_desc>
