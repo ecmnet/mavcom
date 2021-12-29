@@ -69,13 +69,13 @@ public class Debug extends Segment {
 	public void set(Vector3D_F64 t) {
 		x       = (float)t.x;
 		y       = (float)t.y;
-		x       = (float)t.z;
+		z       = (float)t.z;
 	}
 	
 	public void set(Vector4D_F64 t) {
 		x       = (float)t.x;
 		y       = (float)t.y;
-		x       = (float)t.z;
+		z       = (float)t.z;
 	}
 
 	public void clear() {
