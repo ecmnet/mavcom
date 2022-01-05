@@ -36,11 +36,18 @@ public class MSP3DComplementaryFilter {
     	count++;
     }
     
-    public Vector3D_F64 getFiltered() {
+    public void add(Vector3D_F64 value1, Vector3D_F64 value2) {
+    		filtered.x = value2.x * (1 - factor) + value1.x * factor;
+    		filtered.y = value2.y * (1 - factor) + value1.y * factor;
+    		filtered.z = value2.z * (1 - factor) + value1.z * factor;
+    	count++;
+    }
+    
+    public Vector3D_F64 get() {
     	return filtered;
     }
     
-    public double getFilteredNorm() {
+    public double getNorm() {
     	return filtered.norm();
     }
     
@@ -48,7 +55,7 @@ public class MSP3DComplementaryFilter {
     	return count;
     }
     
-    public void clear() {
+    public void reset() {
     	filtered.setTo(0,0,0);
     	count = 0;
     }
