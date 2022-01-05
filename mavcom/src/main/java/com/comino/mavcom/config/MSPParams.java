@@ -34,6 +34,7 @@ public final class MSPParams {
 	public static final String T265_OFFSET_X            = "t265_offset_x";
 	public static final String T265_OFFSET_Y            = "t265_offset_y";
 	public static final String T265_OFFSET_Z            = "t265_offset_z";
+	public static final String T265_DRIFT_COMPENSATION  = "t265_drift_compensation";
 	
 	// D455 settings
 	
