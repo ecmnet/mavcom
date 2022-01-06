@@ -314,6 +314,12 @@ public class MAVController implements IMAVController, Runnable {
 		if(comm!=null)
 			comm.addMAVLinkListener(listener);
 	}
+	
+	@Override
+	public void addMAVLinkListener(Class<?> clazz, IMAVLinkListener listener) {
+		if(comm!=null)
+			comm.registerListener(clazz, listener);
+	}
 
 	@Override
 	public void addMAVMessageListener(IMAVMessageListener listener) {

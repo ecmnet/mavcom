@@ -381,6 +381,11 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	public void addMAVLinkListener(IMAVLinkListener listener) {
 		comm.addMAVLinkListener(listener);
 	}
+	
+	@Override
+	public void addMAVLinkListener(Class<?> clazz,IMAVLinkListener listener) {
+		comm.registerListener(clazz, listener);
+	}
 
 	@Override
 	public void addMAVMessageListener(IMAVMessageListener listener) {
