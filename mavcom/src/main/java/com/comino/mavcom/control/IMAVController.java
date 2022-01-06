@@ -77,6 +77,7 @@ public interface IMAVController {
 
 	public void addStatusChangeListener(IMSPStatusChangedListener listener);
 	public void addMAVLinkListener(IMAVLinkListener listener);
+	public void addMAVLinkListener(Class<?> clazz, IMAVLinkListener listener);
 	public void addMAVMessageListener(IMAVMessageListener listener);
 
 	public StatusManager getStatusManager();

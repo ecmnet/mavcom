@@ -699,7 +699,7 @@ public interface MAV_CMD {
     /**
      * Enable/disable autotune.
      * PARAM 1 : Enable (1: enable, 0:disable).
-     * PARAM 2 : Empty.
+     * PARAM 2 : Specify which axis are autotuned. 0 indicates autopilot default settings.
      * PARAM 3 : Empty.
      * PARAM 4 : Empty.
      * PARAM 5 : Empty.
@@ -1398,7 +1398,7 @@ public interface MAV_CMD {
      * Command to operate winch.
      * PARAM 1 : Winch instance number.
      * PARAM 2 : Action to perform.
-     * PARAM 3 : Length of cable to release (negative to wind).
+     * PARAM 3 : Length of line to release (negative to wind).
      * PARAM 4 : Release rate (negative to wind).
      * PARAM 5 : Empty.
      * PARAM 6 : Empty.

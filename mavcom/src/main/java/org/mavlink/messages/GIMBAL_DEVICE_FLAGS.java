@@ -13,7 +13,7 @@ public interface GIMBAL_DEVICE_FLAGS {
      */
     public final static int GIMBAL_DEVICE_FLAGS_RETRACT = 1;
     /**
-     * Set to neutral position (horizontal, forward looking, with stabiliziation), takes presedence over all other flags except RETRACT.
+     * Set to neutral/default position, taking precedence over all other flags except RETRACT. Neutral is commonly forward-facing and horizontal (pitch=yaw=0) but may be any orientation.
      */
     public final static int GIMBAL_DEVICE_FLAGS_NEUTRAL = 2;
     /**
