@@ -72,6 +72,12 @@ public class Debug extends Segment {
 		z       = (float)t.z;
 	}
 	
+	public void set(double _x, double _y, double _z) {
+		x       = (float)_x;
+		y       = (float)_y;
+		z       = (float)_z;
+	}
+	
 	public void set(Vector4D_F64 t) {
 		x       = (float)t.x;
 		y       = (float)t.y;
