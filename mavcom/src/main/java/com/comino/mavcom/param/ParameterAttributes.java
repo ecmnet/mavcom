@@ -33,6 +33,7 @@
 
 package com.comino.mavcom.param;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,5 +80,13 @@ public class ParameterAttributes  implements Comparable<ParameterAttributes> {
 	@Override
 	public int compareTo(ParameterAttributes o) {
        return this.name.compareTo(o.name);
+	}
+	
+	public String getValueFormatted() {
+		if(value!=Double.MAX_VALUE && value!= -Double.MAX_VALUE) {
+			BigDecimal bd = new BigDecimal(value).setScale(decimals,BigDecimal.ROUND_HALF_UP);
+			return bd.toPlainString();
+		}
+		return "NaN";
 	}
 }
