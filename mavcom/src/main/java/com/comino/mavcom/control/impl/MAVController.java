@@ -199,7 +199,7 @@ public class MAVController implements IMAVController, Runnable {
 			}
 		}
 		if(callback!=null)
-			comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,1));
+			comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,comm,1));
 		return sendMAVLinkMessage(cmd);
 	}
 

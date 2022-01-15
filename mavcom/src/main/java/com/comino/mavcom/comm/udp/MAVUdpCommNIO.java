@@ -95,7 +95,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 	private MAVUdpCommNIO(DataModel model, String peerAddress, int pPort, int bPort) {
 		this.model = model;
-		this.parser = new MAVLinkToModelParser(model,this);
+		this.parser = new MAVLinkToModelParser(model);
 		this.peerPort = new InetSocketAddress(peerAddress,pPort);
 		this.bindPort = new InetSocketAddress(bPort);
 		this.reader = new MAVLinkBlockingReader(2, parser);

@@ -75,7 +75,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 
 		this.model    = model;
-		this.parser   = new MAVLinkToModelParser(model,this);
+		this.parser   = new MAVLinkToModelParser(model);
 		this.peerPort = new InetSocketAddress(peerAddress,pPort);
 		this.reader   = new MAVLinkBlockingReader(2, parser);
 		this.bindPort = bPort;

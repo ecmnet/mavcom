@@ -95,8 +95,6 @@ public class MAVSerialComm implements IMAVComm {
 		this.model = model; int i=0;
 		this.baudrate = baudrate;
 		
-		this.parser     = new MAVLinkToModelParser(model, this);
-		this.reader     = new MAVLinkBlockingReader(3, parser);
 
 		System.out.print("Searching ports... ");
 
@@ -134,6 +132,9 @@ public class MAVSerialComm implements IMAVComm {
 		
 		this.is = new BufferedInputStream(serialPort.getInputStream(),BUFFER*1024*2);
 		this.os = new BufferedOutputStream(serialPort.getOutputStream(),2048);
+		
+		this.parser     = new MAVLinkToModelParser(model);
+		this.reader     = new MAVLinkBlockingReader(3, parser);
 
 	}
 

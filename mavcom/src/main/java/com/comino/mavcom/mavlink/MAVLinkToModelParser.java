@@ -77,7 +77,7 @@ public class MAVLinkToModelParser {
 
 	private final WorkQueue wq = WorkQueue.getInstance();
 
-	public MAVLinkToModelParser(final DataModel model, final IMAVComm link) {
+	public MAVLinkToModelParser(final DataModel model) {
 
 		this.model = model;
 		this.mavList = new HashMap<Class<?>, MAVLinkMessage>();
@@ -102,7 +102,8 @@ public class MAVLinkToModelParser {
 					
 					if((ack.result == MAV_RESULT.MAV_RESULT_FAILED ||
 					    ack.result == MAV_RESULT.MAV_RESULT_TEMPORARILY_REJECTED) && acknowlede.getAndDecreaseRetries() > 0) {
-						try { link.write(acknowlede.msg); 
+						try { 
+							acknowlede.link.write(acknowlede.msg); 
 						logger.writeLocalMsg("Command " + ack.command + " not accepted. Retry.",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 						} catch (Exception e) { System.err.println(e.getMessage()); }
 						return;		
