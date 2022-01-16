@@ -52,23 +52,25 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	private boolean connected;
 
 	private final msg_heartbeat beat = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_OSD);
-	private final IMAVComm[] comms = new IMAVComm[3];
+	private final IMAVComm[] comms = new IMAVComm[4];
 
 
 	public MAVAutoController(String peerAddress, int peerPort, int bindPort) {
-		super(3);
+		super(2);
 		this.peerAddress = peerAddress;
 		this.peerPort = peerPort;
 		this.bindPort = bindPort;
-		comms[2] = MAVUdpCommNIO2.getInstance(reader,"127.0.0.1",14656,14650);
-		comms[1] = MAVUdpCommNIO2.getInstance(reader, peerAddress,peerPort, bindPort);
+		
 		comms[0] = MAVSerialComm.getInstance(reader,57600);
+		comms[1] = new MAVUdpCommNIO2(reader, peerAddress,peerPort, bindPort);
+		comms[2] = new MAVUdpCommNIO2(reader,"localhost",14580,14540);
+		comms[3] = new MAVUdpCommNIO2(reader,"127.0.0.1",14656,14650);
+		
 		model.sys.setStatus(Status.MSP_PROXY, false);
 
 		beat.type = MAV_TYPE.MAV_TYPE_GCS;
 		beat.system_status = MAV_STATE.MAV_STATE_ACTIVE;
-		System.out.println("AutoController loaded");
-
+		System.out.println("Auto Controller loaded ("+peerAddress+":"+peerPort+")");
 	}
 
 
@@ -78,32 +80,42 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if(this.connected)
 			return true;
 
-		System.out.print("Try to connect... ");
+		System.out.print("Connecting to... ");
 		
 		if(comm!=null && !comm.isConnected()) {
-			comm.close();
+			comm.close(); comm.open();
+			return true;
 		}
 
 		
 		if(comms[0].open()) {
 			comm = comms[0];
 			this.isSITL = false;
-			System.out.println("Serial connection found");
+			System.out.println(comm);
 			return true;
 		}
 		
 		if(comms[1].open()) {
 			comm = comms[1];
-			System.out.println("UDP connection found");
+			this.isSITL = false;
+			System.out.println(comm);
 			return true;
 		}
 		
-//		if(comms[2].open()) {
-//			comm = comms[2];
-//			this.isSITL = true;
-//			System.out.println("SITL PROXY connection found");
-//			return true;
-//		}
+		
+		if(comms[2].open()) {
+			comm = comms[2];
+			this.isSITL = true;
+			System.out.println(comm+" (SITL)");
+			return true;
+		}
+		
+		if(comms[3].open()) {
+			comm = comms[3];
+			this.isSITL = true;
+			System.out.println(comm+" (SITL Proxy)");
+			return true;
+		}
 			
 		
 		return true;

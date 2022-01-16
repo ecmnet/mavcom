@@ -144,6 +144,7 @@ public class Status extends Segment {
 	public float    wifi_quality 	= Float.NaN;
 
 	public long     gcl_tms         = 0;
+	public long     msp_tms         = 0;
 	public short    mem_m           = 0;
 	
 	public static String   version  = "";

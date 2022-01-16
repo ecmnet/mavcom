@@ -6,6 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.SocketOption;
 import java.net.StandardSocketOptions;
 import java.nio.Buffer;
@@ -56,10 +57,12 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	private Selector        selector     = null;
 
 	private IMAVProxy       byteListener = null;
-	private Thread worker                = null;
+	private Thread wt                = null;
 
 	private final ByteBuffer rxBuffer    = ByteBuffer.allocateDirect(BUFFER_SIZE*1024);
 	private final byte[]    proxyBuffer  = new byte[rxBuffer.capacity()];
+
+	private Worker worker;
 
 	private final static msg_heartbeat hb = new msg_heartbeat(255,1);
 
@@ -69,7 +72,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		return com;
 	}
 
-	private MAVUdpCommNIO2(MAVLinkBlockingReader reader, String peerAddress, int pPort, int bPort) {
+	public MAVUdpCommNIO2(MAVLinkBlockingReader reader, String peerAddress, int pPort, int bPort) {
 
 
 		this.model    = reader.getModel();
@@ -78,21 +81,27 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		this.bindPort = bPort;
 
 		hb.isValid = true;
-		worker = new Thread(new Worker());
-		worker.start();
+		this.worker = new Worker();
+		wt = new Thread(worker);
+		wt.start();
+	}
 
-		System.out.println("Vehicle (NIO4): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
+	public String toString() {
+		return "UDP "+ peerPort.getHostString();
 	}
 
 
 	@Override
 	public boolean open() {
+
 		try {
 			state = WAITING;
 			if(selector!=null)
 				selector.close();
-
-		} catch (IOException e) {
+			worker.waitFor();
+			if(state == WAITING)
+				return false;
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return true;
@@ -164,10 +173,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		reader.getParser().writeMessage(m);
 	}
 
-	public String toString() {
-		return "State: "+state+" ("+transfer_speed +")";
-	}
-	
 	@Override
 	public MAVLinkBlockingReader getReader() {
 		return reader;
@@ -181,7 +186,13 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		private int msg_length; 
 		private long start; 
 		private String localAddress;
+		private MAVUdpCommNIO2 comm;
 
+		public void waitFor() {
+			synchronized(this) { try {
+				wait(500);
+			} catch (InterruptedException e) { } };
+		}
 
 		@Override
 		public void run() {
@@ -189,15 +200,15 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			try {
 				channel = DatagramChannel.open();
 				final Set<SocketOption<?>> options = channel.supportedOptions();
-			    if (options.contains(StandardSocketOptions.TCP_NODELAY)) {
-			        channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
-			    }
+				if (options.contains(StandardSocketOptions.TCP_NODELAY)) {
+					channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
+				}
 				channel.socket().setReuseAddress(true);
 				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
 				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
 				channel.socket().setSoTimeout(1000);
 				selector = Selector.open();
-		//		channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
+				//		channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
 				channel.configureBlocking(false);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -209,13 +220,13 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 
 					try { Thread.sleep(100); } catch (InterruptedException e) { }
-					
+
 					transfer_speed = 0;
 					((Buffer)rxBuffer).clear();
 					try {
 
 						channel.disconnect();
-						
+
 						try { Thread.sleep(50); } catch (InterruptedException e) { }
 
 						if(!channel.socket().isBound()) {
@@ -228,11 +239,11 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 									channel.socket().bind(new InetSocketAddress(localAddress,bindPort));
 								else
 									channel.socket().bind(new InetSocketAddress(bindPort));
-									continue;
+								continue;
 							}
 						}
 						channel.connect(peerPort);
-						
+
 						if(selector.isOpen())
 							selector.close();
 						selector = Selector.open();
@@ -245,6 +256,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						state = WAITING;
 					}
 
+				}
+				synchronized(this) {
+					notify();
 				}
 
 				write(hb);

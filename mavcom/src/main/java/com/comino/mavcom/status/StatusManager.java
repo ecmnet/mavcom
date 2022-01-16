@@ -430,6 +430,10 @@ public class StatusManager implements Runnable {
 				System.out.println(("GCL lost at "+(model.sys.gcl_tms - DataModel.getSynchronizedPX4Time_us())/1000)+"ms");
 				System.out.println(model.sys);
 		}
+		
+		if (checkTimeOutSystem(model.sys.msp_tms, TIMEOUT_GCL_CONNECTED) && model.sys.isSensorAvailable(Status.MSP_MSP_AVAILABILITY)) {
+			model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, (false));
+	    }
 
 		if(!model.sys.isStatus(Status.MSP_SITL)) {
 			if (checkTimeOut(model.rc.tms, TIMEOUT_RC_ATTACHED)) {
@@ -440,6 +444,7 @@ public class StatusManager implements Runnable {
 
 		if (checkTimeOut(model.sys.tms, TIMEOUT_CONNECTED) && model.sys.isStatus(Status.MSP_CONNECTED)) {
 			model.sys.setStatus(Status.MSP_CONNECTED, false);
+			model.sys.setStatus(Status.MSP_ACTIVE, false);
 			model.sys.clear();
 			//	System.out.println("..Connection timeout "+(model.sys.tms+TIMEOUT_CONNECTED)+" vs "+DataModel.getSynchronizedPX4Time_us()+" > "+model.sys.tms);
 			System.out.println(("MSP lost: "+(DataModel.getSynchronizedPX4Time_us() - model.sys.tms)/1000)+"ms");

@@ -2,6 +2,7 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_msp_status;
 
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
 public class MspStatusPlugin extends MAVLinkPluginBase {
@@ -24,6 +25,7 @@ public class MspStatusPlugin extends MAVLinkPluginBase {
 		model.sys.mem_m    = (short)status.memory;
 		model.sys.build = status.getVersion();
 		model.sys.t_takeoff_ms = status.takeoff_ms;
+		model.sys.msp_tms = System.currentTimeMillis()*1000;
 
 		model.sys.setStatus(Status.MSP_ACTIVE, true);
 		model.sys.setStatus(Status.MSP_CONNECTED, true);

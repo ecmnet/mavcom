@@ -192,6 +192,10 @@ public class MAVSerialComm implements IMAVComm {
 			e.printStackTrace();
 		}
 	}
+	
+	public String toString() {
+		return "Serial "+ serialPort.getDescriptivePortName()+" ("+baudrate+")";
+	}
 
 	private boolean open(String portName, int baudRate, int dataBits, int stopBits, int parity) {
 
