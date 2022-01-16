@@ -93,16 +93,16 @@ public class MAVController implements IMAVController, Runnable {
 	private String           filename;
 	private SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	private PrintStream      ps_log;
-	
+
 	private int  mode = 0;
-	
+
 	protected final WorkQueue wq = WorkQueue.getInstance();
-	
+
 
 	public static IMAVController getInstance() {
 		return controller;
 	}
-	
+
 	public MAVController() {
 		this(0);
 	}
@@ -116,8 +116,8 @@ public class MAVController implements IMAVController, Runnable {
 		wq.addCyclicTask("LP",200,this);
 
 	}
-	
-	
+
+
 
 	public String enableFileLogging(boolean enable, String directory_name) {
 		this.file_log_enabled = enable;
@@ -157,7 +157,7 @@ public class MAVController implements IMAVController, Runnable {
 		return null;
 	}
 
-	
+
 
 	@Override
 	public int getMode() {
@@ -174,7 +174,7 @@ public class MAVController implements IMAVController, Runnable {
 			return true;
 		} catch (Exception e1) {
 			commError++;
-			System.out.println("MAVLinkMessage not sent. "+e1.getMessage());
+			System.out.println("MAVLinkMessage "+msg+" not sent. "+e1.getMessage());
 			return false;
 		}
 
@@ -233,17 +233,22 @@ public class MAVController implements IMAVController, Runnable {
 			}
 		}
 
-		try {
-			if((comm.isSerial()))
-				throw new IOException("MSP Commands only via UDP to proxy allowed");
+		if(comm!=null) {
 
-			comm.write(cmd);
-			return true;
-		} catch (IOException e1) {
-			commError++;
-			System.out.println("Command rejected: "+e1.getMessage());
-			return false;
+			try {
+				if(comm.isSerial())
+					throw new IOException("MSP Commands only via UDP to proxy allowed");
+
+				comm.write(cmd);
+				return true;
+			} catch (IOException e1) {
+				commError++;
+				System.out.println("Command rejected: "+e1.getMessage());
+				return false;
+			}
+			
 		}
+		return false;
 	}
 
 	@Override
@@ -278,7 +283,7 @@ public class MAVController implements IMAVController, Runnable {
 
 	@Override
 	public DataModel getCurrentModel() {
-		return comm.getModel();
+		return reader.getModel();
 	}
 
 
@@ -315,7 +320,7 @@ public class MAVController implements IMAVController, Runnable {
 	public void addMAVLinkListener(IMAVLinkListener listener) {
 		reader.getParser().addMAVLinkListener(listener);
 	}
-	
+
 	@Override
 	public void addMAVLinkListener(Class<?> clazz, IMAVLinkListener listener) {
 		reader.getParser().registerListener(clazz, listener);
@@ -326,7 +331,7 @@ public class MAVController implements IMAVController, Runnable {
 		reader.getParser().addMAVMessageListener(listener);
 
 	}
-	
+
 	@Override
 	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap() {
 		return reader.getParser().getMavLinkMessageMap();
@@ -335,7 +340,8 @@ public class MAVController implements IMAVController, Runnable {
 
 	@Override
 	public void shutdown() {
-		comm.shutdown();	
+		if(comm!=null)
+			comm.shutdown();	
 		if(file_log_enabled)
 			ps_log.close();
 	}
@@ -383,7 +389,9 @@ public class MAVController implements IMAVController, Runnable {
 
 	@Override
 	public long getTransferRate() {
-		return comm.getTransferRate();
+		if(comm!=null)
+			return comm.getTransferRate();
+		return 0;
 	}
 
 }

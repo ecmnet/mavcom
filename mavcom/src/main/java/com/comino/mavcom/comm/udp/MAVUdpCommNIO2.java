@@ -141,7 +141,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	@Override
 	public boolean isConnected() {
-		return channel.isConnected();
+		return channel!=null && channel.isConnected();
 	}
 
 	@Override

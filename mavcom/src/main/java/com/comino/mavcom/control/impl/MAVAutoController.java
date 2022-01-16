@@ -52,7 +52,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	private boolean connected;
 
 	private final msg_heartbeat beat = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_OSD);
-	private final IMAVComm[] comms = new IMAVComm[2];
+	private final IMAVComm[] comms = new IMAVComm[3];
 
 
 	public MAVAutoController(String peerAddress, int peerPort, int bindPort) {
@@ -60,6 +60,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		this.peerAddress = peerAddress;
 		this.peerPort = peerPort;
 		this.bindPort = bindPort;
+		comms[2] = MAVUdpCommNIO2.getInstance(reader,"127.0.0.1",14656,14650);
 		comms[1] = MAVUdpCommNIO2.getInstance(reader, peerAddress,peerPort, bindPort);
 		comms[0] = MAVSerialComm.getInstance(reader,57600);
 		model.sys.setStatus(Status.MSP_PROXY, false);
@@ -93,11 +94,10 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		
 		if(comms[1].open()) {
 			comm = comms[1];
-			this.isSITL = false;
 			System.out.println("UDP connection found");
 			return true;
 		}
-//		
+		
 //		if(comms[2].open()) {
 //			comm = comms[2];
 //			this.isSITL = true;
@@ -124,6 +124,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	@Override
 	public void run() {
         super.run();
+        if(comm==null)
+        	return;
 		try {
 			if(!comm.isConnected()) {
 				this.connected = false;
