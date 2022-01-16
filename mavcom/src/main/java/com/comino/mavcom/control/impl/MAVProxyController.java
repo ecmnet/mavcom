@@ -156,7 +156,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		case MAVController.MODE_NORMAL:
 			//comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
 			//     comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_9);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 
@@ -183,7 +183,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		case MAVController.MODE_USB:
 			//			comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_5, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_5);
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
@@ -194,7 +194,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		case MAVController.MODE_SERVER:
 
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
+			comm = MAVSerialComm.getInstance(model, BAUDRATE_9);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 

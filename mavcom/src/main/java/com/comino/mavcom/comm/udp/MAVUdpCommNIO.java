@@ -55,6 +55,7 @@ import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVAcknowledge;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
+import com.comino.mavcom.mavlink.MAVLinkReader;
 import com.comino.mavcom.mavlink.MAVLinkToModelParser;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
@@ -77,7 +78,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	private boolean					isConnected    = false;
 	private long                    transfer_speed = 0;
 
-	private MAVLinkBlockingReader reader;
+	private MAVLinkReader reader;
 
 	private Selector selector;
 

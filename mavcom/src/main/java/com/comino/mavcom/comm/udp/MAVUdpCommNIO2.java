@@ -28,6 +28,7 @@ import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVAcknowledge;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
+import com.comino.mavcom.mavlink.MAVLinkReader;
 import com.comino.mavcom.mavlink.MAVLinkToModelParser;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
@@ -50,7 +51,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	private final DataModel model;
 	private final MAVLinkToModelParser parser;
 	private final InetSocketAddress peerPort;
-	private final MAVLinkBlockingReader reader;
+	private final MAVLinkReader reader;
 
 	private final int bindPort;
 

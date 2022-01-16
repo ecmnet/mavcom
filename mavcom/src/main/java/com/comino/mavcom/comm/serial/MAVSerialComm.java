@@ -50,6 +50,7 @@ import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVAcknowledge;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
+import com.comino.mavcom.mavlink.MAVLinkReader;
 import com.comino.mavcom.mavlink.MAVLinkToModelParser;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
@@ -72,7 +73,7 @@ public class MAVSerialComm implements IMAVComm {
 
 
 	private MAVLinkToModelParser  parser = null;
-	private MAVLinkBlockingReader reader;
+	private MAVLinkReader         reader;
 
 	private static   IMAVComm com = null;
 	private IMAVProxy byteListener = null;
@@ -82,7 +83,7 @@ public class MAVSerialComm implements IMAVComm {
 	private InputStream is;
 	private OutputStream os;
 
-	public static IMAVComm getInstance(DataModel model, int baudrate, boolean isUSB) {
+	public static IMAVComm getInstance(DataModel model, int baudrate) {
 		if(com==null)
 			com = new MAVSerialComm(model, baudrate);
 		return com;
