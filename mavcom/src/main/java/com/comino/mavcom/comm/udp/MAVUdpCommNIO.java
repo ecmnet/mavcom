@@ -73,12 +73,10 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	private SocketAddress 			peerPort = null;
 	private DatagramChannel 		channel = null;
 
-	private MAVLinkToModelParser	parser = null;
-
 	private boolean					isConnected    = false;
 	private long                    transfer_speed = 0;
 
-	private MAVLinkReader reader;
+	private MAVLinkBlockingReader reader;
 
 	private Selector selector;
 
@@ -96,10 +94,9 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 	private MAVUdpCommNIO(DataModel model, String peerAddress, int pPort, int bPort) {
 		this.model = model;
-		this.parser = new MAVLinkToModelParser(model);
 		this.peerPort = new InetSocketAddress(peerAddress,pPort);
 		this.bindPort = new InetSocketAddress(bPort);
-		this.reader = new MAVLinkBlockingReader(2, parser);
+		this.reader = new MAVLinkBlockingReader(2, model);
 
 
 		System.out.println("Vehicle (NIO3): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
@@ -111,7 +108,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		if(isConnected)
 			return true;
 
-		parser.reset(); Arrays.fill(proxyBuffer, (byte)0);
+		reader.getParser().reset(); Arrays.fill(proxyBuffer, (byte)0);
 
 		if(channel!=null && channel.isOpen() && channel.isConnected() ) { //&& parser.isConnected()) {
 			isConnected = true;
@@ -230,7 +227,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 				}
 			} catch(Exception e) {
 				((Buffer)rxBuffer).clear();
-				parser.reset(); 
+				reader.getParser().reset(); 
 				model.sys.setStatus(Status.MSP_CONNECTED,false);
 				try { channel.close(); } catch (IOException e1) { 	}
 				isConnected = false;
@@ -247,9 +244,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 	@Override
 	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap() {
-		if(parser!=null)
-			return parser.getMavLinkMessageMap();
-		return null;
+			return reader.getParser().getMavLinkMessageMap();
 	}
 
 	public void write(MAVLinkMessage msg) throws IOException {
@@ -261,18 +256,18 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 	@Override
 	public void addMAVLinkListener(IMAVLinkListener listener) {
-		parser.addMAVLinkListener(listener);
+		reader.getParser().addMAVLinkListener(listener);
 
 	}
 	
 	@Override
 	public void addMAVMessageListener(IMAVMessageListener listener) {
-		parser.addMAVMessageListener(listener);
+		reader.getParser().addMAVMessageListener(listener);
 
 	}
 	
 	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
-		parser.registerListener(clazz, listener);
+		reader.getParser().registerListener(clazz, listener);
 	}
 
 	@Override
@@ -355,13 +350,13 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 	@Override
 	public void writeMessage(LogMessage m) {
-		parser.writeMessage(m);
+		reader.getParser().writeMessage(m);
 
 	}
 
 	@Override
 	public void setCmdAcknowledgeListener(int command,MAVAcknowledge ack) {
-		parser.setCmdAcknowledgeListener(command,ack);
+		reader.getParser().setCmdAcknowledgeListener(command,ack);
 	}
 
 	@Override

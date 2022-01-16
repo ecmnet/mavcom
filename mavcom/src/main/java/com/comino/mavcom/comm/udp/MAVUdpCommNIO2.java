@@ -49,9 +49,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 
 	private final DataModel model;
-	private final MAVLinkToModelParser parser;
 	private final InetSocketAddress peerPort;
-	private final MAVLinkReader reader;
+	private final MAVLinkBlockingReader reader;
 
 	private final int bindPort;
 
@@ -76,9 +75,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 
 		this.model    = model;
-		this.parser   = new MAVLinkToModelParser(model);
 		this.peerPort = new InetSocketAddress(peerAddress,pPort);
-		this.reader   = new MAVLinkBlockingReader(2, parser);
+		this.reader   = new MAVLinkBlockingReader(2, model);
 		this.bindPort = bPort;
 
 		hb.isValid = true;
@@ -109,9 +107,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	@Override
 	public Map<Class<?>, MAVLinkMessage> getMavLinkMessageMap() {
-		if(parser!=null)
-			return parser.getMavLinkMessageMap();
-		return null;
+			return reader.getParser().getMavLinkMessageMap();
 	}
 
 	@Override
@@ -152,21 +148,21 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	@Override
 	public void addMAVLinkListener(IMAVLinkListener listener) {
-		parser.addMAVLinkListener(listener);
+		reader.getParser().addMAVLinkListener(listener);
 	}
 
 	@Override
 	public void addMAVMessageListener(IMAVMessageListener listener) {
-		parser.addMAVMessageListener(listener);
+		reader.getParser().addMAVMessageListener(listener);
 	}
 
 	@Override
 	public void setCmdAcknowledgeListener(int command,MAVAcknowledge ack) {
-		parser.setCmdAcknowledgeListener(command,ack);
+		reader.getParser().setCmdAcknowledgeListener(command,ack);
 	}
 	
 	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
-		parser.registerListener(clazz, listener);
+		reader.getParser().registerListener(clazz, listener);
 	}
 
 	@Override
@@ -191,7 +187,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	@Override
 	public void writeMessage(LogMessage m) {
-		parser.writeMessage(m);
+		reader.getParser().writeMessage(m);
 	}
 
 	public String toString() {

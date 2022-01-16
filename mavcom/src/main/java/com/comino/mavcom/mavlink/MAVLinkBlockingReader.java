@@ -1,19 +1,25 @@
 package com.comino.mavcom.mavlink;
 
+import com.comino.mavcom.model.DataModel;
+
 public class MAVLinkBlockingReader extends MAVLinkReader implements Runnable {
 
 	private MAVLinkToModelParser parser;
 
-	public MAVLinkBlockingReader(int id, MAVLinkToModelParser parser) {
-		this(id,false, parser);
+	public MAVLinkBlockingReader(int id, DataModel model) {
+		this(id,false, model);
 	}
 
-	public MAVLinkBlockingReader(int id, boolean noCRCCheck, MAVLinkToModelParser parser) {
+	public MAVLinkBlockingReader(int id, boolean noCRCCheck, DataModel model) {
 		super(id,noCRCCheck);
-		this.parser = parser;
+		this.parser = new MAVLinkToModelParser(model);
 		Thread t = new Thread(this);
 		t.setName("MAVLinkBlockingReader");
 		t.start();
+	}
+	
+	public MAVLinkToModelParser getParser() {
+		return parser;
 	}
 
 	@Override

@@ -71,9 +71,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	private DataModel 		    model = null;
 
-
-	private MAVLinkToModelParser  parser = null;
-	private MAVLinkReader         reader;
+	private MAVLinkBlockingReader  reader;
 
 	private static   IMAVComm com = null;
 	private IMAVProxy byteListener = null;
@@ -134,8 +132,7 @@ public class MAVSerialComm implements IMAVComm {
 		this.is = new BufferedInputStream(serialPort.getInputStream(),BUFFER*1024*2);
 		this.os = new BufferedOutputStream(serialPort.getOutputStream(),2048);
 		
-		this.parser     = new MAVLinkToModelParser(model);
-		this.reader     = new MAVLinkBlockingReader(3, parser);
+		this.reader     = new MAVLinkBlockingReader(3, model);
 
 	}
 
@@ -184,7 +181,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	@Override
 	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap() {
-		return parser.getMavLinkMessageMap();
+		return reader.getParser().getMavLinkMessageMap();
 	}
 
 	/* (non-Javadoc)
@@ -272,7 +269,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	@Override
 	public void addMAVLinkListener(IMAVLinkListener listener) {
-		parser.addMAVLinkListener(listener);
+		reader.getParser().addMAVLinkListener(listener);
 
 	}
 
@@ -284,12 +281,12 @@ public class MAVSerialComm implements IMAVComm {
 
 	@Override
 	public void addMAVMessageListener(IMAVMessageListener listener) {
-		parser.addMAVMessageListener(listener);
+		reader.getParser().addMAVMessageListener(listener);
 
 	}
 	
 	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
-		parser.registerListener(clazz, listener);
+		reader.getParser().registerListener(clazz, listener);
 	}
 
 	@Override
@@ -311,7 +308,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	@Override
 	public void setCmdAcknowledgeListener(int command, MAVAcknowledge ack) {
-		parser.setCmdAcknowledgeListener(command,ack);
+		reader.getParser().setCmdAcknowledgeListener(command,ack);
 	}
 
 
