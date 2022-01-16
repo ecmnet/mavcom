@@ -53,11 +53,11 @@ public interface IMAVComm {
 
 	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap();
 
-	void close();
+	public void close();
 
-	void shutdown();
+	public void shutdown();
 
-	void write(MAVLinkMessage msg) throws IOException;
+	public void write(MAVLinkMessage msg) throws IOException;
 
 	public void setProxyListener(IMAVProxy proxy);
 
@@ -65,7 +65,7 @@ public interface IMAVComm {
 
 	public void addMAVMessageListener(IMAVMessageListener listener);
 
-	void registerListener(Class<?> clazz, IMAVLinkListener listener);
+	public void registerListener(Class<?> clazz, IMAVLinkListener listener);
 
 	public void setCmdAcknowledgeListener(int command, MAVAcknowledge ack);
 

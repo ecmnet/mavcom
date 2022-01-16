@@ -50,8 +50,6 @@ import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVAcknowledge;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
-import com.comino.mavcom.mavlink.MAVLinkReader;
-import com.comino.mavcom.mavlink.MAVLinkToModelParser;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
@@ -132,7 +130,7 @@ public class MAVSerialComm implements IMAVComm {
 		this.is = new BufferedInputStream(serialPort.getInputStream(),BUFFER*1024*2);
 		this.os = new BufferedOutputStream(serialPort.getOutputStream(),2048);
 		
-		this.reader     = new MAVLinkBlockingReader(3, model);
+		this.reader = new MAVLinkBlockingReader(3, model);
 
 	}
 
