@@ -79,17 +79,19 @@ public class MAVSerialComm implements IMAVComm {
 	private InputStream is;
 	private OutputStream os;
 
-	public static IMAVComm getInstance(DataModel model, int baudrate) {
+	public static IMAVComm getInstance(MAVLinkBlockingReader reader, int baudrate) {
 		if(com==null)
-			com = new MAVSerialComm(model, baudrate);
+			com = new MAVSerialComm(reader, baudrate);
 		return com;
 	}
 
-	private MAVSerialComm(DataModel model, int baudrate) {
+	private MAVSerialComm(MAVLinkBlockingReader reader, int baudrate) {
 
 		boolean found = false;
 
-		this.model = model; int i=0;
+		this.model = reader.getModel();
+		
+		int i=0;
 		this.baudrate = baudrate;
 		
 
@@ -130,7 +132,7 @@ public class MAVSerialComm implements IMAVComm {
 		this.is = new BufferedInputStream(serialPort.getInputStream(),BUFFER*1024*2);
 		this.os = new BufferedOutputStream(serialPort.getOutputStream(),2048);
 		
-		this.reader = new MAVLinkBlockingReader(3, model);
+		this.reader = reader;
 
 	}
 
@@ -174,12 +176,6 @@ public class MAVSerialComm implements IMAVComm {
 
 	public int getUnread() {
 		return reader.nbUnreadMessages();
-	}
-
-
-	@Override
-	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap() {
-		return reader.getParser().getMavLinkMessageMap();
 	}
 
 	/* (non-Javadoc)
@@ -265,27 +261,12 @@ public class MAVSerialComm implements IMAVComm {
 		} catch (Exception e) { e.printStackTrace(); }
 	}
 
-	@Override
-	public void addMAVLinkListener(IMAVLinkListener listener) {
-		reader.getParser().addMAVLinkListener(listener);
-
-	}
-
 
 	@Override
 	public boolean isConnected() {
 		return (serialPort != null && serialPort.isOpen());
 	}
 
-	@Override
-	public void addMAVMessageListener(IMAVMessageListener listener) {
-		reader.getParser().addMAVMessageListener(listener);
-
-	}
-	
-	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
-		reader.getParser().registerListener(clazz, listener);
-	}
 
 	@Override
 	public void writeMessage(LogMessage m) {
@@ -305,12 +286,6 @@ public class MAVSerialComm implements IMAVComm {
 	}
 
 	@Override
-	public void setCmdAcknowledgeListener(int command, MAVAcknowledge ack) {
-		reader.getParser().setCmdAcknowledgeListener(command,ack);
-	}
-
-
-	@Override
 	public long getTransferRate() {
 
 		return 0;
@@ -322,88 +297,16 @@ public class MAVSerialComm implements IMAVComm {
 		
 	}
 
-
 	@Override
 	public void setProxyListener(IMAVProxy listener) {
 		this.byteListener = listener;
 
 	}
 
-
-
-
-
-	public static void main(String[] args) {
-		MAVSerialComm comm = new MAVSerialComm(new DataModel(),TEST);
-		comm.open();
-
-
-		long time = System.currentTimeMillis();
-
-
-		try {
-
-
-
-
-			//	while(System.currentTimeMillis()< (time+30000)) {
-
-			while(true) {
-
-
-				//				msg_command_long cmd = new msg_command_long(255,1);
-				//				cmd.target_system = 1;
-				//				cmd.target_component = 1;
-				//				cmd.command = MAV_CMD.MAV_CMD_DO_SET_MODE;
-				//				cmd.confirmation = 0;
-				//
-				//				cmd.param1 = MAV_MODE_FLAG.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
-				//				cmd.param2 = 2;
-				//
-				//
-				//				try {
-				//					comm.write(cmd);
-				//					System.out.println("Execute: "+cmd.toString());
-				//				} catch (IOException e1) {
-				//					System.err.println(e1.getMessage());
-				//				}
-
-				//				comm.getMavLinkMessageMap().forEach((a,b) -> {
-				//					System.out.println(b);
-				//				});
-
-				msg_timesync msg = 	(msg_timesync) comm.getMavLinkMessageMap().get(msg_timesync.class);
-				//				//		comm.getModel().state.print("NED:");
-				//				System.out.println("REM="+comm.getModel().battery.p+" VOLT="+comm.getModel().battery.b0+" CURRENT="+comm.getModel().battery.c0);
-				//				System.out.println("ANGLEX="+comm.getModel().attitude.p+" ANGLEY="+comm.getModel().attitude.r+" "+comm.getModel().sys.toString());
-				Thread.sleep(2000);
-				//				System.out.println("Errors: "+comm.getErrorCount()+"Current Unix Time: "+(System.nanoTime()/1000*1000)+" "+msg);
-				comm.getMavLinkMessageMap().forEach((a,m) -> {
-					System.out.println(a+":"+m);
-				});
-			}
-
-			//			colService.stop();
-			//			comm.close();
-			//
-			//			System.out.println(colService.getModelList().size()+" models collected");
-
-
-			//			for(int i=0;i<colService.getModelList().size();i++) {
-			//				DataModel m = colService.getModelList().get(i);
-			//				System.out.println(m.attitude.aX);
-			//			}
-
-
-		} catch (Exception e) {
-			comm.close();
-			e.printStackTrace();
-
-		}
-
-
-
-
+	@Override
+	public MAVLinkBlockingReader getReader() {
+		return reader;
 	}
+
 
 }

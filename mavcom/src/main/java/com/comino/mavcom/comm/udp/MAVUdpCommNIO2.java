@@ -63,18 +63,18 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	private final static msg_heartbeat hb = new msg_heartbeat(255,1);
 
-	public static MAVUdpCommNIO2 getInstance(DataModel model, String peerAddress, int peerPort, int bindPort) {
+	public static MAVUdpCommNIO2 getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort, int bindPort) {
 		if(com==null)
-			com = new MAVUdpCommNIO2(model, peerAddress, peerPort, bindPort);
+			com = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort);
 		return com;
 	}
 
-	private MAVUdpCommNIO2(DataModel model, String peerAddress, int pPort, int bPort) {
+	private MAVUdpCommNIO2(MAVLinkBlockingReader reader, String peerAddress, int pPort, int bPort) {
 
 
-		this.model    = model;
+		this.model    = reader.getModel();
 		this.peerPort = new InetSocketAddress(peerAddress,pPort);
-		this.reader   = new MAVLinkBlockingReader(2, model);
+		this.reader   = reader;
 		this.bindPort = bPort;
 
 		hb.isValid = true;
@@ -101,11 +101,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	@Override
 	public DataModel getModel() {
 		return model;
-	}
-
-	@Override
-	public Map<Class<?>, MAVLinkMessage> getMavLinkMessageMap() {
-			return reader.getParser().getMavLinkMessageMap();
 	}
 
 	@Override
@@ -145,25 +140,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	}
 
 	@Override
-	public void addMAVLinkListener(IMAVLinkListener listener) {
-		reader.getParser().addMAVLinkListener(listener);
-	}
-
-	@Override
-	public void addMAVMessageListener(IMAVMessageListener listener) {
-		reader.getParser().addMAVMessageListener(listener);
-	}
-
-	@Override
-	public void setCmdAcknowledgeListener(int command,MAVAcknowledge ack) {
-		reader.getParser().setCmdAcknowledgeListener(command,ack);
-	}
-	
-	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
-		reader.getParser().registerListener(clazz, listener);
-	}
-
-	@Override
 	public boolean isConnected() {
 		return channel.isConnected();
 	}
@@ -190,6 +166,11 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	public String toString() {
 		return "State: "+state+" ("+transfer_speed +")";
+	}
+	
+	@Override
+	public MAVLinkBlockingReader getReader() {
+		return reader;
 	}
 
 	private class Worker implements Runnable {
@@ -374,7 +355,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 
 	public static void main(String[] args) {
-		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new DataModel(), "172.168.178.22", 14555, 14550);
+		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2,new DataModel()), "172.168.178.22", 14555, 14550);
 
 
 

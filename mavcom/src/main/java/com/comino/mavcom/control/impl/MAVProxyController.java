@@ -64,6 +64,7 @@ import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVAcknowledge;
+import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.mavlink.MAVTimeSync;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
@@ -99,6 +100,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	private StatusManager 				status_manager 	= null;
 	private List<IMAVMessageListener> 	messageListener = null;
 	private MAVTimeSync                 timesync        = null;
+	private final MAVLinkBlockingReader reader;
 
 	private final WorkQueue wq = WorkQueue.getInstance();
 
@@ -114,6 +116,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		this.mode = mode;
 		controller = this;
 		model = new DataModel();
+		reader = new MAVLinkBlockingReader(2,model);
 		status_manager = new StatusManager(model, false);
 		messageListener = new ArrayList<IMAVMessageListener>();
 
@@ -156,7 +159,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		case MAVController.MODE_NORMAL:
 			//comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
 			//     comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_9);
+			comm = MAVSerialComm.getInstance(reader, BAUDRATE_9);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 
@@ -176,14 +179,14 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		case MAVController.MODE_SITL:
 			model.sys.setStatus(Status.MSP_SITL,true);
-			comm = MAVUdpCommNIO2.getInstance(model, "127.0.0.1",14580, 14540);
+			comm = MAVUdpCommNIO2.getInstance(reader, "127.0.0.1",14580, 14540);
 			proxy = new MAVUdpProxyNIO2(model,"127.0.0.1",14650,"0.0.0.0",14656,comm);
 			peerAddress = "127.0.0.1";
 			System.out.println("Proxy Controller (SITL mode) loaded");
 			break;
 		case MAVController.MODE_USB:
 			//			comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_5);
+			comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), BAUDRATE_5);
 			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try { Thread.sleep(500); } catch (InterruptedException e) { }
@@ -194,7 +197,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		case MAVController.MODE_SERVER:
 
-			comm = MAVSerialComm.getInstance(model, BAUDRATE_9);
+			comm = MAVSerialComm.getInstance(reader, BAUDRATE_9);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 
@@ -225,7 +228,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		});
 
 		// FWD PX4 heartbeat messages to GCL when not connected
-		comm.addMAVLinkListener((o) -> {
+		reader.getParser().addMAVLinkListener((o) -> {
 			if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && o instanceof msg_heartbeat) {
 				proxy.write((MAVLinkMessage)o);
 			}
@@ -282,7 +285,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			}
 		}
 		if(callback!=null)
-			comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,comm,1));
+			reader.getParser().setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,comm,1));
 		return sendMAVLinkMessage(cmd);
 	}
 
@@ -362,7 +365,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap() {
-		return comm.getMavLinkMessageMap();
+		return reader.getParser().getMavLinkMessageMap();
 	}
 
 
@@ -379,12 +382,12 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void addMAVLinkListener(IMAVLinkListener listener) {
-		comm.addMAVLinkListener(listener);
+		reader.getParser().addMAVLinkListener(listener);
 	}
 	
 	@Override
 	public void addMAVLinkListener(Class<?> clazz,IMAVLinkListener listener) {
-		comm.registerListener(clazz, listener);
+		reader.getParser().registerListener(clazz, listener);
 	}
 
 	@Override

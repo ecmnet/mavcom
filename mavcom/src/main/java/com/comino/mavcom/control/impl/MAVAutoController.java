@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- *   Copyright (c) 2017,2018 Eike Mansfeld ecm@gmx.de. All rights reserved.
+ *   Copyright (c) 2017,2022 Eike Mansfeld ecm@gmx.de. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -39,45 +39,73 @@ import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.lquac.msg_heartbeat;
 
+import com.comino.mavcom.comm.IMAVComm;
+import com.comino.mavcom.comm.serial.MAVSerialComm;
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.model.segment.Status;
 
 
-public class MAVUdpController extends MAVController implements IMAVController, Runnable {
+public class MAVAutoController extends MAVController implements IMAVController, Runnable {
 
 	private boolean connected;
 
 	private final msg_heartbeat beat = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_OSD);
+	private final IMAVComm[] comms = new IMAVComm[2];
 
-	public MAVUdpController(String peerAddress, int peerPort, int bindPort, boolean isSITL) {
-		super(2);
-		this.isSITL = isSITL;
+
+	public MAVAutoController(String peerAddress, int peerPort, int bindPort) {
+		super(3);
 		this.peerAddress = peerAddress;
 		this.peerPort = peerPort;
 		this.bindPort = bindPort;
-		
-		System.out.println("UDP Controller loaded ("+peerAddress+":"+peerPort+")");
-		comm = MAVUdpCommNIO2.getInstance(reader, peerAddress,peerPort, bindPort);
+		comms[1] = MAVUdpCommNIO2.getInstance(reader, peerAddress,peerPort, bindPort);
+		comms[0] = MAVSerialComm.getInstance(reader,57600);
 		model.sys.setStatus(Status.MSP_PROXY, false);
 
 		beat.type = MAV_TYPE.MAV_TYPE_GCS;
 		beat.system_status = MAV_STATE.MAV_STATE_ACTIVE;
+		System.out.println("AutoController loaded");
 
 	}
+
 
 	@Override
 	public boolean connect() {
 
-		System.out.print("Try to start..");
 		if(this.connected)
 			return true;
 
-		if(!comm.isConnected()) {
-			comm.close(); comm.open();
+		System.out.print("Try to connect... ");
+		
+		if(comm!=null && !comm.isConnected()) {
+			comm.close();
 		}
 
+		
+		if(comms[0].open()) {
+			comm = comms[0];
+			this.isSITL = false;
+			System.out.println("Serial connection found");
+			return true;
+		}
+		
+		if(comms[1].open()) {
+			comm = comms[1];
+			this.isSITL = false;
+			System.out.println("UDP connection found");
+			return true;
+		}
+//		
+//		if(comms[2].open()) {
+//			comm = comms[2];
+//			this.isSITL = true;
+//			System.out.println("SITL PROXY connection found");
+//			return true;
+//		}
+			
+		
 		return true;
 	}
 

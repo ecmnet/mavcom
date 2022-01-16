@@ -42,6 +42,7 @@ import org.mavlink.messages.MAVLinkMessage;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVAcknowledge;
+import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 
@@ -51,7 +52,7 @@ public interface IMAVComm {
 
 	public DataModel getModel();
 
-	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap();
+    public MAVLinkBlockingReader getReader();
 
 	public void close();
 
@@ -60,14 +61,6 @@ public interface IMAVComm {
 	public void write(MAVLinkMessage msg) throws IOException;
 
 	public void setProxyListener(IMAVProxy proxy);
-
-	public void addMAVLinkListener(IMAVLinkListener listener);
-
-	public void addMAVMessageListener(IMAVMessageListener listener);
-
-	public void registerListener(Class<?> clazz, IMAVLinkListener listener);
-
-	public void setCmdAcknowledgeListener(int command, MAVAcknowledge ack);
 
 	public boolean isConnected();
 

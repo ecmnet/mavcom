@@ -57,6 +57,7 @@ import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVAcknowledge;
+import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
@@ -76,11 +77,12 @@ public class MAVController implements IMAVController, Runnable {
 	protected int    peerPort = 0;
 	protected int    bindPort = 0;
 
-	protected static IMAVController controller = null;
+	protected static IMAVController controller;
 	protected IMAVComm comm = null;
 
-	protected   boolean isSITL = false;
-	protected   volatile DataModel model = null;
+	protected boolean isSITL = false;
+	protected final DataModel model;
+	protected final MAVLinkBlockingReader reader;
 
 	protected   int commError = 0;
 
@@ -95,15 +97,21 @@ public class MAVController implements IMAVController, Runnable {
 	private int  mode = 0;
 	
 	protected final WorkQueue wq = WorkQueue.getInstance();
+	
 
 	public static IMAVController getInstance() {
 		return controller;
 	}
-
-
+	
 	public MAVController() {
+		this(0);
+	}
+
+
+	public MAVController(int i) {
 		controller = this;
 		model = new DataModel();
+		reader = new MAVLinkBlockingReader(i,model);
 		status_manager = new StatusManager(model, true);
 		wq.addCyclicTask("LP",200,this);
 
@@ -199,7 +207,7 @@ public class MAVController implements IMAVController, Runnable {
 			}
 		}
 		if(callback!=null)
-			comm.setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,comm,1));
+			reader.getParser().setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,comm,1));
 		return sendMAVLinkMessage(cmd);
 	}
 
@@ -275,12 +283,6 @@ public class MAVController implements IMAVController, Runnable {
 
 
 	@Override
-	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap() {
-		return comm.getMavLinkMessageMap();
-	}
-
-
-	@Override
 	public boolean isSimulation() {
 		return model.sys.isStatus(Status.MSP_SITL);
 	}
@@ -311,21 +313,23 @@ public class MAVController implements IMAVController, Runnable {
 
 	@Override
 	public void addMAVLinkListener(IMAVLinkListener listener) {
-		if(comm!=null)
-			comm.addMAVLinkListener(listener);
+		reader.getParser().addMAVLinkListener(listener);
 	}
 	
 	@Override
 	public void addMAVLinkListener(Class<?> clazz, IMAVLinkListener listener) {
-		if(comm!=null)
-			comm.registerListener(clazz, listener);
+		reader.getParser().registerListener(clazz, listener);
 	}
 
 	@Override
 	public void addMAVMessageListener(IMAVMessageListener listener) {
-		if(comm!=null)
-			comm.addMAVMessageListener(listener);
+		reader.getParser().addMAVMessageListener(listener);
 
+	}
+	
+	@Override
+	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap() {
+		return reader.getParser().getMavLinkMessageMap();
 	}
 
 

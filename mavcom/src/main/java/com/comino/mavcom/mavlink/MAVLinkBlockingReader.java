@@ -5,6 +5,7 @@ import com.comino.mavcom.model.DataModel;
 public class MAVLinkBlockingReader extends MAVLinkReader implements Runnable {
 
 	private MAVLinkToModelParser parser;
+	private DataModel model;
 
 	public MAVLinkBlockingReader(int id, DataModel model) {
 		this(id,false, model);
@@ -13,6 +14,7 @@ public class MAVLinkBlockingReader extends MAVLinkReader implements Runnable {
 	public MAVLinkBlockingReader(int id, boolean noCRCCheck, DataModel model) {
 		super(id,noCRCCheck);
 		this.parser = new MAVLinkToModelParser(model);
+		this.model  = model;
 		Thread t = new Thread(this);
 		t.setName("MAVLinkBlockingReader");
 		t.start();
@@ -20,6 +22,10 @@ public class MAVLinkBlockingReader extends MAVLinkReader implements Runnable {
 	
 	public MAVLinkToModelParser getParser() {
 		return parser;
+	}
+	
+	public DataModel getModel() {
+		return model;
 	}
 
 	@Override
