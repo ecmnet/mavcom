@@ -3,6 +3,7 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
+
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
@@ -10,114 +11,103 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
+
 /**
- * Class msg_actuator_output_status
- * The raw values of the actuator outputs (e.g. on Pixhawk, from MAIN, AUX ports). This message supersedes SERVO_OUTPUT_RAW.
+ * Class msg_actuator_output_status The raw values of the actuator outputs (e.g.
+ * on Pixhawk, from MAIN, AUX ports). This message supersedes SERVO_OUTPUT_RAW.
  **/
 public class msg_actuator_output_status extends MAVLinkMessage {
-  public static final int MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS = 375;
-  private static final long serialVersionUID = MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS;
-  public msg_actuator_output_status() {
-    this(1,1);
-}
-  public msg_actuator_output_status(int sysId, int componentId) {
-    messageType = MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS;
-    this.sysId = sysId;
-    this.componentId = componentId;
-    payload_length = 140;
-}
+	public static final int MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS = 375;
+	private static final long serialVersionUID = MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS;
 
-  /**
-   * Timestamp (since system boot).
-   */
-  public long time_usec;
-  /**
-   * Active outputs
-   */
-  public long active;
-  /**
-   * Servo / motor output array values. Zero values indicate unused channels.
-   */
-  public float[] actuator = new float[32];
-/**
- * Decode message with raw data
- */
-public void decode(LittleEndianDataInputStream dis) throws IOException {
-  time_usec = (long)dis.readLong();
-  active = (int)dis.readInt()&0x00FFFFFFFF;
-  for (int i=0; i<32; i++) {
-    actuator[i] = (float)dis.readFloat();
-  }
-}
-/**
- * Encode message with raw data and other informations
- */
-public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+140];
-   LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
-  dos.writeByte((byte)0xFD);
-  dos.writeByte(payload_length & 0x00FF);
-  dos.writeByte(incompat & 0x00FF);
-  dos.writeByte(compat & 0x00FF);
-  dos.writeByte(packet & 0x00FF);
-  dos.writeByte(sysId & 0x00FF);
-  dos.writeByte(componentId & 0x00FF);
-  dos.writeByte(messageType & 0x00FF);
-  dos.writeByte((messageType >> 8) & 0x00FF);
-  dos.writeByte((messageType >> 16) & 0x00FF);
-  dos.writeLong(time_usec);
-  dos.writeInt((int)(active&0x00FFFFFFFF));
-  for (int i=0; i<32; i++) {
-    dos.writeFloat(actuator[i]);
-  }
-  dos.flush();
-  byte[] tmp = dos.toByteArray();
-  for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 140);
-  crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
-  byte crcl = (byte) (crc & 0x00FF);
-  byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[150] = crcl;
-  buffer[151] = crch;
-  dos.close();
-  return buffer;
-}
-public String toString() {
-return "MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS : " +   "  time_usec="+time_usec
-+  "  active="+active
-+  "  actuator[0]="+format((float)actuator[0])
-+  "  actuator[1]="+format((float)actuator[1])
-+  "  actuator[2]="+format((float)actuator[2])
-+  "  actuator[3]="+format((float)actuator[3])
-+  "  actuator[4]="+format((float)actuator[4])
-+  "  actuator[5]="+format((float)actuator[5])
-+  "  actuator[6]="+format((float)actuator[6])
-+  "  actuator[7]="+format((float)actuator[7])
-+  "  actuator[8]="+format((float)actuator[8])
-+  "  actuator[9]="+format((float)actuator[9])
-+  "  actuator[10]="+format((float)actuator[10])
-+  "  actuator[11]="+format((float)actuator[11])
-+  "  actuator[12]="+format((float)actuator[12])
-+  "  actuator[13]="+format((float)actuator[13])
-+  "  actuator[14]="+format((float)actuator[14])
-+  "  actuator[15]="+format((float)actuator[15])
-+  "  actuator[16]="+format((float)actuator[16])
-+  "  actuator[17]="+format((float)actuator[17])
-+  "  actuator[18]="+format((float)actuator[18])
-+  "  actuator[19]="+format((float)actuator[19])
-+  "  actuator[20]="+format((float)actuator[20])
-+  "  actuator[21]="+format((float)actuator[21])
-+  "  actuator[22]="+format((float)actuator[22])
-+  "  actuator[23]="+format((float)actuator[23])
-+  "  actuator[24]="+format((float)actuator[24])
-+  "  actuator[25]="+format((float)actuator[25])
-+  "  actuator[26]="+format((float)actuator[26])
-+  "  actuator[27]="+format((float)actuator[27])
-+  "  actuator[28]="+format((float)actuator[28])
-+  "  actuator[29]="+format((float)actuator[29])
-+  "  actuator[30]="+format((float)actuator[30])
-+  "  actuator[31]="+format((float)actuator[31])
-;}
+	public msg_actuator_output_status() {
+		this(1, 1);
+	}
+
+	public msg_actuator_output_status(int sysId, int componentId) {
+		messageType = MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS;
+		this.sysId = sysId;
+		this.componentId = componentId;
+		payload_length = 140;
+	}
+
+	/**
+	 * Timestamp (since system boot).
+	 */
+	public long time_usec;
+	/**
+	 * Active outputs
+	 */
+	public long active;
+	/**
+	 * Servo / motor output array values. Zero values indicate unused channels.
+	 */
+	public float[] actuator = new float[32];
+
+	/**
+	 * Decode message with raw data
+	 */
+	public void decode(LittleEndianDataInputStream dis) throws IOException {
+		time_usec = (long) dis.readLong();
+		active = (int) dis.readInt() & 0x00FFFFFFFF;
+		for (int i = 0; i < 32; i++) {
+			actuator[i] = (float) dis.readFloat();
+		}
+	}
+
+	/**
+	 * Encode message with raw data and other informations
+	 */
+	public byte[] encode() throws IOException {
+		byte[] buffer = new byte[12 + 140];
+		LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
+		dos.writeByte((byte) 0xFD);
+		dos.writeByte(payload_length & 0x00FF);
+		dos.writeByte(incompat & 0x00FF);
+		dos.writeByte(compat & 0x00FF);
+		dos.writeByte(packet & 0x00FF);
+		dos.writeByte(sysId & 0x00FF);
+		dos.writeByte(componentId & 0x00FF);
+		dos.writeByte(messageType & 0x00FF);
+		dos.writeByte((messageType >> 8) & 0x00FF);
+		dos.writeByte((messageType >> 16) & 0x00FF);
+		dos.writeLong(time_usec);
+		dos.writeInt((int) (active & 0x00FFFFFFFF));
+		for (int i = 0; i < 32; i++) {
+			dos.writeFloat(actuator[i]);
+		}
+		dos.flush();
+		byte[] tmp = dos.toByteArray();
+		for (int b = 0; b < tmp.length; b++)
+			buffer[b] = tmp[b];
+		int crc = MAVLinkCRC.crc_calculate_encode(buffer, 140);
+		crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
+		byte crcl = (byte) (crc & 0x00FF);
+		byte crch = (byte) ((crc >> 8) & 0x00FF);
+		buffer[150] = crcl;
+		buffer[151] = crch;
+		dos.close();
+		return buffer;
+	}
+
+	public String toString() {
+		return "MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS : " + "  time_usec=" + time_usec + "  active=" + active
+				+ "  actuator[0]=" + format((float) actuator[0]) + "  actuator[1]=" + format((float) actuator[1])
+				+ "  actuator[2]=" + format((float) actuator[2]) + "  actuator[3]=" + format((float) actuator[3])
+				+ "  actuator[4]=" + format((float) actuator[4]) + "  actuator[5]=" + format((float) actuator[5])
+				+ "  actuator[6]=" + format((float) actuator[6]) + "  actuator[7]=" + format((float) actuator[7])
+				+ "  actuator[8]=" + format((float) actuator[8]) + "  actuator[9]=" + format((float) actuator[9])
+				+ "  actuator[10]=" + format((float) actuator[10]) + "  actuator[11]=" + format((float) actuator[11])
+				+ "  actuator[12]=" + format((float) actuator[12]) + "  actuator[13]=" + format((float) actuator[13])
+				+ "  actuator[14]=" + format((float) actuator[14]) + "  actuator[15]=" + format((float) actuator[15])
+				+ "  actuator[16]=" + format((float) actuator[16]) + "  actuator[17]=" + format((float) actuator[17])
+				+ "  actuator[18]=" + format((float) actuator[18]) + "  actuator[19]=" + format((float) actuator[19])
+				+ "  actuator[20]=" + format((float) actuator[20]) + "  actuator[21]=" + format((float) actuator[21])
+				+ "  actuator[22]=" + format((float) actuator[22]) + "  actuator[23]=" + format((float) actuator[23])
+				+ "  actuator[24]=" + format((float) actuator[24]) + "  actuator[25]=" + format((float) actuator[25])
+				+ "  actuator[26]=" + format((float) actuator[26]) + "  actuator[27]=" + format((float) actuator[27])
+				+ "  actuator[28]=" + format((float) actuator[28]) + "  actuator[29]=" + format((float) actuator[29])
+				+ "  actuator[30]=" + format((float) actuator[30]) + "  actuator[31]=" + format((float) actuator[31]);
+	}
 
 }
-

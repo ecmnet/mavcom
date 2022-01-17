@@ -39,26 +39,20 @@ import org.mavlink.messages.MAV_PARAM_TYPE;
 
 public class ParamUtils {
 
-
 	// WEIRD: Representation of int32 in the float field ....
 
-
-	public static double paramToVal (int type, float val)
-	{
-		if(type == MAV_PARAM_TYPE.MAV_PARAM_TYPE_INT32) {
-			return (double) (ByteBuffer.allocate(4).putFloat(0,val).getInt(0));
-		}
-		else
-			return val ;
+	public static double paramToVal(int type, float val) {
+		if (type == MAV_PARAM_TYPE.MAV_PARAM_TYPE_INT32) {
+			return (double) (ByteBuffer.allocate(4).putFloat(0, val).getInt(0));
+		} else
+			return val;
 	}
 
-	public static float valToParam (int type, double val)
-	{
-		if(type == MAV_PARAM_TYPE.MAV_PARAM_TYPE_INT32) {
-			return (float) (ByteBuffer.allocate(4).putInt(0,(int)val).getFloat(0));
-		}
-		else
-			return (float)val ;
+	public static float valToParam(int type, double val) {
+		if (type == MAV_PARAM_TYPE.MAV_PARAM_TYPE_INT32) {
+			return (float) (ByteBuffer.allocate(4).putInt(0, (int) val).getFloat(0));
+		} else
+			return (float) val;
 	}
 
 }

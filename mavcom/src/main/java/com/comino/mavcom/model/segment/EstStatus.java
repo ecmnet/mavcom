@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
@@ -40,33 +39,33 @@ public class EstStatus extends Segment {
 
 	private static final long serialVersionUID = -8204904128449328395L;
 
-	public static final int    SENSOR_BARO = 0;
-	public static final int	   SENSOR_GPS = 1;
-	public static final int	   SENSOR_LIDAR = 2;
-	public static final int    SENSOR_FLOW = 3;
-	public static final int    SENSOR_SONAR = 4;
-	public static final int    SENSOR_VISION = 5;
-	public static final int    SENSOR_MOCAP = 6;
+	public static final int SENSOR_BARO = 0;
+	public static final int SENSOR_GPS = 1;
+	public static final int SENSOR_LIDAR = 2;
+	public static final int SENSOR_FLOW = 3;
+	public static final int SENSOR_SONAR = 4;
+	public static final int SENSOR_VISION = 5;
+	public static final int SENSOR_MOCAP = 6;
 
-	public float haglRatio  = Float.NaN;
-	public float magRatio   = Float.NaN;
-	public float tasRatio   = Float.NaN;
-	public float velRatio   = Float.NaN;
+	public float haglRatio = Float.NaN;
+	public float magRatio = Float.NaN;
+	public float tasRatio = Float.NaN;
+	public float velRatio = Float.NaN;
 	public float horizRatio = Float.NaN;
-	public float vertRatio  = Float.NaN;
+	public float vertRatio = Float.NaN;
 
 	public float posHorizAccuracy = Float.NaN;
-	public float posVertAccuracy  = Float.NaN;
+	public float posVertAccuracy = Float.NaN;
 
 	public int flags = 0;
 
 	public void set(EstStatus a) {
-		this.haglRatio   = a.haglRatio;
-		this.magRatio    = a.magRatio;
-		this.tasRatio    = a.tasRatio;
-		this.velRatio    = a.velRatio;
-		this.horizRatio  = a.horizRatio;
-		this.vertRatio   = a.vertRatio;
+		this.haglRatio = a.haglRatio;
+		this.magRatio = a.magRatio;
+		this.tasRatio = a.tasRatio;
+		this.velRatio = a.velRatio;
+		this.horizRatio = a.horizRatio;
+		this.vertRatio = a.vertRatio;
 
 		this.posHorizAccuracy = a.posHorizAccuracy;
 		this.posVertAccuracy = a.posVertAccuracy;
@@ -81,20 +80,19 @@ public class EstStatus extends Segment {
 		return at;
 	}
 
-	public boolean isFlagSet(int ...box) {
-		for(int b : box)
-		  if((flags & (1<<b))==0)
-            return false;
+	public boolean isFlagSet(int... box) {
+		for (int b : box)
+			if ((flags & (1 << b)) == 0)
+				return false;
 		return true;
 	}
 
-	//--------------------------------------------------------------------------------------------------------
-
+	// --------------------------------------------------------------------------------------------------------
 
 	public void clear() {
 		haglRatio = 0;
-		tasRatio  = 0;
-		magRatio  = 0;
+		tasRatio = 0;
+		magRatio = 0;
 		vertRatio = 0;
 		horizRatio = 0;
 		velRatio = 0;

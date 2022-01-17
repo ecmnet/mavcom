@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 // ok
@@ -41,128 +40,122 @@ public class GPS extends Segment {
 
 	private static final long serialVersionUID = 3343922430238721067L;
 
+	public static final int GPS_SAT_FIX = 0;
+	public static final int GPS_SAT_VALID = 1;
+	public static final int GPS_SAT_RTK = 2;
+	public static final int GPS_SAT_RTKFIX = 3;
 
-	public static final int GPS_SAT_FIX      = 0;
-	public static final int GPS_SAT_VALID    = 1;
-	public static final int GPS_SAT_RTK      = 2;
-	public static final int GPS_SAT_RTKFIX   = 3;
+	public int flags = 0;
 
-	public int		flags		= 0;
-
-	public float   	numsat 		= Float.NaN;
-	public double 	latitude 	= Double.NaN;
-	public double 	longitude 	= Double.NaN;
-	public short  	heading 	    = 0;
-	public short  	altitude 	= 0;
-	public float  	eph 	    = Float.NaN;
-	public float  	epv 	    = Float.NaN;
-	public float  	hdop 	    = Float.NaN;
-	public float  	speed 		= Float.NaN;
-	public byte     fixtype     = (byte)0;
-	public float	lx=Float.NaN;		
-	public float    ly=Float.NaN;		
-
-
+	public float numsat = Float.NaN;
+	public double latitude = Double.NaN;
+	public double longitude = Double.NaN;
+	public short heading = 0;
+	public short altitude = 0;
+	public float eph = Float.NaN;
+	public float epv = Float.NaN;
+	public float hdop = Float.NaN;
+	public float speed = Float.NaN;
+	public byte fixtype = (byte) 0;
+	public float lx = Float.NaN;
+	public float ly = Float.NaN;
 
 	public GPS() {
 
 	}
 
-	public GPS(float _lat, float _lon, int _heading ) {
-		latitude 	= _lat;
-		longitude 	= _lon;
-		heading 	= (short)_heading;
+	public GPS(float _lat, float _lon, int _heading) {
+		latitude = _lat;
+		longitude = _lon;
+		heading = (short) _heading;
 		setFlag(GPS_SAT_VALID, true);
-		numsat 		= 99;
+		numsat = 99;
 	}
 
-	public void set(int _fix, int _numsat, float _lat, float _lon, int _altitude, int _heading, float _eph, float _speed) {
+	public void set(int _fix, int _numsat, float _lat, float _lon, int _altitude, int _heading, float _eph,
+			float _speed) {
 
-		setFlag(GPS_SAT_FIX,    _fix > 0);
-		setFlag(GPS_SAT_RTK,    _fix > 3);
+		setFlag(GPS_SAT_FIX, _fix > 0);
+		setFlag(GPS_SAT_RTK, _fix > 3);
 		setFlag(GPS_SAT_RTKFIX, _fix > 4);
 		setFlag(GPS_SAT_VALID, numsat > 6);
 
-		fixtype     = (byte)_fix;
+		fixtype = (byte) _fix;
 
-		numsat 		= (byte)_numsat;
-		latitude 	= _lat;
-		longitude 	= _lon;
-		heading 	= (short)_heading;
-		altitude 	= (short)_altitude;
-		eph 		= _eph;
-		speed 		= _speed;
+		numsat = (byte) _numsat;
+		latitude = _lat;
+		longitude = _lon;
+		heading = (short) _heading;
+		altitude = (short) _altitude;
+		eph = _eph;
+		speed = _speed;
 
 	}
 
 	public void set(GPS gps) {
-		flags 		= gps.flags;
-		numsat		= gps.numsat;
-		latitude	= gps.latitude;
-		longitude	= gps.longitude;
-		altitude	= gps.altitude;
-		heading		= gps.heading;
-		eph			= gps.eph;
-		epv         = gps.epv;
-		hdop        = gps.hdop;
-		speed		= gps.speed;
-		lx          = gps.lx;
-		ly          = gps.ly;
+		flags = gps.flags;
+		numsat = gps.numsat;
+		latitude = gps.latitude;
+		longitude = gps.longitude;
+		altitude = gps.altitude;
+		heading = gps.heading;
+		eph = gps.eph;
+		epv = gps.epv;
+		hdop = gps.hdop;
+		speed = gps.speed;
+		lx = gps.lx;
+		ly = gps.ly;
 	}
-
 
 	public GPS clone() {
 		GPS g = new GPS();
 
-		g.flags       	= flags;
-		g.numsat    	= numsat;
-		g.heading   	= heading;
-		g.latitude  	= latitude;
-		g.longitude 	= longitude;
-		g.eph 			= eph;
-		g.epv       = epv;
-		g.hdop          = hdop;
-		g.altitude		= altitude;
-		g.speed     	= speed;
-		g.fixtype       = fixtype;
-		g.lx            = lx;
-		g.ly            = ly;
+		g.flags = flags;
+		g.numsat = numsat;
+		g.heading = heading;
+		g.latitude = latitude;
+		g.longitude = longitude;
+		g.eph = eph;
+		g.epv = epv;
+		g.hdop = hdop;
+		g.altitude = altitude;
+		g.speed = speed;
+		g.fixtype = fixtype;
+		g.lx = lx;
+		g.ly = ly;
 
 		return g;
 	}
 
-
 	public void clear() {
 
-		flags 		= 0;
-		numsat 		= 0;
-		latitude 	= Double.NaN;
-		longitude 	= Double.NaN;
-		heading 	= 0;
-		altitude 	= 0;
-		eph 		= 0;
+		flags = 0;
+		numsat = 0;
+		latitude = Double.NaN;
+		longitude = Double.NaN;
+		heading = 0;
+		altitude = 0;
+		eph = 0;
 		epv = 0;
-		hdop        = 0;
-		speed 		= 0;
-		lx          = Float.NaN;	
-		ly          = Float.NaN;		
-		fixtype     = 0;
+		hdop = 0;
+		speed = 0;
+		lx = Float.NaN;
+		ly = Float.NaN;
+		fixtype = 0;
 
 	}
 
-	public void  setFlag(int box, boolean val) {
-		if(val)
-			flags = (short) (flags | (1<<box));
+	public void setFlag(int box, boolean val) {
+		if (val)
+			flags = (short) (flags | (1 << box));
 		else
-			flags = (short) (flags & ~(1<<box));
+			flags = (short) (flags & ~(1 << box));
 	}
 
-	public boolean isFlagSet(int ...box) {
-		for(int b : box)
-			if((flags & (1<<b))==0)
+	public boolean isFlagSet(int... box) {
+		for (int b : box)
+			if ((flags & (1 << b)) == 0)
 				return false;
 		return true;
 	}
 }
-
-

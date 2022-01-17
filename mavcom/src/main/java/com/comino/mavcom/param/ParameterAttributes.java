@@ -38,29 +38,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ParameterAttributes  implements Comparable<ParameterAttributes> {
+public class ParameterAttributes implements Comparable<ParameterAttributes> {
 
-	public double  default_val = 0;
-	public double  min_val   = -Double.MAX_VALUE;
-	public double  max_val   =  Double.MAX_VALUE;
-	public double  value     =  Double.NaN;
-	public double  increment = 0;
-	public int     vtype     = 0;
-	public int     decimals  = 3;
-	public String  name = null;
-	public String  type = null;
-	public String  description = null;
-	public String  description_long = null;
-	public String  unit = "";
-	public String  group_name = null;
+	public double default_val = 0;
+	public double min_val = -Double.MAX_VALUE;
+	public double max_val = Double.MAX_VALUE;
+	public double value = Double.NaN;
+	public double increment = 0;
+	public int vtype = 0;
+	public int decimals = 3;
+	public String name = null;
+	public String type = null;
+	public String description = null;
+	public String description_long = null;
+	public String unit = "";
+	public String group_name = null;
 
 	public boolean reboot_required = false;
-	public HashMap<Integer,String> valueList = null;
+	public HashMap<Integer, String> valueList = null;
 	public List<String> bitMask = null;
 
 	public ParameterAttributes(String group_name) {
 		this.group_name = group_name;
-		this.valueList = new HashMap<Integer,String>();
+		this.valueList = new HashMap<Integer, String>();
 		this.bitMask = new ArrayList<String>();
 	}
 
@@ -72,19 +72,18 @@ public class ParameterAttributes  implements Comparable<ParameterAttributes> {
 		this.description_long = "none";
 	}
 
-
 	public String toString() {
-		return "group="+group_name+" name="+name+" description="+description+" type="+type;
+		return "group=" + group_name + " name=" + name + " description=" + description + " type=" + type;
 	}
 
 	@Override
 	public int compareTo(ParameterAttributes o) {
-       return this.name.compareTo(o.name);
+		return this.name.compareTo(o.name);
 	}
-	
+
 	public String getValueFormatted() {
-		if(value!=Double.MAX_VALUE && value!= -Double.MAX_VALUE) {
-			BigDecimal bd = new BigDecimal(value).setScale(decimals,BigDecimal.ROUND_HALF_UP);
+		if (value != Double.MAX_VALUE && value != -Double.MAX_VALUE) {
+			BigDecimal bd = new BigDecimal(value).setScale(decimals, BigDecimal.ROUND_HALF_UP);
 			return bd.toPlainString();
 		}
 		return "NaN";

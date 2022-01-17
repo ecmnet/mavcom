@@ -27,77 +27,79 @@ import java.util.List;
 
 /**
  * MAVLink Enum data
+ * 
  * @author ghelle
  * @version $Rev: 4 $
  *
  */
 public class MAVLinkEnum {
 
-    /**
-     * MAVLink Enum name
-     */
-    private String name;
+	/**
+	 * MAVLink Enum name
+	 */
+	private String name;
 
-    /**
-     * MAVLink Enum description
-     */
-    private String description;
+	/**
+	 * MAVLink Enum description
+	 */
+	private String description;
 
-    /**
-     * MAVLink Enum entries
-     */
-    private List<MAVLinkEntry> entries;
+	/**
+	 * MAVLink Enum entries
+	 */
+	private List<MAVLinkEntry> entries;
 
-    /**
-     * MAVLink Enum constructor
-     * @param name
-     */
-    public MAVLinkEnum(String name) {
-        this.name = name;
-        ;
-        entries = new ArrayList<MAVLinkEntry>();
-    }
+	/**
+	 * MAVLink Enum constructor
+	 * 
+	 * @param name
+	 */
+	public MAVLinkEnum(String name) {
+		this.name = name;
+		;
+		entries = new ArrayList<MAVLinkEntry>();
+	}
 
-    /**
-     * @return The name
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * @return The name
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * @param name The name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**
+	 * @param name The name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * @return The description
-     */
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * @return The description
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * @param description The description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	/**
+	 * @param description The description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    /**
-     * @return The entries
-     */
-    public List<MAVLinkEntry> getEntries() {
-        return entries;
-    }
+	/**
+	 * @return The entries
+	 */
+	public List<MAVLinkEntry> getEntries() {
+		return entries;
+	}
 
-    /**
-     * @param entries The entries to set
-     */
-    public void setEntries(List<MAVLinkEntry> entries) {
-        this.entries = entries;
-    }
+	/**
+	 * @param entries The entries to set
+	 */
+	public void setEntries(List<MAVLinkEntry> entries) {
+		this.entries = entries;
+	}
 
 }

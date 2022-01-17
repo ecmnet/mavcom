@@ -11,7 +11,5 @@ public class PX4UTMGlobalPositionPlugin extends MAVLinkPluginBase {
 	@Override
 	public void received(Object o) {
 
-
-
 	}
 }

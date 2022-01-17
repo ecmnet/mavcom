@@ -4,9 +4,6 @@ import org.mavlink.messages.lquac.msg_attitude_target;
 
 import com.comino.mavutils.MSPMathUtils;
 
-
-
-
 public class PX4AttitudeTargetPlugin extends MAVLinkPluginBase {
 
 	private final float[] sp = new float[3];

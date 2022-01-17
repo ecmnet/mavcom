@@ -11,23 +11,23 @@ import com.comino.mavutils.workqueue.WorkQueue;
 // TODO: Better implementation
 // http://docs.ros.org/en/lunar/api/mavros/html/sys__time_8cpp_source.html
 
-public class MAVTimeSync implements Runnable  {
+public class MAVTimeSync implements Runnable {
 
 	private static double OFFSET_AVG_ALPHA = 0.1d;
 
 	private final IMAVComm comm;
 	private final WorkQueue wq = WorkQueue.getInstance();
 
-	private final msg_timesync   sync_s  = new msg_timesync(1, 1);
+	private final msg_timesync sync_s = new msg_timesync(1, 1);
 
 	private long time_offset_ns = 0;
-
 
 	public MAVTimeSync(IMAVComm comm) {
 		this.comm = comm;
 
-		if(comm.isSerial() && comm.isConnected()) {
-			comm.getReader().getParser().registerListener(msg_timesync.class, (o) -> handle_time_sync((msg_timesync)o));
+		if (comm.isSerial() && comm.isConnected()) {
+			comm.getReader().getParser().registerListener(msg_timesync.class,
+					(o) -> handle_time_sync((msg_timesync) o));
 			wq.addCyclicTask("HP", 100, this);
 			System.out.println("Time synchronization started...");
 		}
@@ -40,10 +40,11 @@ public class MAVTimeSync implements Runnable  {
 			Instant ins = Instant.now();
 			long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();
 
-			//	System.out.println(sync.sysId+": "+sync.ts1+"/"+sync.tc1+"/"+now_ns+"/"+DataModel.t_offset_ns);
+			// System.out.println(sync.sysId+":
+			// "+sync.ts1+"/"+sync.tc1+"/"+now_ns+"/"+DataModel.t_offset_ns);
 
-			if (sync.tc1 == 0 ) {
-				synchronized(this) {
+			if (sync.tc1 == 0) {
+				synchronized (this) {
 					sync_s.tc1 = now_ns;
 					sync_s.ts1 = sync.ts1;
 					comm.write(sync_s);
@@ -53,8 +54,8 @@ public class MAVTimeSync implements Runnable  {
 			} else if (sync.tc1 > 0) {
 
 				// check RTT
-				long rtt_ms = ( now_ns - sync.ts1 ) / 1000000L;
-				if(rtt_ms > 10) {
+				long rtt_ms = (now_ns - sync.ts1) / 1000000L;
+				if (rtt_ms > 10) {
 					return;
 				}
 
@@ -62,10 +63,10 @@ public class MAVTimeSync implements Runnable  {
 				long dt = time_offset_ns - offset_ns;
 				if (dt > 100000000L || dt < -100000000L) {
 					time_offset_ns = offset_ns;
-					System.out.println("[sys]  Clock skew detected: " + (dt/1000)+"us");
+					System.out.println("[sys]  Clock skew detected: " + (dt / 1000) + "us");
 				} else {
-					time_offset_ns = (long) (OFFSET_AVG_ALPHA * (double)offset_ns
-							+ (1.0d - OFFSET_AVG_ALPHA) * (double)time_offset_ns);
+					time_offset_ns = (long) (OFFSET_AVG_ALPHA * (double) offset_ns
+							+ (1.0d - OFFSET_AVG_ALPHA) * (double) time_offset_ns);
 				}
 				DataModel.t_offset_ns = time_offset_ns;
 			}
@@ -76,12 +77,12 @@ public class MAVTimeSync implements Runnable  {
 
 	@Override
 	public void run() {
-		//  Publish timesync to Vehicle
+		// Publish timesync to Vehicle
 
 		try {
 			Instant ins = Instant.now();
 			long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();
-			synchronized(this) {
+			synchronized (this) {
 				sync_s.tc1 = 0;
 				sync_s.ts1 = now_ns;
 				comm.write(sync_s);
@@ -90,10 +91,9 @@ public class MAVTimeSync implements Runnable  {
 			e.printStackTrace();
 		}
 	}
-	
-	public String toString() {
-		return "Current offset: "+(time_offset_ns/1000L)+"us";
-	}
 
+	public String toString() {
+		return "Current offset: " + (time_offset_ns / 1000L) + "us";
+	}
 
 }

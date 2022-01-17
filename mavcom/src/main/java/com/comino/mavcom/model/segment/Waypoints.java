@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
@@ -55,10 +54,9 @@ public class Waypoints extends Segment {
 	public float[] pyaw = new float[5];
 	public float[] vyaw = new float[5];
 
-	public short[]  cmd  = new short[5];
+	public short[] cmd = new short[5];
 
 	public short valid_points = 0;
-
 
 	public Waypoints clone() {
 		Waypoints t = new Waypoints();
@@ -67,51 +65,51 @@ public class Waypoints extends Segment {
 	}
 
 	public void set(Waypoints t) {
-		for(int i=0;i<5;i++) {
-			
+		for (int i = 0; i < 5; i++) {
+
 			posx[i] = t.posx[i];
 			posy[i] = t.posy[i];
 			posz[i] = t.posz[i];
-			
+
 			velx[i] = t.velx[i];
 			vely[i] = t.vely[i];
 			velz[i] = t.velz[i];
-			
+
 			accx[i] = t.accx[i];
 			accy[i] = t.accy[i];
 			accz[i] = t.accz[i];
-			
+
 			pyaw[i] = t.pyaw[i];
 			vyaw[i] = t.vyaw[i];
-			
+
 			cmd[i] = Short.MAX_VALUE;
-			
+
 			valid_points = 0;
 
 		}
 
 	}
 
-	public void clear() {	
-		for(int i=0;i<5;i++) {
-			
+	public void clear() {
+		for (int i = 0; i < 5; i++) {
+
 			posx[i] = Float.NaN;
 			posy[i] = Float.NaN;
 			posz[i] = Float.NaN;
-			
+
 			velx[i] = Float.NaN;
 			vely[i] = Float.NaN;
 			velz[i] = Float.NaN;
-			
+
 			accx[i] = Float.NaN;
 			accy[i] = Float.NaN;
 			accz[i] = Float.NaN;
-			
+
 			pyaw[i] = Float.NaN;
 			vyaw[i] = Float.NaN;
-			
+
 			cmd[i] = Short.MAX_VALUE;
-			
+
 			valid_points = 0;
 		}
 

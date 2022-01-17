@@ -53,7 +53,6 @@ public class Imu extends Segment {
 
 	public float abs_pressure = 0;
 
-
 	public void set(Imu a) {
 		accx = a.accx;
 		accy = a.accy;
@@ -87,10 +86,8 @@ public class Imu extends Segment {
 
 		a.abs_pressure = abs_pressure;
 
-
 		return a;
 	}
-
 
 	public void clear() {
 		accx = 0;
@@ -108,7 +105,5 @@ public class Imu extends Segment {
 		abs_pressure = 0;
 
 	}
-
-
 
 }

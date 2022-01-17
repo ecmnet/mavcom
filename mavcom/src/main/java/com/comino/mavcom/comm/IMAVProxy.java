@@ -15,8 +15,8 @@ public interface IMAVProxy {
 	void enableProxy(boolean enable);
 
 	void close();
-	
-    void registerListener(Class<?> clazz, IMAVLinkListener listener);
+
+	void registerListener(Class<?> clazz, IMAVLinkListener listener);
 
 	void unregisterListener(Class<?> clazz);
 
@@ -27,9 +27,9 @@ public interface IMAVProxy {
 	long getTransferRate();
 
 	void write(byte[] buffer, int length);
-	
+
 	void shutdown();
-	
+
 	void broadcast();
 
 }

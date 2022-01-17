@@ -40,24 +40,23 @@ import com.comino.mavcom.model.segment.generic.Segment;
 
 public class Grid extends Segment {
 
-	public static final byte  STATUS_TRANSFER   = 0;
-	public static final byte  STATUS_CLEARING   = 1;
-
+	public static final byte STATUS_TRANSFER = 0;
+	public static final byte STATUS_CLEARING = 1;
 
 	private static final long serialVersionUID = -77272456745165428L;
-	
-	private static  LinkedList<Long>  transfer;
 
-	public int      count;
-	public byte    status;
+	private static LinkedList<Long> transfer;
 
-	public float    ix,iy,iz;	// Indicator
-	public float    vx,vy,vz;   // Vehicle position
+	public int count;
+	public byte status;
+
+	public float ix, iy, iz; // Indicator
+	public float vx, vy, vz; // Vehicle position
 
 	public Grid() {
-	
-		this.count    = 0;
-		this.status   = 0;
+
+		this.count = 0;
+		this.status = 0;
 
 		transfer = new LinkedList<Long>();
 
@@ -65,13 +64,13 @@ public class Grid extends Segment {
 
 	public void set(Grid a) {
 
-		ix               = a.ix;
-		iy               = a.iy;
-		iz               = a.iz;
-		
-		vx               = a.vx;
-		vy               = a.vy;
-		vz               = a.vz;
+		ix = a.ix;
+		iy = a.iy;
+		iz = a.iz;
+
+		vx = a.vx;
+		vy = a.vy;
+		vz = a.vz;
 
 	}
 
@@ -81,38 +80,39 @@ public class Grid extends Segment {
 		return a;
 	}
 
-	// Transfer via block only. positive values => set block; negative => remove block
+	// Transfer via block only. positive values => set block; negative => remove
+	// block
 
 	public boolean toArray(long[] array) {
 		try {
-			if(!hasTransfers())
+			if (!hasTransfers())
 				return false;
-			if(transfer.isEmpty() || array == null )
+			if (transfer.isEmpty() || array == null)
 				return false;
 
-			synchronized(this) {
+			synchronized (this) {
 				Arrays.fill(array, 0);
-				for(int i=0; i< array.length && transfer.size() > 0;i++) {
+				for (int i = 0; i < array.length && transfer.size() > 0; i++) {
 					array[i] = transfer.poll();
 				}
 			}
 			return true;
-		}
-		catch(Exception e) {
-			//	System.out.println("Array-Transfer: "+e.getMessage()+"A="+array+" T="+transfer);
+		} catch (Exception e) {
+			// System.out.println("Array-Transfer: "+e.getMessage()+"A="+array+"
+			// T="+transfer);
 			return false;
 		}
 	}
 
 	public boolean hasTransfers() {
-		return transfer!=null && !transfer.isEmpty();
+		return transfer != null && !transfer.isEmpty();
 	}
 
 	public LinkedList<Long> getTransfers() {
 		return transfer;
 	}
-	
-	public void setIndicator( float ix, float iy, float iz) {
+
+	public void setIndicator(float ix, float iy, float iz) {
 		this.ix = ix;
 		this.iy = iy;
 		this.iz = iz;
@@ -121,15 +121,11 @@ public class Grid extends Segment {
 	@SuppressWarnings("unlikely-arg-type")
 	public void fromArray(long[] array) {
 
-		for(int i=0; i< array.length && array[i]!=0;i++) {
-			if(!transfer.contains((int)array[i]))
-			   transfer.push(array[i]);
+		for (int i = 0; i < array.length && array[i] != 0; i++) {
+			if (!transfer.contains((int) array[i]))
+				transfer.push(array[i]);
 		}
 		count = transfer.size();
 	}
-
-	
-
-	
 
 }

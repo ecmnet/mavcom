@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.DataModel;
@@ -40,10 +39,11 @@ import com.comino.mavcom.model.segment.generic.Segment;
 public class LogMessage extends Segment {
 
 	private static final long serialVersionUID = 3345013931542810501L;
-	public  static final String[] severity_texts = { "Emergency","Alert","Critical","Error","Warning","Notice","Info","Debug" };
+	public static final String[] severity_texts = { "Emergency", "Alert", "Critical", "Error", "Warning", "Notice",
+			"Info", "Debug" };
 
-	public String    text = null;
-	public int   severity = 0;
+	public String text = null;
+	public int severity = 0;
 
 	private static LogMessage last_message;
 
@@ -64,7 +64,7 @@ public class LogMessage extends Segment {
 	}
 
 	public LogMessage clone() {
-		LogMessage m = new LogMessage(this.text,this.severity, this.tms);
+		LogMessage m = new LogMessage(this.text, this.severity, this.tms);
 		this.text = null;
 		return m;
 	}
@@ -76,12 +76,11 @@ public class LogMessage extends Segment {
 	}
 
 	public boolean isNew() {
-		return isNew(Integer.MAX_VALUE,DataModel.getSynchronizedPX4Time_us());
+		return isNew(Integer.MAX_VALUE, DataModel.getSynchronizedPX4Time_us());
 	}
 
 	public boolean isNew(int level_filter, long tms) {
-		if(text != null && (tms-this.tms) < 300000 
-				&& severity <= level_filter)
+		if (text != null && (tms - this.tms) < 300000 && severity <= level_filter)
 			return true;
 		return false;
 	}
@@ -96,7 +95,7 @@ public class LogMessage extends Segment {
 	}
 
 	public String getSeverityString() {
-		return "["+severity_texts[severity]+"]";
+		return "[" + severity_texts[severity] + "]";
 	}
 
 	public String toString() {

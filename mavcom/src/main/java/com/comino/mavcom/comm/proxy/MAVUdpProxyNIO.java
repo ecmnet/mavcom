@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.comm.proxy;
 
 import java.io.IOException;
@@ -56,33 +55,32 @@ import com.comino.mavcom.mavlink.MAVLinkReader;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
-
 public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable, IMAVProxy {
 
 	private static final int BUFFER = 64;
 
-	private SocketAddress 			bindPort = null;
-	private SocketAddress 			peerPort;
-	private DatagramChannel 		channel = null;
+	private SocketAddress bindPort = null;
+	private SocketAddress peerPort;
+	private DatagramChannel channel = null;
 
-	private HashMap<Class<?>,List<IMAVLinkListener>> listeners = null;
+	private HashMap<Class<?>, List<IMAVLinkListener>> listeners = null;
 
-	private MAVLinkReader 			reader;
-	private Selector 				selector;
-	private IMAVComm 				comm;
+	private MAVLinkReader reader;
+	private Selector selector;
+	private IMAVComm comm;
 
-	private boolean 				isConnected   = false;
-	private boolean					proxy_enabled = false;
+	private boolean isConnected = false;
+	private boolean proxy_enabled = false;
 
-	private final ByteBuffer 		rxBuffer = ByteBuffer.allocate(BUFFER*1024);
+	private final ByteBuffer rxBuffer = ByteBuffer.allocate(BUFFER * 1024);
 
 	private List<IMAVLinkListener> listener_list = null;
-	private long                   transfer_speed = 0;
+	private long transfer_speed = 0;
 
 	private DataModel model;
 
-
-	public MAVUdpProxyNIO(DataModel model,String peerAddress, int pPort, String bindAddress, int bPort, IMAVComm comm) {
+	public MAVUdpProxyNIO(DataModel model, String peerAddress, int pPort, String bindAddress, int bPort,
+			IMAVComm comm) {
 
 		peerPort = new InetSocketAddress(peerAddress, pPort);
 		bindPort = new InetSocketAddress(bindAddress, bPort);
@@ -91,68 +89,71 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable, IMAVProxy {
 		this.comm = comm;
 		this.model = model;
 
-		listeners = new HashMap<Class<?>,List<IMAVLinkListener>>();
+		listeners = new HashMap<Class<?>, List<IMAVLinkListener>>();
 
-		System.out.println("Proxy (NIO3): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
+		System.out.println(
+				"Proxy (NIO3): BindPort=" + bPort + " PeerPort=" + pPort + " BufferSize: " + rxBuffer.capacity());
 
 	}
 
 	@Override
 	public boolean open() {
 
-		if(channel!=null && channel.isConnected()) {
+		if (channel != null && channel.isConnected()) {
 			isConnected = true;
 			return true;
 		}
 
-			((Buffer)rxBuffer).clear(); 
+		((Buffer) rxBuffer).clear();
 
-			while(!isConnected) {
+		while (!isConnected) {
 
-				isConnected = false;
-				try { Thread.sleep(100); } catch (InterruptedException e2) { }
+			isConnected = false;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e2) {
+			}
 
+			try {
+
+				// System.out.println("Connect to UDP channel");
 				try {
+					channel = DatagramChannel.open();
+					channel.socket().bind(bindPort);
+					channel.socket().setTrafficClass(0x08);
+					channel.socket().setSendBufferSize(BUFFER * 1024);
+					channel.socket().setReceiveBufferSize(BUFFER * 1024);
+					channel.configureBlocking(false);
+					channel.socket().setReuseAddress(true);
 
-					//						System.out.println("Connect to UDP channel");
-					try {
-						channel = DatagramChannel.open();
-						channel.socket().bind(bindPort);
-						channel.socket().setTrafficClass(0x08);
-						channel.socket().setSendBufferSize(BUFFER*1024);
-						channel.socket().setReceiveBufferSize(BUFFER*1024);
-						channel.configureBlocking(false);
-						channel.socket().setReuseAddress(true);
-
-
-					} catch(java.net.BindException b) {
-						System.err.println("Connection error: "+b.getLocalizedMessage());
-						continue;
-					} catch (Exception e) {
-						continue;
-					}
-					channel.connect(peerPort);
-					selector = Selector.open();
-
-					if(channel.isConnected())
-						isConnected = true;
-
-
-				} catch(Exception e) {
-					System.err.println("Open "+e.getLocalizedMessage());
-					try {
-						channel.disconnect();
-						channel.close();
-					} catch (IOException e1) { }
+				} catch (java.net.BindException b) {
+					System.err.println("Connection error: " + b.getLocalizedMessage());
+					continue;
+				} catch (Exception e) {
 					continue;
 				}
-			}
-			
-			((Buffer)rxBuffer).clear();
+				channel.connect(peerPort);
+				selector = Selector.open();
 
-			Thread t = new Thread(this);
-			t.setName("Proxy worker");
-			t.start();
+				if (channel.isConnected())
+					isConnected = true;
+
+			} catch (Exception e) {
+				System.err.println("Open " + e.getLocalizedMessage());
+				try {
+					channel.disconnect();
+					channel.close();
+				} catch (IOException e1) {
+				}
+				continue;
+			}
+		}
+
+		((Buffer) rxBuffer).clear();
+
+		Thread t = new Thread(this);
+		t.setName("Proxy worker");
+		t.start();
 
 		return true;
 	}
@@ -172,20 +173,19 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable, IMAVProxy {
 		this.proxy_enabled = enable;
 	}
 
-
 	@Override
 	public void close() {
 		isConnected = false;
-		((Buffer)rxBuffer).clear();
+		((Buffer) rxBuffer).clear();
 		try {
-			if(selector!=null) {
+			if (selector != null) {
 				selector.close();
 			}
 			if (channel != null) {
 				channel.disconnect();
 				channel.close();
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -193,17 +193,19 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable, IMAVProxy {
 	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
 
 		List<IMAVLinkListener> list = null;
-		if(listeners.containsKey(clazz)) {
+		if (listeners.containsKey(clazz)) {
 			list = listeners.get(clazz);
-			if(!list.contains(listener)) {
+			if (!list.contains(listener)) {
 				list.add(listener);
-				System.out.println("Register MavLink listener: "+clazz.getSimpleName()+" : "+listener.getClass().getName());
+				System.out.println(
+						"Register MavLink listener: " + clazz.getSimpleName() + " : " + listener.getClass().getName());
 			}
 		} else {
-			list  = new ArrayList<IMAVLinkListener>();
+			list = new ArrayList<IMAVLinkListener>();
 			list.add(listener);
 			listeners.put(clazz, list);
-			System.out.println("Register MavLink listener: "+clazz.getSimpleName()+" : "+listener.getClass().getName());
+			System.out.println(
+					"Register MavLink listener: " + clazz.getSimpleName() + " : " + listener.getClass().getName());
 		}
 	}
 
@@ -217,22 +219,24 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable, IMAVProxy {
 
 		SelectionKey key = null;
 		MAVLinkMessage msg = null;
-		Iterator<?> selectedKeys = null; long bcount = 0; long start;
+		Iterator<?> selectedKeys = null;
+		long bcount = 0;
+		long start;
 
 		try {
-			channel.register(selector, SelectionKey.OP_READ );
+			channel.register(selector, SelectionKey.OP_READ);
 
 			bcount = 0;
 
-			if(!comm.isConnected()) {
+			if (!comm.isConnected()) {
 				isConnected = false;
 				return;
 			}
 
 			start = System.currentTimeMillis();
-			while(isConnected) {
+			while (isConnected) {
 
-				if(selector.select(1000)==0) {
+				if (selector.select(1000) == 0) {
 					isConnected = false;
 					continue;
 				}
@@ -248,39 +252,40 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable, IMAVProxy {
 					}
 
 					if (key.isReadable()) {
-						//						try {
-						if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
-							if(rxBuffer.position()>0) {
-								((Buffer)rxBuffer).flip();
-								while(rxBuffer.hasRemaining()) {
+						// try {
+						if (channel.isConnected() && channel.receive(rxBuffer) != null) {
+							if (rxBuffer.position() > 0) {
+								((Buffer) rxBuffer).flip();
+								while (rxBuffer.hasRemaining()) {
 									bcount++;
 									reader.put(rxBuffer.get());
 								}
 								rxBuffer.compact();
-								while((msg=reader.getNextMessage())!=null) {
+								while ((msg = reader.getNextMessage()) != null) {
 									listener_list = listeners.get(msg.getClass());
-									if(listener_list!=null) {
-										for(IMAVLinkListener listener : listener_list)
+									if (listener_list != null) {
+										for (IMAVLinkListener listener : listener_list)
 											listener.received(msg);
 									}
-									if(comm.isConnected())
+									if (comm.isConnected())
 										comm.write(msg);
 								}
 
-								if((System.currentTimeMillis() - start) > 500) {
+								if ((System.currentTimeMillis() - start) > 500) {
 									transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
-									bcount = 0; start = System.currentTimeMillis();
+									bcount = 0;
+									start = System.currentTimeMillis();
 								}
 							}
 						}
 					}
 				}
 			}
-		} catch(Exception e) { }
+		} catch (Exception e) {
+		}
 		close();
 		isConnected = false;
 	}
-
 
 	@Override
 	public int getBadCRC() {
@@ -288,20 +293,21 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable, IMAVProxy {
 	}
 
 	@Override
-	public void write(MAVLinkMessage msg)  {
+	public void write(MAVLinkMessage msg) {
 
-		if(msg!=null && channel!=null && channel.isOpen() && isConnected) {
+		if (msg != null && channel != null && channel.isOpen() && isConnected) {
 			try {
 				channel.write(ByteBuffer.wrap(msg.encode()));
 
-			} catch (IOException e) {}
+			} catch (IOException e) {
+			}
 		}
 
 	}
 
 	@Override
 	public void received(Object o) {
-		if(proxy_enabled) {
+		if (proxy_enabled) {
 			write((MAVLinkMessage) o);
 		}
 	}
@@ -311,32 +317,32 @@ public class MAVUdpProxyNIO implements IMAVLinkListener, Runnable, IMAVProxy {
 		return transfer_speed;
 	}
 
-
 	@Override
 	public void write(byte[] buffer, int length) {
 
 		// Do not foreward data if GCL is not connected
-		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
+		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
 			return;
 
-		if(channel != null && channel.isOpen() && channel.isConnected() && isConnected) {
+		if (channel != null && channel.isOpen() && channel.isConnected() && isConnected) {
 			try {
-				if(length > 0)
-					channel.write(ByteBuffer.wrap(buffer,0,length));
-			} catch (Exception e) { }
-		} 
+				if (length > 0)
+					channel.write(ByteBuffer.wrap(buffer, 0, length));
+			} catch (Exception e) {
+			}
+		}
 	}
 
 	@Override
 	public void shutdown() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void broadcast() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

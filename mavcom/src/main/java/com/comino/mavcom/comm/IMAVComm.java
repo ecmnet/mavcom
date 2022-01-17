@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.comm;
 
 import java.io.IOException;
@@ -52,7 +51,7 @@ public interface IMAVComm {
 
 	public DataModel getModel();
 
-    public MAVLinkBlockingReader getReader();
+	public MAVLinkBlockingReader getReader();
 
 	public void close();
 
@@ -71,6 +70,5 @@ public interface IMAVComm {
 	public long getTransferRate();
 
 	public void writeMessage(LogMessage m);
-
 
 }

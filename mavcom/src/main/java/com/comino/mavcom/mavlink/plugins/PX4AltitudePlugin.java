@@ -20,7 +20,7 @@ public class PX4AltitudePlugin extends MAVLinkPluginBase {
 //		if(Float.isFinite(alt.altitude_terrain))
 //		  model.hud.ar = alt.altitude_local - alt.altitude_terrain;//alt.altitude_relative 
 //		else
-			model.hud.ar = alt.altitude_relative ;
+		model.hud.ar = alt.altitude_relative;
 //		if(model.hud.ar<0)
 //			model.hud.ar = 0;
 		model.hud.bc = alt.bottom_clearance;

@@ -1,7 +1,5 @@
 package org.mavlink;
 
-
-
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.EOFException;
@@ -39,7 +37,7 @@ public class MAVLinkReaderOld {
 	 *
 	 */
 	private final byte[] receivedBuffer = new byte[RECEIVED_BUFFER_SIZE];
-	
+
 	private static int MAVLINK_MAX_PAYLOAD_SIZE = 255;
 
 	/**
@@ -93,25 +91,23 @@ public class MAVLinkReaderOld {
 	private boolean debug = false;
 
 	/**
-	 * Constructor with MAVLink 1.0 by default and without stream. Must be used whith byte array read methods.
+	 * Constructor with MAVLink 1.0 by default and without stream. Must be used
+	 * whith byte array read methods.
 	 */
 	public MAVLinkReaderOld(int id) {
-		this((byte)IMAVLinkMessage.MAVPROT_PACKET_START_V20,id);
+		this((byte) IMAVLinkMessage.MAVPROT_PACKET_START_V20, id);
 	}
 
 	public MAVLinkReaderOld(int id, boolean debug) {
-		this((byte)IMAVLinkMessage.MAVPROT_PACKET_START_V20,id);
+		this((byte) IMAVLinkMessage.MAVPROT_PACKET_START_V20, id);
 		this.debug = debug;
 	}
-
 
 	/**
 	 * Constructor
 	 *
-	 * @param dis
-	 *            Data input stream
-	 * @param start
-	 *            Start byte for MAVLink version
+	 * @param dis   Data input stream
+	 * @param start Start byte for MAVLink version
 	 */
 	public MAVLinkReaderOld(DataInputStream dis, byte start) {
 		this.dis = dis;
@@ -124,8 +120,7 @@ public class MAVLinkReaderOld {
 	/**
 	 * Constructor for byte array read methods.
 	 *
-	 * @param start
-	 *            Start byte for MAVLink version
+	 * @param start Start byte for MAVLink version
 	 */
 	public MAVLinkReaderOld(byte start, int id) {
 		this.id = id;
@@ -134,7 +129,7 @@ public class MAVLinkReaderOld {
 		for (int i = 0; i < lastPacket.length; i++) {
 			lastPacket[i] = -1;
 		}
-		System.out.println("MAVLinkReader "+id+" started");
+		System.out.println("MAVLinkReader " + id + " started");
 	}
 
 	/**
@@ -144,16 +139,14 @@ public class MAVLinkReaderOld {
 		return packets.size();
 	}
 
-
-
 	public void put(byte[] buffer, int len) throws IOException {
 
-			dis = new DataInputStream(new ByteArrayInputStream(buffer, 0, len));
-			while (dis.available() >  0)
-				readNextMessageWithoutBlocking();
+		dis = new DataInputStream(new ByteArrayInputStream(buffer, 0, len));
+		while (dis.available() > 0)
+			readNextMessageWithoutBlocking();
 	}
 
-	public  MAVLinkMessage getNextMessage() {
+	public MAVLinkMessage getNextMessage() {
 		MAVLinkMessage msg = null;
 		if (!packets.isEmpty()) {
 			msg = (MAVLinkMessage) packets.firstElement();
@@ -162,19 +155,17 @@ public class MAVLinkReaderOld {
 		return msg;
 	}
 
-
 	public MAVLinkMessage getNextMessage(byte[] buffer, int len) throws IOException {
 		MAVLinkMessage msg = null;
 
-		if (packets.isEmpty() || len > 0 ) {
+		if (packets.isEmpty() || len > 0) {
 			for (int i = offset; i < len + offset; i++) {
 				bytes[i] = buffer[i - offset];
 			}
 
 			dis = new DataInputStream(new ByteArrayInputStream(bytes, 0, len + offset));
 
-
-			while (dis.available() >  lengthToRead+RECEIVED_OFFSET)
+			while (dis.available() > lengthToRead + RECEIVED_OFFSET)
 				readNextMessageWithoutBlocking();
 
 			offset = dis.available();
@@ -193,7 +184,8 @@ public class MAVLinkReaderOld {
 	}
 
 	/**
-	 * Return next message. If bytes available, try to read it. Don't wait message is completed, it will be retruned nex time
+	 * Return next message. If bytes available, try to read it. Don't wait message
+	 * is completed, it will be retruned nex time
 	 *
 	 * @return MAVLink message or null
 	 */
@@ -208,7 +200,6 @@ public class MAVLinkReaderOld {
 		}
 		return msg;
 	}
-
 
 	/**
 	 * @return The lostBytes
@@ -255,7 +246,7 @@ public class MAVLinkReaderOld {
 		try {
 			if (messageInProgress == false) {
 				// Waiting for a new message
-				if (dis==null || dis.available() == 0)
+				if (dis == null || dis.available() == 0)
 					return validData;
 				receivedBuffer[nbReceived] = dis.readByte();
 				totalBytesReceived++;
@@ -277,14 +268,12 @@ public class MAVLinkReaderOld {
 					lengthToRead = 0;
 					// restart buffer
 					nbReceived = 0;
-				}
-				else {
+				} else {
 					lostBytes++;
 					nbReceived = 0;
 					return validData;
 				}
-			}
-			else {
+			} else {
 				// Message in progress
 				if (!lengthReceived) {
 					if (dis.available() == 0)
@@ -301,11 +290,10 @@ public class MAVLinkReaderOld {
 				lengthReceived = false;
 				lengthToRead = 0;
 				// restart buffer
-				lostBytes=0;
+				lostBytes = 0;
 				nbReceived = 0;
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			nbReceived = 0;
 			validData = false;
 		}
@@ -314,12 +302,11 @@ public class MAVLinkReaderOld {
 	}
 
 	/**
-	 * Read the end of message after the start byte and the payload length. Called only if there are available character to read all the rest of
-	 * message
+	 * Read the end of message after the start byte and the payload length. Called
+	 * only if there are available character to read all the rest of message
 	 *
 	 * @return true if no error occurs
-	 * @throws IOException
-	 *             on read byte function...
+	 * @throws IOException on read byte function...
 	 */
 	protected boolean readEndMessage() throws IOException, EOFException {
 		boolean validData = false;
@@ -379,34 +366,35 @@ public class MAVLinkReaderOld {
 			// CRC-EXTRA for Mavlink 1.0
 			try {
 				crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[msgId], crc);
-			} catch(Exception e) {  }
+			} catch (Exception e) {
+			}
 		}
 
 		byte crcl = (byte) (crc & 0x00FF);
 		byte crch = (byte) ((crc >> 8) & 0x00FF);
 
-		if ((crcl == crcLow) && (crch == crcHigh) || msgId==36 ) {
+		if ((crcl == crcLow) && (crch == crcHigh) || msgId == 36) {
 			msg = MAVLinkMessageFactory.getMessage(msgId, sysId, componentId, rawData);
 			if (msg != null) {
 				msg.packet = packet;
 				if (!checkPacket(sysId, packet)) {
 					badSequence += 1;
-				// System.err.println(id+" SEQ: MSG="+msgId+" "+bytesToHex(receivedBuffer,lengthToRead+12));
+					// System.err.println(id+" SEQ: MSG="+msgId+"
+					// "+bytesToHex(receivedBuffer,lengthToRead+12));
 				}
 				packets.addElement(msg);
 				nbMessagesReceived++;
-				validData=true;
-			}
-			else {
+				validData = true;
+			} else {
 				System.err.println("ERROR creating message  Id=" + msgId);
 				validData = false;
 			}
-		}
-		else {
+		} else {
 			badCRC = badCRC + 1;
 
-		if(debug)
-       		 System.err.println("ID: "+id+" CRC: MSG="+msgId+" Length: "+(lengthToRead+12)+" "+bytesToHex(receivedBuffer,lengthToRead+12));
+			if (debug)
+				System.err.println("ID: " + id + " CRC: MSG=" + msgId + " Length: " + (lengthToRead + 12) + " "
+						+ bytesToHex(receivedBuffer, lengthToRead + 12));
 			validData = false;
 		}
 		// restart buffer
@@ -419,8 +407,7 @@ public class MAVLinkReaderOld {
 	/**
 	 * Check if we don't lost messages...
 	 *
-	 * @param sequence
-	 *            current sequence
+	 * @param sequence current sequence
 	 * @return true if we don't lost messages
 	 */
 	protected boolean checkPacket(int sysId, int packet) {
@@ -429,33 +416,31 @@ public class MAVLinkReaderOld {
 			// it is the first message read
 			lastPacket[sysId] = packet;
 			check = true;
-		}
-		else if (lastPacket[sysId] < packet) {
+		} else if (lastPacket[sysId] < packet) {
 			if (packet - lastPacket[sysId] == 1) {
 				// No message lost
 				check = true;
 			}
+		} else
+		// We have reached the max number (255) and restart to 0
+		if (packet + 256 - lastPacket[sysId] == 1) {
+			// No message lost
+			check = true;
 		}
-		else
-			// We have reached the max number (255) and restart to 0
-			if (packet + 256 - lastPacket[sysId] == 1) {
-				// No message lost
-				check = true;
-			}
 		return check;
 	}
 
 	/**
 	 * Read Payload bytes
 	 *
-	 * @param nb
-	 *            Nb bytes to read
+	 * @param nb Nb bytes to read
 	 * @return Payload bytes
 	 * @throws IOException
 	 */
-	private byte[] buffer = new byte[MAVLINK_MAX_PAYLOAD_SIZE+1];
+	private byte[] buffer = new byte[MAVLINK_MAX_PAYLOAD_SIZE + 1];
+
 	protected byte[] readRawData(int nb) throws IOException {
-		Arrays.fill(buffer,8,MAVLINK_MAX_PAYLOAD_SIZE,(byte)0x00);
+		Arrays.fill(buffer, 8, MAVLINK_MAX_PAYLOAD_SIZE, (byte) 0x00);
 		int index = 0;
 		/*
 		 * while (dis.available() < nb) { ; }
@@ -469,9 +454,10 @@ public class MAVLinkReaderOld {
 	}
 
 	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
 	public static String bytesToHex(byte[] bytes, int len) {
 		char[] hexChars = new char[len * 2];
-		for ( int j = 0; j <len; j++ ) {
+		for (int j = 0; j < len; j++) {
 			int v = bytes[j] & 0xFF;
 			hexChars[j * 2] = hexArray[v >>> 4];
 			hexChars[j * 2 + 1] = hexArray[v & 0x0F];

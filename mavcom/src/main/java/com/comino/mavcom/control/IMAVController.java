@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.control;
 
 import java.util.Map;
@@ -48,16 +47,21 @@ import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 public interface IMAVController {
 
 	public boolean connect();
+
 	public boolean close();
-	public void    shutdown();
+
+	public void shutdown();
 
 	public boolean isSimulation();
+
 	public boolean isConnected();
 
 	public String enableFileLogging(boolean enable, String directory);
 
 	public int getErrorCount();
+
 	public long getTransferRate();
+
 	public int getMode();
 
 	public DataModel getCurrentModel();
@@ -66,21 +70,26 @@ public interface IMAVController {
 
 	public void writeLogMessage(LogMessage m);
 
-	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap();
+	public Map<Class<?>, MAVLinkMessage> getMavLinkMessageMap();
 
-	public boolean sendMAVLinkCmd(int command, float...params);
-	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge ack, float...params);
+	public boolean sendMAVLinkCmd(int command, float... params);
+
+	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge ack, float... params);
+
 	public boolean sendMAVLinkMessage(MAVLinkMessage msg);
-	public boolean sendMSPLinkCmd(int command, float...params);
+
+	public boolean sendMSPLinkCmd(int command, float... params);
 
 	public boolean sendShellCommand(String s);
 
 	public void addStatusChangeListener(IMSPStatusChangedListener listener);
+
 	public void addMAVLinkListener(IMAVLinkListener listener);
+
 	public void addMAVLinkListener(Class<?> clazz, IMAVLinkListener listener);
+
 	public void addMAVMessageListener(IMAVMessageListener listener);
 
 	public StatusManager getStatusManager();
-
 
 }

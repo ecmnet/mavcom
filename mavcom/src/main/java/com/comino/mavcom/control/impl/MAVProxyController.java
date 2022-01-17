@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.control.impl;
 
 import java.io.UnsupportedEncodingException;
@@ -78,28 +77,26 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	protected String peerAddress = null;
 
-
 	protected static IMAVMSPController controller = null;
 
 	protected IMAVComm comm = null;
 
+	protected DataModel model = null;
+	protected IMAVProxy proxy = null;
 
-	protected   DataModel model = null;
-	protected   IMAVProxy proxy = null;
+	private static final int BAUDRATE_5 = 57600;
+	private static final int BAUDRATE_9 = 921600;
+	private static final int BAUDRATE_15 = 1500000;
+	private static final int BAUDRATE_20 = 2000000;
+	private static final int BAUDRATE_30 = 3000000;
 
-	private static final int BAUDRATE_5   = 57600;
-	private static final int BAUDRATE_9   = 921600;
-	private static final int BAUDRATE_15  = 1500000;
-	private static final int BAUDRATE_20  = 2000000;
-	private static final int BAUDRATE_30  = 3000000;
+	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
+	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1, MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
+	private static final msg_heartbeat beat_obs = new msg_heartbeat(1, MAV_COMPONENT.MAV_COMP_ID_OBSTACLE_AVOIDANCE);
 
-	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
-	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1,MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
-	private static final msg_heartbeat beat_obs = new msg_heartbeat(1,MAV_COMPONENT.MAV_COMP_ID_OBSTACLE_AVOIDANCE);
-
-	private StatusManager 				status_manager 	= null;
-	private List<IMAVMessageListener> 	messageListener = null;
-	private MAVTimeSync                 timesync        = null;
+	private StatusManager status_manager = null;
+	private List<IMAVMessageListener> messageListener = null;
+	private MAVTimeSync timesync = null;
 	private final MAVLinkBlockingReader reader;
 
 	private final WorkQueue wq = WorkQueue.getInstance();
@@ -110,13 +107,12 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		return controller;
 	}
 
-
 	public MAVProxyController(int mode) {
 
 		this.mode = mode;
 		controller = this;
 		model = new DataModel();
-		reader = new MAVLinkBlockingReader(2,model);
+		reader = new MAVLinkBlockingReader(2, model);
 		status_manager = new StatusManager(model, false);
 		messageListener = new ArrayList<IMAVMessageListener>();
 
@@ -133,67 +129,74 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		beat_obs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
 		beat_obs.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 
-		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_RISING, (a) -> {
-			System.out.println("Connection to device established...");
-			model.sys.setStatus(Status.MSP_SITL,!comm.isSerial());
-		});
+		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_RISING,
+				(a) -> {
+					System.out.println("Connection to device established...");
+					model.sys.setStatus(Status.MSP_SITL, !comm.isSerial());
+				});
 
-		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_FALLING, (a) -> {
-			model.sys.setStatus(Status.MSP_ACTIVE, false);
-			System.out.println("Connection to device lost...");
-		});
+		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_FALLING,
+				(a) -> {
+					model.sys.setStatus(Status.MSP_ACTIVE, false);
+					System.out.println("Connection to device lost...");
+				});
 
+		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_RISING,
+				(a) -> {
+					System.out.println("Connection to GCS established...");
+					proxy.enableProxy(true);
+				});
 
-		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_RISING, (a) -> {
-			System.out.println("Connection to GCS established...");
-			proxy.enableProxy(true);
-		});
+		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_FALLING,
+				(a) -> {
+					proxy.enableProxy(false);
+					System.out.println("Connection to GCS lost...");
+				});
 
-		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_FALLING, (a) -> {
-			proxy.enableProxy(false);
-			System.out.println("Connection to GCS lost...");
-		});
-
-
-		switch(mode) {
+		switch (mode) {
 		case MAVController.MODE_NORMAL:
-			//comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			//     comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
+			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
+			// comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
 			comm = MAVSerialComm.getInstance(reader, BAUDRATE_9);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 
-			try { Thread.sleep(100); } catch (InterruptedException e) { }
-
-			if(HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) {
-				proxy = new MAVUdpProxyNIO2(model,"172.168.178.2",14550,"172.168.178.22",14555,comm);
-				peerAddress = "172.168.178.22";
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
 			}
-			else {
-				proxy = new MAVUdpProxyNIO2(model,"172.168.178.2",14550,"172.168.178.1",14555,comm);	
+
+			if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) {
+				proxy = new MAVUdpProxyNIO2(model, "172.168.178.2", 14550, "172.168.178.22", 14555, comm);
+				peerAddress = "172.168.178.22";
+			} else {
+				proxy = new MAVUdpProxyNIO2(model, "172.168.178.2", 14550, "172.168.178.1", 14555, comm);
 				peerAddress = "172.168.178.1";
 			}
-			System.out.println("Proxy Controller loaded: "+peerAddress);
-			model.sys.setStatus(Status.MSP_SITL,false);
+			System.out.println("Proxy Controller loaded: " + peerAddress);
+			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
 
 		case MAVController.MODE_SITL:
-			model.sys.setStatus(Status.MSP_SITL,true);
-			comm = MAVUdpCommNIO2.getInstance(reader, "127.0.0.1",14580, 14540);
-			proxy = new MAVUdpProxyNIO2(model,"127.0.0.1",14650,"0.0.0.0",14656,comm);
+			model.sys.setStatus(Status.MSP_SITL, true);
+			comm = MAVUdpCommNIO2.getInstance(reader, "127.0.0.1", 14580, 14540);
+			proxy = new MAVUdpProxyNIO2(model, "127.0.0.1", 14650, "0.0.0.0", 14656, comm);
 			peerAddress = "127.0.0.1";
 			System.out.println("Proxy Controller (SITL mode) loaded");
 			break;
 		case MAVController.MODE_USB:
-			//			comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
+			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
 			comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), BAUDRATE_5);
-			//		comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
+			// comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
-			try { Thread.sleep(500); } catch (InterruptedException e) { }
-			proxy = new MAVUdpProxyNIO2(model,"127.0.0.1",14650,"0.0.0.0",14656,comm);
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+			}
+			proxy = new MAVUdpProxyNIO2(model, "127.0.0.1", 14650, "0.0.0.0", 14656, comm);
 			peerAddress = "127.0.0.1";
-			System.out.println("Proxy Controller (serial mode) loaded: "+peerAddress);
-			model.sys.setStatus(Status.MSP_SITL,false);
+			System.out.println("Proxy Controller (serial mode) loaded: " + peerAddress);
+			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
 		case MAVController.MODE_SERVER:
 
@@ -201,41 +204,44 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 
-			try { Thread.sleep(100); } catch (InterruptedException e) { }
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
 
-			if(HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) {
-				proxy = new MAVUdpProxyNIO2(model,"192.168.178.60",14550,"192.168.178.86",14555,comm);
+			if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) {
+				proxy = new MAVUdpProxyNIO2(model, "192.168.178.60", 14550, "192.168.178.86", 14555, comm);
+				peerAddress = "192.168.178.86";
+			} else {
+				proxy = new MAVUdpProxyNIO2(model, "172.168.178.60", 14550, "192.168.178.86", 14555, comm);
 				peerAddress = "192.168.178.86";
 			}
-			else {
-				proxy = new MAVUdpProxyNIO2(model,"172.168.178.60",14550,"192.168.178.86",14555,comm);	
-				peerAddress = "192.168.178.86";
-			}
-			System.out.println("Proxy Controller loaded: "+peerAddress);
-			model.sys.setStatus(Status.MSP_SITL,false);
+			System.out.println("Proxy Controller loaded: " + peerAddress);
+			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
 		}
 
-		//		comm.addMAVLinkListener(proxy);
+		// comm.addMAVLinkListener(proxy);
 		// Direct byte based proxy
 		comm.setProxyListener(proxy);
 
-
 		// Register processing of PING sent by GCL
-		proxy.registerListener(msg_heartbeat.class, (o) -> {	
-			model.sys.gcl_tms = System.currentTimeMillis()*1000L;
+		proxy.registerListener(msg_heartbeat.class, (o) -> {
+			model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
 		});
 
 		// FWD PX4 heartbeat messages to GCL when not connected
 		reader.getParser().addMAVLinkListener((o) -> {
-			if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && o instanceof msg_heartbeat) {
-				proxy.write((MAVLinkMessage)o);
+			if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && o instanceof msg_heartbeat) {
+				proxy.write((MAVLinkMessage) o);
 			}
 		});
 
-		wq.addSingleTask("LP", 500, () -> {  timesync = new MAVTimeSync(comm); });
-		wq.addCyclicTask("NP", 200, this);	
+		wq.addSingleTask("LP", 500, () -> {
+			timesync = new MAVTimeSync(comm);
+		});
+		wq.addCyclicTask("NP", 200, this);
 
 	}
 
@@ -243,12 +249,11 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	public boolean sendMAVLinkMessage(MAVLinkMessage msg) {
 
 		try {
-			if(msg.sysId==2) {
-				if(proxy.isConnected() && model.sys.isStatus(Status.MSP_GCL_CONNECTED))
+			if (msg.sysId == 2) {
+				if (proxy.isConnected() && model.sys.isStatus(Status.MSP_GCL_CONNECTED))
 					proxy.write(msg);
-			}
-			else {
-				if(comm.isConnected()) {
+			} else {
+				if (comm.isConnected()) {
 					comm.write(msg);
 				}
 			}
@@ -260,35 +265,48 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	}
 
 	@Override
-	public boolean sendMAVLinkCmd(int command, float...params) {
-		return sendMAVLinkCmd(command,null,params);
-	}	
+	public boolean sendMAVLinkCmd(int command, float... params) {
+		return sendMAVLinkCmd(command, null, params);
+	}
 
 	@Override
-	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, float...params) {
+	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, float... params) {
 
-		msg_command_long cmd = new msg_command_long(255,1);
+		msg_command_long cmd = new msg_command_long(255, 1);
 		cmd.target_system = 1;
 		cmd.target_component = 1;
 		cmd.command = command;
 		cmd.confirmation = 1;
 
-		for(int i=0; i<params.length;i++) {
-			switch(i) {
-			case 0: cmd.param1 = params[0]; break;
-			case 1: cmd.param2 = params[1]; break;
-			case 2: cmd.param3 = params[2]; break;
-			case 3: cmd.param4 = params[3]; break;
-			case 4: cmd.param5 = params[4]; break;
-			case 5: cmd.param6 = params[5]; break;
-			case 6: cmd.param7 = params[6]; break;
+		for (int i = 0; i < params.length; i++) {
+			switch (i) {
+			case 0:
+				cmd.param1 = params[0];
+				break;
+			case 1:
+				cmd.param2 = params[1];
+				break;
+			case 2:
+				cmd.param3 = params[2];
+				break;
+			case 3:
+				cmd.param4 = params[3];
+				break;
+			case 4:
+				cmd.param5 = params[4];
+				break;
+			case 5:
+				cmd.param6 = params[5];
+				break;
+			case 6:
+				cmd.param7 = params[6];
+				break;
 			}
 		}
-		if(callback!=null)
-			reader.getParser().setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,comm,1));
+		if (callback != null)
+			reader.getParser().setCmdAcknowledgeListener(command, new MAVAcknowledge(callback, cmd, comm, 1));
 		return sendMAVLinkMessage(cmd);
 	}
-
 
 	@Override
 	public int getMode() {
@@ -297,26 +315,25 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public boolean sendShellCommand(String s) {
-		String command = s+"\n";
-		msg_serial_control msg = new msg_serial_control(1,1);
+		String command = s + "\n";
+		msg_serial_control msg = new msg_serial_control(1, 1);
 		try {
 			byte[] bytes = command.getBytes("US-ASCII");
-			for(int i =0;i<bytes.length && i<70;i++)
+			for (int i = 0; i < bytes.length && i < 70; i++)
 				msg.data[i] = bytes[i];
 			msg.count = bytes.length;
 			msg.device = SERIAL_CONTROL_DEV.SERIAL_CONTROL_DEV_SHELL;
-			msg.flags  = SERIAL_CONTROL_FLAG.SERIAL_CONTROL_FLAG_RESPOND;
+			msg.flags = SERIAL_CONTROL_FLAG.SERIAL_CONTROL_FLAG_RESPOND;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		sendMAVLinkMessage(msg);
-		System.out.println("ShellCommand executed: "+s);
+		System.out.println("ShellCommand executed: " + s);
 		return true;
 	}
 
-
 	@Override
-	public boolean sendMSPLinkCmd(int command, float...params) {
+	public boolean sendMSPLinkCmd(int command, float... params) {
 		MSPLogger.getInstance().writeLocalMsg("Command rejected: Proxy cannot send command to itself...");
 		return false;
 	}
@@ -325,20 +342,22 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		proxy.registerListener(clazz, listener);
 	}
 
-
-
 	public boolean isConnected() {
-		//		model.sys.setStatus(Status.MSP_ACTIVE, comm.isConnected());
-		if(mode == MAVController.MODE_NORMAL)
+		// model.sys.setStatus(Status.MSP_ACTIVE, comm.isConnected());
+		if (mode == MAVController.MODE_NORMAL)
 			return proxy.isConnected() && comm.isConnected();
 		return proxy.isConnected();
 	}
 
 	@Override
 	public boolean connect() {
-		try { Thread.sleep(200); } catch (InterruptedException e) { }
-		comm.open(); proxy.open();
-		if(comm.isConnected()) {
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+		}
+		comm.open();
+		proxy.open();
+		if (comm.isConnected()) {
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES, 1);
 		}
 		return true;
@@ -346,28 +365,25 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public boolean close() {
-		proxy.close(); comm.close();
+		proxy.close();
+		comm.close();
 		return true;
 	}
-
 
 	@Override
 	public void shutdown() {
 		proxy.shutdown();
 	}
 
-
 	@Override
 	public DataModel getCurrentModel() {
 		return comm.getModel();
 	}
 
-
 	@Override
-	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap() {
+	public Map<Class<?>, MAVLinkMessage> getMavLinkMessageMap() {
 		return reader.getParser().getMavLinkMessageMap();
 	}
-
 
 	@Override
 	public boolean isSimulation() {
@@ -384,9 +400,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	public void addMAVLinkListener(IMAVLinkListener listener) {
 		reader.getParser().addMAVLinkListener(listener);
 	}
-	
+
 	@Override
-	public void addMAVLinkListener(Class<?> clazz,IMAVLinkListener listener) {
+	public void addMAVLinkListener(Class<?> clazz, IMAVLinkListener listener) {
 		reader.getParser().registerListener(clazz, listener);
 	}
 
@@ -398,7 +414,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public void writeLogMessage(LogMessage m) {
 
-		if(!m.isNew())
+		if (!m.isNew())
 			return;
 
 		this.model.msg = m;
@@ -407,7 +423,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		msg_statustext msg = new msg_statustext();
 		msg.setText(m.text);
 		msg.componentId = 1;
-		msg.severity =m.severity;
+		msg.severity = m.severity;
 		proxy.write(msg);
 		if (messageListener != null) {
 			for (IMAVMessageListener msglistener : messageListener)
@@ -415,18 +431,15 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		}
 	}
 
-
 	@Override
 	public String getConnectedAddress() {
 		return peerAddress;
 	}
 
-
 	@Override
 	public int getErrorCount() {
 		return comm.getErrorCount();
 	}
-
 
 	@Override
 	public String enableFileLogging(boolean enable, String directory) {
@@ -438,22 +451,22 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		return status_manager;
 	}
 
-
 	@Override
 	public boolean start() {
 
 		status_manager.start();
 
-		if(isSimulation()) {
+		if (isSimulation()) {
 			System.out.println("Setup MAVLink streams for simulation mode");
-			sendMAVLinkCmd(MAV_CMD.MAV_CMD_SET_MESSAGE_INTERVAL, IMAVLinkMessageID.MAVLINK_MSG_ID_HIGHRES_IMU,50000);
-			sendMAVLinkCmd(MAV_CMD.MAV_CMD_SET_MESSAGE_INTERVAL, IMAVLinkMessageID.MAVLINK_MSG_ID_VISION_POSITION_ESTIMATE,50000);
-			sendMAVLinkCmd(MAV_CMD.MAV_CMD_SET_MESSAGE_INTERVAL, IMAVLinkMessageID.MAVLINK_MSG_ID_ATTITUDE_TARGET,20000);
+			sendMAVLinkCmd(MAV_CMD.MAV_CMD_SET_MESSAGE_INTERVAL, IMAVLinkMessageID.MAVLINK_MSG_ID_HIGHRES_IMU, 50000);
+			sendMAVLinkCmd(MAV_CMD.MAV_CMD_SET_MESSAGE_INTERVAL,
+					IMAVLinkMessageID.MAVLINK_MSG_ID_VISION_POSITION_ESTIMATE, 50000);
+			sendMAVLinkCmd(MAV_CMD.MAV_CMD_SET_MESSAGE_INTERVAL, IMAVLinkMessageID.MAVLINK_MSG_ID_ATTITUDE_TARGET,
+					20000);
 		}
 
 		return true;
 	}
-
 
 	@Override
 	public void run() {
@@ -462,17 +475,16 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		sendMAVLinkMessage(beat_obs);
 
-		if(!proxy.isConnected())  {
-			proxy.close(); 
-			if(!proxy.open())
+		if (!proxy.isConnected()) {
+			proxy.close();
+			if (!proxy.open())
 				return;
 		}
 
-		if(!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
+		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
 			proxy.broadcast();
 
-
-		if(!comm.isConnected()) {
+		if (!comm.isConnected()) {
 			model.sys.setStatus(Status.MSP_ACTIVE, false);
 			comm.open();
 		}

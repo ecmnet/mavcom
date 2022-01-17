@@ -31,9 +31,7 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
-
 
 import com.comino.mavcom.model.segment.generic.Segment;
 
@@ -41,46 +39,46 @@ public class Rc extends Segment {
 
 	private static final long serialVersionUID = -1177166201561030663L;
 
-	public float  rssi =  Float.NaN;
+	public float rssi = Float.NaN;
 
-	public float 	s0 = Float.NaN;
-	public float 	s1 = Float.NaN;
-	public float 	s2 = Float.NaN;
-	public float 	s3 = Float.NaN;
-	public float 	s4 = Float.NaN;
-	public float 	s5 = Float.NaN;
-	public float 	s6 = Float.NaN;
-	public float 	s7 = Float.NaN;
+	public float s0 = Float.NaN;
+	public float s1 = Float.NaN;
+	public float s2 = Float.NaN;
+	public float s3 = Float.NaN;
+	public float s4 = Float.NaN;
+	public float s5 = Float.NaN;
+	public float s6 = Float.NaN;
+	public float s7 = Float.NaN;
 
 	public void set(Rc a) {
-		s0		= a.s0;
-		s1		= a.s1;
-		s2		= a.s2;
-		s3		= a.s3;
-		s4		= a.s4;
-		s5		= a.s5;
-		s6		= a.s6;
-		s7		= a.s7;
-		rssi    = a.rssi;
+		s0 = a.s0;
+		s1 = a.s1;
+		s2 = a.s2;
+		s3 = a.s3;
+		s4 = a.s4;
+		s5 = a.s5;
+		s6 = a.s6;
+		s7 = a.s7;
+		rssi = a.rssi;
 	}
 
 	public Rc clone() {
 		Rc at = new Rc();
-		at.s0 		= s0;
-		at.s1 		= s1;
-		at.s2 		= s2;
-		at.s3 		= s3;
-		at.s4 		= s4;
-		at.s5 		= s5;
-		at.s6 		= s6;
-		at.s7 		= s7;
-		at.rssi     = rssi;
+		at.s0 = s0;
+		at.s1 = s1;
+		at.s2 = s2;
+		at.s3 = s3;
+		at.s4 = s4;
+		at.s5 = s5;
+		at.s6 = s6;
+		at.s7 = s7;
+		at.rssi = rssi;
 
 		return at;
 	}
 
 	public float get(int channel) {
-		switch(channel) {
+		switch (channel) {
 		case 1:
 			return s0;
 		case 2:
@@ -102,18 +100,17 @@ public class Rc extends Segment {
 		}
 	}
 
-	//--------------------------------------------------------------------------------------------------------
-
+	// --------------------------------------------------------------------------------------------------------
 
 	public void clear() {
-		s0   = Float.NaN;
-		s1   = Float.NaN;
-		s2   = Float.NaN;
-		s3   = Float.NaN;
-		s4   = Float.NaN;
-		s5   = Float.NaN;
-		s6   = Float.NaN;
-		s7   = Float.NaN;
+		s0 = Float.NaN;
+		s1 = Float.NaN;
+		s2 = Float.NaN;
+		s3 = Float.NaN;
+		s4 = Float.NaN;
+		s5 = Float.NaN;
+		s6 = Float.NaN;
+		s7 = Float.NaN;
 		rssi = Float.NaN;
 
 	}

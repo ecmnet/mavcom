@@ -25,24 +25,24 @@ package org.mavlink.generator;
 import java.util.Comparator;
 
 /**
- * Comparator to sort field in MAVLink messages.
- * Sort only on the size of field type and ignore array size
+ * Comparator to sort field in MAVLink messages. Sort only on the size of field
+ * type and ignore array size
+ * 
  * @author ghelle
  * @version $Rev: 4 $
  *
  */
 public class FieldCompare implements Comparator<MAVLinkField> {
 
-    public int compare(MAVLinkField field2, MAVLinkField field1) {
+	public int compare(MAVLinkField field2, MAVLinkField field1) {
 
-        //Sort on type size
-        if (field1.getType().getTypeSize() > field2.getType().getTypeSize()) {
-            return 1;
-        }
-        else if (field1.getType().getTypeSize() < field2.getType().getTypeSize()) {
-            return -1;
-        }
-        return 0;
-    }
+		// Sort on type size
+		if (field1.getType().getTypeSize() > field2.getType().getTypeSize()) {
+			return 1;
+		} else if (field1.getType().getTypeSize() < field2.getType().getTypeSize()) {
+			return -1;
+		}
+		return 0;
+	}
 
 }

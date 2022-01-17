@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
@@ -40,8 +39,7 @@ public class Telemetry extends Segment {
 
 	private static final long serialVersionUID = -5513070249760162722L;
 
-	public float  rssi            = 0;
-
+	public float rssi = 0;
 
 	public void set(Telemetry m) {
 		rssi = m.rssi;
@@ -49,14 +47,13 @@ public class Telemetry extends Segment {
 
 	public Telemetry clone() {
 		Telemetry s = new Telemetry();
-		s.rssi	= rssi;
+		s.rssi = rssi;
 		return s;
 	}
 
 	public void clear() {
-		rssi    = 0;
+		rssi = 0;
 
 	}
-
 
 }

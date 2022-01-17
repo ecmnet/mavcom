@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.control.impl;
 
 import java.util.ArrayList;
@@ -49,15 +48,13 @@ import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.MSPMathUtils;
 import com.comino.mavutils.workqueue.WorkQueue;
 
-
-
 public class MAVSimController extends MAVController implements IMAVController {
 
 	DataModel model = null;
-	ArrayList<LogMessage>					msgList;
-	private List<IMAVMessageListener> msgListener        = null;
+	ArrayList<LogMessage> msgList;
+	private List<IMAVMessageListener> msgListener = null;
 	private ArrayList<IMSPStatusChangedListener> modeListener;
-	
+
 	private final WorkQueue wq = WorkQueue.getInstance();
 
 	public MAVSimController() {
@@ -66,7 +63,7 @@ public class MAVSimController extends MAVController implements IMAVController {
 		msgListener = new ArrayList<IMAVMessageListener>();
 		modeListener = new ArrayList<IMSPStatusChangedListener>();
 
-		wq.addCyclicTask("NP",50, new Simulation());
+		wq.addCyclicTask("NP", 50, new Simulation());
 	}
 
 	@Override
@@ -80,10 +77,10 @@ public class MAVSimController extends MAVController implements IMAVController {
 		return model;
 	}
 
-	//	@Override
-	//	public List<DataModel> getModelList() {
-	//		return collector.getModelList();
-	//	}
+	// @Override
+	// public List<DataModel> getModelList() {
+	// return collector.getModelList();
+	// }
 
 	@Override
 	public boolean close() {
@@ -98,7 +95,7 @@ public class MAVSimController extends MAVController implements IMAVController {
 	@Override
 	public boolean sendMAVLinkMessage(MAVLinkMessage msg) {
 
-		if(!controller.getCurrentModel().sys.isStatus(Status.MSP_CONNECTED)) {
+		if (!controller.getCurrentModel().sys.isStatus(Status.MSP_CONNECTED)) {
 			System.out.println("Command rejected. No connection.");
 			return false;
 		}
@@ -113,15 +110,14 @@ public class MAVSimController extends MAVController implements IMAVController {
 	}
 
 	@Override
-	public boolean sendMAVLinkCmd(int command, float...params) {
-
+	public boolean sendMAVLinkCmd(int command, float... params) {
 
 		return true;
 	}
 
-	public boolean sendMSPLinkCmd(int command, float...params) {
+	public boolean sendMSPLinkCmd(int command, float... params) {
 
-		if(!controller.getCurrentModel().sys.isStatus(Status.MSP_CONNECTED)) {
+		if (!controller.getCurrentModel().sys.isStatus(Status.MSP_CONNECTED)) {
 			System.out.println("Command rejected. No connection.");
 			return false;
 		}
@@ -129,16 +125,16 @@ public class MAVSimController extends MAVController implements IMAVController {
 		return true;
 	}
 
-
 	private class Simulation implements Runnable {
 
 		Status old = new Status();
 
-		long count = 0; int msg_count = 0;
+		long count = 0;
+		int msg_count = 0;
 
 		@Override
 		public void run() {
-			model.battery.b0 = 12.75f - count/500f;
+			model.battery.b0 = 12.75f - count / 500f;
 
 			model.base.latitude = 48;
 			model.base.longitude = 11;
@@ -155,26 +151,25 @@ public class MAVSimController extends MAVController implements IMAVController {
 //			if(model.state.l_z > -5.0f)
 //				model.state.l_z = model.state.l_z - 0.001f - (float)Math.random()*0.001f;
 
+			model.state.l_z = -(float) (Math.sin(count / 400f)) * 2f;
+			model.state.l_x = (float) (Math.sin(count / 200f)) * 1f;
+			model.state.l_y = (float) (Math.cos(count / 200f)) * 1f;
 
-			model.state.l_z = -(float)(Math.sin(count/400f))*2f;
-			model.state.l_x = (float)(Math.sin(count/200f))*1f;
-			model.state.l_y = (float)(Math.cos(count/200f))*1f;
+			model.vision.x = model.state.l_x + (float) Math.random() * 0.2f - 0.1f;
+			model.vision.y = model.state.l_y + (float) Math.random() * 0.2f - 0.1f;
+			model.vision.z = model.state.l_z + (float) Math.random() * 0.2f - 0.1f;
 
-			model.vision.x = model.state.l_x + (float)Math.random()*0.2f-0.1f;
-			model.vision.y = model.state.l_y + (float)Math.random()*0.2f-0.1f;
-			model.vision.z = model.state.l_z + (float)Math.random()*0.2f-0.1f;
-
-			model.flow.fd = (float)Math.random()*0.5f+1;
+			model.flow.fd = (float) Math.random() * 0.5f + 1;
 			model.attitude.r = 0;
-			model.attitude.p = (float)(Math.PI/4);
-			model.attitude.y = (float)(count/1000f % (2*Math.PI));
-			model.imu.accx = (float)Math.random()*0.5f-0.25f;
-			model.imu.accy = (float)Math.random()*0.5f-0.25f;
-			model.imu.accz = (float)Math.random()*0.5f-9.81f;
+			model.attitude.p = (float) (Math.PI / 4);
+			model.attitude.y = (float) (count / 1000f % (2 * Math.PI));
+			model.imu.accx = (float) Math.random() * 0.5f - 0.25f;
+			model.imu.accy = (float) Math.random() * 0.5f - 0.25f;
+			model.imu.accz = (float) Math.random() * 0.5f - 9.81f;
 
-			model.imu.gyrox = (float)Math.random()*0.5f-0.25f;
-			model.imu.gyroy = (float)Math.random()*0.5f-0.25f;
-			model.imu.gyroz = (float)Math.random()*0.5f-0.25f;
+			model.imu.gyrox = (float) Math.random() * 0.5f - 0.25f;
+			model.imu.gyroy = (float) Math.random() * 0.5f - 0.25f;
+			model.imu.gyroz = (float) Math.random() * 0.5f - 0.25f;
 
 			model.sys.setStatus(Status.MSP_LANDED, false);
 
@@ -183,20 +178,18 @@ public class MAVSimController extends MAVController implements IMAVController {
 			model.gps.numsat = 8;
 
 			model.slam.pd = MSPMathUtils.toRad(count % 360);
-			model.slam.pv = 1 + (float)Math.random()*0.3f;
-			model.slam.px = model.state.l_x+(float)Math.cos(model.slam.pd);
-			model.slam.py = model.state.l_y+(float)Math.sin(model.slam.pd);
-
-			
+			model.slam.pv = 1 + (float) Math.random() * 0.3f;
+			model.slam.px = model.state.l_x + (float) Math.cos(model.slam.pd);
+			model.slam.py = model.state.l_y + (float) Math.sin(model.slam.pd);
 
 //			for(int i=0;i<5;i++)
 //			  model.grid.setBlock((float)Math.random()*20f-10,(float)Math.random()*20f-10, -(float)Math.random()*3, Math.random()>0.8);
 
-			model.grid.setIndicator(model.state.l_x, model.state.l_y,0);
+			model.grid.setIndicator(model.state.l_x, model.state.l_y, 0);
 
-			model.hud.ag = (float)Math.random()*10f+500f;
+			model.hud.ag = (float) Math.random() * 10f + 500f;
 
-			model.imu.abs_pressure = 1013 +  (float)Math.random()*10f;
+			model.imu.abs_pressure = 1013 + (float) Math.random() * 10f;
 
 			model.sys.setStatus(Status.MSP_CONNECTED, true);
 			model.sys.setStatus(Status.MSP_ARMED, true);
@@ -206,23 +199,22 @@ public class MAVSimController extends MAVController implements IMAVController {
 			model.sys.setSensor(Status.MSP_PIX4FLOW_AVAILABILITY, true);
 			model.sys.setSensor(Status.MSP_GPS_AVAILABILITY, true);
 
-			if(!old.isEqual(model.sys)) {
-				for(IMSPStatusChangedListener listener : modeListener) {
+			if (!old.isEqual(model.sys)) {
+				for (IMSPStatusChangedListener listener : modeListener) {
 					listener.update(model.sys);
 				}
 			}
 
 			old.set(model.sys);
 
-			if(msgList.size()>msg_count) {
+			if (msgList.size() > msg_count) {
 				msg_count = msgList.size();
-				if(msgListener!=null) {
-					for(IMAVMessageListener msglistener : msgListener)
-						msglistener.messageReceived(msgList.get(msg_count-1));
+				if (msgListener != null) {
+					for (IMAVMessageListener msglistener : msgListener)
+						msglistener.messageReceived(msgList.get(msg_count - 1));
 				}
 			}
 		}
 	}
 
-	
 }

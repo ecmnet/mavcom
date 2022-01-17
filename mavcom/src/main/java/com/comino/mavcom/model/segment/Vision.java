@@ -43,23 +43,20 @@ public class Vision extends Segment {
 
 	private static final long serialVersionUID = 270248566309263309L;
 
-	public static final int ENABLED             = 0;
-	public static final int AVAILABLE           = 1;
-	public static final int RESETTING           = 2;
-	public static final int POS_VALID           = 3;
-	public static final int SPEED_VALID         = 4;
-	public static final int PUBLISHED           = 5;
-	public static final int FIDUCIAL_ENABLED	= 6;
-	public static final int FIDUCIAL_LOCKED     = 7;
-	public static final int VIDEO_ENABLED       = 8;
+	public static final int ENABLED = 0;
+	public static final int AVAILABLE = 1;
+	public static final int RESETTING = 2;
+	public static final int POS_VALID = 3;
+	public static final int SPEED_VALID = 4;
+	public static final int PUBLISHED = 5;
+	public static final int FIDUCIAL_ENABLED = 6;
+	public static final int FIDUCIAL_LOCKED = 7;
+	public static final int VIDEO_ENABLED = 8;
 
+	private static final String[] MSP_VISION_TEXTS = { "Enabled", "Available", "Resetting", "Position valid",
+			"Speed valid", "Published", "Fiducual enabled", "Fiducial locked", "Video stream" };
 
-	
-	private static final String[] MSP_VISION_TEXTS  = { "Enabled","Available", "Resetting", "Position valid", "Speed valid", "Published", "Fiducual enabled",
-			                                            "Fiducial locked", "Video stream" };
-	
-	private static final String[] MSP_VISION_TSEXTS = { "RESET", "EVPOS", "EVVEL"};
-
+	private static final String[] MSP_VISION_TSEXTS = { "RESET", "EVPOS", "EVVEL" };
 
 	// Vision position
 	public float x = Float.NaN;
@@ -92,42 +89,41 @@ public class Vision extends Segment {
 	public float cov_vy = Float.NaN;
 	public float cov_vz = Float.NaN;
 
-	public float h    = Float.NaN;
-	public float p    = Float.NaN;
-	public float r    = Float.NaN;
+	public float h = Float.NaN;
+	public float p = Float.NaN;
+	public float r = Float.NaN;
 
-	public int   flags = 0;
-	public float fps   = Float.NaN;
-	public float qual  = Float.NaN;
+	public int flags = 0;
+	public float fps = Float.NaN;
+	public float qual = Float.NaN;
 
-	public int   errors = 0;
-
+	public int errors = 0;
 
 	public void set(Vision a) {
-		x  = a.x;
-		y  = a.y;
-		z  = a.z;
+		x = a.x;
+		y = a.y;
+		z = a.z;
 
-		gx  = a.gx;
-		gy  = a.gy;
-		gz  = a.gz;
+		gx = a.gx;
+		gy = a.gy;
+		gz = a.gz;
 
-		px  = a.px;
-		py  = a.py;
-		pz  = a.pz;
-		pw  = a.pw;
+		px = a.px;
+		py = a.py;
+		pz = a.pz;
+		pw = a.pw;
 
-		cov_px  = a.cov_px;
-		cov_py  = a.cov_py;
-		cov_pz  = a.cov_pz;
+		cov_px = a.cov_px;
+		cov_py = a.cov_py;
+		cov_pz = a.cov_pz;
 
 		vx = a.vx;
 		vy = a.vy;
 		vz = a.vz;
 
-		cov_vx  = a.cov_vx;
-		cov_vy  = a.cov_vy;
-		cov_vz  = a.cov_vz;
+		cov_vx = a.cov_vx;
+		cov_vy = a.cov_vy;
+		cov_vz = a.cov_vz;
 
 		errors = a.errors;
 
@@ -137,130 +133,126 @@ public class Vision extends Segment {
 		qual = a.qual;
 
 		flags = a.flags;
-		fps   = a.fps;
+		fps = a.fps;
 	}
 
 	public Vision clone() {
 		Vision a = new Vision();
-        a.set(this);
+		a.set(this);
 		return a;
 	}
 
-
 	public void clear() {
-		x  = Float.NaN;
-		y  = Float.NaN;
-		z  = Float.NaN;
+		x = Float.NaN;
+		y = Float.NaN;
+		z = Float.NaN;
 
-		gx  = Float.NaN;
-		gy  = Float.NaN;
-		gz  = Float.NaN;
-		
-		px  = Float.NaN;
-		py  = Float.NaN;
-		pz  = Float.NaN;
-		pw  = Float.NaN;
-		
-		cov_px  = Float.NaN;
-		cov_py  = Float.NaN;
-		cov_pz  = Float.NaN;
+		gx = Float.NaN;
+		gy = Float.NaN;
+		gz = Float.NaN;
+
+		px = Float.NaN;
+		py = Float.NaN;
+		pz = Float.NaN;
+		pw = Float.NaN;
+
+		cov_px = Float.NaN;
+		cov_py = Float.NaN;
+		cov_pz = Float.NaN;
 
 		vx = Float.NaN;
 		vy = Float.NaN;
 		vz = Float.NaN;
 
-		cov_vx  = Float.NaN;
-		cov_vy  = Float.NaN;
-		cov_vz  = Float.NaN;
+		cov_vx = Float.NaN;
+		cov_vy = Float.NaN;
+		cov_vz = Float.NaN;
 
 		h = Float.NaN;
 		p = Float.NaN;
 		r = Float.NaN;
 
-		qual=Float.NaN;
+		qual = Float.NaN;
 
 		flags = 0;
 		fps = Float.NaN;
 	}
 
-	public void  setStatus(int box, boolean val) {
-		if(box == ENABLED && !val) {
+	public void setStatus(int box, boolean val) {
+		if (box == ENABLED && !val) {
 			flags = 0;
 			return;
 		}
-		if(val)
-			flags = (int) (flags | (1<<box));
+		if (val)
+			flags = (int) (flags | (1 << box));
 		else
-			flags = (int) (flags & ~(1<<box));
+			flags = (int) (flags & ~(1 << box));
 	}
 
-	public boolean isStatus(int ...box) {
-		for(int b : box)
-		  if((flags & (1<<b))==0)
-            return false;
+	public boolean isStatus(int... box) {
+		for (int b : box)
+			if ((flags & (1 << b)) == 0)
+				return false;
 		return true;
 	}
 
 	public void setPosition(Vector3D_F64 v) {
-		this.x = (float)v.x;
-		this.y = (float)v.y;
-		this.z = (float)v.z;
+		this.x = (float) v.x;
+		this.y = (float) v.y;
+		this.z = (float) v.z;
 	}
 
 	public void setSpeed(Vector3D_F64 v) {
-		this.vx = (float)v.x;
-		this.vy = (float)v.y;
-		this.vz = (float)v.z;
+		this.vx = (float) v.x;
+		this.vy = (float) v.y;
+		this.vz = (float) v.z;
 	}
 
 	public void setPrecisionOffset(Vector3D_F64 v) {
-		this.px = (float)v.x;
-		this.py = (float)v.y;
-		this.pz = (float)v.z;
+		this.px = (float) v.x;
+		this.py = (float) v.y;
+		this.pz = (float) v.z;
 	}
-	
+
 	public void setPrecisionOffset(Vector4D_F64 v) {
-		this.px = (float)v.x;
-		this.py = (float)v.y;
-		this.pz = (float)v.z;
-		this.pw = (float)v.w;
+		this.px = (float) v.x;
+		this.py = (float) v.y;
+		this.pz = (float) v.z;
+		this.pw = (float) v.w;
 	}
 
 	public void setGroundTruth(Vector3D_F64 v) {
-		this.gx = (float)v.x;
-		this.gy = (float)v.y;
-		this.gz = (float)v.z;
+		this.gx = (float) v.x;
+		this.gy = (float) v.y;
+		this.gz = (float) v.z;
 	}
-
 
 	public void setAttitude(Attitude3D_F64 a) {
-		this.r = (float)a.getRoll();
-		this.p = (float)a.getPitch();
-		this.h = (float)a.getYaw();
+		this.r = (float) a.getRoll();
+		this.p = (float) a.getPitch();
+		this.h = (float) a.getYaw();
 	}
-	
+
 	public String getShortText() {
-		if(isStatus(Vision.POS_VALID))
+		if (isStatus(Vision.POS_VALID))
 			return MSP_VISION_TSEXTS[1];
-		else if(isStatus(Vision.SPEED_VALID))
+		else if (isStatus(Vision.SPEED_VALID))
 			return MSP_VISION_TSEXTS[2];
-		else if(isStatus(Vision.RESETTING))
+		else if (isStatus(Vision.RESETTING))
 			return MSP_VISION_TSEXTS[0];
-		else 
-			return "";	
+		else
+			return "";
 	}
-	
+
 	public String toString() {
 		StringBuilder b = new StringBuilder();
 		b.append("!---------------------------------------------------!\n");
 		b.append("Vision flags:\n");
-		for(int i=0;i<MSP_VISION_TEXTS.length;i++) {
-		   b.append((flags >> i) & 0x1).append(" = ").append(MSP_VISION_TEXTS[i]).append("\n"); 
+		for (int i = 0; i < MSP_VISION_TEXTS.length; i++) {
+			b.append((flags >> i) & 0x1).append(" = ").append(MSP_VISION_TEXTS[i]).append("\n");
 		}
 		b.append("!---------------------------------------------------!\n");
 		return b.toString();
 	}
-
-
 
 }

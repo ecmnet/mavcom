@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.control.impl;
 
 import org.mavlink.messages.MAV_COMPONENT;
@@ -43,85 +42,79 @@ import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.comm.serial.MAVSerialComm;
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
 import com.comino.mavcom.control.IMAVController;
-import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.model.segment.Status;
-
 
 public class MAVAutoController extends MAVController implements IMAVController, Runnable {
 
 	private boolean connected;
 
-	private final msg_heartbeat beat = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_OSD);
+	private final msg_heartbeat beat = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_OSD);
 	private final IMAVComm[] comms = new IMAVComm[4];
-
 
 	public MAVAutoController(String peerAddress, int peerPort, int bindPort) {
 		super(2);
 		this.peerAddress = peerAddress;
 		this.peerPort = peerPort;
 		this.bindPort = bindPort;
-		
-		comms[0] = MAVSerialComm.getInstance(reader,57600);
-		comms[1] = new MAVUdpCommNIO2(reader, peerAddress,peerPort, bindPort);
-		comms[2] = new MAVUdpCommNIO2(reader,"localhost",14580,14540);
-		comms[3] = new MAVUdpCommNIO2(reader,"127.0.0.1",14656,14650);
-		
+
+		comms[0] = MAVSerialComm.getInstance(reader, 57600);
+		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort);
+		comms[2] = new MAVUdpCommNIO2(reader, "localhost", 14580, 14540);
+		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650);
+
 		model.sys.setStatus(Status.MSP_PROXY, false);
 
 		beat.type = MAV_TYPE.MAV_TYPE_GCS;
 		beat.system_status = MAV_STATE.MAV_STATE_ACTIVE;
-		System.out.println("Auto Controller loaded ("+peerAddress+":"+peerPort+")");
+		System.out.println("Auto Controller loaded (" + peerAddress + ":" + peerPort + ")");
 	}
-
 
 	@Override
 	public boolean connect() {
 
-		if(this.connected)
+		if (this.connected)
 			return true;
 
 		System.out.print("Connecting to... ");
-		
-		if(comm!=null && !comm.isConnected()) {
-			comm.close(); comm.open();
+
+		if (comm != null && !comm.isConnected()) {
+			comm.close();
+			comm.open();
 			return true;
 		}
 
-		
-		if(comms[0].open()) {
+		if (comms[0].open()) {
 			comm = comms[0];
 			this.isSITL = false;
-			model.sys.setStatus(Status.MSP_SITL,false);
+			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
 			return true;
 		}
-		
-		if(comms[1].open()) {
+
+		if (comms[1].open()) {
 			comm = comms[1];
 			this.isSITL = false;
-			model.sys.setStatus(Status.MSP_SITL,false);
+			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
 			return true;
 		}
-		
-		
-		if(comms[2].open()) {
+
+		if (comms[2].open()) {
 			comm = comms[2];
 			this.isSITL = true;
-			model.sys.setStatus(Status.MSP_SITL,true);
-			System.out.println(comm+" (SITL)");
+			model.sys.setStatus(Status.MSP_SITL, true);
+			System.out.println(comm + " (SITL)");
 			return true;
 		}
-		
-		if(comms[3].open()) {
+
+		if (comms[3].open()) {
 			comm = comms[3];
 			this.isSITL = true;
-			model.sys.setStatus(Status.MSP_SITL,true);
-			System.out.println(comm+" (SITL Proxy)");
+			model.sys.setStatus(Status.MSP_SITL, true);
+			System.out.println(comm + " (SITL Proxy)");
 			return true;
 		}
-			
-		
+
 		return true;
 	}
 
@@ -129,6 +122,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	public boolean close() {
 		super.close();
 		this.connected = false;
+		model.sys.setStatus(Status.MSP_CONNECTED, false);
 		return true;
 	}
 
@@ -139,19 +133,22 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 	@Override
 	public void run() {
-        super.run();
-        if(comm==null)
-        	return;
+		super.run();
+		if (comm == null)
+			return;
 		try {
-			if(!comm.isConnected()) {
+			if (!comm.isConnected()) {
 				this.connected = false;
-				comm.close(); comm.open();
+				comm.close();
+				comm.open();
 				return;
 			}
 			this.connected = true;
 			model.sys.setStatus(Status.MSP_SITL, isSimulation());
 			comm.write(beat);
 
-		} catch (Exception e) { e.printStackTrace(); }	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

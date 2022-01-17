@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.control.impl;
 
 import com.comino.mavcom.comm.serial.MAVSerialComm;
@@ -44,18 +43,17 @@ import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 
 public class MAVSerialController extends MAVController implements IMAVController {
 
-
 	public MAVSerialController() {
 		super();
 		System.out.println("Serial Controller loaded");
-		comm = MAVSerialComm.getInstance(reader,2000000);
+		comm = MAVSerialComm.getInstance(reader, 2000000);
 
 	}
-	
+
 	public MAVSerialController(int baud) {
 		super();
 		System.out.println("Serial Controller loaded");
-		comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model),baud);
+		comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), baud);
 
 	}
 

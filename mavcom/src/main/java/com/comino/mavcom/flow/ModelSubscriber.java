@@ -3,7 +3,6 @@ package com.comino.mavcom.flow;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 
-
 public class ModelSubscriber<ModelType> {
 
 	private MSubscriber subscriber;
@@ -12,7 +11,7 @@ public class ModelSubscriber<ModelType> {
 	private ModelListener<ModelType> listener;
 
 	public ModelSubscriber(Class<ModelType> clazz) {
-		this(clazz,null);
+		this(clazz, null);
 	}
 
 	public ModelSubscriber(Class<ModelType> clazz, ModelListener<ModelType> listener) {
@@ -34,7 +33,7 @@ public class ModelSubscriber<ModelType> {
 	}
 
 	public boolean hasData() {
-		return data!=null;
+		return data != null;
 	}
 
 	public ModelType getData() {
@@ -63,14 +62,14 @@ public class ModelSubscriber<ModelType> {
 		@Override
 		public void onNext(ModelType item) {
 			data = item;
-			if(listener!=null)
+			if (listener != null)
 				listener.listen(data);
 			subscription.request(1);
 		}
 
 		@Override
 		public void onError(Throwable throwable) {
-			System.err.println("Flow "+throwable.getMessage());
+			System.err.println("Flow " + throwable.getMessage());
 		}
 
 		@Override

@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
@@ -40,55 +39,52 @@ public class Flow extends Segment {
 
 	private static final long serialVersionUID = -1123989934184248219L;
 
-	public float fX     = Float.NaN;		// Flow integrated X
-	public float fY     = Float.NaN;		// Flow integrated Y
-	public float fq		= Float.NaN;
-	public float fd		= Float.NaN;		// Flow distance
-	public float fgX    = Float.NaN;	    // Flow Gyro
-	public float fgY    = Float.NaN;
-	public float fgZ    = Float.NaN;
-	public long  ius    = 0;               // Integratoon timespan
-
-
+	public float fX = Float.NaN; // Flow integrated X
+	public float fY = Float.NaN; // Flow integrated Y
+	public float fq = Float.NaN;
+	public float fd = Float.NaN; // Flow distance
+	public float fgX = Float.NaN; // Flow Gyro
+	public float fgY = Float.NaN;
+	public float fgZ = Float.NaN;
+	public long ius = 0; // Integratoon timespan
 
 	public void set(Flow a) {
-		fX    	= a.fX;
-		fY    	= a.fY;
-		fq      = a.fq;
-		fd      = a.fd;
-		fgX     = a.fgX;
-		fgY     = a.fgY;
-		fgZ     = a.fgZ;
-		ius     = a.ius;
+		fX = a.fX;
+		fY = a.fY;
+		fq = a.fq;
+		fd = a.fd;
+		fgX = a.fgX;
+		fgY = a.fgY;
+		fgZ = a.fgZ;
+		ius = a.ius;
 
 	}
 
 	public Flow clone() {
 		Flow at = new Flow();
-		at.fX 		= fX;
-		at.fY 		= fY;
-		at.fq		= fq;
-		at.fd       = fd;
-		at.fgX      = fgX;
-		at.fgY      = fgY;
-		at.fgZ      = fgZ;
-		at.ius      = ius;
+		at.fX = fX;
+		at.fY = fY;
+		at.fq = fq;
+		at.fd = fd;
+		at.fgX = fgX;
+		at.fgY = fgY;
+		at.fgZ = fgZ;
+		at.ius = ius;
 
 		return at;
 	}
 
-	//--------------------------------------------------------------------------------------------------------
-
+	// --------------------------------------------------------------------------------------------------------
 
 	public void clear() {
-		fX    	= Float.NaN;
-		fY    	= Float.NaN;
-		fq      = Float.NaN;
-		fd      = Float.NaN;
-		fgX     = Float.NaN;
-		fgY     = Float.NaN;
-		fgZ     = Float.NaN;
-		ius     = 0;
+		fX = Float.NaN;
+		fY = Float.NaN;
+		fq = Float.NaN;
+		fd = Float.NaN;
+		fgX = Float.NaN;
+		fgY = Float.NaN;
+		fgZ = Float.NaN;
+		ius = 0;
 	}
 
 }

@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.control.impl;
 
 import java.io.File;
@@ -65,17 +64,16 @@ import com.comino.mavcom.status.StatusManager;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.workqueue.WorkQueue;
 
-
 public class MAVController implements IMAVController, Runnable {
 
-	public static final int MODE_NORMAL	 = 0;
-	public static final int MODE_SITL    = 1;
-	public static final int MODE_USB     = 2;
-	public static final int MODE_SERVER  = 3;
+	public static final int MODE_NORMAL = 0;
+	public static final int MODE_SITL = 1;
+	public static final int MODE_USB = 2;
+	public static final int MODE_SERVER = 3;
 
 	protected String peerAddress = null;
-	protected int    peerPort = 0;
-	protected int    bindPort = 0;
+	protected int peerPort = 0;
+	protected int bindPort = 0;
 
 	protected static IMAVController controller;
 	protected IMAVComm comm = null;
@@ -84,20 +82,19 @@ public class MAVController implements IMAVController, Runnable {
 	protected final DataModel model;
 	protected final MAVLinkBlockingReader reader;
 
-	protected   int commError = 0;
+	protected int commError = 0;
 
-	private boolean file_log_enabled  = false;
+	private boolean file_log_enabled = false;
 
 	private StatusManager status_manager = null;
 
-	private String           filename;
+	private String filename;
 	private SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-	private PrintStream      ps_log;
+	private PrintStream ps_log;
 
-	private int  mode = 0;
+	private int mode = 0;
 
 	protected final WorkQueue wq = WorkQueue.getInstance();
-
 
 	public static IMAVController getInstance() {
 		return controller;
@@ -107,40 +104,38 @@ public class MAVController implements IMAVController, Runnable {
 		this(0);
 	}
 
-
 	public MAVController(int i) {
 		controller = this;
 		model = new DataModel();
-		reader = new MAVLinkBlockingReader(i,model);
+		reader = new MAVLinkBlockingReader(i, model);
 		status_manager = new StatusManager(model, true);
-		wq.addCyclicTask("LP",200,this);
+		wq.addCyclicTask("LP", 200, this);
 
 	}
 
-
-
 	public String enableFileLogging(boolean enable, String directory_name) {
 		this.file_log_enabled = enable;
-		if(enable) {
-			if(directory_name==null)
-				directory_name = System.getProperty("user.home")+"/MSPLog";
+		if (enable) {
+			if (directory_name == null)
+				directory_name = System.getProperty("user.home") + "/MSPLog";
 			File file = new File(directory_name);
-			if(!file.exists() || !file.isDirectory()){
+			if (!file.exists() || !file.isDirectory()) {
 				boolean wasDirectoryMade = file.mkdirs();
-				if(wasDirectoryMade)System.out.println("Directory "+directory_name+" created");
+				if (wasDirectoryMade)
+					System.out.println("Directory " + directory_name + " created");
 				else {
 					file_log_enabled = false;
-					System.out.println("No logging to file: Could not create directory "+directory_name);
+					System.out.println("No logging to file: Could not create directory " + directory_name);
 					return null;
 				}
 			}
 			// create file, if it does not exist
 			SimpleDateFormat sdfFile = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
-			this.filename = directory_name +"/msplog_"+sdfFile.format(new Date())+".log";
-			System.out.println("Logging to: "+filename);
+			this.filename = directory_name + "/msplog_" + sdfFile.format(new Date()) + ".log";
+			System.out.println("Logging to: " + filename);
 
 			try {
-				FileOutputStream fos_log  = new FileOutputStream(filename);
+				FileOutputStream fos_log = new FileOutputStream(filename);
 				ps_log = new PrintStream(fos_log);
 			} catch (FileNotFoundException e) {
 				System.out.println("No logging to file: Error creating log file.");
@@ -157,116 +152,138 @@ public class MAVController implements IMAVController, Runnable {
 		return null;
 	}
 
-
-
 	@Override
 	public int getMode() {
 		return mode;
 	}
-
 
 	@Override
 	public boolean sendMAVLinkMessage(MAVLinkMessage msg) {
 
 		try {
 			comm.write(msg);
-			//			System.out.println("Execute: "+msg.toString());
+			// System.out.println("Execute: "+msg.toString());
 			return true;
 		} catch (Exception e1) {
 			commError++;
-			System.out.println("MAVLinkMessage "+msg+" not sent. "+e1.getMessage());
+			System.out.println("MAVLinkMessage " + msg + " not sent. " + e1.getMessage());
 			return false;
 		}
 
 	}
 
+	@Override
+	public boolean sendMAVLinkCmd(int command, float... params) {
+		return sendMAVLinkCmd(command, null, params);
+	}
 
 	@Override
-	public boolean sendMAVLinkCmd(int command, float...params) {
-		return sendMAVLinkCmd(command,null,params);
-	}	
+	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, float... params) {
 
-	@Override
-	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge callback, float...params) {
-
-		msg_command_long cmd = new msg_command_long(255,1);
+		msg_command_long cmd = new msg_command_long(255, 1);
 		cmd.target_system = 1;
 		cmd.target_component = 1;
 		cmd.command = command;
 		cmd.confirmation = 1;
 
-		for(int i=0; i<params.length;i++) {
-			switch(i) {
-			case 0: cmd.param1 = params[0]; break;
-			case 1: cmd.param2 = params[1]; break;
-			case 2: cmd.param3 = params[2]; break;
-			case 3: cmd.param4 = params[3]; break;
-			case 4: cmd.param5 = params[4]; break;
-			case 5: cmd.param6 = params[5]; break;
-			case 6: cmd.param7 = params[6]; break;
+		for (int i = 0; i < params.length; i++) {
+			switch (i) {
+			case 0:
+				cmd.param1 = params[0];
+				break;
+			case 1:
+				cmd.param2 = params[1];
+				break;
+			case 2:
+				cmd.param3 = params[2];
+				break;
+			case 3:
+				cmd.param4 = params[3];
+				break;
+			case 4:
+				cmd.param5 = params[4];
+				break;
+			case 5:
+				cmd.param6 = params[5];
+				break;
+			case 6:
+				cmd.param7 = params[6];
+				break;
 			}
 		}
-		if(callback!=null)
-			reader.getParser().setCmdAcknowledgeListener(command,new MAVAcknowledge(callback,cmd,comm,1));
+		if (callback != null)
+			reader.getParser().setCmdAcknowledgeListener(command, new MAVAcknowledge(callback, cmd, comm, 1));
 		return sendMAVLinkMessage(cmd);
 	}
 
-	public boolean sendMSPLinkCmd(int command, float...params) {
+	public boolean sendMSPLinkCmd(int command, float... params) {
 
-		if(!controller.getCurrentModel().sys.isStatus(Status.MSP_CONNECTED)) {
+		if (!controller.getCurrentModel().sys.isStatus(Status.MSP_CONNECTED)) {
 			System.out.println("Command rejected. No connection.");
 			return false;
 		}
 
-		msg_msp_command cmd = new msg_msp_command(255,1);
+		msg_msp_command cmd = new msg_msp_command(255, 1);
 		cmd.command = command;
 
-		for(int i=0; i<params.length;i++) {
-			switch(i) {
-			case 0: cmd.param1 = params[0]; break;
-			case 1: cmd.param2 = params[1]; break;
-			case 2: cmd.param3 = params[2]; break;
-			case 3: cmd.param4 = params[3]; break;
-			case 4: cmd.param5 = params[4]; break;
-			case 5: cmd.param6 = params[5]; break;
+		for (int i = 0; i < params.length; i++) {
+			switch (i) {
+			case 0:
+				cmd.param1 = params[0];
+				break;
+			case 1:
+				cmd.param2 = params[1];
+				break;
+			case 2:
+				cmd.param3 = params[2];
+				break;
+			case 3:
+				cmd.param4 = params[3];
+				break;
+			case 4:
+				cmd.param5 = params[4];
+				break;
+			case 5:
+				cmd.param6 = params[5];
+				break;
 
 			}
 		}
 
-		if(comm!=null) {
+		if (comm != null) {
 
 			try {
-				if(comm.isSerial())
+				if (comm.isSerial())
 					throw new IOException("MSP Commands only via UDP to proxy allowed");
 
 				comm.write(cmd);
 				return true;
 			} catch (IOException e1) {
 				commError++;
-				System.out.println("Command rejected: "+e1.getMessage());
+				System.out.println("Command rejected: " + e1.getMessage());
 				return false;
 			}
-			
+
 		}
 		return false;
 	}
 
 	@Override
 	public boolean sendShellCommand(String s) {
-		String command = s+"\n";
-		msg_serial_control msg = new msg_serial_control(1,1);
+		String command = s + "\n";
+		msg_serial_control msg = new msg_serial_control(1, 1);
 		try {
 			byte[] bytes = command.getBytes("US-ASCII");
-			for(int i =0;i<bytes.length && i<70;i++)
+			for (int i = 0; i < bytes.length && i < 70; i++)
 				msg.data[i] = bytes[i];
 			msg.count = bytes.length;
 			msg.device = SERIAL_CONTROL_DEV.SERIAL_CONTROL_DEV_SHELL;
-			msg.flags  = SERIAL_CONTROL_FLAG.SERIAL_CONTROL_FLAG_RESPOND;
+			msg.flags = SERIAL_CONTROL_FLAG.SERIAL_CONTROL_FLAG_RESPOND;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		sendMAVLinkMessage(msg);
-		System.out.println("ShellCommand executed: "+s);
+		System.out.println("ShellCommand executed: " + s);
 		try {
 			Thread.sleep(200);
 		} catch (InterruptedException e) {
@@ -286,35 +303,29 @@ public class MAVController implements IMAVController, Runnable {
 		return reader.getModel();
 	}
 
-
 	@Override
 	public boolean isSimulation() {
 		return model.sys.isStatus(Status.MSP_SITL);
 	}
-
 
 	@Override
 	public boolean isConnected() {
 		return true;
 	}
 
-
-
 	@Override
 	public boolean close() {
 		comm.close();
-		if(file_log_enabled)
+		if (file_log_enabled)
 			ps_log.close();
 		return true;
 	}
-
 
 	@Override
 	public void addStatusChangeListener(IMSPStatusChangedListener listener) {
 		status_manager.addListener(listener);
 
 	}
-
 
 	@Override
 	public void addMAVLinkListener(IMAVLinkListener listener) {
@@ -333,63 +344,55 @@ public class MAVController implements IMAVController, Runnable {
 	}
 
 	@Override
-	public Map<Class<?>,MAVLinkMessage> getMavLinkMessageMap() {
+	public Map<Class<?>, MAVLinkMessage> getMavLinkMessageMap() {
 		return reader.getParser().getMavLinkMessageMap();
 	}
 
-
 	@Override
 	public void shutdown() {
-		if(comm!=null)
-			comm.shutdown();	
-		if(file_log_enabled)
+		if (comm != null)
+			comm.shutdown();
+		if (file_log_enabled)
 			ps_log.close();
 	}
-
 
 	@Override
 	public void writeLogMessage(LogMessage m) {
 
-		if(comm!=null)
+		if (comm != null)
 			comm.writeMessage(m);
-		model.msg.set(m);	
+		model.msg.set(m);
 	}
-
-
 
 	@Override
 	public int getErrorCount() {
 		return comm.getErrorCount();
 	}
 
-
 	@Override
 	public String getConnectedAddress() {
 		return peerAddress;
 	}
 
-
 	@Override
 	public void run() {
-		if(file_log_enabled) {
+		if (file_log_enabled) {
 			ps_log.flush();
 		}
 	}
 
 	private void writeLogToFile(String msg) {
-		ps_log.println(sdf1.format(new Date())+": "+msg);
+		ps_log.println(sdf1.format(new Date()) + ": " + msg);
 	}
-
 
 	@Override
 	public StatusManager getStatusManager() {
 		return status_manager;
 	}
 
-
 	@Override
 	public long getTransferRate() {
-		if(comm!=null)
+		if (comm != null)
 			return comm.getTransferRate();
 		return 0;
 	}

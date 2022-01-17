@@ -2,9 +2,8 @@ package com.comino.mavcom.utils;
 
 public class SimpleComplementaryFilter {
 
-	double mean   = 0;
+	double mean = 0;
 	double factor = 1;
-
 
 	public SimpleComplementaryFilter(double factor) {
 		super();

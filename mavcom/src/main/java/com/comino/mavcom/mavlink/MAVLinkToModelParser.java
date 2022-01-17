@@ -65,15 +65,15 @@ public class MAVLinkToModelParser {
 	private DataModel model;
 	private MSPLogger logger = null;
 
-	private Map<Class<?>, MAVLinkMessage>                mavList = null;
+	private Map<Class<?>, MAVLinkMessage> mavList = null;
 
-	private Map<Class<?>, List<IMAVLinkListener>> 	    msglisteners 		= null;
-	private List<IMAVLinkListener> 	  					mavListener 		= null;
-	private List<IMAVMessageListener> 					messageListener 	= null;
+	private Map<Class<?>, List<IMAVLinkListener>> msglisteners = null;
+	private List<IMAVLinkListener> mavListener = null;
+	private List<IMAVMessageListener> messageListener = null;
 
 	private long time_offset_ns = 0;
 
-	private Map<Integer,MAVAcknowledge> cmd_ack = new HashMap<Integer,MAVAcknowledge>();
+	private Map<Integer, MAVAcknowledge> cmd_ack = new HashMap<Integer, MAVAcknowledge>();
 
 	private final WorkQueue wq = WorkQueue.getInstance();
 
@@ -93,48 +93,57 @@ public class MAVLinkToModelParser {
 			@Override
 			public void received(Object o) {
 
-				//	wq.addSingleTask("LP", () -> {
+				// wq.addSingleTask("LP", () -> {
 				msg_command_ack ack = (msg_command_ack) o;
 
-				if(cmd_ack.containsKey(ack.command)) {
+				if (cmd_ack.containsKey(ack.command)) {
 
 					final MAVAcknowledge acknowlede = cmd_ack.get(ack.command);
-					
-					if((ack.result == MAV_RESULT.MAV_RESULT_FAILED ||
-					    ack.result == MAV_RESULT.MAV_RESULT_TEMPORARILY_REJECTED) && acknowlede.getAndDecreaseRetries() > 0) {
-						try { 
-							acknowlede.link.write(acknowlede.msg); 
-						logger.writeLocalMsg("Command " + ack.command + " not accepted. Retry.",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
-						} catch (Exception e) { System.err.println(e.getMessage()); }
-						return;		
+
+					if ((ack.result == MAV_RESULT.MAV_RESULT_FAILED
+							|| ack.result == MAV_RESULT.MAV_RESULT_TEMPORARILY_REJECTED)
+							&& acknowlede.getAndDecreaseRetries() > 0) {
+						try {
+							acknowlede.link.write(acknowlede.msg);
+							logger.writeLocalMsg("Command " + ack.command + " not accepted. Retry.",
+									MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+						} catch (Exception e) {
+							System.err.println(e.getMessage());
+						}
+						return;
 					}
-					wq.addSingleTask("HP", () -> acknowlede.callback.received(ack.command, ack.result) );
+					wq.addSingleTask("HP", () -> acknowlede.callback.received(ack.command, ack.result));
 					cmd_ack.remove(ack.command);
 
-					if(logger==null)
+					if (logger == null)
 						logger = MSPLogger.getInstance();
 
 					switch (ack.result) {
 					case MAV_RESULT.MAV_RESULT_ACCEPTED:
-						logger.writeLocalMsg("Command " + ack.command + " is accepted",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+						logger.writeLocalMsg("Command " + ack.command + " is accepted",
+								MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 						break;
 					case MAV_RESULT.MAV_RESULT_FAILED:
-						logger.writeLocalMsg("Command " + ack.command + " failed",MAV_SEVERITY.MAV_SEVERITY_WARNING);
+						logger.writeLocalMsg("Command " + ack.command + " failed", MAV_SEVERITY.MAV_SEVERITY_WARNING);
 						break;
 					case MAV_RESULT.MAV_RESULT_DENIED:
-						logger.writeLocalMsg("Command " + ack.command + " denied",MAV_SEVERITY.MAV_SEVERITY_WARNING);
+						logger.writeLocalMsg("Command " + ack.command + " denied", MAV_SEVERITY.MAV_SEVERITY_WARNING);
 						break;
 					case MAV_RESULT.MAV_RESULT_UNSUPPORTED:
-						logger.writeLocalMsg("Command " + ack.command + " is unsupported",MAV_SEVERITY.MAV_SEVERITY_WARNING);
+						logger.writeLocalMsg("Command " + ack.command + " is unsupported",
+								MAV_SEVERITY.MAV_SEVERITY_WARNING);
 						break;
 					case MAV_RESULT.MAV_RESULT_TEMPORARILY_REJECTED:
-						logger.writeLocalMsg("Command " + ack.command + " is temporarily rejected",MAV_SEVERITY.MAV_SEVERITY_WARNING);
+						logger.writeLocalMsg("Command " + ack.command + " is temporarily rejected",
+								MAV_SEVERITY.MAV_SEVERITY_WARNING);
 						break;
 					case MAV_RESULT.MAV_RESULT_IN_PROGRESS:
-						logger.writeLocalMsg("Command " + ack.command + " is in progress",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+						logger.writeLocalMsg("Command " + ack.command + " is in progress",
+								MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 						break;
 					default:
-						logger.writeLocalMsg("Command " + ack.command + " -> unknown result",MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+						logger.writeLocalMsg("Command " + ack.command + " -> unknown result",
+								MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 					}
 				}
 			}
@@ -149,13 +158,14 @@ public class MAVLinkToModelParser {
 				m.tms = DataModel.getSynchronizedPX4Time_us();
 				m.severity = msg.severity;
 
-				// if new message follows tha last one within 10ms, check severity and keep that one
+				// if new message follows tha last one within 10ms, check severity and keep that
+				// one
 				// with higher severity
-				if(model.msg!=null && (m.tms - model.msg.tms ) < 10000) {
-					if(m.severity < model.msg.severity) {
-						model.msg.set(m);  
+				if (model.msg != null && (m.tms - model.msg.tms) < 10000) {
+					if (m.severity < model.msg.severity) {
+						model.msg.set(m);
 					}
-				} else 
+				} else
 					model.msg.set(m);
 
 				writeMessage(m);
@@ -164,25 +174,30 @@ public class MAVLinkToModelParser {
 
 		System.out.println("MAVMSP parser: " + msglisteners.size() + " MAVLink messagetypes registered");
 
-		model.sys.tms = System.currentTimeMillis()*1000L;
+		model.sys.tms = System.currentTimeMillis() * 1000L;
 
 	}
 
 	private void registerPlugins() {
 		System.out.println("Loading MAVLinkMessage plugins...");
 		try {
-			ArrayList<Class<?>> classes = MSPPluginHelper.getClassesForPackage(this.getClass().getPackage().getName()+".plugins");
+			ArrayList<Class<?>> classes = MSPPluginHelper
+					.getClassesForPackage(this.getClass().getPackage().getName() + ".plugins");
 			classes.forEach((c) -> {
-				if(c.getName().endsWith("Plugin")) {
+				if (c.getName().endsWith("Plugin")) {
 					try {
 						Constructor<?> constructor = c.getConstructor();
-						MAVLinkPluginBase plugin = (MAVLinkPluginBase)constructor.newInstance();
+						MAVLinkPluginBase plugin = (MAVLinkPluginBase) constructor.newInstance();
 						plugin.setDataModel(model);
-						registerListener(plugin.getMessageClass(),plugin);
-					} catch (Exception e) { e.printStackTrace(); }
+						registerListener(plugin.getMessageClass(), plugin);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			});
-		} catch (ClassNotFoundException e) { e.printStackTrace(); }
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void addMAVLinkListener(IMAVLinkListener listener) {
@@ -203,15 +218,15 @@ public class MAVLinkToModelParser {
 
 	public boolean isConnected() {
 		if (!model.sys.isStatus(Status.MSP_CONNECTED)) {
-			model.clear(); 
+			model.clear();
 			return false;
 		}
 		return model.sys.isStatus(Status.MSP_CONNECTED);
 	}
 
-	public void setCmdAcknowledgeListener(int command,MAVAcknowledge ack) {
-		if(!cmd_ack.containsKey(command))
-		    this.cmd_ack.put(command, ack);
+	public void setCmdAcknowledgeListener(int command, MAVAcknowledge ack) {
+		if (!cmd_ack.containsKey(command))
+			this.cmd_ack.put(command, ack);
 	}
 
 	public void reset() {
@@ -237,11 +252,11 @@ public class MAVLinkToModelParser {
 
 	public void parseMessage(MAVLinkMessage msg) throws IOException {
 
-		List<IMAVLinkListener> msgListener = null; 
+		List<IMAVLinkListener> msgListener = null;
 
 		if (msg != null) {
 
-			model.sys.tms = DataModel.getSynchronizedPX4Time_us();//System.currentTimeMillis()*1000L;
+			model.sys.tms = DataModel.getSynchronizedPX4Time_us();// System.currentTimeMillis()*1000L;
 
 			try {
 
@@ -255,7 +270,8 @@ public class MAVLinkToModelParser {
 						for (IMAVLinkListener mavlistener : mavListener)
 							mavlistener.received(msg);
 
-				} catch (ConcurrentModificationException e) { }
+				} catch (ConcurrentModificationException e) {
+				}
 
 				mavList.put(msg.getClass(), msg);
 
@@ -264,17 +280,18 @@ public class MAVLinkToModelParser {
 			}
 		}
 
-		//		if ((System.currentTimeMillis() - time_sync_cycle) > TIME_SYNC_CYCLE_MS && TIME_SYNC_CYCLE_MS > 0) {
+		// if ((System.currentTimeMillis() - time_sync_cycle) > TIME_SYNC_CYCLE_MS &&
+		// TIME_SYNC_CYCLE_MS > 0) {
 		//
-		//			if(!link.isSerial())
-		//				return;
+		// if(!link.isSerial())
+		// return;
 		//
-		//			time_sync_cycle = System.currentTimeMillis();
-		//			msg_timesync sync_s = new msg_timesync(255, 1);
-		//			sync_s.tc1 = 0;
-		//			sync_s.ts1 = System.currentTimeMillis() * 1000000L;
-		//			link.write(sync_s);
-		//		}
+		// time_sync_cycle = System.currentTimeMillis();
+		// msg_timesync sync_s = new msg_timesync(255, 1);
+		// sync_s.tc1 = 0;
+		// sync_s.ts1 = System.currentTimeMillis() * 1000000L;
+		// link.write(sync_s);
+		// }
 
 	}
 

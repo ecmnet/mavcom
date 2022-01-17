@@ -37,13 +37,12 @@ import com.comino.mavcom.model.segment.generic.Segment;
 
 public class Distance extends Segment {
 
-
 	private static final long serialVersionUID = 7283330566444686784L;
 
-	public float di     = Float.NaN;		// LIDAR distance
-	public float dicov	= Float.NaN;		// LIDAR covariance
-	public float min	= Float.NaN;		// LIDAR min range
-	public float max	= Float.NaN;		// LIDAR min range
+	public float di = Float.NaN; // LIDAR distance
+	public float dicov = Float.NaN; // LIDAR covariance
+	public float min = Float.NaN; // LIDAR min range
+	public float max = Float.NaN; // LIDAR min range
 
 	public void set(Distance a) {
 		di = a.di;
@@ -59,14 +58,11 @@ public class Distance extends Segment {
 		return a;
 	}
 
-
 	public void clear() {
-		di     	= Float.NaN;		// LIDAR distance
-		dicov	= Float.NaN;		// LIDAR covariance
-	    min		= Float.NaN;		// LIDAR min range
-		max		= Float.NaN;		// LIDAR min range
+		di = Float.NaN; // LIDAR distance
+		dicov = Float.NaN; // LIDAR covariance
+		min = Float.NaN; // LIDAR min range
+		max = Float.NaN; // LIDAR min range
 	}
-
-
 
 }

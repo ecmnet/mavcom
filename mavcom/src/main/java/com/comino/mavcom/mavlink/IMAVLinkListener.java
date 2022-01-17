@@ -31,9 +31,7 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.mavlink;
-
 
 public interface IMAVLinkListener {
 

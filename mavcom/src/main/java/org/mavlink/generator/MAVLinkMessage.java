@@ -27,83 +27,84 @@ import java.util.List;
 
 /**
  * MAVLink message generic type
+ * 
  * @author ghelle
  * @version $Rev: 4 $
  *
  */
 public class MAVLinkMessage {
 
-    private int id;
+	private int id;
 
-    private String name;
+	private String name;
 
-    private String description;
+	private String description;
 
-    private List<MAVLinkField> fields;
+	private List<MAVLinkField> fields;
 
-    private int extensionIndex = 0;
+	private int extensionIndex = 0;
 
-    public MAVLinkMessage(int id, String name) {
-        this.id = id;
-        this.name = name;
-        fields = new ArrayList<MAVLinkField>();
-    }
+	public MAVLinkMessage(int id, String name) {
+		this.id = id;
+		this.name = name;
+		fields = new ArrayList<MAVLinkField>();
+	}
 
-    /**
-     * @return The id
-     */
-    public int getId() {
-        return id;
-    }
+	/**
+	 * @return The id
+	 */
+	public int getId() {
+		return id;
+	}
 
-    /**
-     * @param id The id to set
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
+	/**
+	 * @param id The id to set
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    /**
-     * @return The name
-     */
-    public String getName() {
-        return name;
-    }
+	/**
+	 * @return The name
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * @param name The name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+	/**
+	 * @param name The name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    /**
-     * @return The description
-     */
-    public String getDescription() {
-        return description;
-    }
+	/**
+	 * @return The description
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-    /**
-     * @param description The description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	/**
+	 * @param description The description to set
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    /**
-     * @return The fields
-     */
-    public List<MAVLinkField> getFields() {
-        return fields;
-    }
+	/**
+	 * @return The fields
+	 */
+	public List<MAVLinkField> getFields() {
+		return fields;
+	}
 
-    /**
-     * @param fields The fields to set
-     */
-    public void setFields(List<MAVLinkField> fields) {
-        this.fields = fields;
-    }
+	/**
+	 * @param fields The fields to set
+	 */
+	public void setFields(List<MAVLinkField> fields) {
+		this.fields = fields;
+	}
 
 	public int getExtensionIndex() {
 		return extensionIndex;
@@ -112,7 +113,5 @@ public class MAVLinkMessage {
 	public void setExtensionIndex(int extensionIndex) {
 		this.extensionIndex = extensionIndex;
 	}
-
-
 
 }

@@ -71,17 +71,18 @@ public class MAVLinkGenerator {
 	/**
 	 * Main class for the generator.
 	 *
-	 * Command line arguments are :
-	 *     source : directory path containing xml files to parse for generation
-	 *     target : directory path for output Java source files
-	 *     isLittleEndian : true if type are stored in LittleEndian in buffer, false for BigEndian
-	 *     forEmbeddedJava : true if generated code must use apis for embedded code, false else
-	 *     useExtraByte : if true use extra crc byte to compute CRC. If true generate for MAVLink 1.0 else MAVLink 0.9
-	 *     debug : true to generate toString methods in each message class
+	 * Command line arguments are : source : directory path containing xml files to
+	 * parse for generation target : directory path for output Java source files
+	 * isLittleEndian : true if type are stored in LittleEndian in buffer, false for
+	 * BigEndian forEmbeddedJava : true if generated code must use apis for embedded
+	 * code, false else useExtraByte : if true use extra crc byte to compute CRC. If
+	 * true generate for MAVLink 1.0 else MAVLink 0.9 debug : true to generate
+	 * toString methods in each message class
 	 *
-	 * Example : java org.mavlink.generator.MAVLinkGenerator resources/1.0 target/ true true true true
-	 *   Generate MAVLink message Java classes for mavlink xml files contains in resources/1.0 in target directory
-	 *   for Little Endian data, embedded code using extra byte for crc and generating debug code
+	 * Example : java org.mavlink.generator.MAVLinkGenerator resources/1.0 target/
+	 * true true true true Generate MAVLink message Java classes for mavlink xml
+	 * files contains in resources/1.0 in target directory for Little Endian data,
+	 * embedded code using extra byte for crc and generating debug code
 	 *
 	 * @param args
 	 */
@@ -93,7 +94,7 @@ public class MAVLinkGenerator {
 			System.exit(-1);
 		}
 
-		System.out.println("Generating..."+args[0]+" ...to "+args[1]);
+		System.out.println("Generating..." + args[0] + " ...to " + args[1]);
 		generator.source = args[0];
 		generator.target = args[1];
 		generator.isLittleEndian = Boolean.parseBoolean(args[2]);
@@ -104,15 +105,13 @@ public class MAVLinkGenerator {
 		File src = new File(generator.source);
 		if (src.isDirectory()) {
 			generator.parseDirectory(generator.source);
-		}
-		else if (src.isFile()) {
+		} else if (src.isFile()) {
 			generator.parseFile(generator.source, generator.target);
-		}
-		else {
+		} else {
 			System.out.println("Do nothing");
 		}
 
-		//System.exit(0);
+		// System.exit(0);
 	}
 
 	/**
@@ -127,7 +126,8 @@ public class MAVLinkGenerator {
 		System.out.println("  target : directory path for output Java source files");
 		System.out.println("  isLittleEndian : true if type are stored in LittleEndian in buffer, false for BigEndian");
 		System.out.println("  forEmbeddedJava : true if generated code must use apis for embedded code, false else");
-		System.out.println("  useExtraByte : if true use extra crc byte to compute CRC. If true generate for MAVLink 1.0 else MAVLink 0.9");
+		System.out.println(
+				"  useExtraByte : if true use extra crc byte to compute CRC. If true generate for MAVLink 1.0 else MAVLink 0.9");
 		System.out.println("  debug : true to generate toString methods in each message class");
 		System.out.println("  ");
 		System.out.println("Example :");
@@ -149,23 +149,23 @@ public class MAVLinkGenerator {
 			for (int i = 0; i < files.length; i++) {
 				if (files[i].endsWith(".xml")) {
 					int index = files[i].indexOf('.');
-					String rep = target ;//+ File.separator + files[i].substring(0, index);
+					String rep = target;// + File.separator + files[i].substring(0, index);
 					parseFile(files[i], path, rep);
-					//                    MAVLinkData mavlink = null;
-					//                    mavlink = new MAVLinkData();
+					// MAVLinkData mavlink = null;
+					// mavlink = new MAVLinkData();
 					//
-					//                    Map<String, String> implementations = parseFile(mavlink, files[i], path, rep, false);
+					// Map<String, String> implementations = parseFile(mavlink, files[i], path, rep,
+					// false);
 					//
-					//                    generateMAVLinkClass(rep, implementations);
-					//                    generateFactoryClass(mavlink, rep);
-					//                    generateIMavlinkId(mavlink, rep);
-					//                    generateMavlinkCoder(mavlink, rep);
-					//                    generateIMavlinkCRC(rep);
-					//                    imports = "";
+					// generateMAVLinkClass(rep, implementations);
+					// generateFactoryClass(mavlink, rep);
+					// generateIMavlinkId(mavlink, rep);
+					// generateMavlinkCoder(mavlink, rep);
+					// generateIMavlinkCRC(rep);
+					// imports = "";
 				}
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("MAVLinkGenerator Error : " + file + "  =  " + e);
 			e.printStackTrace();
 		}
@@ -184,8 +184,7 @@ public class MAVLinkGenerator {
 			generateMavlinkCoder(mavlink, destination);
 			generateIMavlinkCRC(destination);
 			imports = "";
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("MAVLinkGenerator Error : " + filename + "  =  " + e);
 			e.printStackTrace();
 		}
@@ -200,31 +199,25 @@ public class MAVLinkGenerator {
 	/**
 	 * Parse a MAVLink xml messages descriptor file.
 	 *
-	 * @param mavlink
-	 *            MAVLink data used and to fill
-	 * @param file
-	 *            Parsed file
-	 * @param path
-	 *            Path to file
-	 * @param target
-	 *            Path for generation
-	 * @param inInclude
-	 *            True if we are in an include file
+	 * @param mavlink   MAVLink data used and to fill
+	 * @param file      Parsed file
+	 * @param path      Path to file
+	 * @param target    Path for generation
+	 * @param inInclude True if we are in an include file
 	 * @return implementation code for readers and writers.
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public Map<String, String> parseFile(MAVLinkData mavlink, String file, String path, String target, boolean inInclude)
-			throws ParserConfigurationException, SAXException, IOException {
+	public Map<String, String> parseFile(MAVLinkData mavlink, String file, String path, String target,
+			boolean inInclude) throws ParserConfigurationException, SAXException, IOException {
 		Map<String, String> implementations = new HashMap<String, String>();
 		SAXParserFactory fabrique = SAXParserFactory.newInstance();
 		SAXParser parseur = fabrique.newSAXParser();
 		if (!inInclude) {
 			mavlink.setFile(file.substring(0, file.indexOf('.')));
 			System.out.println("MAVLinkData : " + mavlink.getFile());
-		}
-		else {
+		} else {
 			System.out.println("MAVLinkData INCLUDE : " + file.substring(0, file.indexOf('.')));
 		}
 		MAVLinkHandler gestionnaire = new MAVLinkHandler(this, mavlink, path, target);
@@ -254,7 +247,7 @@ public class MAVLinkGenerator {
 		String forToString = "";
 		for (MAVLinkMessage message : mavlink.getMessages().values()) {
 
-			if(message.getId()>9998)
+			if (message.getId() > 9998)
 				continue;
 
 			String className = "msg_" + message.getName().toLowerCase();
@@ -279,8 +272,7 @@ public class MAVLinkGenerator {
 					sbWrite.append("  dos.writeByte(messageType & 0x00FF);\n");
 					sbWrite.append("  dos.writeByte((messageType >> 8) & 0x00FF);\n");
 					sbWrite.append("  dos.writeByte((messageType >> 16) & 0x00FF);\n");
-				}
-				else {
+				} else {
 					sbWrite.append("  dos.writeByte((byte)" + IMAVLinkMessage.STRING_MAVPROT_PACKET_START_V20 + ");\n");
 					sbWrite.append("  dos.writeByte(payload_length & 0x00FF);\n");
 					sbWrite.append("  dos.writeByte(incompat & 0x00FF);\n");
@@ -304,18 +296,17 @@ public class MAVLinkGenerator {
 					if (isLittleEndian) {
 						writer.print("import org.mavlink.io.LittleEndianDataInputStream;\n");
 						writer.print("import org.mavlink.io.LittleEndianDataOutputStream;\n");
-					}
-					else {
+					} else {
 						writer.print("import java.io.DataInputStream;\n");
 						writer.print("import java.io.DataOutputStream;\n");
 					}
-				}
-				else {
+				} else {
 					writer.print("import java.nio.ByteBuffer;\n");
 					writer.print("import java.nio.ByteOrder;\n");
 				}
 				String description = message.getDescription();
-				writer.print("/**\n * Class " + className + "\n * " + (description == null ? "" : message.getDescription().trim()) + "\n **/\n");
+				writer.print("/**\n * Class " + className + "\n * "
+						+ (description == null ? "" : message.getDescription().trim()) + "\n **/\n");
 				writer.print("public class " + className + " extends MAVLinkMessage {\n");
 				String id = MAVLINK_MSG + "_ID_" + message.getName();
 				writer.print("  public static final int " + id + " = " + message.getId() + ";\n");
@@ -328,11 +319,10 @@ public class MAVLinkGenerator {
 				String extraCrcBuffer = message.getName() + " ";
 				// Write Fields
 				int fieldLen = 0;
-				//Issue 1 by BoxMonster44 : don't sort for mavlink 0.9
+				// Issue 1 by BoxMonster44 : don't sort for mavlink 0.9
 				if (useExtraByte) {
-					SortFields(message.getExtensionIndex(),message.getFields());
+					SortFields(message.getExtensionIndex(), message.getFields());
 				}
-
 
 				for (int j = 0; j < message.getFields().size(); j++) {
 					MAVLinkField field = message.getFields().get(j);
@@ -347,53 +337,57 @@ public class MAVLinkGenerator {
 						attr = first.toUpperCase() + field.getName().substring(1);
 						fieldWrite.append("  public void set" + attr + "(String tmp) {\n");
 						fieldWrite.append("    int len = Math.min(tmp.length(), " + type.arrayLenth + ");\n");
-						fieldWrite.append("    for (int i=0; i<len; i++) {\n      " + field.getName() + "[i] = tmp.charAt(i);\n    }\n");
-						fieldWrite.append("    for (int i=len; i<" + type.arrayLenth + "; i++) {\n      " + field.getName()
-						+ "[i] = 0;\n    }\n  }\n");
+						fieldWrite.append("    for (int i=0; i<len; i++) {\n      " + field.getName()
+								+ "[i] = tmp.charAt(i);\n    }\n");
+						fieldWrite.append("    for (int i=len; i<" + type.arrayLenth + "; i++) {\n      "
+								+ field.getName() + "[i] = 0;\n    }\n  }\n");
 						fieldWrite.append("  public String get" + attr + "() {\n");
 						fieldWrite.append("    String result=\"\";\n");
-						fieldWrite.append("    for (int i=0; i<" + type.arrayLenth + "; i++) {\n      if (" + field.getName()
-						+ "[i] != 0) result=result+" + field.getName() + "[i]; else break;\n    }\n    return result;\n  }\n");
+						fieldWrite.append("    for (int i=0; i<" + type.arrayLenth + "; i++) {\n      if ("
+								+ field.getName() + "[i] != 0) result=result+" + field.getName()
+								+ "[i]; else break;\n    }\n    return result;\n  }\n");
 					}
 					fieldLen += type.getLengthType();
 
-
-					if(field.getType().isArray && field.getType().type != MAVLinkDataType.CHAR) {
-						for(int i=0;i<type.arrayLenth;i++) {
-							switch(field.getType().type) {
+					if (field.getType().isArray && field.getType().type != MAVLinkDataType.CHAR) {
+						for (int i = 0; i < type.arrayLenth; i++) {
+							switch (field.getType().type) {
 
 							case MAVLinkDataType.FLOAT:
 							case MAVLinkDataType.DOUBLE:
-								forToString = forToString + (j != 0 || i > 0 ? "+" : "") + "  \"  " + field.getName()+"["+i+"]"  + "=\"+"
-										+ "format((float)"+field.getName()+"["+i+"])"
-										+"\n";
+								forToString = forToString + (j != 0 || i > 0 ? "+" : "") + "  \"  " + field.getName()
+										+ "[" + i + "]" + "=\"+" + "format((float)" + field.getName() + "[" + i + "])"
+										+ "\n";
 								break;
 							default:
 
-								forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName()+"["+i+"]" + "=\"+"
-										+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR ? "get" + attr + "()" : field.getName())
-										+"["+i+"]"+"\n";
+								forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName() + "[" + i
+										+ "]" + "=\"+"
+										+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR
+												? "get" + attr + "()"
+												: field.getName())
+										+ "[" + i + "]" + "\n";
 							}
 						}
 
 					} else
-						switch(field.getType().type) {
+						switch (field.getType().type) {
 
 						case MAVLinkDataType.FLOAT:
 						case MAVLinkDataType.DOUBLE:
 							forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName() + "=\"+"
-									+ "format((float)"+field.getName()+")"
-									+"\n";
+									+ "format((float)" + field.getName() + ")" + "\n";
 							break;
 						default:
 							forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName() + "=\"+"
-									+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR ? "get" + attr + "()" : field.getName())
-									+"\n";
+									+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR
+											? "get" + attr + "()"
+											: field.getName())
+									+ "\n";
 
 						}
 
-
-					if(j < message.getExtensionIndex() || message.getExtensionIndex() == 0) {
+					if (j < message.getExtensionIndex() || message.getExtensionIndex() == 0) {
 						extraCrcBuffer = extraCrcBuffer + type.getCType() + " " + field.getName() + " ";
 						if (type.isArray) {
 							extraCrcBuffer = extraCrcBuffer + (char) type.arrayLenth;
@@ -414,12 +408,10 @@ public class MAVLinkGenerator {
 				if (forEmbeddedJava) {
 					if (isLittleEndian) {
 						writer.print("public void decode(LittleEndianDataInputStream dis) throws IOException {\n");
-					}
-					else {
+					} else {
 						writer.print("public void decode(DataInputStream dis) throws IOException {\n");
 					}
-				}
-				else {
+				} else {
 					writer.print("public void decode(ByteBuffer dis) throws IOException {\n");
 				}
 
@@ -433,18 +425,16 @@ public class MAVLinkGenerator {
 				writer.print("  byte[] buffer = new byte[12+" + fieldLen + "];\n");
 				if (forEmbeddedJava) {
 					if (isLittleEndian) {
-						writer.print("   LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());\n");
-					}
-					else {
+						writer.print(
+								"   LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());\n");
+					} else {
 						writer.print("   ByteArrayOutputStream baos = new ByteArrayOutputStream();\n");
 						writer.print("   DataOutputStream dos = new DataOutputStream(baos);\n");
 					}
-				}
-				else {
+				} else {
 					if (isLittleEndian) {
 						writer.print("   ByteBuffer dos = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN);\n");
-					}
-					else {
+					} else {
 						writer.print("   ByteBuffer dos = ByteBuffer.wrap(buffer).order(ByteOrder.BIG_ENDIAN);\n");
 					}
 				}
@@ -452,19 +442,18 @@ public class MAVLinkGenerator {
 				if (forEmbeddedJava) {
 					if (isLittleEndian) {
 						writer.print("  dos.flush();\n  byte[] tmp = dos.toByteArray();\n");
-					}
-					else {
+					} else {
 						writer.print("  dos.flush();\n  byte[] tmp = baos.toByteArray();\n");
 					}
 					writer.print("  for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];\n");
-				}
-				else {
+				} else {
 					// nothing
 				}
 				writer.print("  int crc = MAVLinkCRC.crc_calculate_encode(buffer, " + fieldLen + ");\n");
 				// Issue 1 by BoxMonster44 : Don't accumulate messageType for mavlink 0.9
 				if (useExtraByte) {
-					writer.print("  crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);\n");
+					writer.print(
+							"  crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);\n");
 				}
 				writer.print("  byte crcl = (byte) (crc & 0x00FF);\n");
 				writer.print("  byte crch = (byte) ((crc >> 8) & 0x00FF);\n");
@@ -473,8 +462,7 @@ public class MAVLinkGenerator {
 				if (forEmbeddedJava) {
 					if (isLittleEndian) {
 						writer.print("  dos.close();\n");
-					}
-					else {
+					} else {
 						writer.print("  baos.close();\n");
 						writer.print("  dos.close();\n");
 					}
@@ -485,7 +473,7 @@ public class MAVLinkGenerator {
 					writer.print("return \"" + id + " : \" + " + forToString + ";");
 					writer.print("}\n\n");
 				}
-				
+
 //				writer.print("public boolean equals(Object o) {\n");
 //				writer.print(" if (this == o)\n");
 //				writer.print("     return  true;\n");
@@ -497,20 +485,17 @@ public class MAVLinkGenerator {
 //				writer.print("public int hashCode() {\n");
 //				writer.print(" return "+id+";");
 //				writer.print("}\n\n");
-				
+
 				writer.print("}\n\n");
 				forToString = "";
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				System.err.println("ERROR : " + e);
 				e.printStackTrace();
-			}
-			finally {
+			} finally {
 				try {
 					writer.close();
 					output.close();
-				}
-				catch (Exception ex) {
+				} catch (Exception ex) {
 					System.err.println("ERROR : " + ex);
 					ex.printStackTrace();
 				}
@@ -520,12 +505,12 @@ public class MAVLinkGenerator {
 
 	private void SortFields(int index, List<MAVLinkField> fields) {
 		int size = fields.size();
-		if(index > 0) {
+		if (index > 0) {
 			List<MAVLinkField> extendedFields = new ArrayList<MAVLinkField>();
 			extendedFields.addAll(fields);
-			for(int i=0;i<index;i++)
+			for (int i = 0; i < index; i++)
 				extendedFields.remove(0);
-			for(int i=index;i<size;i++)
+			for (int i = index; i < size; i++)
 				fields.remove(index);
 
 			Collections.sort(fields, new FieldCompare());
@@ -533,8 +518,7 @@ public class MAVLinkGenerator {
 
 			fields.addAll(extendedFields);
 
-		}
-		else
+		} else
 			Collections.sort(fields, new FieldCompare());
 	}
 
@@ -561,7 +545,8 @@ public class MAVLinkGenerator {
 				writer.print("/**\n * Generated class : " + className + "\n * DO NOT MODIFY!\n **/\n");
 				writer.print("package " + packageName + ";\n");
 				String description = message.getDescription();
-				writer.print("/**\n * Interface " + className + "\n * " + (description == null ? "" : message.getDescription().trim()) + "\n **/\n");
+				writer.print("/**\n * Interface " + className + "\n * "
+						+ (description == null ? "" : message.getDescription().trim()) + "\n **/\n");
 				writer.print("public interface " + className + " {\n");
 				implementations.put(className.trim(), className.trim());
 				for (int j = 0; j < message.getEntries().size(); j++) {
@@ -575,17 +560,14 @@ public class MAVLinkGenerator {
 					writer.print("    public final static int " + entry.getName() + " = " + entry.getValue() + ";\n");
 				}
 				writer.print("}\n");
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				System.err.println("ERROR : " + e);
 				e.printStackTrace();
-			}
-			finally {
+			} finally {
 				try {
 					writer.close();
 					output.close();
-				}
-				catch (Exception ex) {
+				} catch (Exception ex) {
 					System.err.println("ERROR : " + ex);
 					ex.printStackTrace();
 				}
@@ -617,25 +599,23 @@ public class MAVLinkGenerator {
 			writer = new PrintWriter(output);
 			writer.print("/**\n * Generated class : " + className + "\n * DO NOT MODIFY!\n **/\n");
 			writer.print("package " + packageName + ";\n");
-			writer.print("/**\n * Interface " + className + "\n * Implement all constants in enums and entries \n **/\n");
+			writer.print(
+					"/**\n * Interface " + className + "\n * Implement all constants in enums and entries \n **/\n");
 			if (implementation.size() != 0) {
-				writer.print("public interface " + className + " extends " + allImpl.substring(0, allImpl.length() - 1) + " {\n}\n");
-			}
-			else {
+				writer.print("public interface " + className + " extends " + allImpl.substring(0, allImpl.length() - 1)
+						+ " {\n}\n");
+			} else {
 				writer.print("public interface " + className + " {\n}\n");
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("ERROR : " + e);
 			System.err.println("allImpl : " + allImpl);
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			try {
 				writer.close();
 				output.close();
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				System.err.println("ERROR : " + ex);
 				ex.printStackTrace();
 			}
@@ -671,41 +651,39 @@ public class MAVLinkGenerator {
 				if (isLittleEndian) {
 					writer.print("import org.mavlink.io.LittleEndianDataInputStream;\n");
 					writer.print("import java.io.ByteArrayInputStream;\n");
-				}
-				else {
+				} else {
 					writer.print("import java.io.DataInputStream;\n");
 					writer.print("import java.io.ByteArrayInputStream;\n");
 				}
-			}
-			else {
+			} else {
 				writer.print("import java.nio.ByteBuffer;\n");
 				writer.print("import java.nio.ByteOrder;\n");
 			}
 			writer.print(imports);
-			writer.print("/**\n * Class MAVLinkMessageFactory\n * Generate MAVLink message classes from byte array\n **/\n");
+			writer.print(
+					"/**\n * Class MAVLinkMessageFactory\n * Generate MAVLink message classes from byte array\n **/\n");
 			writer.print("public class MAVLinkMessageFactory implements IMAVLinkMessage, IMAVLinkMessageID {\n");
-			writer.print("public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, byte[] rawData) throws IOException {\n");
+			writer.print(
+					"public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, byte[] rawData) throws IOException {\n");
 			writer.print("    MAVLinkMessage msg=null;\n");
 			if (forEmbeddedJava) {
 				if (isLittleEndian) {
-					writer.print("    LittleEndianDataInputStream dis = new LittleEndianDataInputStream(new ByteArrayInputStream(rawData));\n");
-				}
-				else {
+					writer.print(
+							"    LittleEndianDataInputStream dis = new LittleEndianDataInputStream(new ByteArrayInputStream(rawData));\n");
+				} else {
 					writer.print("    DataInputStream dis = new DataInputStream(new ByteArrayInputStream(rawData));\n");
 				}
-			}
-			else {
+			} else {
 				if (isLittleEndian) {
 					writer.print("    ByteBuffer dis = ByteBuffer.wrap(rawData).order(ByteOrder.LITTLE_ENDIAN);\n");
-				}
-				else {
+				} else {
 					writer.print("    ByteBuffer dis = ByteBuffer.wrap(rawData).order(ByteOrder.BIG_ENDIAN);\n");
 				}
 			}
 			writer.print("    switch(msgid) {\n");
 			for (MAVLinkMessage message : mavlink.getMessages().values()) {
 
-				if(message.getId() > 9998)
+				if (message.getId() > 9998)
 					continue;
 
 				String msgClassName = "msg_" + message.getName().toLowerCase();
@@ -722,17 +700,14 @@ public class MAVLinkGenerator {
 			writer.print("    return msg;\n");
 			writer.print("  }\n");
 			writer.print("}\n");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("ERROR : " + e);
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			try {
 				writer.close();
 				output.close();
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				System.err.println("ERROR : " + ex);
 				ex.printStackTrace();
 			}
@@ -761,24 +736,22 @@ public class MAVLinkGenerator {
 			// Write Header
 			writer.print("/**\n * Generated class : " + className + "\n * DO NOT MODIFY!\n **/\n");
 			writer.print("package " + packageName + ";\n");
-			writer.print("/**\n * Interface IMAVLinkMessageId\n * Generate al MAVLink message Id in an interface\n **/\n");
+			writer.print(
+					"/**\n * Interface IMAVLinkMessageId\n * Generate al MAVLink message Id in an interface\n **/\n");
 			writer.print("public interface IMAVLinkMessageID {\n");
 			for (MAVLinkMessage message : mavlink.getMessages().values()) {
 				String id = MAVLINK_MSG + "_ID_" + message.getName();
 				writer.print("  public static int " + id + " = " + message.getId() + ";\n");
 			}
 			writer.print("}\n");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("ERROR : " + e);
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			try {
 				writer.close();
 				output.close();
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				System.err.println("ERROR : " + ex);
 				ex.printStackTrace();
 			}
@@ -810,30 +783,26 @@ public class MAVLinkGenerator {
 			writer.print("public interface IMAVLinkCRC {\n");
 			if (useExtraByte) {
 				writer.print("  public static boolean MAVLINK_EXTRA_CRC = true;\n");
-			}
-			else {
+			} else {
 				writer.print("  public static boolean MAVLINK_EXTRA_CRC = false;\n");
 			}
 			writer.print("  public static char[] MAVLINK_MESSAGE_CRCS = {\n");
 			for (int i = 0; i < MAVLINK_MESSAGE_CRCS.length; i++) {
-				//				if (i % 25 == 0)
-				//					writer.print("\n ");
+				// if (i % 25 == 0)
+				// writer.print("\n ");
 				writer.print(MAVLINK_MESSAGE_CRCS[i]);
 				if (i != MAVLINK_MESSAGE_CRCS.length - 1)
 					writer.print(",");
 			}
 			writer.print("};\n}");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("ERROR : " + e);
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			try {
 				writer.close();
 				output.close();
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				System.err.println("ERROR : " + ex);
 				ex.printStackTrace();
 			}
@@ -866,12 +835,10 @@ public class MAVLinkGenerator {
 			if (forEmbeddedJava) {
 				if (isLittleEndian) {
 					writer.print("import org.mavlink.io.LittleEndianDataInputStream;\n");
-				}
-				else {
+				} else {
 					writer.print("import java.io.DataInputStream;\n");
 				}
-			}
-			else {
+			} else {
 				writer.print("import java.io.Serializable;");
 				writer.print("import java.nio.ByteBuffer;\n");
 				writer.print("import java.nio.ByteOrder;\n");
@@ -880,8 +847,7 @@ public class MAVLinkGenerator {
 			writer.print("public abstract class MAVLinkMessageCoder ");
 			if (forEmbeddedJava) {
 				writer.print("{\n");
-			}
-			else {
+			} else {
 				writer.print(" implements Serializable{\n");
 			}
 			writer.print("  /**\n");
@@ -889,13 +855,12 @@ public class MAVLinkGenerator {
 			writer.print("   */\n");
 			if (forEmbeddedJava) {
 				if (isLittleEndian) {
-					writer.print("  public abstract void decode(LittleEndianDataInputStream dis) throws IOException ;\n");
-				}
-				else {
+					writer.print(
+							"  public abstract void decode(LittleEndianDataInputStream dis) throws IOException ;\n");
+				} else {
 					writer.print("  public abstract void decode(DataInputStream dis) throws IOException ;\n");
 				}
-			}
-			else {
+			} else {
 				writer.print("  public abstract void decode(ByteBuffer dis) throws IOException ;\n");
 			}
 			writer.print("  /**\n");
@@ -904,26 +869,21 @@ public class MAVLinkGenerator {
 			if (forEmbeddedJava) {
 				if (isLittleEndian) {
 					writer.print("  public abstract byte[] encode() throws IOException ;\n");
-				}
-				else {
+				} else {
 					writer.print("  public abstract byte[] encode() throws IOException ;\n");
 				}
-			}
-			else {
+			} else {
 				writer.print("  public abstract byte[] encode() throws IOException ;\n");
 			}
 			writer.print("}\n");
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("ERROR : " + e);
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			try {
 				writer.close();
 				output.close();
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				System.err.println("ERROR : " + ex);
 				ex.printStackTrace();
 			}

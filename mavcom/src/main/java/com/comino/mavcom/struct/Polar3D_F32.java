@@ -1,7 +1,5 @@
 package com.comino.mavcom.struct;
 
-
-
 import com.comino.mavutils.MSPMathUtils;
 
 import georegression.struct.point.Point3D_F64;
@@ -12,14 +10,15 @@ public class Polar3D_F32 {
 
 	public float angle_xy = 0;
 	public float angle_xz = 0;
-	public float value    = 0;
+	public float value = 0;
 
 	public boolean isValid = false;
 
 	private Vector3D_F32 v = new Vector3D_F32();
 
 	public Polar3D_F32() {
-		super(); clear();
+		super();
+		clear();
 	}
 
 	public Polar3D_F32(float angle_xy, float angle_xz, float length) {
@@ -29,14 +28,12 @@ public class Polar3D_F32 {
 		this.value = length;
 	}
 
-
 	public void clear() {
 		angle_xy = 0;
 		angle_xz = 0;
-		value    = Float.POSITIVE_INFINITY;
-		isValid  = false;
+		value = Float.POSITIVE_INFINITY;
+		isValid = false;
 	}
-
 
 	public void set(Polar3D_F32 t) {
 		this.angle_xy = t.angle_xy;
@@ -47,15 +44,18 @@ public class Polar3D_F32 {
 
 	public void set(float vx, float vy, float vz) {
 
-		if(Float.isNaN(vx)) vx = 0;
-		if(Float.isNaN(vy)) vy = 0;
-		if(Float.isNaN(vz)) vz = 0;
+		if (Float.isNaN(vx))
+			vx = 0;
+		if (Float.isNaN(vy))
+			vy = 0;
+		if (Float.isNaN(vz))
+			vz = 0;
 
-		this.value    = (float)Math.sqrt((vx)*(vx) + (vy)*(vy) + (vz)*(vz));
+		this.value = (float) Math.sqrt((vx) * (vx) + (vy) * (vy) + (vz) * (vz));
 		this.angle_xy = getDirection(vy, vx);
 
-		if(this.value !=0)
-			this.angle_xz = (float)Math.asin((vz)/this.value);
+		if (this.value != 0)
+			this.angle_xz = (float) Math.asin((vz) / this.value);
 		else
 			this.angle_xz = 0;
 
@@ -63,31 +63,30 @@ public class Polar3D_F32 {
 		this.angle_xz = MSPMathUtils.normAngle2(this.angle_xz);
 	}
 
-	//	public void scaleXY(float factor) {
-	//		get();
+	// public void scaleXY(float factor) {
+	// get();
 	//
-	//		v.x = v.x * factor;
-	//		v.y = v.y * factor;
+	// v.x = v.x * factor;
+	// v.y = v.y * factor;
 	//
-	//		this.value    = (float)Math.sqrt((v.x)*(v.x) + (v.y)*(v.y) + (v.z)*(v.z));
-	//		this.angle_xy = getDirection(v.y, v.x);
-	//		this.angle_xz = (float)Math.asin((v.z)/this.value);
+	// this.value = (float)Math.sqrt((v.x)*(v.x) + (v.y)*(v.y) + (v.z)*(v.z));
+	// this.angle_xy = getDirection(v.y, v.x);
+	// this.angle_xz = (float)Math.asin((v.z)/this.value);
 	//
-	//		this.angle_xy = MSPMathUtils.normAngle2(this.angle_xy);
-	//		this.angle_xz = MSPMathUtils.normAngle2(this.angle_xz);
-	//	}
+	// this.angle_xy = MSPMathUtils.normAngle2(this.angle_xy);
+	// this.angle_xz = MSPMathUtils.normAngle2(this.angle_xz);
+	// }
 
 	public boolean isValid() {
 		return Float.isFinite(value) && isValid;
 	}
 
-
 	public void set(Vector3D_F32 t) {
-		set(t.x,t.y,t.z);
+		set(t.x, t.y, t.z);
 	}
 
 	public void set(Point3D_F64 t) {
-		set((float)t.x,(float)t.y,(float)t.z);
+		set((float) t.x, (float) t.y, (float) t.z);
 	}
 
 	public void set() {
@@ -100,10 +99,11 @@ public class Polar3D_F32 {
 
 	public void set(Vector4D_F32 t, Vector4D_F32 c) {
 
-		this.value    = (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
-		this.angle_xy = getDirection(t.y-c.y, t.x-c.x);
-		if(value != 0)
-			this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
+		this.value = (float) Math
+				.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+		this.angle_xy = getDirection(t.y - c.y, t.x - c.x);
+		if (value != 0)
+			this.angle_xz = (float) Math.asin((t.z - c.z) / this.value);
 		else
 			this.angle_xz = 0;
 
@@ -114,14 +114,18 @@ public class Polar3D_F32 {
 
 	public void set(Point3D_F64 t, Vector4D_F32 c) {
 
-		if(Double.isNaN(t.x)) t.x = c.x;
-		if(Double.isNaN(t.y)) t.y = c.y;
-		if(Double.isNaN(t.z)) t.z = c.z;
+		if (Double.isNaN(t.x))
+			t.x = c.x;
+		if (Double.isNaN(t.y))
+			t.y = c.y;
+		if (Double.isNaN(t.z))
+			t.z = c.z;
 
-		this.value    = (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
-		this.angle_xy = getDirection((float)t.y-c.y, (float)t.x-c.x);
-		if(value != 0)
-			this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
+		this.value = (float) Math
+				.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+		this.angle_xy = getDirection((float) t.y - c.y, (float) t.x - c.x);
+		if (value != 0)
+			this.angle_xz = (float) Math.asin((t.z - c.z) / this.value);
 		else
 			this.angle_xz = 0;
 
@@ -132,14 +136,18 @@ public class Polar3D_F32 {
 
 	public void set(Vector3D_F32 t, Vector3D_F32 c) {
 
-		if(Float.isNaN(t.x)) t.x = c.x;
-		if(Float.isNaN(t.y)) t.y = c.y;
-		if(Float.isNaN(t.z)) t.z = c.z;
+		if (Float.isNaN(t.x))
+			t.x = c.x;
+		if (Float.isNaN(t.y))
+			t.y = c.y;
+		if (Float.isNaN(t.z))
+			t.z = c.z;
 
-		this.value    = (float)Math.sqrt((t.x-c.x)*(t.x-c.x) + (t.y-c.y)*(t.y-c.y) + (t.z-c.z)*(t.z-c.z));
-		this.angle_xy = getDirection(t.y-c.y, t.x-c.x);
-		if(value != 0)
-			this.angle_xz = (float)Math.asin((t.z-c.z)/this.value);
+		this.value = (float) Math
+				.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+		this.angle_xy = getDirection(t.y - c.y, t.x - c.x);
+		if (value != 0)
+			this.angle_xz = (float) Math.asin((t.z - c.z) / this.value);
 		else
 			this.angle_xz = 0;
 
@@ -156,11 +164,13 @@ public class Polar3D_F32 {
 	}
 
 	public void get(Vector3D_F32 t) {
-		get(); t.setTo(v);
+		get();
+		t.setTo(v);
 	}
 
 	public Vector3D_F32 get() {
-		v.setTo((float)( Math.cos(angle_xy) * Math.cos(angle_xz)), (float)(Math.sin(angle_xy)* Math.cos(angle_xz)),(float)Math.sin(angle_xz));
+		v.setTo((float) (Math.cos(angle_xy) * Math.cos(angle_xz)), (float) (Math.sin(angle_xy) * Math.cos(angle_xz)),
+				(float) Math.sin(angle_xz));
 		v.scale(value);
 		return v;
 	}
@@ -173,31 +183,31 @@ public class Polar3D_F32 {
 	}
 
 	public void get(Vector4D_F32 t, float yaw) {
-		get(t); t.w = yaw;
+		get(t);
+		t.w = yaw;
 	}
 
 	public float getX() {
-		return (float)(Math.cos(angle_xy) * Math.cos(angle_xz)) * value;
+		return (float) (Math.cos(angle_xy) * Math.cos(angle_xz)) * value;
 	}
 
 	public float getY() {
-		return (float)(Math.sin(angle_xy) * Math.cos(angle_xz)) * value;
+		return (float) (Math.sin(angle_xy) * Math.cos(angle_xz)) * value;
 	}
 
 	public float getZ() {
-		return  (float)Math.sin(angle_xz) * value;
+		return (float) Math.sin(angle_xz) * value;
 	}
 
-
 	public String toString() {
-		return "XY="+MSPMathUtils.fromRad2(angle_xy)+" XZ="+MSPMathUtils.fromRad2(angle_xz)+" L="+value;
+		return "XY=" + MSPMathUtils.fromRad2(angle_xy) + " XZ=" + MSPMathUtils.fromRad2(angle_xz) + " L=" + value;
 	}
 
 	public static void main(String[] args) {
 
 		Vector3D_F32 current = new Vector3D_F32();
-		Vector3D_F32 target  = new Vector3D_F32(0,-1,0);
-		Vector3D_F32 result  = new Vector3D_F32();
+		Vector3D_F32 target = new Vector3D_F32(0, -1, 0);
+		Vector3D_F32 result = new Vector3D_F32();
 
 		Polar3D_F32 p = new Polar3D_F32();
 		p.set(target, current);
@@ -211,20 +221,19 @@ public class Polar3D_F32 {
 
 	private float getDirection(float dy, float dx) {
 
-		if(dx == 0 && dy == 0)
+		if (dx == 0 && dy == 0)
 			return 0;
-		if(dx == 0 && dy > 0)
-			return  (float)Math.PI/2;
-		if(dx == 0 && dy < 0)
-			return -(float)Math.PI/2;
+		if (dx == 0 && dy > 0)
+			return (float) Math.PI / 2;
+		if (dx == 0 && dy < 0)
+			return -(float) Math.PI / 2;
 
-		if((dx > 0 && dy > 0) || (dx > 0 && dy < 0))
-			return (float)Math.atan(dy/dx);
-		if((dx < 0 && dy > 0) || (dx < 0 && dy < 0))
-			return (float)(Math.atan(dy/dx)-Math.PI);
+		if ((dx > 0 && dy > 0) || (dx > 0 && dy < 0))
+			return (float) Math.atan(dy / dx);
+		if ((dx < 0 && dy > 0) || (dx < 0 && dy < 0))
+			return (float) (Math.atan(dy / dx) - Math.PI);
 
 		return 0;
 	}
-
 
 }

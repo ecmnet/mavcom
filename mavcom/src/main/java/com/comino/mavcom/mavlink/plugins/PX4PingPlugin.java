@@ -6,7 +6,6 @@ import com.comino.mavcom.model.segment.Status;
 
 public class PX4PingPlugin extends MAVLinkPluginBase {
 
-
 	public PX4PingPlugin() {
 		super(msg_ping.class);
 	}

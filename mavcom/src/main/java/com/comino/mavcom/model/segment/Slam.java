@@ -38,36 +38,35 @@ import com.comino.mavcom.model.segment.generic.Segment;
 public class Slam extends Segment {
 
 	private static final long serialVersionUID = -353494527253663585L;
-	
-	public static final short OFFBOARD_FLAG_NONE     = 0;
-	public static final short OFFBOARD_FLAG_HOLD     = 1;
-	public static final short OFFBOARD_FLAG_MOVE     = 2;
-	public static final short OFFBOARD_FLAG_SPEED    = 3;
-	public static final short OFFBOARD_FLAG_TURN     = 4;
-	public static final short OFFBOARD_FLAG_LAND     = 5;
-	public static final short OFFBOARD_FLAG_NEURAL   = 6;
-	
-	public static final short OFFBOARD_FLAG_DEBUG1   = 15;
-	public static final short OFFBOARD_FLAG_DEBUG2   = 16;
-	public static final short OFFBOARD_FLAG_DEBUG3   = 17;
-	
 
-	public float    px;		// planned path x
-	public float    py;		// planned path y
-	public float    pz;		// planned path Z
-	public float    pd;		// planned direction XY
-	public float    pp;		// planned direction YZ
-	public float    pv;		// planned speed
-	public float    dw;     // distance to next waypoint
-	public float    dm;     // minimal distance to obstacle
-	public float    di;     // distance to target
-	public float    ox;		// nearest obstacle x
-	public float    oy;		// nearest obstacle y
-	public float    oz;		// nearest obstacle z
-	public short    flags;  // Offboard Flags
-	public float    fps;    // Rate in Hz.
-	public float  quality;	// SLAM quality
-	public int    wpcount;
+	public static final short OFFBOARD_FLAG_NONE = 0;
+	public static final short OFFBOARD_FLAG_HOLD = 1;
+	public static final short OFFBOARD_FLAG_MOVE = 2;
+	public static final short OFFBOARD_FLAG_SPEED = 3;
+	public static final short OFFBOARD_FLAG_TURN = 4;
+	public static final short OFFBOARD_FLAG_LAND = 5;
+	public static final short OFFBOARD_FLAG_NEURAL = 6;
+
+	public static final short OFFBOARD_FLAG_DEBUG1 = 15;
+	public static final short OFFBOARD_FLAG_DEBUG2 = 16;
+	public static final short OFFBOARD_FLAG_DEBUG3 = 17;
+
+	public float px; // planned path x
+	public float py; // planned path y
+	public float pz; // planned path Z
+	public float pd; // planned direction XY
+	public float pp; // planned direction YZ
+	public float pv; // planned speed
+	public float dw; // distance to next waypoint
+	public float dm; // minimal distance to obstacle
+	public float di; // distance to target
+	public float ox; // nearest obstacle x
+	public float oy; // nearest obstacle y
+	public float oz; // nearest obstacle z
+	public short flags; // Offboard Flags
+	public float fps; // Rate in Hz.
+	public float quality; // SLAM quality
+	public int wpcount;
 
 	public Slam() {
 		clear();
@@ -123,7 +122,7 @@ public class Slam extends Segment {
 		this.pp = pp;
 		this.pv = pv;
 	}
-	
+
 //	public boolean isFlag(int ...box) {
 //		for(int b : box)
 //			if((flags & (1<<b))==0)

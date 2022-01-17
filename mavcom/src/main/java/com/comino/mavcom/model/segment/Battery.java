@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
@@ -40,34 +39,32 @@ public class Battery extends Segment {
 
 	private static final long serialVersionUID = -4051617731611229443L;
 
-	public float  b0              = Float.NaN; // Voltage
-	public float  c0			  = Float.NaN; // Current
-	public float  a0			  = Float.NaN; // Accumulated consumption
-	public float  p               = Float.NaN;
-
+	public float b0 = Float.NaN; // Voltage
+	public float c0 = Float.NaN; // Current
+	public float a0 = Float.NaN; // Accumulated consumption
+	public float p = Float.NaN;
 
 	public void set(Battery m) {
-		 a0 = m.a0;
-		 b0 = m.b0;
-		 c0 = m.c0;
-		 p  = m.p;
+		a0 = m.a0;
+		b0 = m.b0;
+		c0 = m.c0;
+		p = m.p;
 	}
 
 	public Battery clone() {
 		Battery s = new Battery();
-		s.b0	= b0;
-		s.c0    = c0;
-		s.p     = p;
-		s.a0    = a0;
+		s.b0 = b0;
+		s.c0 = c0;
+		s.p = p;
+		s.a0 = a0;
 		return s;
 	}
 
 	public void clear() {
-		b0    = 0;
-		c0    = 0;
-		p     = 0;
-		a0    = 0;
+		b0 = 0;
+		c0 = 0;
+		p = 0;
+		a0 = 0;
 	}
-
 
 }

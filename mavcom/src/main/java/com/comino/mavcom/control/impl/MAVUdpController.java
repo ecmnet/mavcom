@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.control.impl;
 
 import org.mavlink.messages.MAV_COMPONENT;
@@ -41,15 +40,13 @@ import org.mavlink.messages.lquac.msg_heartbeat;
 
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
 import com.comino.mavcom.control.IMAVController;
-import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.model.segment.Status;
-
 
 public class MAVUdpController extends MAVController implements IMAVController, Runnable {
 
 	private boolean connected;
 
-	private final msg_heartbeat beat = new msg_heartbeat(2,MAV_COMPONENT.MAV_COMP_ID_OSD);
+	private final msg_heartbeat beat = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_OSD);
 
 	public MAVUdpController(String peerAddress, int peerPort, int bindPort, boolean isSITL) {
 		super(2);
@@ -57,9 +54,9 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 		this.peerAddress = peerAddress;
 		this.peerPort = peerPort;
 		this.bindPort = bindPort;
-		
-		System.out.println("UDP Controller loaded ("+peerAddress+":"+peerPort+")");
-		comm = MAVUdpCommNIO2.getInstance(reader, peerAddress,peerPort, bindPort);
+
+		System.out.println("UDP Controller loaded (" + peerAddress + ":" + peerPort + ")");
+		comm = MAVUdpCommNIO2.getInstance(reader, peerAddress, peerPort, bindPort);
 		model.sys.setStatus(Status.MSP_PROXY, false);
 
 		beat.type = MAV_TYPE.MAV_TYPE_GCS;
@@ -71,11 +68,12 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 	public boolean connect() {
 
 		System.out.print("Try to start..");
-		if(this.connected)
+		if (this.connected)
 			return true;
 
-		if(!comm.isConnected()) {
-			comm.close(); comm.open();
+		if (!comm.isConnected()) {
+			comm.close();
+			comm.open();
 		}
 
 		return true;
@@ -95,17 +93,20 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 
 	@Override
 	public void run() {
-        super.run();
+		super.run();
 		try {
-			if(!comm.isConnected()) {
+			if (!comm.isConnected()) {
 				this.connected = false;
-				comm.close(); comm.open();
+				comm.close();
+				comm.open();
 				return;
 			}
 			this.connected = true;
 			model.sys.setStatus(Status.MSP_SITL, isSimulation());
 			comm.write(beat);
 
-		} catch (Exception e) { e.printStackTrace(); }	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

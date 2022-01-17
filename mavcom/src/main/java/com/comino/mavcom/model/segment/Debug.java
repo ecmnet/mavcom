@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
@@ -45,47 +44,47 @@ public class Debug extends Segment {
 
 	// positioning actual
 
-
-	public float	x=0;
-	public float    y=0;
-	public float    z=0;
-	
+	public float x = 0;
+	public float y = 0;
+	public float z = 0;
 
 	public Debug clone() {
 		Debug t = new Debug();
-		t.x		= x;
-		t.y		= y;
-		t.z		= z;
+		t.x = x;
+		t.y = y;
+		t.z = z;
 
 		return t;
 	}
 
 	public void set(Debug t) {
-		x		= t.x;
-		y		= t.y;
-		z		= t.z;
+		x = t.x;
+		y = t.y;
+		z = t.z;
 	}
-	
+
 	public void set(Vector3D_F64 t) {
-		x       = (float)t.x;
-		y       = (float)t.y;
-		z       = (float)t.z;
+		x = (float) t.x;
+		y = (float) t.y;
+		z = (float) t.z;
 	}
-	
+
 	public void set(double _x, double _y, double _z) {
-		x       = (float)_x;
-		y       = (float)_y;
-		z       = (float)_z;
+		x = (float) _x;
+		y = (float) _y;
+		z = (float) _z;
 	}
-	
+
 	public void set(Vector4D_F64 t) {
-		x       = (float)t.x;
-		y       = (float)t.y;
-		z       = (float)t.z;
+		x = (float) t.x;
+		y = (float) t.y;
+		z = (float) t.z;
 	}
 
 	public void clear() {
-      x = 0; y = 0; z = 0;
+		x = 0;
+		y = 0;
+		z = 0;
 	}
 
 }

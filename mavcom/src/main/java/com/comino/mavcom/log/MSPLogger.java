@@ -43,13 +43,12 @@ public class MSPLogger {
 
 	// TOOD: register proxy, and send messages if proxy is registered
 
-	private static MSPLogger log      = null;
-	private IMAVController control    = null;
+	private static MSPLogger log = null;
+	private IMAVController control = null;
 	private boolean debug_msg_enabled = false;
 
-
-	public static MSPLogger getInstance(IMAVController control)  {
-		if(log==null) {
+	public static MSPLogger getInstance(IMAVController control) {
+		if (log == null) {
 			log = new MSPLogger(control);
 		}
 		return log;
@@ -68,23 +67,23 @@ public class MSPLogger {
 	}
 
 	public void writeLocalMsg(String msg) {
-		writeLocalMsg(msg,MAV_SEVERITY.MAV_SEVERITY_INFO);
+		writeLocalMsg(msg, MAV_SEVERITY.MAV_SEVERITY_INFO);
 
 	}
 
 	public void writeLocalDebugMsg(String msg) {
-		writeLocalMsg(msg,MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+		writeLocalMsg(msg, MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 	}
 
 	public void writeLocalMsg(String msg, int severity) {
-		    System.out.println("["+LogMessage.severity_texts[severity]+"] "+msg);
-			if(severity == MAV_SEVERITY.MAV_SEVERITY_DEBUG && !debug_msg_enabled)
-				return;
-			LogMessage m = new LogMessage();
-			m.text = msg; m.severity = severity;
-			m.tms = DataModel.getSynchronizedPX4Time_us();
-			control.writeLogMessage(m);
+		System.out.println("[" + LogMessage.severity_texts[severity] + "] " + msg);
+		if (severity == MAV_SEVERITY.MAV_SEVERITY_DEBUG && !debug_msg_enabled)
+			return;
+		LogMessage m = new LogMessage();
+		m.text = msg;
+		m.severity = severity;
+		m.tms = DataModel.getSynchronizedPX4Time_us();
+		control.writeLogMessage(m);
 	}
-
 
 }

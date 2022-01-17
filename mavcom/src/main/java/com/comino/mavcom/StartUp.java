@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom;
 
 import java.lang.management.MemoryMXBean;
@@ -54,16 +53,14 @@ import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.param.PX4Parameters;
 
-
 public class StartUp implements Runnable {
 
-	private IMAVMSPController    control = null;
-	private MSPConfig	          config = null;
-
+	private IMAVMSPController control = null;
+	private MSPConfig config = null;
 
 	private OperatingSystemMXBean osBean = null;;
-	private MemoryMXBean  mxBean = null;
-	private DataModel      model = null;
+	private MemoryMXBean mxBean = null;
+	private DataModel model = null;
 
 	private boolean is_simulation = false;
 
@@ -71,24 +68,21 @@ public class StartUp implements Runnable {
 
 	public StartUp(String[] args) {
 
-		if(args.length != 0) {
+		if (args.length != 0) {
 			is_simulation = true;
 		}
 
-		if(is_simulation) {
-			config  = MSPConfig.getInstance(System.getProperty("user.home")+"/","msp.properties");
+		if (is_simulation) {
+			config = MSPConfig.getInstance(System.getProperty("user.home") + "/", "msp.properties");
 			control = new MAVProxyController(MAVController.MODE_SITL);
-		}
-		else {
-			config  = MSPConfig.getInstance("/home/up","msp.properties");
+		} else {
+			config = MSPConfig.getInstance("/home/up", "msp.properties");
 			control = new MAVProxyController(MAVController.MODE_NORMAL);
 		}
-
 
 		model = control.getCurrentModel();
 
 		MSPLogger.getInstance(control);
-
 
 		osBean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
 		mxBean = java.lang.management.ManagementFactory.getMemoryMXBean();
@@ -97,29 +91,28 @@ public class StartUp implements Runnable {
 
 		control.start();
 
-		MSPLogger.getInstance().writeLocalMsg("MAVProxy "+config.getVersion()+" loaded");
+		MSPLogger.getInstance().writeLocalMsg("MAVProxy " + config.getVersion() + " loaded");
 		Thread worker = new Thread(this);
 		worker.start();
 
 		control.registerListener(msg_msp_command.class, new IMAVLinkListener() {
 			@Override
 			public void received(Object o) {
-				msg_msp_command cmd = (msg_msp_command)o;
-				switch(cmd.command) {
+				msg_msp_command cmd = (msg_msp_command) o;
+				switch (cmd.command) {
 				case MSP_CMD.MSP_TRANSFER_MICROSLAM:
-					control.writeLogMessage(new LogMessage("[sitl] map transfer request",
-							MAV_SEVERITY.MAV_SEVERITY_NOTICE));
+					control.writeLogMessage(
+							new LogMessage("[sitl] map transfer request", MAV_SEVERITY.MAV_SEVERITY_NOTICE));
 					break;
 				}
 			}
 		});
 
-
 		params = PX4Parameters.getInstance(control);
 
 		control.getStatusManager().addListener(Status.MSP_CONNECTED, (n) -> {
-	      if(n.isStatus(Status.MSP_CONNECTED))
-	    	  params.requestRefresh(false);
+			if (n.isStatus(Status.MSP_CONNECTED))
+				params.requestRefresh(false);
 		});
 
 	}
@@ -128,48 +121,44 @@ public class StartUp implements Runnable {
 		new StartUp(args);
 	}
 
-
 	boolean isAvoiding = true;
 
 	@Override
 	public void run() {
 		long tms = System.currentTimeMillis();
 
-		msg_msp_micro_grid grid = new msg_msp_micro_grid(1,1);
-		msg_msp_status msg = new msg_msp_status(2,1);
+		msg_msp_micro_grid grid = new msg_msp_micro_grid(1, 1);
+		msg_msp_status msg = new msg_msp_status(2, 1);
 
-		while(true) {
+		while (true) {
 			try {
 
-				if(!control.isConnected()) {
+				if (!control.isConnected()) {
 					Thread.sleep(200);
 					control.connect();
 					continue;
 				}
 
-
-				while(model.grid.hasTransfers()) {
+				while (model.grid.hasTransfers()) {
 					grid.resolution = 0;
-					grid.extension  = 0;
-					grid.tms  = DataModel.getSynchronizedPX4Time_us();
+					grid.extension = 0;
+					grid.tms = DataModel.getSynchronizedPX4Time_us();
 					grid.count = model.grid.count;
-					if(model.grid.toArray(grid.data)) {
+					if (model.grid.toArray(grid.data)) {
 						control.sendMAVLinkMessage(grid);
 					}
 				}
 
-
 				Thread.sleep(50);
 
-				if((System.currentTimeMillis()-tms) < 500)
+				if ((System.currentTimeMillis() - tms) < 500)
 					continue;
 
 				tms = System.currentTimeMillis();
 
-
 				msg.load = 0;
-				msg.autopilot_mode =control.getCurrentModel().sys.autopilot;
-				msg.memory = (int)(mxBean.getHeapMemoryUsage().getUsed() * 100 /mxBean.getHeapMemoryUsage().getMax());
+				msg.autopilot_mode = control.getCurrentModel().sys.autopilot;
+				msg.memory = (int) (mxBean.getHeapMemoryUsage().getUsed() * 100 / mxBean.getHeapMemoryUsage().getMax());
 				msg.com_error = control.getErrorCount();
 				msg.uptime_ms = System.currentTimeMillis() - tms;
 				msg.status = control.getCurrentModel().sys.getStatus();
@@ -179,7 +168,6 @@ public class StartUp implements Runnable {
 				msg.unix_time_us = DataModel.getSynchronizedPX4Time_us();
 				msg.wifi_quality = 100;
 				control.sendMAVLinkMessage(msg);
-
 
 			} catch (Exception e) {
 				e.printStackTrace();

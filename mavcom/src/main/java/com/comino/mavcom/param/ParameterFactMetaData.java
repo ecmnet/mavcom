@@ -46,21 +46,20 @@ import org.w3c.dom.NodeList;
 
 public class ParameterFactMetaData {
 
-
-	private Map<String,ParameterAttributes> parameterList = null;
+	private Map<String, ParameterAttributes> parameterList = null;
 
 	public ParameterFactMetaData(String filename) {
 
-		parameterList = new HashMap<String,ParameterAttributes>();
+		parameterList = new HashMap<String, ParameterAttributes>();
 
 		try {
 			DocumentBuilder dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = dBuilder.parse(getClass().getResourceAsStream("/"+filename));
+			Document doc = dBuilder.parse(getClass().getResourceAsStream("/" + filename));
 
 			if (doc.hasChildNodes()) {
 				String v_major = doc.getElementsByTagName("parameter_version_major").item(0).getTextContent();
 				String v_minor = doc.getElementsByTagName("parameter_version_minor").item(0).getTextContent();
-				System.out.println("ParameterFactMetaData Version: "+v_major+"."+v_minor);
+				System.out.println("ParameterFactMetaData Version: " + v_major + "." + v_minor);
 				buildParameterList(doc.getElementsByTagName("group"));
 			}
 		} catch (Exception e) {
@@ -71,8 +70,9 @@ public class ParameterFactMetaData {
 	private void buildParameterList(NodeList groups) {
 		for (int i = 0; i < groups.getLength(); i++) {
 			Node group = groups.item(i);
-			for(int g = 0;g<group.getChildNodes().getLength();g++) {
-				addParameterToList(group.getAttributes().getNamedItem("name").getNodeValue(),group.getChildNodes().item(g));
+			for (int g = 0; g < group.getChildNodes().getLength(); g++) {
+				addParameterToList(group.getAttributes().getNamedItem("name").getNodeValue(),
+						group.getChildNodes().item(g));
 			}
 		}
 	}
@@ -80,56 +80,56 @@ public class ParameterFactMetaData {
 	private void addParameterToList(String group_name, Node parameter) {
 		ParameterAttributes attributes = new ParameterAttributes(group_name);
 		NamedNodeMap name_n = parameter.getAttributes();
-		if(name_n==null)
+		if (name_n == null)
 			return;
 
 		attributes.name = name_n.getNamedItem("name").getNodeValue().toUpperCase();
 
 		NamedNodeMap type_n = parameter.getAttributes();
-		if(type_n!=null)
-			attributes.type  = type_n.getNamedItem("type").getNodeValue();
+		if (type_n != null)
+			attributes.type = type_n.getNamedItem("type").getNodeValue();
 
 		NamedNodeMap default_n = parameter.getAttributes();
-		if(default_n!=null)
-			attributes.default_val  = Float.parseFloat(default_n.getNamedItem("default").getNodeValue());
+		if (default_n != null)
+			attributes.default_val = Float.parseFloat(default_n.getNamedItem("default").getNodeValue());
 
-		for(int i=0;i<parameter.getChildNodes().getLength();i++) {
+		for (int i = 0; i < parameter.getChildNodes().getLength(); i++) {
 
 			Node node = parameter.getChildNodes().item(i);
-			if(node.getNodeName().equals("short_desc"))
+			if (node.getNodeName().equals("short_desc"))
 				attributes.description = node.getTextContent();
-			if(node.getNodeName().equals("long_desc"))
+			if (node.getNodeName().equals("long_desc"))
 				attributes.description_long = node.getTextContent();
-			if(node.getNodeName().equals("unit"))
+			if (node.getNodeName().equals("unit"))
 				attributes.unit = node.getTextContent();
-			if(node.getNodeName().equals("decimal"))
+			if (node.getNodeName().equals("decimal"))
 				attributes.decimals = Integer.parseInt(node.getTextContent());
-			if(node.getNodeName().equals("increment"))
+			if (node.getNodeName().equals("increment"))
 				attributes.increment = Float.parseFloat(node.getTextContent());
-			if(node.getNodeName().equals("min"))
+			if (node.getNodeName().equals("min"))
 				attributes.min_val = Float.parseFloat(node.getTextContent());
-			if(node.getNodeName().equals("max"))
+			if (node.getNodeName().equals("max"))
 				attributes.max_val = Float.parseFloat(node.getTextContent());
-			if(node.getNodeName().equals("boolean")) {
+			if (node.getNodeName().equals("boolean")) {
 				attributes.valueList.put(0, "disabled");
 				attributes.valueList.put(1, "enabled");
 			}
-			if(node.getNodeName().equals("bitmask")) {
-				for(int j=0; j<node.getChildNodes().getLength();j++) {
+			if (node.getNodeName().equals("bitmask")) {
+				for (int j = 0; j < node.getChildNodes().getLength(); j++) {
 					Node value = node.getChildNodes().item(j);
-					if(value.getNodeName().equals("bit")) {
+					if (value.getNodeName().equals("bit")) {
 						int index = Integer.parseInt(value.getAttributes().getNamedItem("index").getNodeValue());
 						attributes.bitMask.add(index, value.getTextContent());
 					}
 				}
 			}
-			if(node.getNodeName().equals("reboot_required"))
+			if (node.getNodeName().equals("reboot_required"))
 				attributes.reboot_required = Boolean.parseBoolean(node.getTextContent());
-			if(node.getNodeName().equals("values")) {
-				for(int j=0; j<node.getChildNodes().getLength();j++) {
+			if (node.getNodeName().equals("values")) {
+				for (int j = 0; j < node.getChildNodes().getLength(); j++) {
 					Node value = node.getChildNodes().item(j);
-					if(value.getNodeName().equals("value")) {
-						int code = (int)Float.parseFloat(value.getAttributes().getNamedItem("code").getNodeValue());
+					if (value.getNodeName().equals("value")) {
+						int code = (int) Float.parseFloat(value.getAttributes().getNamedItem("code").getNodeValue());
 						attributes.valueList.put(code, value.getTextContent());
 					}
 				}

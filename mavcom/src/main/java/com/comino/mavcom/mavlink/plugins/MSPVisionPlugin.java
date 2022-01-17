@@ -1,6 +1,5 @@
 package com.comino.mavcom.mavlink.plugins;
 
-
 import org.mavlink.messages.lquac.msg_msp_vision;
 
 import com.comino.mavcom.model.DataModel;
@@ -35,21 +34,20 @@ public class MSPVisionPlugin extends MAVLinkPluginBase {
 		model.vision.y = vision.y;
 		model.vision.z = vision.z;
 
-		model.vision.h= vision.h;
-		model.vision.p= vision.p;
-		model.vision.r= vision.r;
+		model.vision.h = vision.h;
+		model.vision.p = vision.p;
+		model.vision.r = vision.r;
 
 		model.vision.qual = vision.quality;
-		model.vision.errors  = (int) vision.errors;
+		model.vision.errors = (int) vision.errors;
 
-		model.vision.flags   = (int)vision.flags;
-		model.sys.setSensor(Status.MSP_FIDUCIAL_LOCKED,model.vision.isStatus(Vision.FIDUCIAL_LOCKED));
+		model.vision.flags = (int) vision.flags;
+		model.sys.setSensor(Status.MSP_FIDUCIAL_LOCKED, model.vision.isStatus(Vision.FIDUCIAL_LOCKED));
 		model.vision.fps = vision.fps;
 
 		model.sys.setSensor(Status.MSP_OPCV_AVAILABILITY, model.vision.isStatus(Vision.AVAILABLE));
 		model.vision.tms = DataModel.getSynchronizedPX4Time_us();
-		
-		
+
 	}
 
 }

@@ -28,12 +28,12 @@ public class MspMicroSlamPlugin extends MAVLinkPluginBase {
 		model.slam.oy = slam.oy;
 		model.slam.oz = slam.oz;
 		model.slam.quality = slam.quality;
-		model.slam.wpcount = (int)slam.wpcount;
-		model.slam.flags = (short)slam.flags;
-		model.slam.fps  = slam.fps;
+		model.slam.wpcount = (int) slam.wpcount;
+		model.slam.flags = (short) slam.flags;
+		model.slam.fps = slam.fps;
 		model.slam.tms = DataModel.getSynchronizedPX4Time_us();
-		if(slam.quality > 0)
-		model.sys.setSensor(Status.MSP_SLAM_AVAILABILITY, true);
+		if (slam.quality > 0)
+			model.sys.setSensor(Status.MSP_SLAM_AVAILABILITY, true);
 
 	}
 }

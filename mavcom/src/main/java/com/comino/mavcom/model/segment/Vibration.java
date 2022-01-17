@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
@@ -40,38 +39,36 @@ public class Vibration extends Segment {
 
 	private static final long serialVersionUID = -1177166201561030663L;
 
-	public float 	vibx = Float.NaN;
-	public float 	viby = Float.NaN;
-	public float 	vibz = Float.NaN;
-	public float    cli0 = Float.NaN;
-	public float    cli1 = Float.NaN;
-	public float    cli2 = Float.NaN;
-
+	public float vibx = Float.NaN;
+	public float viby = Float.NaN;
+	public float vibz = Float.NaN;
+	public float cli0 = Float.NaN;
+	public float cli1 = Float.NaN;
+	public float cli2 = Float.NaN;
 
 	public void set(Vibration a) {
-		vibx		= a.vibx;
-		viby		= a.viby;
-		vibz		= a.vibz;
-		cli0        = a.cli0;
-		cli1        = a.cli1;
-		cli2        = a.cli2;
+		vibx = a.vibx;
+		viby = a.viby;
+		vibz = a.vibz;
+		cli0 = a.cli0;
+		cli1 = a.cli1;
+		cli2 = a.cli2;
 
 	}
 
 	public Vibration clone() {
 		Vibration at = new Vibration();
-		at.vibx		= vibx;
-		at.viby		= viby;
-		at.vibz		= vibz;
-		at.cli0     = cli0;
-		at.cli1     = cli1;
-		at.cli2     = cli2;
+		at.vibx = vibx;
+		at.viby = viby;
+		at.vibz = vibz;
+		at.cli0 = cli0;
+		at.cli1 = cli1;
+		at.cli2 = cli2;
 
 		return at;
 	}
 
-	//--------------------------------------------------------------------------------------------------------
-
+	// --------------------------------------------------------------------------------------------------------
 
 	public void clear() {
 		vibx = 0;

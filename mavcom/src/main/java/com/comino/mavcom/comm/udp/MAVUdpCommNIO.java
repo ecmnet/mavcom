@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.comm.udp;
 
 import java.io.IOException;
@@ -59,95 +58,97 @@ import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 
-
 public class MAVUdpCommNIO implements IMAVComm, Runnable {
 
 	private static final int BUFFER = 128;
 
+	private DataModel model = null;
 
-	private DataModel 				model = null;
+	private SocketAddress bindPort = null;
+	private SocketAddress peerPort = null;
+	private DatagramChannel channel = null;
 
-	private SocketAddress 			bindPort = null;
-	private SocketAddress 			peerPort = null;
-	private DatagramChannel 		channel = null;
-
-	private boolean					isConnected    = false;
-	private long                    transfer_speed = 0;
+	private boolean isConnected = false;
+	private long transfer_speed = 0;
 
 	private MAVLinkBlockingReader reader;
 
 	private Selector selector;
 
-	private static MAVUdpCommNIO com       = null;
-	private IMAVProxy byteListener    = null;
+	private static MAVUdpCommNIO com = null;
+	private IMAVProxy byteListener = null;
 
-	private final ByteBuffer rxBuffer    = ByteBuffer.allocate(BUFFER*1024);
-	private final byte[]    proxyBuffer  = new byte[rxBuffer.capacity()];
+	private final ByteBuffer rxBuffer = ByteBuffer.allocate(BUFFER * 1024);
+	private final byte[] proxyBuffer = new byte[rxBuffer.capacity()];
 
-	public static MAVUdpCommNIO getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort, int bindPort) {
-		if(com==null)
+	public static MAVUdpCommNIO getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort,
+			int bindPort) {
+		if (com == null)
 			com = new MAVUdpCommNIO(reader, peerAddress, peerPort, bindPort);
 		return com;
 	}
 
 	private MAVUdpCommNIO(MAVLinkBlockingReader reader, String peerAddress, int pPort, int bPort) {
 		this.model = reader.getModel();
-		this.peerPort = new InetSocketAddress(peerAddress,pPort);
+		this.peerPort = new InetSocketAddress(peerAddress, pPort);
 		this.bindPort = new InetSocketAddress(bPort);
 		this.reader = reader;
 
-
-		System.out.println("Vehicle (NIO3): BindPort="+bPort+" PeerPort="+pPort+ " BufferSize: "+rxBuffer.capacity());
+		System.out.println(
+				"Vehicle (NIO3): BindPort=" + bPort + " PeerPort=" + pPort + " BufferSize: " + rxBuffer.capacity());
 
 	}
 
 	public boolean open() {
 
-		if(isConnected)
+		if (isConnected)
 			return true;
 
-		reader.getParser().reset(); Arrays.fill(proxyBuffer, (byte)0);
+		reader.getParser().reset();
+		Arrays.fill(proxyBuffer, (byte) 0);
 
-		if(channel!=null && channel.isOpen() && channel.isConnected() ) { //&& parser.isConnected()) {
+		if (channel != null && channel.isOpen() && channel.isConnected()) { // && parser.isConnected()) {
 			isConnected = true;
 			return true;
 		}
 
+		while (!isConnected) {
 
-		while(!isConnected) {
-
-			try { Thread.sleep(100); } catch (InterruptedException e2) { }
-
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e2) {
+			}
 
 			try {
 				channel = DatagramChannel.open();
 				channel.socket().setReuseAddress(true);
 				channel.bind(bindPort);
-				//	channel.socket().setTrafficClass(0x08);
-				channel.socket().setReceiveBufferSize(BUFFER*1024);
-				channel.socket().setSendBufferSize(32*1024);
+				// channel.socket().setTrafficClass(0x08);
+				channel.socket().setReceiveBufferSize(BUFFER * 1024);
+				channel.socket().setSendBufferSize(32 * 1024);
 				channel.connect(peerPort);
 				channel.configureBlocking(false);
 				selector = Selector.open();
 				channel.register(selector, SelectionKey.OP_READ);
 
-				if(channel.isConnected())
+				if (channel.isConnected())
 					isConnected = true;
 
-			} catch(Exception e) {
+			} catch (Exception e) {
 				try {
-					if(channel.isOpen()) {
+					if (channel.isOpen()) {
 						channel.disconnect();
 						channel.close();
 					}
-				} catch (IOException e1) { }
-				model.sys.setStatus(Status.MSP_CONNECTED,false);
+				} catch (IOException e1) {
+				}
+				model.sys.setStatus(Status.MSP_CONNECTED, false);
 				isConnected = false;
 				continue;
 			}
 		}
-		
-		((Buffer)rxBuffer).clear();
+
+		((Buffer) rxBuffer).clear();
 
 		Thread t = new Thread(this);
 		t.setName("MAVLink parser");
@@ -161,36 +162,36 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	public void run() {
 		SelectionKey key = null;
 		Iterator<?> selectedKeys = null;
-		long bcount = 0; int msg_length; long start; byte b;
+		long bcount = 0;
+		int msg_length;
+		long start;
+		byte b;
 
 		bcount = 0;
 
-		if(channel.isConnected()) {
+		if (channel.isConnected()) {
 			isConnected = true;
 
-			msg_heartbeat hb = new msg_heartbeat(255,1);
+			msg_heartbeat hb = new msg_heartbeat(255, 1);
 			hb.isValid = true;
 			try {
-				for(int i=0;i<10;i++)
+				for (int i = 0; i < 10; i++)
 					write(hb);
-			} catch(Exception e) { }
+			} catch (Exception e) {
+			}
 		} else
 			isConnected = false;
 
-
 		start = System.currentTimeMillis();
 
-
-		while(isConnected) {
+		while (isConnected) {
 
 			try {
 
-
-				if(selector.select(3000)==0) {
+				if (selector.select(3000) == 0) {
 					isConnected = false;
 					continue;
 				}
-
 
 				selectedKeys = selector.selectedKeys().iterator();
 
@@ -203,31 +204,35 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 						continue;
 
 					if (key.isReadable()) {
-						if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
-							((Buffer)rxBuffer).flip();
+						if (channel.isConnected() && channel.receive(rxBuffer) != null) {
+							((Buffer) rxBuffer).flip();
 							msg_length = 0;
-							while(rxBuffer.hasRemaining()) {
+							while (rxBuffer.hasRemaining()) {
 								proxyBuffer[msg_length++] = rxBuffer.get();
 							}
 							rxBuffer.compact();
 
-							if(byteListener !=null)
+							if (byteListener != null)
 								byteListener.write(proxyBuffer, msg_length);
 							reader.put(proxyBuffer, msg_length);
 							bcount = bcount + msg_length;
 						}
-						if((System.currentTimeMillis() - start) > 750) {
+						if ((System.currentTimeMillis() - start) > 750) {
 							transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
-							bcount = 0; start = System.currentTimeMillis();
+							bcount = 0;
+							start = System.currentTimeMillis();
 						}
 
 					}
 				}
-			} catch(Exception e) {
-				((Buffer)rxBuffer).clear();
-				reader.getParser().reset(); 
-				model.sys.setStatus(Status.MSP_CONNECTED,false);
-				try { channel.close(); } catch (IOException e1) { 	}
+			} catch (Exception e) {
+				((Buffer) rxBuffer).clear();
+				reader.getParser().reset();
+				model.sys.setStatus(Status.MSP_CONNECTED, false);
+				try {
+					channel.close();
+				} catch (IOException e1) {
+				}
 				isConnected = false;
 			}
 		}
@@ -239,11 +244,10 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		return reader.getLostPackages();
 	}
 
-
 	public void write(MAVLinkMessage msg) throws IOException {
-		if(!channel.isConnected())
+		if (!channel.isConnected())
 			throw new IOException("Not yet connected");
-		if(msg!=null && channel!=null && channel.isOpen() && channel.isConnected() && isConnected)
+		if (msg != null && channel != null && channel.isOpen() && channel.isConnected() && isConnected)
 			channel.write(ByteBuffer.wrap(msg.encode()));
 	}
 
@@ -263,65 +267,57 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	public void close() {
 		isConnected = false;
 		try {
-			if(selector!=null ) {
+			if (selector != null) {
 				selector.close();
 			}
-			if (channel != null ) {
+			if (channel != null) {
 				channel.close();
 			}
-		} catch(Exception e) {  e.printStackTrace(); }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-
-
 	public static void main(String[] args) {
-		MAVUdpCommNIO comm = new MAVUdpCommNIO(new MAVLinkBlockingReader(2,new DataModel()), "172.168.178.1", 14555, 14550);
-		//	MAVUdpComm comm = new MAVUdpComm(new DataModel(), "192.168.4.1", 14555,"0.0.0.0",14550);
+		MAVUdpCommNIO comm = new MAVUdpCommNIO(new MAVLinkBlockingReader(2, new DataModel()), "172.168.178.1", 14555,
+				14550);
+		// MAVUdpComm comm = new MAVUdpComm(new DataModel(), "192.168.4.1",
+		// 14555,"0.0.0.0",14550);
 
 		comm.open();
 
-
-
 		long time = System.currentTimeMillis();
-
 
 		try {
 
 			System.out.println("Started");
 
-			while(System.currentTimeMillis()< (time+60000)) {
+			while (System.currentTimeMillis() < (time + 60000)) {
 
-				//					comm.model.state.print("NED:");
-				//								System.out.println("REM="+comm.model.battery.p+" VOLT="+comm.model.battery.b0+" CURRENT="+comm.model.battery.c0);
+				// comm.model.state.print("NED:");
+				// System.out.println("REM="+comm.model.battery.p+"
+				// VOLT="+comm.model.battery.b0+" CURRENT="+comm.model.battery.c0);
 
-				if(comm.isConnected)
-					System.out.println("ANGLEX="+comm.model.hud.aX+" ANGLEY="+comm.model.hud.aY+" "+comm.model.sys.toString());
-
+				if (comm.isConnected)
+					System.out.println("ANGLEX=" + comm.model.hud.aX + " ANGLEY=" + comm.model.hud.aY + " "
+							+ comm.model.sys.toString());
 
 				Thread.sleep(100);
 
-
 			}
-
 
 			comm.close();
 
-
-
-
-
-			//			for(int i=0;i<colService.getModelList().size();i++) {
-			//				DataModel m = colService.getModelList().get(i);
-			//				System.out.println(m.attitude.aX);
-			//			}
-
+			// for(int i=0;i<colService.getModelList().size();i++) {
+			// DataModel m = colService.getModelList().get(i);
+			// System.out.println(m.attitude.aX);
+			// }
 
 		} catch (Exception e) {
 			comm.close();
 			e.printStackTrace();
 
 		}
-
 
 	}
 
@@ -336,7 +332,6 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		return transfer_speed;
 	}
 
-
 	@Override
 	public void setProxyListener(IMAVProxy listener) {
 		this.byteListener = listener;
@@ -346,9 +341,9 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	@Override
 	public void shutdown() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public MAVLinkBlockingReader getReader() {
 		return reader;

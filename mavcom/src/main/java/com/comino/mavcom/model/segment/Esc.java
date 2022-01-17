@@ -31,21 +31,17 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
 
 public class Esc extends Segment {
 
-	
 	private static final long serialVersionUID = -5931813489256991489L;
-	
-	public short[]	rpm      = new short[4];
-	public float[]  voltage  = new float[4];
-	public float[]  current  = new float[4];;
 
-
+	public short[] rpm = new short[4];
+	public float[] voltage = new float[4];
+	public float[] current = new float[4];;
 
 	public Esc clone() {
 		Esc t = new Esc();
@@ -54,7 +50,7 @@ public class Esc extends Segment {
 	}
 
 	public void set(Esc t) {
-		for(int i=0;i<rpm.length;i++) {
+		for (int i = 0; i < rpm.length; i++) {
 			t.rpm[i] = rpm[i];
 			t.voltage[i] = voltage[i];
 			t.current[i] = current[i];
@@ -62,8 +58,8 @@ public class Esc extends Segment {
 	}
 
 	public void clear() {
-		for(int i=0;i<rpm.length;i++) {
-			rpm[i] = (short)0;
+		for (int i = 0; i < rpm.length; i++) {
+			rpm[i] = (short) 0;
 			voltage[i] = Float.NaN;
 			current[i] = Float.NaN;
 		}

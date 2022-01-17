@@ -31,10 +31,7 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.config;
-
-
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -58,7 +55,7 @@ public class MSPConfig {
 	private String path;
 
 	public static MSPConfig getInstance(String path, String filename) {
-		if(config==null)
+		if (config == null)
 			config = new MSPConfig(path, filename);
 		return config;
 	}
@@ -71,19 +68,18 @@ public class MSPConfig {
 		this.path = path;
 		this.fileName = filename;
 		this.prop = new Properties();
-		System.out.println("\nInitializing ("+filename+", Java "+System.getProperty("java.version")+" "+System.getProperty("java.vm.vendor")+
-				           " build on BoofCV "+BoofVersion.VERSION);
+		System.out.println("\nInitializing (" + filename + ", Java " + System.getProperty("java.version") + " "
+				+ System.getProperty("java.vm.vendor") + " build on BoofCV " + BoofVersion.VERSION);
 		refreshProperties();
-		this.version = prop.getProperty("build","tmp");
-		this.version_date = prop.getProperty("build_date","NA");
+		this.version = prop.getProperty("build", "tmp");
+		this.version_date = prop.getProperty("build_date", "NA");
 	}
 
 	public String getBasePath() {
 		return path;
 	}
 
-
-	public void updateProperty(String item, String value)  {
+	public void updateProperty(String item, String value) {
 		this.prop.setProperty(item, value);
 	}
 
@@ -91,19 +87,19 @@ public class MSPConfig {
 		URL url = getClass().getClassLoader().getResource(fileName);
 		FileOutputStream file;
 		file = new FileOutputStream(url.getFile());
-		prop.store(file,new Date().toString());
+		prop.store(file, new Date().toString());
 		file.close();
 	}
 
 	public MSPConfig refreshProperties() {
 		try {
-			InputStream propStream = new FileInputStream(path+"/"+fileName);
-			if(propStream!=null) {
+			InputStream propStream = new FileInputStream(path + "/" + fileName);
+			if (propStream != null) {
 				prop.load(propStream);
-			    propStream.close();
+				propStream.close();
 			}
-		} catch(IOException io ) {
-			System.err.println("Configuration file'"+fileName+"' not found.");
+		} catch (IOException io) {
+			System.err.println("Configuration file'" + fileName + "' not found.");
 		}
 		return this;
 	}
@@ -130,7 +126,7 @@ public class MSPConfig {
 
 	public String[] getListProperty(String key) {
 		String line = prop.getProperty(key);
-		if(line==null)
+		if (line == null)
 			return null;
 		return line.trim().split("\\s*,\\s*");
 	}
@@ -140,12 +136,11 @@ public class MSPConfig {
 	}
 
 	public int getIntProperty(String key, String defaultValue) {
-		return (int)Float.parseFloat(prop.getProperty(key, defaultValue).trim());
+		return (int) Float.parseFloat(prop.getProperty(key, defaultValue).trim());
 	}
 
 	public float getFloatProperty(String key, String defaultValue) {
 		return Float.parseFloat(prop.getProperty(key, defaultValue).trim());
 	}
-
 
 }

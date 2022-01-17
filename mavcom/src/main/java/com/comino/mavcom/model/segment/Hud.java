@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
@@ -40,35 +39,34 @@ public class Hud extends Segment {
 
 	private static final long serialVersionUID = -1123989934184248219L;
 
-	public float aX     = Float.NaN;	// angleX
-	public float aY     = Float.NaN;	// angleY
+	public float aX = Float.NaN; // angleX
+	public float aY = Float.NaN; // angleY
 
-	public float h      = Float.NaN;	// heading (compass)
-	public float al     = Float.NaN;	// altitude above ground
-	public float ag     = Float.NaN;	// est.altitude above sealevel
-	public float at     = Float.NaN;    // altitde terrain
-	public float ar     = Float.NaN;    // altitde relative
-	public float bc     = Float.NaN;    // bottom clearance
-	public float ap     = Float.NaN;    // pressure altitude
+	public float h = Float.NaN; // heading (compass)
+	public float al = Float.NaN; // altitude above ground
+	public float ag = Float.NaN; // est.altitude above sealevel
+	public float at = Float.NaN; // altitde terrain
+	public float ar = Float.NaN; // altitde relative
+	public float bc = Float.NaN; // bottom clearance
+	public float ap = Float.NaN; // pressure altitude
 
-	public float s    	= Float.NaN;	// ground speed
-	public float vs     = Float.NaN;    // vertical speed
-	public float as     = Float.NaN;    // airspeed
-
+	public float s = Float.NaN; // ground speed
+	public float vs = Float.NaN; // vertical speed
+	public float as = Float.NaN; // airspeed
 
 	public void set(Hud a) {
-		aX    	= a.aX;
-		aY    	= a.aY;
-		h   	= a.h;
-		al      = a.al;
-		ag      = a.ag;
-		s   	= a.s;
-		at      = a.at;
-		vs      = a.vs;
-		ar      = a.ar;
-		bc      = a.bc;
-		as      = a.as;
-		ap      = a.ap;
+		aX = a.aX;
+		aY = a.aY;
+		h = a.h;
+		al = a.al;
+		ag = a.ag;
+		s = a.s;
+		at = a.at;
+		vs = a.vs;
+		ar = a.ar;
+		bc = a.bc;
+		as = a.as;
+		ap = a.ap;
 
 	}
 
@@ -78,22 +76,21 @@ public class Hud extends Segment {
 		return a;
 	}
 
-	//--------------------------------------------------------------------------------------------------------
-
+	// --------------------------------------------------------------------------------------------------------
 
 	public void clear() {
-		aX    	= 0;
-		aY    	= 0;
-		h   	= 0;
-		al 		= 0;
-		ag      = 0;
-		s   	= 0;
-		at      = 0;
-		vs      = 0;
-		ar      = 0;
-		bc      = 0;
-		as      = 0;
-		ap      = 0;
+		aX = 0;
+		aY = 0;
+		h = 0;
+		al = 0;
+		ag = 0;
+		s = 0;
+		at = 0;
+		vs = 0;
+		ar = 0;
+		bc = 0;
+		as = 0;
+		ap = 0;
 	}
 
 }

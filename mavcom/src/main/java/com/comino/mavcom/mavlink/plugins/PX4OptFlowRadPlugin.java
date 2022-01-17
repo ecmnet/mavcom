@@ -18,18 +18,18 @@ public class PX4OptFlowRadPlugin extends MAVLinkPluginBase {
 		model.flow.fX = flow.integrated_x;
 		model.flow.fY = flow.integrated_y;
 		model.flow.fq = flow.quality / 255.0f;
-		
-		if(flow.distance > 0)
-		  model.flow.fd = flow.distance;
-		
+
+		if (flow.distance > 0)
+			model.flow.fd = flow.distance;
+
 		model.flow.fgX = flow.integrated_xgyro;
 		model.flow.fgY = flow.integrated_ygyro;
 		model.flow.fgZ = flow.integrated_zgyro;
 		model.flow.ius = flow.integration_time_us;
 
-	//	if(flow.quality > 0) {
-		  model.sys.setSensor(Status.MSP_PIX4FLOW_AVAILABILITY, true);
-		  model.flow.tms = DataModel.getSynchronizedPX4Time_us();
-	//	}
+		// if(flow.quality > 0) {
+		model.sys.setSensor(Status.MSP_PIX4FLOW_AVAILABILITY, true);
+		model.flow.tms = DataModel.getSynchronizedPX4Time_us();
+		// }
 	}
 }

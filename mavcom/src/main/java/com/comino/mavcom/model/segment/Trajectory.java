@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
@@ -39,34 +38,31 @@ import com.comino.mavcom.model.segment.generic.Segment;
 public class Trajectory extends Segment {
 
 	private static final long serialVersionUID = 3575306268521569009L;
-	
+
 	// Polynomial Trajectory
 
-   public float ls = 0;					// length in secs
-   public float fs = 0;					// already done in secs
-   
-   public float ax = 0;                 // alpha
-   public float ay = 0;
-   public float az = 0;
-   
+	public float ls = 0; // length in secs
+	public float fs = 0; // already done in secs
 
-   public float bx = 0;                 // beta
-   public float by = 0;
-   public float bz = 0;
-   
+	public float ax = 0; // alpha
+	public float ay = 0;
+	public float az = 0;
 
-   public float gx = 0;                 // gamma
-   public float gy = 0;
-   public float gz = 0;
-   
-   public float sx = 0;                 // gamma
-   public float sy = 0;
-   public float sz = 0;
-   
-   public float svx = 0;                 // gamma
-   public float svy = 0;
-   public float svz = 0;
-   
+	public float bx = 0; // beta
+	public float by = 0;
+	public float bz = 0;
+
+	public float gx = 0; // gamma
+	public float gy = 0;
+	public float gz = 0;
+
+	public float sx = 0; // gamma
+	public float sy = 0;
+	public float sz = 0;
+
+	public float svx = 0; // gamma
+	public float svy = 0;
+	public float svz = 0;
 
 	public Trajectory clone() {
 		Trajectory t = new Trajectory();
@@ -75,37 +71,49 @@ public class Trajectory extends Segment {
 	}
 
 	public void set(Trajectory t) {
-		
+
 		ls = t.ls;
-		
+
 		ax = t.ax;
 		ay = t.ay;
 		az = t.az;
-		
+
 		bx = t.bx;
 		by = t.by;
 		bz = t.bz;
-		
+
 		gx = t.gx;
 		gy = t.gy;
 		gz = t.gz;
-		
+
 		sx = t.sx;
 		sy = t.sy;
 		sz = t.sz;
-		
+
 		svx = t.svx;
 		svy = t.svy;
 		svz = t.svz;
-		
-		
+
 	}
 
 	public void clear() {
-	   ls = -1f; fs = -1f;
-       ax = 0; ay = 0; az = 0; sx = 0; svx = 0;  
-       bx = 0; by = 0; bz = 0; sy = 0; svy = 0; 
-       gx = 0; gy = 0; gz = 0; sz = 0; svz = 0;  
+		ls = -1f;
+		fs = -1f;
+		ax = 0;
+		ay = 0;
+		az = 0;
+		sx = 0;
+		svx = 0;
+		bx = 0;
+		by = 0;
+		bz = 0;
+		sy = 0;
+		svy = 0;
+		gx = 0;
+		gy = 0;
+		gz = 0;
+		sz = 0;
+		svz = 0;
 	}
 
 }

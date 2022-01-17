@@ -38,14 +38,13 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	private static final int BUFFER_SIZE = 128;
 
-	private static final int WAITING     = 0;
-	private static final int RUNNING     = 1;
+	private static final int WAITING = 0;
+	private static final int RUNNING = 1;
 
-	private static MAVUdpCommNIO2 com    = null;
+	private static MAVUdpCommNIO2 com = null;
 
-	private int   state          = WAITING;
-	private long  transfer_speed = 0;
-
+	private int state = WAITING;
+	private long transfer_speed = 0;
 
 	private final DataModel model;
 	private final InetSocketAddress peerPort;
@@ -53,31 +52,31 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	private final int bindPort;
 
-	private DatagramChannel channel      = null;
-	private Selector        selector     = null;
+	private DatagramChannel channel = null;
+	private Selector selector = null;
 
-	private IMAVProxy       byteListener = null;
-	private Thread wt                = null;
+	private IMAVProxy byteListener = null;
+	private Thread wt = null;
 
-	private final ByteBuffer rxBuffer    = ByteBuffer.allocateDirect(BUFFER_SIZE*1024);
-	private final byte[]    proxyBuffer  = new byte[rxBuffer.capacity()];
+	private final ByteBuffer rxBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE * 1024);
+	private final byte[] proxyBuffer = new byte[rxBuffer.capacity()];
 
 	private Worker worker;
 
-	private final static msg_heartbeat hb = new msg_heartbeat(255,1);
+	private final static msg_heartbeat hb = new msg_heartbeat(255, 1);
 
-	public static MAVUdpCommNIO2 getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort, int bindPort) {
-		if(com==null)
+	public static MAVUdpCommNIO2 getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort,
+			int bindPort) {
+		if (com == null)
 			com = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort);
 		return com;
 	}
 
 	public MAVUdpCommNIO2(MAVLinkBlockingReader reader, String peerAddress, int pPort, int bPort) {
 
-
-		this.model    = reader.getModel();
-		this.peerPort = new InetSocketAddress(peerAddress,pPort);
-		this.reader   = reader;
+		this.model = reader.getModel();
+		this.peerPort = new InetSocketAddress(peerAddress, pPort);
+		this.reader = reader;
 		this.bindPort = bPort;
 
 		hb.isValid = true;
@@ -87,19 +86,18 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	}
 
 	public String toString() {
-		return "UDP "+ peerPort.getHostString();
+		return "UDP " + peerPort.getHostString();
 	}
-
 
 	@Override
 	public boolean open() {
 
 		try {
 			state = WAITING;
-			if(selector!=null)
+			if (selector != null)
 				selector.close();
-			worker.waitFor(); 
-			if(state == WAITING)
+			worker.waitFor();
+			if (state == WAITING)
 				return false;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -116,7 +114,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public void close() {
 		state = WAITING;
 		try {
-			if(channel!=null)
+			if (channel != null)
 				channel.disconnect();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -132,15 +130,16 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			channel.disconnect();
 			channel.close();
 		} catch (IOException e) {
-		}	
+		}
 	}
 
 	@Override
 	public void write(MAVLinkMessage msg) {
 		try {
-			if(state == RUNNING && channel.isConnected())
+			if (state == RUNNING && channel.isConnected())
 				channel.write(ByteBuffer.wrap(msg.encode()));
-		} catch (IOException e) { 	}
+		} catch (IOException e) {
+		}
 	}
 
 	@Override
@@ -150,7 +149,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	@Override
 	public boolean isConnected() {
-		return channel!=null && channel.isConnected();
+		return channel != null && channel.isConnected();
 	}
 
 	@Override
@@ -182,15 +181,19 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 		private SelectionKey key = null;
 		private Iterator<?> selectedKeys = null;
-		private int bcount = 0; 
-		private int msg_length; 
-		private long start; 
+		private int bcount = 0;
+		private int msg_length;
+		private long start;
 		private String localAddress;
 
 		public void waitFor() {
-			synchronized(this) { try {
-				wait(500);
-			} catch (InterruptedException e) { } };
+			synchronized (this) {
+				try {
+					wait(500);
+				} catch (InterruptedException e) {
+				}
+			}
+			;
 		}
 
 		@Override
@@ -203,39 +206,43 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
 				}
 				channel.socket().setReuseAddress(true);
-				channel.socket().setReceiveBufferSize(BUFFER_SIZE*1024);
-				channel.socket().setSendBufferSize(BUFFER_SIZE*1024);
+				channel.socket().setReceiveBufferSize(BUFFER_SIZE * 1024);
+				channel.socket().setSendBufferSize(BUFFER_SIZE * 1024);
 				channel.socket().setSoTimeout(1000);
 				selector = Selector.open();
-				//		channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
+				// channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
 				channel.configureBlocking(false);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
-			while(channel.isOpen()) {
+			while (channel.isOpen()) {
 
-				while(state == WAITING) {
+				while (state == WAITING) {
 
-
-					try { Thread.sleep(100); } catch (InterruptedException e) { }
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+					}
 
 					transfer_speed = 0;
-					((Buffer)rxBuffer).clear();
+					((Buffer) rxBuffer).clear();
 					try {
 
 						channel.disconnect();
 
-						try { Thread.sleep(50); } catch (InterruptedException e) { }
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+						}
 
-						if(!channel.socket().isBound()) {
-							if(peerPort.getAddress().isLoopbackAddress()) {
+						if (!channel.socket().isBound()) {
+							if (peerPort.getAddress().isLoopbackAddress()) {
 								channel.socket().bind(new InetSocketAddress(bindPort));
-							}
-							else {
+							} else {
 								localAddress = getLocalAdress(BROADCAST_PORT);
-								if(localAddress!=null)
-									channel.socket().bind(new InetSocketAddress(localAddress,bindPort));
+								if (localAddress != null)
+									channel.socket().bind(new InetSocketAddress(localAddress, bindPort));
 								else
 									channel.socket().bind(new InetSocketAddress(bindPort));
 								continue;
@@ -243,30 +250,30 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						}
 						channel.connect(peerPort);
 
-						if(selector.isOpen())
+						if (selector.isOpen())
 							selector.close();
 						selector = Selector.open();
 						channel.register(selector, SelectionKey.OP_READ);
 
-						if(channel.isConnected())
+						if (channel.isConnected())
 							state = RUNNING;
 
-					} catch ( ClosedSelectorException  |  IOException e) {
+					} catch (ClosedSelectorException | IOException e) {
 						state = WAITING;
 					}
 
 				}
-				synchronized(this) {
+				synchronized (this) {
 					notify();
 				}
 
 				write(hb);
 
 				start = System.currentTimeMillis();
-				while(state == RUNNING) {
+				while (state == RUNNING) {
 
 					try {
-						if(selector.select()==0) {
+						if (selector.select() == 0) {
 							state = WAITING;
 							continue;
 						}
@@ -283,52 +290,53 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 							}
 
 							if (key.isReadable()) {
-								if(channel.isConnected() && channel.receive(rxBuffer)!=null) {
-									((Buffer)rxBuffer).flip();
+								if (channel.isConnected() && channel.receive(rxBuffer) != null) {
+									((Buffer) rxBuffer).flip();
 									msg_length = 0;
-									while(rxBuffer.hasRemaining()) {
+									while (rxBuffer.hasRemaining()) {
 										proxyBuffer[msg_length++] = rxBuffer.get();
 									}
 									rxBuffer.compact();
 
-									if(byteListener !=null)
+									if (byteListener != null)
 										byteListener.write(proxyBuffer, msg_length);
 									reader.put(proxyBuffer, msg_length);
 									bcount = bcount + msg_length;
 								}
-								if((System.currentTimeMillis() - start) > 750) {
+								if ((System.currentTimeMillis() - start) > 750) {
 									transfer_speed = bcount * 1000 / (System.currentTimeMillis() - start);
-									bcount = 0; start = System.currentTimeMillis();
+									bcount = 0;
+									start = System.currentTimeMillis();
 								}
-							}	
+							}
 						}
 					} catch (Exception e) {
 						try {
 							selector.close();
-						} catch (Exception e1) { 	}
-						
+						} catch (Exception e1) {
+						}
+
 						state = WAITING;
-					}	
-				}				
-			}	
+					}
+				}
+			}
 		}
 
 		private String getLocalAdress(int port) {
 
 			InetAddress localAddress = null;
-			boolean      found = false;
+			boolean found = false;
 
 			Enumeration<?> e;
 			try {
 				String peer = listenToBroadcast(port);
 				e = NetworkInterface.getNetworkInterfaces();
-				while(e.hasMoreElements() && !found)
-				{
+				while (e.hasMoreElements() && !found) {
 					NetworkInterface n = (NetworkInterface) e.nextElement();
 					Enumeration<?> ee = n.getInetAddresses();
 					while (ee.hasMoreElements()) {
 						localAddress = (InetAddress) ee.nextElement();
-						if(localAddress.getHostAddress().startsWith(peer.substring(0,3))) {
+						if (localAddress.getHostAddress().startsWith(peer.substring(0, 3))) {
 							found = true;
 							break;
 						}
@@ -339,8 +347,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 				return null;
 			}
 
-			if(found) {
-				System.out.println("LocalAdress: "+localAddress.getHostAddress());
+			if (found) {
+				System.out.println("LocalAdress: " + localAddress.getHostAddress());
 				return localAddress.getHostAddress();
 			}
 			System.out.println("No adapter found");
@@ -358,31 +366,28 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			System.out.println("Remote broadcast received. Binding..");
 			InetAddress address = packet.getAddress();
 			socket.close();
-			String received =  new String(packet.getData(), 0, packet.getLength());
-			if (received.equals("LQUAC")) {			
-				System.out.println("Address: "+address.getHostAddress());
+			String received = new String(packet.getData(), 0, packet.getLength());
+			if (received.equals("LQUAC")) {
+				System.out.println("Address: " + address.getHostAddress());
 				return address.getHostAddress();
 			}
-			return null;	
+			return null;
 		}
 	}
 
-
 	public static void main(String[] args) {
-		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2,new DataModel()), "172.168.178.22", 14555, 14550);
-
-
-
-
+		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "172.168.178.22", 14555,
+				14550);
 
 		try {
-			while(true) {
+			while (true) {
 				comm.open();
 				System.out.println("Started");
 				long time = System.currentTimeMillis();
-				while(System.currentTimeMillis()< (time+3000)) {
-					if(comm.isConnected())
-						System.out.println(comm.isConnected()+" => "+comm+" => ANGLEX="+comm.model.hud.aX+" ANGLEY="+comm.model.hud.aY);
+				while (System.currentTimeMillis() < (time + 3000)) {
+					if (comm.isConnected())
+						System.out.println(comm.isConnected() + " => " + comm + " => ANGLEX=" + comm.model.hud.aX
+								+ " ANGLEY=" + comm.model.hud.aY);
 					Thread.sleep(200);
 					comm.write(hb);
 				}

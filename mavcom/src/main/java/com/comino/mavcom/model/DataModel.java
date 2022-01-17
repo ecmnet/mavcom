@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.model;
 
 import java.io.Serializable;
@@ -62,9 +61,7 @@ import com.comino.mavcom.model.segment.Vision;
 import com.comino.mavcom.model.segment.Waypoints;
 import com.comino.mavcom.model.segment.generic.Segment;
 
-
 // Consolidated device data model after IMU
-
 
 public class DataModel extends Segment implements Serializable {
 
@@ -72,61 +69,62 @@ public class DataModel extends Segment implements Serializable {
 	 *
 	 */
 	private static final long serialVersionUID = 3439530621929819600L;
-	
-	public static long  t_offset_ns     = 0;
 
-	public   Attitude    attitude = null;
-	public   Battery     battery  = null;
-	public   Hud   			 hud  = null;
-	public 	 Imu			 imu  = null;
-	public   State		   state  = null;
-	public   State	 target_state = null;
-	public   State     home_state = null;
-	public   Telemetry telemetry  = null;
-	public	 GPS	         gps  = null;
-	public	 GPS	        base  = null;
-	public	 Flow		    flow  = null;
-	public   Distance    distance = null;
-	public   Status          sys  = null;
-	public	 Servo			servo = null;
-	public	 Rc				  rc  = null;
-	public   Vibration  vibration = null;
-	public   Debug		    debug = null;
-	public   LogMessage       msg = null;
-	public   Vision        vision = null;
-	public   EstStatus       est  = null;
-	public   Grid           grid  = null;
-	public   Slam           slam  = null;
-	public   Waypoints       way  = null;
-	public   Esc             esc  = null;
-	public   Trajectory      traj = null;
+	public static long t_offset_ns = 0;
 
-	public DataModel()  {
-		this.attitude       = new Attitude();
-		this.battery   		= new Battery();
-		this.hud  			= new Hud();
-		this.imu       		= new Imu();
-		this.state     		= new State();
-		this.target_state 	= new State();
-		this.home_state 	= new State();
-		this.telemetry 		= new Telemetry();
-		this.gps       		= new GPS();
-		this.base           = new GPS();
-		this.flow            = new Flow();
-		this.distance       = new Distance();
-		this.sys       		= new Status();
-		this.servo			= new Servo();
-		this.rc             = new Rc();
-		this.vibration      = new Vibration();
-		this.debug          = new Debug();
-		this.msg            = new LogMessage();
-		this.vision         = new Vision();
-		this.est            = new EstStatus();
-		this.slam           = new Slam();
-		this.grid           = new Grid();
-		this.way            = new Waypoints(); way.clear();
-		this.esc            = new Esc();
-		this.traj           = new Trajectory();
+	public Attitude attitude = null;
+	public Battery battery = null;
+	public Hud hud = null;
+	public Imu imu = null;
+	public State state = null;
+	public State target_state = null;
+	public State home_state = null;
+	public Telemetry telemetry = null;
+	public GPS gps = null;
+	public GPS base = null;
+	public Flow flow = null;
+	public Distance distance = null;
+	public Status sys = null;
+	public Servo servo = null;
+	public Rc rc = null;
+	public Vibration vibration = null;
+	public Debug debug = null;
+	public LogMessage msg = null;
+	public Vision vision = null;
+	public EstStatus est = null;
+	public Grid grid = null;
+	public Slam slam = null;
+	public Waypoints way = null;
+	public Esc esc = null;
+	public Trajectory traj = null;
+
+	public DataModel() {
+		this.attitude = new Attitude();
+		this.battery = new Battery();
+		this.hud = new Hud();
+		this.imu = new Imu();
+		this.state = new State();
+		this.target_state = new State();
+		this.home_state = new State();
+		this.telemetry = new Telemetry();
+		this.gps = new GPS();
+		this.base = new GPS();
+		this.flow = new Flow();
+		this.distance = new Distance();
+		this.sys = new Status();
+		this.servo = new Servo();
+		this.rc = new Rc();
+		this.vibration = new Vibration();
+		this.debug = new Debug();
+		this.msg = new LogMessage();
+		this.vision = new Vision();
+		this.est = new EstStatus();
+		this.slam = new Slam();
+		this.grid = new Grid();
+		this.way = new Waypoints();
+		way.clear();
+		this.esc = new Esc();
+		this.traj = new Trajectory();
 	}
 
 	public DataModel(DataModel m) {
@@ -134,34 +132,33 @@ public class DataModel extends Segment implements Serializable {
 	}
 
 	public void copy(DataModel m) {
-		this.attitude       = m.attitude.clone();
-		this.battery   		= m.battery.clone();
-		this.hud 			= m.hud.clone();
-		this.imu       		= m.imu.clone();
-		this.state     		= m.state.clone();
-		this.target_state   = m.target_state.clone();
-		this.home_state     = m.home_state.clone();
-		this.telemetry 		= m.telemetry.clone();
-		this.gps       		= m.gps.clone();
-		this.base           = m.base.clone();
-		this.flow            = m.flow.clone();
-		this.sys       		= m.sys.clone();
-		this.servo			= m.servo.clone();
-		this.rc             = m.rc.clone();
-		this.vibration      = m.vibration.clone();
-		this.debug          = m.debug.clone();
-		this.tms            = m.tms;
-		this.msg            = m.msg.clone();
-		this.vision         = m.vision.clone();
-		this.est            = m.est.clone();
-		this.slam           = m.slam.clone();
-		this.grid           = m.grid.clone();
-		this.way            = m.way.clone();
-		this.esc            = m.esc.clone();
-		this.distance       = m.distance.clone();
-		this.traj           = m.traj.clone();
+		this.attitude = m.attitude.clone();
+		this.battery = m.battery.clone();
+		this.hud = m.hud.clone();
+		this.imu = m.imu.clone();
+		this.state = m.state.clone();
+		this.target_state = m.target_state.clone();
+		this.home_state = m.home_state.clone();
+		this.telemetry = m.telemetry.clone();
+		this.gps = m.gps.clone();
+		this.base = m.base.clone();
+		this.flow = m.flow.clone();
+		this.sys = m.sys.clone();
+		this.servo = m.servo.clone();
+		this.rc = m.rc.clone();
+		this.vibration = m.vibration.clone();
+		this.debug = m.debug.clone();
+		this.tms = m.tms;
+		this.msg = m.msg.clone();
+		this.vision = m.vision.clone();
+		this.est = m.est.clone();
+		this.slam = m.slam.clone();
+		this.grid = m.grid.clone();
+		this.way = m.way.clone();
+		this.esc = m.esc.clone();
+		this.distance = m.distance.clone();
+		this.traj = m.traj.clone();
 	}
-
 
 	public void set(DataModel m) {
 		this.attitude.set(m.attitude);
@@ -202,9 +199,9 @@ public class DataModel extends Segment implements Serializable {
 		this.est.clear();
 		this.battery.clear();
 		this.tms = 0;
-		
+
 	}
-	
+
 	public void reset() {
 		this.attitude.clear();
 		this.hud.clear();
@@ -235,25 +232,25 @@ public class DataModel extends Segment implements Serializable {
 			Object mclass = mclass_field.get(this);
 			Field mfield_field = mclass.getClass().getField(key[1]);
 			return new Double(mfield_field.getDouble(mclass)).floatValue();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return Float.NaN;
 		}
 	}
-	
+
 	public static long getSynchronizedPX4Time_us() {
 		Instant ins = Instant.now();
 		long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();
-		return (now_ns - t_offset_ns )/1000L;
+		return (now_ns - t_offset_ns) / 1000L;
 	}
-	
+
 	public static long getSynchronizedPX4Time_us(long tms_ms) {
-		return tms_ms*1000L - t_offset_ns/1000L;
+		return tms_ms * 1000L - t_offset_ns / 1000L;
 	}
-	
+
 	public static long getUnixTime_us() {
 		Instant ins = Instant.now();
 		long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();
-		return now_ns/1000L;
+		return now_ns / 1000L;
 	}
 
 	public static void main(String[] args) {

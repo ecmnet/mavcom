@@ -31,7 +31,6 @@
  *
  ****************************************************************************/
 
-
 package com.comino.mavcom.comm.serial;
 
 import java.io.BufferedInputStream;
@@ -57,21 +56,20 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
-
 public class MAVSerialComm implements IMAVComm {
 
-	private static final int TEST  = 57600;
+	private static final int TEST = 57600;
 
 	private static final int BUFFER = 16;
 
-	private SerialPort 			serialPort;
-	private String	            port;
+	private SerialPort serialPort;
+	private String port;
 
-	private DataModel 		    model = null;
+	private DataModel model = null;
 
-	private MAVLinkBlockingReader  reader;
+	private MAVLinkBlockingReader reader;
 
-	private static   IMAVComm com = null;
+	private static IMAVComm com = null;
 	private IMAVProxy byteListener = null;
 
 	private int baudrate = 921600;
@@ -80,7 +78,7 @@ public class MAVSerialComm implements IMAVComm {
 	private OutputStream os;
 
 	public static IMAVComm getInstance(MAVLinkBlockingReader reader, int baudrate) {
-		if(com==null)
+		if (com == null)
 			com = new MAVSerialComm(reader, baudrate);
 		return com;
 	}
@@ -90,83 +88,83 @@ public class MAVSerialComm implements IMAVComm {
 		boolean found = false;
 
 		this.model = reader.getModel();
-		
-		int i=0;
+
+		int i = 0;
 		this.baudrate = baudrate;
-		
 
 		System.out.print("Searching ports... ");
 
 		SerialPort[] ports = SerialPort.getCommPorts();
 
-		if(ports.length>0) {
-			for(i=0;i<ports.length;i++) {
-				if(ports[i].getSystemPortName().contains("tty.SLAB")
+		if (ports.length > 0) {
+			for (i = 0; i < ports.length; i++) {
+				if (ports[i].getSystemPortName().contains("tty.SLAB")
 						|| ports[i].getSystemPortName().contains("tty.usb")
 						|| ports[i].getSystemPortName().contains("ttyTHS1")
 						|| ports[i].getSystemPortName().contains("ttyS1")
 						|| ports[i].getSystemPortName().contains("ttyS4")
 						|| ports[i].getSystemPortName().contains("ttyACM0")
-						|| ports[i].getSystemPortName().contains("ttyAMA0"))
-				{
+						|| ports[i].getSystemPortName().contains("ttyAMA0")) {
 					found = true;
 					break;
 				}
 			}
 
-			if(found)
+			if (found)
 				this.serialPort = ports[i];
-		}
-		else
-			this.serialPort  =SerialPort.getCommPort("/dev/tty.SLAB_USBtoUART");
+		} else
+			this.serialPort = SerialPort.getCommPort("/dev/tty.SLAB_USBtoUART");
 
-		if(found) {
+		if (found) {
 			this.port = serialPort.getSystemPortName();
-			System.out.println(port+" found");
+			System.out.println(port + " found");
 		} else {
 			System.out.println("! No Serial port found...");
 			return;
 		}
 
-		
-		this.is = new BufferedInputStream(serialPort.getInputStream(),BUFFER*1024*2);
-		this.os = new BufferedOutputStream(serialPort.getOutputStream(),2048);
-		
+		this.is = new BufferedInputStream(serialPort.getInputStream(), BUFFER * 1024 * 2);
+		this.os = new BufferedOutputStream(serialPort.getOutputStream(), 2048);
+
 		this.reader = reader;
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.comino.px4.control.serial.IPX4Comm#open()
 	 */
 	@Override
 	public boolean open() {
 
-		if(serialPort==null)
+		if (serialPort == null)
 			return false;
 
-		if(serialPort.isOpen())
+		if (serialPort.isOpen())
 			return true;
 
-
-		while(!open(port ,baudrate, 8,SerialPort.ONE_STOP_BIT,SerialPort.NO_PARITY)) {
+		while (!open(port, baudrate, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY)) {
 			try {
-				if(serialPort.isOpen()) {
+				if (serialPort.isOpen()) {
 					serialPort.closePort();
 				}
 				Thread.sleep(10);
-			} catch (Exception e) {	}
+			} catch (Exception e) {
+			}
 		}
-		System.out.println("Serial port "+this.getClass().getSimpleName()+" opened: "+port+": "+baudrate+" baud");
+		System.out.println(
+				"Serial port " + this.getClass().getSimpleName() + " opened: " + port + ": " + baudrate + " baud");
 		System.out.println(serialPort.getPortDescription());
-		System.out.println("Buffersize (read/write): "+serialPort.getDeviceReadBufferSize()+"/"+serialPort.getDeviceWriteBufferSize());
-		
+		System.out.println("Buffersize (read/write): " + serialPort.getDeviceReadBufferSize() + "/"
+				+ serialPort.getDeviceWriteBufferSize());
+
 		return true;
 	}
 
-
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.comino.px4.control.serial.IPX4Comm#getModel()
 	 */
 	@Override
@@ -178,12 +176,14 @@ public class MAVSerialComm implements IMAVComm {
 		return reader.nbUnreadMessages();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.comino.px4.control.serial.IPX4Comm#close()
 	 */
 	@Override
 	public void close() {
-		if(serialPort!=null)
+		if (serialPort != null)
 			serialPort.closePort();
 		try {
 			is.close();
@@ -192,43 +192,43 @@ public class MAVSerialComm implements IMAVComm {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String toString() {
-		return "Serial "+ serialPort.getDescriptivePortName()+" ("+baudrate+")";
+		return "Serial " + serialPort.getDescriptivePortName() + " (" + baudrate + ")";
 	}
 
 	private boolean open(String portName, int baudRate, int dataBits, int stopBits, int parity) {
 
-		byte[] buf = new byte[BUFFER*1024];
+		byte[] buf = new byte[BUFFER * 1024];
 
-		if(serialPort==null)
+		if (serialPort == null)
 			return false;
 
-		if(serialPort.isOpen())
+		if (serialPort.isOpen())
 			return true;
 
 		try {
 			serialPort.setComPortParameters(baudRate, dataBits, stopBits, parity);
-			serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0,0);
+			serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
 			serialPort.addDataListener(new SerialPortDataListener() {
 				int avail;
+
 				@Override
 				public int getListeningEvents() {
 					return SerialPort.LISTENING_EVENT_DATA_AVAILABLE;
 				}
 
 				@Override
-				public void serialEvent(SerialPortEvent event)
-				{
+				public void serialEvent(SerialPortEvent event) {
 					if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
 						return;
 
 					try {
 						avail = is.available();
-						if(avail > 0) {
+						if (avail > 0) {
 							avail = is.read(buf, 0, avail);
-							if(avail < 5000) {
-								if(byteListener != null)
+							if (avail < 5000) {
+								if (byteListener != null)
 									byteListener.write(buf, avail);
 								reader.put(buf, avail);
 							}
@@ -238,7 +238,7 @@ public class MAVSerialComm implements IMAVComm {
 					}
 				}
 			});
-			
+
 			serialPort.openPort();
 			model.sys.setStatus(Status.MSP_CONNECTED, true);
 
@@ -251,30 +251,32 @@ public class MAVSerialComm implements IMAVComm {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.comino.px4.control.serial.IPX4Comm#write(org.mavlink.messages.MAVLinkMessage)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.comino.px4.control.serial.IPX4Comm#write(org.mavlink.messages.
+	 * MAVLinkMessage)
 	 */
 	@Override
-	public  void write(MAVLinkMessage msg) throws IOException {
-		if(!serialPort.isOpen())
+	public void write(MAVLinkMessage msg) throws IOException {
+		if (!serialPort.isOpen())
 			return;
 		try {
 			byte[] buffer = msg.encode();
 			os.write(buffer, 0, buffer.length);
 			os.flush();
-		} catch (Exception e) { e.printStackTrace(); }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
 
 	@Override
 	public boolean isConnected() {
 		return (serialPort != null && serialPort.isOpen());
 	}
 
-
 	@Override
 	public void writeMessage(LogMessage m) {
-
 
 	}
 
@@ -282,7 +284,6 @@ public class MAVSerialComm implements IMAVComm {
 	public boolean isSerial() {
 		return true;
 	}
-
 
 	@Override
 	public int getErrorCount() {
@@ -294,11 +295,10 @@ public class MAVSerialComm implements IMAVComm {
 
 		return 0;
 	}
-	
+
 	@Override
 	public void shutdown() {
-		
-		
+
 	}
 
 	@Override
@@ -311,6 +311,5 @@ public class MAVSerialComm implements IMAVComm {
 	public MAVLinkBlockingReader getReader() {
 		return reader;
 	}
-
 
 }

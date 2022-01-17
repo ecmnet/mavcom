@@ -24,46 +24,47 @@ package org.mavlink.generator;
 
 /**
  * MAVLink Param type
+ * 
  * @author ghelle
  * @version $Rev: 4 $
  *
  */
 public class MAVLinkParam {
 
-    private int index;
+	private int index;
 
-    private String comment;
+	private String comment;
 
-    public MAVLinkParam(int index) {
-        this.index = index;
-    }
+	public MAVLinkParam(int index) {
+		this.index = index;
+	}
 
-    /**
-     * @return The index
-     */
-    public int getIndex() {
-        return index;
-    }
+	/**
+	 * @return The index
+	 */
+	public int getIndex() {
+		return index;
+	}
 
-    /**
-     * @param index The index to set
-     */
-    public void setIndex(int index) {
-        this.index = index;
-    }
+	/**
+	 * @param index The index to set
+	 */
+	public void setIndex(int index) {
+		this.index = index;
+	}
 
-    /**
-     * @return The comment
-     */
-    public String getComment() {
-        return comment;
-    }
+	/**
+	 * @return The comment
+	 */
+	public String getComment() {
+		return comment;
+	}
 
-    /**
-     * @param comment The comment to set
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+	/**
+	 * @param comment The comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
 }

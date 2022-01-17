@@ -37,7 +37,6 @@ import com.comino.mavcom.model.segment.Status;
 
 public interface IMSPStatusChangedListener {
 
-   public void update(Status newStatus);
-
+	public void update(Status newStatus);
 
 }

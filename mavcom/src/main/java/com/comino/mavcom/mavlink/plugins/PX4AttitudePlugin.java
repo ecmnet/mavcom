@@ -7,7 +7,6 @@ import com.comino.mavcom.model.segment.Status;
 
 public class PX4AttitudePlugin extends MAVLinkPluginBase {
 
-
 	public PX4AttitudePlugin() {
 		super(msg_attitude.class);
 	}
@@ -20,7 +19,7 @@ public class PX4AttitudePlugin extends MAVLinkPluginBase {
 		model.attitude.r = att.roll;
 		model.attitude.p = att.pitch;
 		model.attitude.y = att.yaw;
-		model.state.h    = model.hud.h;
+		model.state.h = model.hud.h;
 
 		model.attitude.rr = att.rollspeed;
 		model.attitude.pr = att.pitchspeed;
@@ -30,7 +29,7 @@ public class PX4AttitudePlugin extends MAVLinkPluginBase {
 
 		model.hud.aX = att.roll;
 		model.hud.aY = att.pitch;
-		
+
 		model.sys.t_boot_ms = att.time_boot_ms;
 
 		model.sys.setSensor(Status.MSP_IMU_AVAILABILITY, true);
