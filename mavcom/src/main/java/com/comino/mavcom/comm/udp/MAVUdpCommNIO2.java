@@ -98,7 +98,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			state = WAITING;
 			if(selector!=null)
 				selector.close();
-			worker.waitFor();
+			worker.waitFor(); 
 			if(state == WAITING)
 				return false;
 		} catch (Exception e) {
@@ -186,7 +186,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		private int msg_length; 
 		private long start; 
 		private String localAddress;
-		private MAVUdpCommNIO2 comm;
 
 		public void waitFor() {
 			synchronized(this) { try {
@@ -307,6 +306,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						try {
 							selector.close();
 						} catch (Exception e1) { 	}
+						
 						state = WAITING;
 					}	
 				}				
