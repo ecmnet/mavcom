@@ -3,7 +3,6 @@
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
-
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.IMAVLinkCRC;
 import org.mavlink.MAVLinkCRC;
@@ -11,174 +10,171 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
-
 /**
- * Class msg_gps_raw_int The global position, as returned by the Global
- * Positioning System (GPS). This is NOT the global position estimate of the
- * system, but rather a RAW sensor value. See message GLOBAL_POSITION_INT for
- * the global position estimate.
+ * Class msg_gps_raw_int
+ * The global position, as returned by the Global Positioning System (GPS). This is
+                NOT the global position estimate of the system, but rather a RAW sensor value. See message GLOBAL_POSITION_INT for the global position estimate.
  **/
 public class msg_gps_raw_int extends MAVLinkMessage {
-	public static final int MAVLINK_MSG_ID_GPS_RAW_INT = 24;
-	private static final long serialVersionUID = MAVLINK_MSG_ID_GPS_RAW_INT;
+  public static final int MAVLINK_MSG_ID_GPS_RAW_INT = 24;
+  private static final long serialVersionUID = MAVLINK_MSG_ID_GPS_RAW_INT;
+  public msg_gps_raw_int() {
+    this(1,1);
+}
+  public msg_gps_raw_int(int sysId, int componentId) {
+    messageType = MAVLINK_MSG_ID_GPS_RAW_INT;
+    this.sysId = sysId;
+    this.componentId = componentId;
+    payload_length = 52;
+}
 
-	public msg_gps_raw_int() {
-		this(1, 1);
-	}
-
-	public msg_gps_raw_int(int sysId, int componentId) {
-		messageType = MAVLINK_MSG_ID_GPS_RAW_INT;
-		this.sysId = sysId;
-		this.componentId = componentId;
-		payload_length = 52;
-	}
-
-	/**
-	 * Timestamp (UNIX Epoch time or time since system boot). The receiving end can
-	 * infer timestamp format (since 1.1.1970 or since system boot) by checking for
-	 * the magnitude of the number.
-	 */
-	public long time_usec;
-	/**
-	 * Latitude (WGS84, EGM96 ellipsoid)
-	 */
-	public long lat;
-	/**
-	 * Longitude (WGS84, EGM96 ellipsoid)
-	 */
-	public long lon;
-	/**
-	 * Altitude (MSL). Positive for up. Note that virtually all GPS modules provide
-	 * the MSL altitude in addition to the WGS84 altitude.
-	 */
-	public long alt;
-	/**
-	 * GPS HDOP horizontal dilution of position (unitless * 100). If unknown, set
-	 * to: UINT16_MAX
-	 */
-	public int eph;
-	/**
-	 * GPS VDOP vertical dilution of position (unitless * 100). If unknown, set to:
-	 * UINT16_MAX
-	 */
-	public int epv;
-	/**
-	 * GPS ground speed. If unknown, set to: UINT16_MAX
-	 */
-	public int vel;
-	/**
-	 * Course over ground (NOT heading, but direction of movement) in degrees * 100,
-	 * 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
-	 */
-	public int cog;
-	/**
-	 * GPS fix type.
-	 */
-	public int fix_type;
-	/**
-	 * Number of satellites visible. If unknown, set to UINT8_MAX
-	 */
-	public int satellites_visible;
-	/**
-	 * Altitude (above WGS84, EGM96 ellipsoid). Positive for up.
-	 */
-	public long alt_ellipsoid;
-	/**
-	 * Position uncertainty.
-	 */
-	public long h_acc;
-	/**
-	 * Altitude uncertainty.
-	 */
-	public long v_acc;
-	/**
-	 * Speed uncertainty.
-	 */
-	public long vel_acc;
-	/**
-	 * Heading / track uncertainty
-	 */
-	public long hdg_acc;
-	/**
-	 * Yaw in earth frame from north. Use 0 if this GPS does not provide yaw. Use
-	 * UINT16_MAX if this GPS is configured to provide yaw and is currently unable
-	 * to provide it. Use 36000 for north.
-	 */
-	public int yaw;
-
-	/**
-	 * Decode message with raw data
-	 */
-	public void decode(LittleEndianDataInputStream dis) throws IOException {
-		time_usec = (long) dis.readLong();
-		lat = (int) dis.readInt();
-		lon = (int) dis.readInt();
-		alt = (int) dis.readInt();
-		eph = (int) dis.readUnsignedShort() & 0x00FFFF;
-		epv = (int) dis.readUnsignedShort() & 0x00FFFF;
-		vel = (int) dis.readUnsignedShort() & 0x00FFFF;
-		cog = (int) dis.readUnsignedShort() & 0x00FFFF;
-		fix_type = (int) dis.readUnsignedByte() & 0x00FF;
-		satellites_visible = (int) dis.readUnsignedByte() & 0x00FF;
-		alt_ellipsoid = (int) dis.readInt();
-		h_acc = (int) dis.readInt() & 0x00FFFFFFFF;
-		v_acc = (int) dis.readInt() & 0x00FFFFFFFF;
-		vel_acc = (int) dis.readInt() & 0x00FFFFFFFF;
-		hdg_acc = (int) dis.readInt() & 0x00FFFFFFFF;
-		yaw = (int) dis.readUnsignedShort() & 0x00FFFF;
-	}
-
-	/**
-	 * Encode message with raw data and other informations
-	 */
-	public byte[] encode() throws IOException {
-		byte[] buffer = new byte[12 + 52];
-		LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
-		dos.writeByte((byte) 0xFD);
-		dos.writeByte(payload_length & 0x00FF);
-		dos.writeByte(incompat & 0x00FF);
-		dos.writeByte(compat & 0x00FF);
-		dos.writeByte(packet & 0x00FF);
-		dos.writeByte(sysId & 0x00FF);
-		dos.writeByte(componentId & 0x00FF);
-		dos.writeByte(messageType & 0x00FF);
-		dos.writeByte((messageType >> 8) & 0x00FF);
-		dos.writeByte((messageType >> 16) & 0x00FF);
-		dos.writeLong(time_usec);
-		dos.writeInt((int) (lat & 0x00FFFFFFFF));
-		dos.writeInt((int) (lon & 0x00FFFFFFFF));
-		dos.writeInt((int) (alt & 0x00FFFFFFFF));
-		dos.writeShort(eph & 0x00FFFF);
-		dos.writeShort(epv & 0x00FFFF);
-		dos.writeShort(vel & 0x00FFFF);
-		dos.writeShort(cog & 0x00FFFF);
-		dos.writeByte(fix_type & 0x00FF);
-		dos.writeByte(satellites_visible & 0x00FF);
-		dos.writeInt((int) (alt_ellipsoid & 0x00FFFFFFFF));
-		dos.writeInt((int) (h_acc & 0x00FFFFFFFF));
-		dos.writeInt((int) (v_acc & 0x00FFFFFFFF));
-		dos.writeInt((int) (vel_acc & 0x00FFFFFFFF));
-		dos.writeInt((int) (hdg_acc & 0x00FFFFFFFF));
-		dos.writeShort(yaw & 0x00FFFF);
-		dos.flush();
-		byte[] tmp = dos.toByteArray();
-		for (int b = 0; b < tmp.length; b++)
-			buffer[b] = tmp[b];
-		int crc = MAVLinkCRC.crc_calculate_encode(buffer, 52);
-		crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
-		byte crcl = (byte) (crc & 0x00FF);
-		byte crch = (byte) ((crc >> 8) & 0x00FF);
-		buffer[62] = crcl;
-		buffer[63] = crch;
-		dos.close();
-		return buffer;
-	}
-
-	public String toString() {
-		return "MAVLINK_MSG_ID_GPS_RAW_INT : " + "  time_usec=" + time_usec + "  lat=" + lat + "  lon=" + lon + "  alt="
-				+ alt + "  eph=" + eph + "  epv=" + epv + "  vel=" + vel + "  cog=" + cog + "  fix_type=" + fix_type
-				+ "  satellites_visible=" + satellites_visible + "  alt_ellipsoid=" + alt_ellipsoid + "  h_acc=" + h_acc
-				+ "  v_acc=" + v_acc + "  vel_acc=" + vel_acc + "  hdg_acc=" + hdg_acc + "  yaw=" + yaw;
-	}
+  /**
+   * Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.
+   */
+  public long time_usec;
+  /**
+   * Latitude (WGS84, EGM96 ellipsoid)
+   */
+  public long lat;
+  /**
+   * Longitude (WGS84, EGM96 ellipsoid)
+   */
+  public long lon;
+  /**
+   * Altitude (MSL). Positive for up. Note that virtually all GPS modules provide the MSL altitude in addition to the WGS84 altitude.
+   */
+  public long alt;
+  /**
+   * GPS HDOP horizontal dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
+   */
+  public int eph;
+  /**
+   * GPS VDOP vertical dilution of position (unitless * 100). If unknown, set to: UINT16_MAX
+   */
+  public int epv;
+  /**
+   * GPS ground speed. If unknown, set to: UINT16_MAX
+   */
+  public int vel;
+  /**
+   * Course over ground (NOT heading, but direction of movement) in degrees * 100, 0.0..359.99 degrees. If unknown, set to: UINT16_MAX
+   */
+  public int cog;
+  /**
+   * GPS fix type.
+   */
+  public int fix_type;
+  /**
+   * Number of satellites visible. If unknown, set to UINT8_MAX
+   */
+  public int satellites_visible;
+  /**
+   * Altitude (above WGS84, EGM96 ellipsoid). Positive for up.
+   */
+  public long alt_ellipsoid;
+  /**
+   * Position uncertainty.
+   */
+  public long h_acc;
+  /**
+   * Altitude uncertainty.
+   */
+  public long v_acc;
+  /**
+   * Speed uncertainty.
+   */
+  public long vel_acc;
+  /**
+   * Heading / track uncertainty
+   */
+  public long hdg_acc;
+  /**
+   * Yaw in earth frame from north. Use 0 if this GPS does not provide yaw. Use UINT16_MAX if this GPS is configured to provide yaw and is currently unable to provide it. Use 36000 for north.
+   */
+  public int yaw;
+/**
+ * Decode message with raw data
+ */
+public void decode(LittleEndianDataInputStream dis) throws IOException {
+  time_usec = (long)dis.readLong();
+  lat = (int)dis.readInt();
+  lon = (int)dis.readInt();
+  alt = (int)dis.readInt();
+  eph = (int)dis.readUnsignedShort()&0x00FFFF;
+  epv = (int)dis.readUnsignedShort()&0x00FFFF;
+  vel = (int)dis.readUnsignedShort()&0x00FFFF;
+  cog = (int)dis.readUnsignedShort()&0x00FFFF;
+  fix_type = (int)dis.readUnsignedByte()&0x00FF;
+  satellites_visible = (int)dis.readUnsignedByte()&0x00FF;
+  alt_ellipsoid = (int)dis.readInt();
+  h_acc = (int)dis.readInt()&0x00FFFFFFFF;
+  v_acc = (int)dis.readInt()&0x00FFFFFFFF;
+  vel_acc = (int)dis.readInt()&0x00FFFFFFFF;
+  hdg_acc = (int)dis.readInt()&0x00FFFFFFFF;
+  yaw = (int)dis.readUnsignedShort()&0x00FFFF;
+}
+/**
+ * Encode message with raw data and other informations
+ */
+public byte[] encode() throws IOException {
+  byte[] buffer = new byte[12+52];
+   LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
+  dos.writeByte((byte)0xFD);
+  dos.writeByte(payload_length & 0x00FF);
+  dos.writeByte(incompat & 0x00FF);
+  dos.writeByte(compat & 0x00FF);
+  dos.writeByte(packet & 0x00FF);
+  dos.writeByte(sysId & 0x00FF);
+  dos.writeByte(componentId & 0x00FF);
+  dos.writeByte(messageType & 0x00FF);
+  dos.writeByte((messageType >> 8) & 0x00FF);
+  dos.writeByte((messageType >> 16) & 0x00FF);
+  dos.writeLong(time_usec);
+  dos.writeInt((int)(lat&0x00FFFFFFFF));
+  dos.writeInt((int)(lon&0x00FFFFFFFF));
+  dos.writeInt((int)(alt&0x00FFFFFFFF));
+  dos.writeShort(eph&0x00FFFF);
+  dos.writeShort(epv&0x00FFFF);
+  dos.writeShort(vel&0x00FFFF);
+  dos.writeShort(cog&0x00FFFF);
+  dos.writeByte(fix_type&0x00FF);
+  dos.writeByte(satellites_visible&0x00FF);
+  dos.writeInt((int)(alt_ellipsoid&0x00FFFFFFFF));
+  dos.writeInt((int)(h_acc&0x00FFFFFFFF));
+  dos.writeInt((int)(v_acc&0x00FFFFFFFF));
+  dos.writeInt((int)(vel_acc&0x00FFFFFFFF));
+  dos.writeInt((int)(hdg_acc&0x00FFFFFFFF));
+  dos.writeShort(yaw&0x00FFFF);
+  dos.flush();
+  byte[] tmp = dos.toByteArray();
+  for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 52);
+  crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
+  byte crcl = (byte) (crc & 0x00FF);
+  byte crch = (byte) ((crc >> 8) & 0x00FF);
+  buffer[62] = crcl;
+  buffer[63] = crch;
+  dos.close();
+  return buffer;
+}
+public String toString() {
+return "MAVLINK_MSG_ID_GPS_RAW_INT : " +   "  time_usec="+time_usec
++  "  lat="+lat
++  "  lon="+lon
++  "  alt="+alt
++  "  eph="+eph
++  "  epv="+epv
++  "  vel="+vel
++  "  cog="+cog
++  "  fix_type="+fix_type
++  "  satellites_visible="+satellites_visible
++  "  alt_ellipsoid="+alt_ellipsoid
++  "  h_acc="+h_acc
++  "  v_acc="+v_acc
++  "  vel_acc="+vel_acc
++  "  hdg_acc="+hdg_acc
++  "  yaw="+yaw
+;}
 
 }
+
