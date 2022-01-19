@@ -437,6 +437,7 @@ public class StatusManager implements Runnable {
 		if (checkTimeOutSystem(model.sys.msp_tms, TIMEOUT_GCL_CONNECTED)
 				&& model.sys.isSensorAvailable(Status.MSP_MSP_AVAILABILITY)) {
 			model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, (false));
+			model.sys.setStatus(Status.MSP_ACTIVE, false);
 		}
 
 		if (!model.sys.isStatus(Status.MSP_SITL)) {

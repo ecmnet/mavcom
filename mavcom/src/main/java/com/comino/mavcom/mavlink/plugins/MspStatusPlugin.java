@@ -18,16 +18,18 @@ public class MspStatusPlugin extends MAVLinkPluginBase {
 		model.sys.status = (int) status.status;
 		model.sys.load_m = status.load;
 		model.sys.autopilot = (long) status.autopilot_mode;
-		model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, true);
 		model.sys.wifi_quality = status.wifi_quality / 100f;
 		model.sys.msp_temp = (byte) status.cpu_temp;
 		model.sys.bat_temp = (byte) status.bat_temp;
 		model.sys.mem_m = (short) status.memory;
-		model.sys.build = status.getVersion();
 		model.sys.t_takeoff_ms = status.takeoff_ms;
 		model.sys.msp_tms = System.currentTimeMillis() * 1000;
 
+		model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, true);
 		model.sys.setStatus(Status.MSP_ACTIVE, true);
 		model.sys.setStatus(Status.MSP_CONNECTED, true);
+		
+		Status.build = status.getVersion();
+		
 	}
 }
