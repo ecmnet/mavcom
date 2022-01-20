@@ -86,6 +86,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comms[0].open()) {
 			comm = comms[0];
 			this.isSITL = false;
+			this.mode = MODE_USB;
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
@@ -95,6 +96,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comms[1].open()) {
 			comm = comms[1];
 			this.isSITL = false;
+			this.mode = MODE_NORMAL;
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
@@ -104,6 +106,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comms[2].open()) {
 			comm = comms[2];
 			this.isSITL = true;
+			this.mode = MODE_SITL;
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
 			System.out.println(comm + " (SITL)");
@@ -113,6 +116,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comms[3].open()) {
 			comm = comms[3];
 			this.isSITL = true;
+			this.mode = MODE_SITL_PROXY;
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
 			System.out.println(comm + " (SITL Proxy)");
@@ -140,6 +144,27 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		super.run();
 		if (comm == null)
 			return;
+		
+		if(comms[0].isConnected()) {
+			this.mode = MODE_USB;
+			comm = comms[0];
+		}
+		
+		if(comms[1].isConnected()) {
+			this.mode = MODE_NORMAL;
+			comm = comms[1];
+		}
+		
+		if(comms[2].isConnected()) {
+			this.mode = MODE_SITL;
+			comm = comms[2];
+		}
+		
+		if(comms[3].isConnected()) {
+			this.mode = MODE_SITL_PROXY;
+			comm = comms[3];
+		}
+		
 		try {
 			if (!comm.isConnected()) {
 				this.connected = false;

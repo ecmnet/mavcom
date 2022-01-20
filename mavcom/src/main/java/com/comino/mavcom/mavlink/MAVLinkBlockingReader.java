@@ -40,7 +40,7 @@ public class MAVLinkBlockingReader extends MAVLinkReader implements Runnable {
 						parser.parseMessage(getNextMessage());
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}

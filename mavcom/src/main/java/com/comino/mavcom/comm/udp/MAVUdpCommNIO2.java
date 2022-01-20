@@ -88,7 +88,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public String toString() {
 		return "UDP " + peerPort.getHostString();
 	}
-
+	
 	@Override
 	public boolean open() {
 
@@ -97,8 +97,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			if (selector != null)
 				selector.close();
 			worker.waitFor();
-			if (state == WAITING)
+			if (state == WAITING) {
 				return false;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -149,7 +150,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	@Override
 	public boolean isConnected() {
-		return channel != null && channel.isConnected();
+		return channel != null && channel.isConnected() && state == RUNNING;
 	}
 
 	@Override
@@ -193,12 +194,12 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 				} catch (InterruptedException e) {
 				}
 			}
-			;
 		}
+		
 
 		@Override
 		public void run() {
-
+        
 			try {
 				channel = DatagramChannel.open();
 				final Set<SocketOption<?>> options = channel.supportedOptions();

@@ -69,7 +69,7 @@ public class MAVController implements IMAVController, Runnable {
 	public static final int MODE_NORMAL = 0;
 	public static final int MODE_SITL = 1;
 	public static final int MODE_USB = 2;
-	public static final int MODE_SERVER = 3;
+	public static final int MODE_SITL_PROXY = 3;
 
 	protected String peerAddress = null;
 	protected int peerPort = 0;
@@ -92,7 +92,7 @@ public class MAVController implements IMAVController, Runnable {
 	private SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 	private PrintStream ps_log;
 
-	private int mode = 0;
+	protected int mode = MODE_NORMAL;
 
 	protected final WorkQueue wq = WorkQueue.getInstance();
 
