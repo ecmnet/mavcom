@@ -33,6 +33,10 @@
 
 package com.comino.mavcom.control.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import org.mavlink.messages.MAV_COMPONENT;
 import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.MAV_TYPE;
@@ -92,7 +96,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			comms[3].shutdown();
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
-			System.out.println(comm);
+			sendDateTime();
 			return true;
 		}
 
@@ -131,6 +135,14 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 
 		return true;
+	}
+	
+	private void sendDateTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm:ss YYYY");   
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		String s = sdf.format(new Date());
+		System.out.println("Sending date & time: "+s);
+		this.sendShellCommand("date -s \""+s+"\"");
 	}
 
 	@Override
@@ -187,4 +199,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			e.printStackTrace();
 		}
 	}
+	
+	
 }
