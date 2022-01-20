@@ -126,7 +126,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	@Override
 	public void shutdown() {
 		try {
-			System.out.println("[mgc] Closing channel...");
 			state = WAITING;
 			channel.disconnect();
 			channel.close();

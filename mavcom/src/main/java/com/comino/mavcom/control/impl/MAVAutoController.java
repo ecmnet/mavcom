@@ -50,6 +50,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 	private final msg_heartbeat beat = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_OSD);
 	private final IMAVComm[] comms = new IMAVComm[4];
+	private boolean isMSP = true;
 
 	public MAVAutoController(String peerAddress, int peerPort, int bindPort) {
 		super(2);
@@ -106,22 +107,26 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comms[2].open()) {
 			comm = comms[2];
 			this.isSITL = true;
+			this.isMSP  = false;
 			this.mode = MODE_SITL;
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
 			System.out.println(comm + " (SITL)");
 			return true;
 		}
-
+		
 		if (comms[3].open()) {
 			comm = comms[3];
+			comms[2].shutdown();
 			this.isSITL = true;
+			this.isMSP  = true;
 			this.mode = MODE_SITL_PROXY;
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
 			System.out.println(comm + " (SITL Proxy)");
 			return true;
 		}
+
 
 		return true;
 	}
@@ -155,12 +160,12 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			comm = comms[1];
 		}
 		
-		if(comms[2].isConnected()) {
+		if(comms[2].isConnected() && !isMSP) {
 			this.mode = MODE_SITL;
 			comm = comms[2];
 		}
 		
-		if(comms[3].isConnected()) {
+		if(comms[3].isConnected() && isMSP) {
 			this.mode = MODE_SITL_PROXY;
 			comm = comms[3];
 		}
