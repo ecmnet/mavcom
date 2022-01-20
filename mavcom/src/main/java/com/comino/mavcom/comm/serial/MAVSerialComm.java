@@ -85,46 +85,13 @@ public class MAVSerialComm implements IMAVComm {
 
 	private MAVSerialComm(MAVLinkBlockingReader reader, int baudrate) {
 
-		boolean found = false;
-
 		this.model = reader.getModel();
-
-		int i = 0;
 		this.baudrate = baudrate;
 
-		System.out.print("Searching ports... ");
-
-		SerialPort[] ports = SerialPort.getCommPorts();
-
-		if (ports.length > 0) {
-			for (i = 0; i < ports.length; i++) {
-				if (ports[i].getSystemPortName().contains("tty.SLAB")
-						|| ports[i].getSystemPortName().contains("tty.usb")
-						|| ports[i].getSystemPortName().contains("ttyTHS1")
-						|| ports[i].getSystemPortName().contains("ttyS1")
-						|| ports[i].getSystemPortName().contains("ttyS4")
-						|| ports[i].getSystemPortName().contains("ttyACM0")
-						|| ports[i].getSystemPortName().contains("ttyAMA0")) {
-					found = true;
-					break;
-				}
-			}
-
-			if (found)
-				this.serialPort = ports[i];
-		} else
-			this.serialPort = SerialPort.getCommPort("/dev/tty.SLAB_USBtoUART");
-
-		if (found) {
-			this.port = serialPort.getSystemPortName();
-			System.out.println(port + " found");
-		} else {
+		if(!searchPort()) {
 			System.out.println("! No Serial port found...");
 			return;
 		}
-
-		this.is = new BufferedInputStream(serialPort.getInputStream(), BUFFER * 1024 * 2);
-		this.os = new BufferedOutputStream(serialPort.getOutputStream(), 2048);
 
 		this.reader = reader;
 
@@ -143,6 +110,10 @@ public class MAVSerialComm implements IMAVComm {
 
 		if (serialPort.isOpen())
 			return true;
+		
+		if(!searchPort()) {
+			return false;
+		}
 
 		while (!open(port, baudrate, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY)) {
 			try {
@@ -158,6 +129,9 @@ public class MAVSerialComm implements IMAVComm {
 		System.out.println(serialPort.getPortDescription());
 		System.out.println("Buffersize (read/write): " + serialPort.getDeviceReadBufferSize() + "/"
 				+ serialPort.getDeviceWriteBufferSize());
+		
+		this.is = new BufferedInputStream(serialPort.getInputStream(), BUFFER * 1024 * 2);
+		this.os = new BufferedOutputStream(serialPort.getOutputStream(), 2048);
 
 		return true;
 	}
@@ -190,6 +164,44 @@ public class MAVSerialComm implements IMAVComm {
 			os.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public boolean searchPort() {
+		int i; boolean found = false;
+		
+		SerialPort[] ports = SerialPort.getCommPorts();
+		
+
+		if (ports.length > 0) {
+			for (i = 0; i < ports.length; i++) {
+				
+				if(serialPort!=null && ports[i].getSystemPortName().equals(serialPort.getSystemPortName()))
+					return true;
+				
+				if (ports[i].getSystemPortName().contains("tty.SLAB")
+						|| ports[i].getSystemPortName().contains("tty.usb")
+						|| ports[i].getSystemPortName().contains("ttyTHS1")
+						|| ports[i].getSystemPortName().contains("ttyS1")
+						|| ports[i].getSystemPortName().contains("ttyS4")
+						|| ports[i].getSystemPortName().contains("ttyACM0")
+						|| ports[i].getSystemPortName().contains("ttyAMA0")) {
+					found = true;
+					break;
+				}
+			}
+
+			if (found)
+				this.serialPort = ports[i];
+		} else
+			this.serialPort = SerialPort.getCommPort("/dev/tty.SLAB_USBtoUART");
+
+		if (found) {
+			this.port = serialPort.getSystemPortName();
+			System.out.println(port + " found");
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -234,7 +246,7 @@ public class MAVSerialComm implements IMAVComm {
 							}
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
+//						e.printStackTrace();
 					}
 				}
 			});
@@ -266,7 +278,7 @@ public class MAVSerialComm implements IMAVComm {
 			os.write(buffer, 0, buffer.length);
 			os.flush();
 		} catch (Exception e) {
-			e.printStackTrace();
+			return;
 		}
 	}
 

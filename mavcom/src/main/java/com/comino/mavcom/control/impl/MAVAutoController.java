@@ -86,6 +86,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comms[0].open()) {
 			comm = comms[0];
 			this.isSITL = false;
+			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
 			return true;
@@ -94,6 +95,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comms[1].open()) {
 			comm = comms[1];
 			this.isSITL = false;
+			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
 			return true;
@@ -102,6 +104,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comms[2].open()) {
 			comm = comms[2];
 			this.isSITL = true;
+			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
 			System.out.println(comm + " (SITL)");
 			return true;
@@ -110,6 +113,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comms[3].open()) {
 			comm = comms[3];
 			this.isSITL = true;
+			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
 			System.out.println(comm + " (SITL Proxy)");
 			return true;

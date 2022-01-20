@@ -86,7 +86,7 @@ public class MAVController implements IMAVController, Runnable {
 
 	private boolean file_log_enabled = false;
 
-	private StatusManager status_manager = null;
+	protected StatusManager status_manager = null;
 
 	private String filename;
 	private SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
