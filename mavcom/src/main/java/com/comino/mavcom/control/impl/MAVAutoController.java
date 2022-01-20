@@ -88,6 +88,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			comm = comms[0];
 			this.isSITL = false;
 			this.mode = MODE_USB;
+			comms[2].shutdown();
+			comms[3].shutdown();
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
