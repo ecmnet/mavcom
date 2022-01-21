@@ -85,6 +85,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 //			comm.open();
 //			return true;
 //		}
+	
 
 		if (comms[0].open()) {
 			comm = comms[0];
@@ -131,7 +132,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			model.sys.setStatus(Status.MSP_SITL, true);
 			return true;
 		}
-		comm = comms[3];
 
 		return true;
 	}
