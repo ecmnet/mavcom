@@ -376,7 +376,7 @@ public class MAVController implements IMAVController, Runnable {
 
 	@Override
 	public void run() {
-		if (file_log_enabled) {
+		if (file_log_enabled && ps_log!=null) {
 			ps_log.flush();
 		}
 	}

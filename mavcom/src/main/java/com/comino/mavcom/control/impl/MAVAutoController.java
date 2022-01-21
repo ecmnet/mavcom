@@ -33,6 +33,7 @@
 
 package com.comino.mavcom.control.impl;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -46,6 +47,7 @@ import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.comm.serial.MAVSerialComm;
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
 import com.comino.mavcom.control.IMAVController;
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
 public class MAVAutoController extends MAVController implements IMAVController, Runnable {
@@ -64,7 +66,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 		comms[0] = MAVSerialComm.getInstance(reader, 57600);
 		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort);
-		comms[2] = new MAVUdpCommNIO2(reader, "localhost", 14580, 14540);
+		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540);
 		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650);
 
 		model.sys.setStatus(Status.MSP_PROXY, false);
@@ -77,26 +79,16 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	@Override
 	public boolean connect() {
 
-		if (this.connected)
+		if (comm != null && comm.isConnected())
 			return true;
-
-//		if (comm != null && !comm.isConnected()) {
-//			comm.close();
-//			comm.open();
-//			return true;
-//		}
-	
 
 		if (comms[0].open()) {
 			comm = comms[0];
 			this.isSITL = false;
 			this.isMSP  = false;
 			this.mode = MODE_USB;
-			comms[2].shutdown();
-			comms[3].shutdown();
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
-			sendDateTime();
 			System.out.println(comm);
 			this.connected = true;
 			return true;
@@ -107,8 +99,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.isSITL = false;
 			this.mode = MODE_NORMAL;
 			this.isMSP  = true;
-			comms[2].shutdown();
-			comms[3].shutdown();
+//			comms[2].shutdown();
+//			comms[3].shutdown();
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
@@ -118,6 +110,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 		if (comms[2].open()) {
 			comm = comms[2];
+			comms[3].shutdown();
 			this.isSITL = true;
 			this.isMSP  = false;
 			this.mode = MODE_SITL;
@@ -136,10 +129,11 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.mode = MODE_SITL_PROXY;
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
-			System.out.println(comm);
+			System.out.println(comm+" PROXY");
 			this.connected = true;
 			return true;
 		}
+	
 
 		return true;
 	}
@@ -172,32 +166,12 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comm == null)
 			return;
 		
-//		if(comms[0].isConnected()) {
-//			this.mode = MODE_USB;
-//			comm = comms[0];
-//		}
-//		
-//		else if(comms[1].isConnected()) {
-//			this.mode = MODE_NORMAL;
-//			comm = comms[1];
-//		}
-//		
-//		else if(comms[2].isConnected() && !isMSP) {
-//			this.mode = MODE_SITL;
-//			comm = comms[2];
-//		}
-//		
-//		else if(comms[3].isConnected() && isMSP) {
-//			this.mode = MODE_SITL_PROXY;
-//			comm = comms[3];
-//		}
-		
 		try {
 			if (!comm.isConnected()) {
-				this.connected = false;
-				comm.close();
+				close();
+				connected = false;
+				model.sys.setStatus(Status.MSP_CONNECTED,false);
 				connect();
-				return;
 			}
 			this.connected = true;
 			model.sys.setStatus(Status.MSP_SITL, isSimulation());
