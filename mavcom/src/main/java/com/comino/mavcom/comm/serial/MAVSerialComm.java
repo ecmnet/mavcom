@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
+import java.util.concurrent.locks.LockSupport;
 
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.lquac.msg_timesync;
@@ -61,6 +62,8 @@ public class MAVSerialComm implements IMAVComm {
 	private static final int TEST = 57600;
 
 	private static final int BUFFER = 16;
+	
+	private final byte[] buf = new byte[BUFFER * 1024];
 
 	private SerialPort serialPort;
 	private String port;
@@ -104,27 +107,32 @@ public class MAVSerialComm implements IMAVComm {
 	 */
 	@Override
 	public boolean open() {
-
-		if (serialPort == null)
-			return false;
-
-		if (serialPort.isOpen())
-			return true;
 		
-		if(!searchPort()) {
-			return false;
+		if (!searchPort()) {
+			 return false;
+		}
+
+		if (serialPort.isOpen()) {
+			return true;
 		}
 
 		while (!open(port, baudrate, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY)) {
 			try {
 				if (serialPort.isOpen()) {
+					serialPort.removeDataListener();
 					serialPort.closePort();
 				}
 				Thread.sleep(10);
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		
+		if (!serialPort.isOpen()) {
+			return false;
+		}
+		
+	    System.out.println("Serial connection established...");
 		this.is = new BufferedInputStream(serialPort.getInputStream(), BUFFER * 1024 * 2);
 		this.os = new BufferedOutputStream(serialPort.getOutputStream(), 2048);
 
@@ -152,8 +160,10 @@ public class MAVSerialComm implements IMAVComm {
 	 */
 	@Override
 	public void close() {
-		if (serialPort != null)
+		if (serialPort != null) {
+			serialPort.removeDataListener();
 			serialPort.closePort();
+		}
 		try {
 			is.close();
 			os.close();
@@ -206,7 +216,6 @@ public class MAVSerialComm implements IMAVComm {
 
 	private boolean open(String portName, int baudRate, int dataBits, int stopBits, int parity) {
 
-		byte[] buf = new byte[BUFFER * 1024];
 
 		if (serialPort == null)
 			return false;
@@ -248,6 +257,7 @@ public class MAVSerialComm implements IMAVComm {
 
 			serialPort.openPort();
 			model.sys.setStatus(Status.MSP_CONNECTED, true);
+			model.sys.tms = DataModel.getSynchronizedPX4Time_us();
 
 		} catch (Exception e2) {
 			e2.printStackTrace();
@@ -305,7 +315,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	@Override
 	public void shutdown() {
-
+         close();
 	}
 
 	@Override
