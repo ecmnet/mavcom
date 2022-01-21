@@ -87,7 +87,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.isSITL = false;
 			this.isMSP  = false;
 			this.mode = MODE_USB;
-			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
 			this.connected = true;
@@ -101,7 +100,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.isMSP  = true;
 //			comms[2].shutdown();
 //			comms[3].shutdown();
-			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
 			this.connected = true;
@@ -114,7 +112,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.isSITL = true;
 			this.isMSP  = false;
 			this.mode = MODE_SITL;
-			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
 			System.out.println(comm);
 			this.connected = true;
@@ -127,7 +124,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.isSITL = true;
 			this.isMSP  = true;
 			this.mode = MODE_SITL_PROXY;
-			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
 			System.out.println(comm+" PROXY");
 			this.connected = true;
