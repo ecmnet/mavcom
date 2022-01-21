@@ -454,7 +454,7 @@ public class StatusManager implements Runnable {
 			// System.out.println("..Connection timeout
 			// "+(model.sys.tms+TIMEOUT_CONNECTED)+" vs
 			// "+DataModel.getSynchronizedPX4Time_us()+" > "+model.sys.tms);
-			System.out.println(("MSP lost: " + (DataModel.getSynchronizedPX4Time_us() - model.sys.tms) / 1000) + "ms");
+			System.out.println(("Connection lost: " + (DataModel.getSynchronizedPX4Time_us() - model.sys.tms) / 1000) + "ms");
 			System.out.println(model.sys);
 			model.sys.wifi_quality = 0;
 			model.sys.tms = DataModel.getSynchronizedPX4Time_us();

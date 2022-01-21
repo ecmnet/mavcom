@@ -124,11 +124,6 @@ public class MAVSerialComm implements IMAVComm {
 			} catch (Exception e) {
 			}
 		}
-		System.out.println(
-				"Serial port " + this.getClass().getSimpleName() + " opened: " + port + ": " + baudrate + " baud");
-		System.out.println(serialPort.getPortDescription());
-		System.out.println("Buffersize (read/write): " + serialPort.getDeviceReadBufferSize() + "/"
-				+ serialPort.getDeviceWriteBufferSize());
 		
 		this.is = new BufferedInputStream(serialPort.getInputStream(), BUFFER * 1024 * 2);
 		this.os = new BufferedOutputStream(serialPort.getOutputStream(), 2048);

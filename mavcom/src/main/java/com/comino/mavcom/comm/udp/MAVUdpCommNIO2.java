@@ -91,6 +91,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	
 	@Override
 	public boolean open() {
+		
+		if(state == RUNNING)
+			return true;
 
 		try {
 			state = WAITING;
