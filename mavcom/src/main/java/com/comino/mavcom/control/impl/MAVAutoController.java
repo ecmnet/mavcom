@@ -80,13 +80,11 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (this.connected)
 			return true;
 
-		System.out.print("Connecting to... ");
-
-		if (comm != null && !comm.isConnected()) {
-			comm.close();
-			comm.open();
-			return true;
-		}
+//		if (comm != null && !comm.isConnected()) {
+//			comm.close();
+//			comm.open();
+//			return true;
+//		}
 
 		if (comms[0].open()) {
 			comm = comms[0];
@@ -104,6 +102,9 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			comm = comms[1];
 			this.isSITL = false;
 			this.mode = MODE_NORMAL;
+			this.isMSP  = true;
+			comms[2].shutdown();
+			comms[3].shutdown();
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, false);
 			System.out.println(comm);
@@ -117,7 +118,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.mode = MODE_SITL;
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
-			System.out.println(comm + " (SITL)");
 			return true;
 		}
 		
@@ -129,10 +129,9 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.mode = MODE_SITL_PROXY;
 			status_manager.reset();
 			model.sys.setStatus(Status.MSP_SITL, true);
-			System.out.println(comm + " (SITL Proxy)");
 			return true;
 		}
-
+		comm = comms[3];
 
 		return true;
 	}
@@ -161,34 +160,35 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	@Override
 	public void run() {
 		super.run();
+		
 		if (comm == null)
 			return;
 		
-		if(comms[0].isConnected()) {
-			this.mode = MODE_USB;
-			comm = comms[0];
-		}
-		
-		if(comms[1].isConnected()) {
-			this.mode = MODE_NORMAL;
-			comm = comms[1];
-		}
-		
-		if(comms[2].isConnected() && !isMSP) {
-			this.mode = MODE_SITL;
-			comm = comms[2];
-		}
-		
-		if(comms[3].isConnected() && isMSP) {
-			this.mode = MODE_SITL_PROXY;
-			comm = comms[3];
-		}
+//		if(comms[0].isConnected()) {
+//			this.mode = MODE_USB;
+//			comm = comms[0];
+//		}
+//		
+//		else if(comms[1].isConnected()) {
+//			this.mode = MODE_NORMAL;
+//			comm = comms[1];
+//		}
+//		
+//		else if(comms[2].isConnected() && !isMSP) {
+//			this.mode = MODE_SITL;
+//			comm = comms[2];
+//		}
+//		
+//		else if(comms[3].isConnected() && isMSP) {
+//			this.mode = MODE_SITL_PROXY;
+//			comm = comms[3];
+//		}
 		
 		try {
 			if (!comm.isConnected()) {
 				this.connected = false;
 				comm.close();
-				comm.open();
+				connect();
 				return;
 			}
 			this.connected = true;
