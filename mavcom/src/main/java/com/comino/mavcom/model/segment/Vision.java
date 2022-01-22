@@ -52,9 +52,10 @@ public class Vision extends Segment {
 	public static final int FIDUCIAL_ENABLED = 6;
 	public static final int FIDUCIAL_LOCKED = 7;
 	public static final int VIDEO_ENABLED = 8;
+	public static final int EXPERIMENTAL = 9;
 
 	private static final String[] MSP_VISION_TEXTS = { "Enabled", "Available", "Resetting", "Position valid",
-			"Speed valid", "Published", "Fiducual enabled", "Fiducial locked", "Video stream" };
+			"Speed valid", "Published", "Fiducual enabled", "Fiducial locked", "Video stream","Experimental" };
 
 	private static final String[] MSP_VISION_TSEXTS = { "RESET", "EVPOS", "EVVEL" };
 
