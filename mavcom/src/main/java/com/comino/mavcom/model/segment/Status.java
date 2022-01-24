@@ -60,7 +60,7 @@ public class Status extends Segment {
 	public static final int MSP_RESERVED = 14;
 	public static final int MSP_READY_FOR_FLIGHT = 15;
 
-	private static final String[] MSP_STATUS_TEXTS = { "Connected", "GCL connected", "MSP actve", "RC Attached",
+	private static final String[] MSP_STATUS_TEXTS = { "Connected", "GCL connected", "MSP active", "RC Attached",
 			"Joystick attached", "Offboard started", "SITL", "Proxy enabled", "Armed", "Landed", "In air", "GPOS valid",
 			"LPOS valid", "Parameter loaded", "Reserved", "Ready for flight" };
 
