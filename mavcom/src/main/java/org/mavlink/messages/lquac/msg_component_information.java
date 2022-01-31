@@ -32,7 +32,7 @@ public class msg_component_information extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * CRC32 of the TYPE_GENERAL file (can be used by a GCS for file caching).
+   * CRC32 of the TYPE_GENERAL file (can be used by a GCS for file caching). The general metadata file contains URLs to other files of different type according to COMP_METADATA_TYPE.
    */
   public long general_metadata_file_crc;
   /**
@@ -60,7 +60,7 @@ public class msg_component_information extends MAVLinkMessage {
     return result;
   }
   /**
-   * (Optional) Component definition URI for TYPE_PERIPHERALS. This must be a MAVLink FTP URI and the file might be compressed with xz.
+   * (Optional) Component definition URI for TYPE_PERIPHERALS. This must be a MAVLink FTP URI and the file might be compressed with xz. Peripherals are listed as a separate URL and not included in the general metadata file because it will likely be generated at runtime while the general (and other referenced files) might be generated at compile time.
    */
   public char[] peripherals_metadata_uri = new char[100];
   public void setPeripherals_metadata_uri(String tmp) {

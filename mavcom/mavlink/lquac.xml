@@ -117,11 +117,14 @@
               <entry value="10" name="TAKEOFF_PROCEDURE">
                   <description>Takeoff procedure</description>
               </entry>
-               <entry value="11" name="PRECISION_LOCK">
+              <entry value="11" name="PRECISION_LOCK">
                   <description>Precision locking</description>
               </entry>
               <entry value="12" name="FCUM">
-                  <description>FCUM experimental mode</description>
+                  <description>FCUM mode</description>
+              </entry>
+              <entry value="13" name="EXPERIMENTAL">
+                  <description>Experimental mode</description>
               </entry>
            </enum>
 
