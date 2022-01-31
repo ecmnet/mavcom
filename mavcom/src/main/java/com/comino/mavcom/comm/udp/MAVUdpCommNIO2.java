@@ -193,7 +193,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		public void waitFor() {
 			synchronized (this) {
 				try {
-					wait(500);
+					wait(100);
 				} catch (InterruptedException e) {
 				}
 			}

@@ -34,8 +34,6 @@
 package com.comino.mavcom.comm;
 
 import java.io.IOException;
-import java.util.Map;
-
 import org.mavlink.messages.MAVLinkMessage;
 
 import com.comino.mavcom.log.IMAVMessageListener;

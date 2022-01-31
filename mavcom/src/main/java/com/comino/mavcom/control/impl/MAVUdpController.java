@@ -74,6 +74,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 		if (!comm.isConnected()) {
 			comm.close();
 			comm.open();
+	
 		}
 
 		return true;
@@ -82,6 +83,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 	@Override
 	public boolean close() {
 		super.close();
+		model.sys.setStatus(Status.MSP_CONNECTED, false);
 		this.connected = false;
 		return true;
 	}

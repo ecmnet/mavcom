@@ -82,6 +82,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 		if (comm != null && comm.isConnected())
 			return true;
+		
+		model.sys.setStatus(Status.MSP_CONNECTED, false);
 
 		if (comms[0].open()) {
 			comm = comms[0];
@@ -161,7 +163,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 	@Override
 	public boolean isConnected() {
-		return model.sys.isStatus(Status.MSP_CONNECTED);
+		return model.sys.isStatus(Status.MSP_CONNECTED) && comm!=null;
 	}
 
 	@Override
