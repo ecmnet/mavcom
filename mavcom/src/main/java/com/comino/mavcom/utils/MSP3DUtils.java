@@ -16,6 +16,7 @@ import georegression.struct.point.Point3D_I32;
 import georegression.struct.point.Vector3D_F32;
 import georegression.struct.point.Vector3D_F64;
 import georegression.struct.point.Vector4D_F32;
+import georegression.struct.point.Vector4D_F64;
 import georegression.struct.se.Se3_F32;
 import georegression.struct.se.Se3_F64;
 
@@ -42,6 +43,9 @@ public class MSP3DUtils {
 	public static float distance3D(Vector4D_F32 t, Vector4D_F32 c) {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
+	public static double distance3D(Vector4D_F64 t, Vector4D_F64 c) {
+		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+	}
 
 	public static float distance2D(Vector4D_F32 t, Vector4D_F32 c) {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
@@ -52,7 +56,7 @@ public class MSP3DUtils {
 	}
 
 	public static double distance2D(Vector3D_F64 t, Vector3D_F64 c) {
-		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
+		return  Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
 	}
 
 	public static float distance3D(Vector3D_F32 t, Vector3D_F32 c) {
@@ -60,7 +64,7 @@ public class MSP3DUtils {
 	}
 
 	public static double distance3D(Vector3D_F64 t, Vector3D_F64 c) {
-		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
 
 	public static float distance3D(Point3D_I32 t, Point3D_I32 c) {
@@ -146,14 +150,25 @@ public class MSP3DUtils {
 		return t;
 	}
 
-	public static boolean convertCurrentState(DataModel model, Vector4D_F32 vector) {
+	public static boolean convertCurrentPosition(DataModel model, Vector4D_F32 vector) {
 		vector.setTo(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.y);
 		return isFinite(vector);
 	}
 
-	public static boolean convertCurrentState(DataModel model, Vector3D_F64 vector) {
+	public static boolean convertCurrentPosition(DataModel model, Vector3D_F64 vector) {
 		vector.setTo(model.state.l_x, model.state.l_y, model.state.l_z);
 		return isFinite(vector);
+	}
+
+	public static boolean convertCurrentPosition(DataModel model, Vector4D_F64 vector) {
+		vector.setTo(model.state.l_x, model.state.l_y, model.state.l_z,model.attitude.y );
+		return isFinite(vector);
+	}
+
+	public static boolean convertCurrentState(DataModel model, Vector4D_F64 pos, Vector4D_F64 speed) {
+		pos.setTo(model.state.l_x, model.state.l_y, model.state.l_z,model.attitude.y );
+		speed.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
+		return isFinite(pos) && isFinite(speed);
 	}
 
 	public static boolean convertTargetState(DataModel model, Vector4D_F32 vector) {
@@ -162,6 +177,11 @@ public class MSP3DUtils {
 	}
 
 	public static boolean convertCurrentSpeed(DataModel model, Vector4D_F32 vector) {
+		vector.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
+		return isFinite(vector);
+	}
+
+	public static boolean convertCurrentSpeed(DataModel model, Vector4D_F64 vector) {
 		vector.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
 		return isFinite(vector);
 	}
@@ -235,6 +255,10 @@ public class MSP3DUtils {
 		return Float.isFinite(vector.x) && Float.isFinite(vector.y) && Float.isFinite(vector.z);
 	}
 
+	public static boolean isFinite(Vector4D_F64 vector) {
+		return Double.isFinite(vector.x) && Double.isFinite(vector.y) && Double.isFinite(vector.z);
+	}
+
 	public static boolean isFinite(Vector3D_F64 vector) {
 		return Double.isFinite(vector.x) && Double.isFinite(vector.y) && Double.isFinite(vector.z);
 	}
@@ -254,8 +278,10 @@ public class MSP3DUtils {
 	}
 
 	public static void convertModelToSe3_F64(DataModel model, Se3_F64 state) {
-		convertToSe3_F64(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.r, model.attitude.p,
-				model.attitude.y, state);
+		if(isValid(model)) {
+			convertToSe3_F64(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.r, model.attitude.p,
+					model.attitude.y, state);
+		}
 	}
 
 	public static void convertModel90ToSe3_F64(DataModel model, Se3_F64 state) {
@@ -310,6 +336,23 @@ public class MSP3DUtils {
 	public static double ConvertSe3_F64ToYaw(Se3_F64 state, double[] v) {
 		ConvertRotation3D_F64.matrixToEuler(state.R, EulerType.XYZ, v);
 		return v[YAW];
+	}
+	
+	public static boolean isValid(Vector4D_F64 vector) {
+		return  Double.isFinite(vector.x)  &&
+				Double.isFinite(vector.y)  &&
+				Double.isFinite(vector.z)  &&
+				Double.isFinite(vector.w);		
+	}
+
+	
+	public static boolean isValid(DataModel model) {
+		return  Float.isFinite(model.state.l_x)  &&
+				Float.isFinite(model.state.l_y)  &&
+				Float.isFinite(model.state.l_z)  &&
+				Float.isFinite(model.attitude.p) &&
+				Float.isFinite(model.attitude.r) &&
+				Float.isFinite(model.attitude.y);
 	}
 
 	public static float getXYDirection(float dx, float dy) {
