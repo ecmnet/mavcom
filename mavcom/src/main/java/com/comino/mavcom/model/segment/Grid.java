@@ -119,13 +119,15 @@ public class Grid extends Segment {
 	}
 
 	@SuppressWarnings("unlikely-arg-type")
-	public void fromArray(long[] array) {
+	public int fromArray(long[] array) {
 
 		for (int i = 0; i < array.length && array[i] != 0; i++) {
 			if (!transfer.contains((int) array[i]))
 				transfer.push(array[i]);
+			array[i] = 0;
 		}
 		count = transfer.size();
+		return count;
 	}
 
 }
