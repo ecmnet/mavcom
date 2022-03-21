@@ -52,6 +52,7 @@ public class Grid extends Segment {
 
 	public float ix, iy, iz; // Indicator
 	public float vx, vy, vz; // Vehicle position
+	public float resolution;
 
 	public Grid() {
 
@@ -71,6 +72,8 @@ public class Grid extends Segment {
 		vx = a.vx;
 		vy = a.vy;
 		vz = a.vz;
+		
+		resolution = a.resolution;
 
 	}
 
@@ -116,6 +119,10 @@ public class Grid extends Segment {
 		this.ix = ix;
 		this.iy = iy;
 		this.iz = iz;
+	}
+	
+	public void setResolution(float resolution) {
+		this.resolution = resolution;
 	}
 
 	@SuppressWarnings("unlikely-arg-type")
