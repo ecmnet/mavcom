@@ -45,7 +45,7 @@ public class Grid extends Segment {
 
 	private static final long serialVersionUID = -77272456745165428L;
 
-	private static LinkedList<Long> transfer;
+	private static final LinkedList<Long> transfer = new LinkedList<Long>(); 
 
 	public int count;
 	public byte status;
@@ -58,8 +58,6 @@ public class Grid extends Segment {
 
 		this.count = 0;
 		this.status = 0;
-
-		transfer = new LinkedList<Long>();
 
 	}
 
@@ -88,21 +86,20 @@ public class Grid extends Segment {
 
 	public boolean toArray(long[] array) {
 		try {
-			if (!hasTransfers())
+			if (!hasTransfers() || transfer==null)
 				return false;
 			if (transfer.isEmpty() || array == null)
 				return false;
 
 			synchronized (this) {
 				Arrays.fill(array, 0);
-				for (int i = 0; i < array.length && transfer.size() > 0; i++) {
+				for (int i = 0; i < array.length && !transfer.isEmpty(); i++) {
 					array[i] = transfer.poll();
 				}
 			}
 			return true;
 		} catch (Exception e) {
-			// System.out.println("Array-Transfer: "+e.getMessage()+"A="+array+"
-			// T="+transfer);
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -113,6 +110,14 @@ public class Grid extends Segment {
 
 	public LinkedList<Long> getTransfers() {
 		return transfer;
+	}
+	
+	public Long pop() {
+		return transfer.pop();
+	}
+	
+	public void add(Long e) {
+		 transfer.add(e);
 	}
 
 	public void setIndicator(float ix, float iy, float iz) {
@@ -127,11 +132,8 @@ public class Grid extends Segment {
 
 	@SuppressWarnings("unlikely-arg-type")
 	public int fromArray(long[] array) {
-
 		for (int i = 0; i < array.length && array[i] != 0; i++) {
-			if (!transfer.contains((int) array[i]))
-				transfer.push(array[i]);
-			array[i] = 0;
+			transfer.push(array[i]);	
 		}
 		count = transfer.size();
 		return count;
