@@ -242,6 +242,12 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 				channel.configureBlocking(false);
 				selector = Selector.open();
 			} catch (BindException b) {
+				try {
+					channel.disconnect();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				System.err.println("Already running: " + b.getMessage());
 				System.err.println("Exiting now...");
 				System.exit(-1);

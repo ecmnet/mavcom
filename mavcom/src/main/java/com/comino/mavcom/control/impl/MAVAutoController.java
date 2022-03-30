@@ -175,6 +175,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		
 		try {
 			if (!comm.isConnected() ||!model.sys.isStatus(Status.MSP_CONNECTED)) {
+				System.out.println("Reconnecting...");
 				close();
 				connected = false;
 				model.sys.setStatus(Status.MSP_CONNECTED,false);

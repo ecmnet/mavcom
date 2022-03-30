@@ -63,7 +63,7 @@ public class MSP3DUtils {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
 
-	public static double distance3D(Vector3D_F64 t, Vector3D_F64 c) {
+	public static double distance3D(GeoTuple3D_F64<?> t, GeoTuple3D_F64<?> c) {
 		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
 
