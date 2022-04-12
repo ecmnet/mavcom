@@ -88,14 +88,14 @@ public class Grid extends Segment {
 		try {
 			if (!hasTransfers() || transfer==null)
 				return false;
+			
 			if (transfer.isEmpty() || array == null)
 				return false;
 
-			synchronized (this) {
 				Arrays.fill(array, 0);
 				for (int i = 0; i < array.length && !transfer.isEmpty(); i++) {
 					array[i] = transfer.poll();
-				}
+
 			}
 			return true;
 		} catch (Exception e) {
