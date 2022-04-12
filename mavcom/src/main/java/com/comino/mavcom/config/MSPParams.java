@@ -41,4 +41,11 @@ public final class MSPParams {
 	public static final String D455_WARN_OBS = "d455_warn_obs";
 	public static final String D455_DEPTH_OVERLAY = "d455_depth_overlay";
 
+
+	// OAK_D settings
+
+	public static final String OAKD_OFFSET_X = "oakd_offset_x";
+	public static final String OAKD_OFFSET_Y = "oakd_offset_y";
+	public static final String OAKD_OFFSET_Z = "oakd_offset_z";
+
 }
