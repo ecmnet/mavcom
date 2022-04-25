@@ -27,11 +27,12 @@ public interface MAV_PROTOCOL_CAPABILITY {
      */
     public final static int MAV_PROTOCOL_CAPABILITY_COMMAND_INT = 8;
     /**
-     * Reserved for future use.
+     * Parameter protocol uses byte-wise encoding of parameter values into param_value (float) fields: https://mavlink.io/en/services/parameter.html#parameter-encoding.
+          Note that either this flag or MAV_PROTOCOL_CAPABILITY_PARAM_ENCODE_BYTEWISE should be set if the parameter protocol is supported.
      */
-    public final static int MAV_PROTOCOL_CAPABILITY_RESERVED1 = 16;
+    public final static int MAV_PROTOCOL_CAPABILITY_PARAM_ENCODE_BYTEWISE = 16;
     /**
-     * Autopilot supports the new FILE_TRANSFER_PROTOCOL message type.
+     * Autopilot supports the File Transfer Protocol v1: https://mavlink.io/en/services/ftp.html.
      */
     public final static int MAV_PROTOCOL_CAPABILITY_FTP = 32;
     /**
@@ -55,7 +56,7 @@ public interface MAV_PROTOCOL_CAPABILITY {
      */
     public final static int MAV_PROTOCOL_CAPABILITY_SET_ACTUATOR_TARGET = 1024;
     /**
-     * Autopilot supports the flight termination command.
+     * Autopilot supports the MAV_CMD_DO_FLIGHTTERMINATION command (flight termination).
      */
     public final static int MAV_PROTOCOL_CAPABILITY_FLIGHT_TERMINATION = 2048;
     /**
@@ -78,4 +79,9 @@ public interface MAV_PROTOCOL_CAPABILITY {
      * Reserved for future use.
      */
     public final static int MAV_PROTOCOL_CAPABILITY_RESERVED2 = 65536;
+    /**
+     * Parameter protocol uses C-cast of parameter values to set the param_value (float) fields: https://mavlink.io/en/services/parameter.html#parameter-encoding.
+          Note that either this flag or MAV_PROTOCOL_CAPABILITY_PARAM_ENCODE_BYTEWISE should be set if the parameter protocol is supported.
+     */
+    public final static int MAV_PROTOCOL_CAPABILITY_PARAM_ENCODE_C_CAST = 131072;
 }

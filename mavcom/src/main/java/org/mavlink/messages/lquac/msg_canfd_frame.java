@@ -1,5 +1,5 @@
 /**
- * Generated class : msg_msp_micro_grid
+ * Generated class : msg_canfd_frame
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
@@ -11,79 +11,64 @@ import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
- * Class msg_msp_micro_grid
- * MSP MICRO GRID Data encoded in longs
+ * Class msg_canfd_frame
+ * A forwarded CANFD frame as requested by MAV_CMD_CAN_FORWARD. These are separated from CAN_FRAME as they need different handling (eg. TAO handling)
  **/
-public class msg_msp_micro_grid extends MAVLinkMessage {
-  public static final int MAVLINK_MSG_ID_MSP_MICRO_GRID = 183;
-  private static final long serialVersionUID = MAVLINK_MSG_ID_MSP_MICRO_GRID;
-  public msg_msp_micro_grid() {
+public class msg_canfd_frame extends MAVLinkMessage {
+  public static final int MAVLINK_MSG_ID_CANFD_FRAME = 387;
+  private static final long serialVersionUID = MAVLINK_MSG_ID_CANFD_FRAME;
+  public msg_canfd_frame() {
     this(1,1);
 }
-  public msg_msp_micro_grid(int sysId, int componentId) {
-    messageType = MAVLINK_MSG_ID_MSP_MICRO_GRID;
+  public msg_canfd_frame(int sysId, int componentId) {
+    messageType = MAVLINK_MSG_ID_CANFD_FRAME;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 233;
+    payload_length = 72;
 }
 
   /**
-   * Timestamp
+   * Frame ID
    */
-  public long tms;
+  public long id;
   /**
-   * Encoded Grid data integers
+   * System ID.
    */
-  public long[] data = new long[50];
+  public int target_system;
   /**
-   * CenterX
+   * Component ID.
    */
-  public float cx;
+  public int target_component;
   /**
-   * CenterY
+   * bus number
    */
-  public float cy;
+  public int bus;
   /**
-   * CenterZ
+   * Frame length
    */
-  public float cz;
+  public int len;
   /**
-   * Resolution in m
+   * Frame data
    */
-  public float resolution;
-  /**
-   * Extension in m per direction
-   */
-  public float extension;
-  /**
-   * BlockCount
-   */
-  public long count;
-  /**
-   * Grid Status
-   */
-  public int status;
+  public int[] data = new int[64];
 /**
  * Decode message with raw data
  */
 public void decode(LittleEndianDataInputStream dis) throws IOException {
-  tms = (long)dis.readLong();
-  for (int i=0; i<50; i++) {
-    data[i] = (int)dis.readInt();
+  id = (int)dis.readInt()&0x00FFFFFFFF;
+  target_system = (int)dis.readUnsignedByte()&0x00FF;
+  target_component = (int)dis.readUnsignedByte()&0x00FF;
+  bus = (int)dis.readUnsignedByte()&0x00FF;
+  len = (int)dis.readUnsignedByte()&0x00FF;
+  for (int i=0; i<64; i++) {
+    data[i] = (int)dis.readUnsignedByte()&0x00FF;
   }
-  cx = (float)dis.readFloat();
-  cy = (float)dis.readFloat();
-  cz = (float)dis.readFloat();
-  resolution = (float)dis.readFloat();
-  extension = (float)dis.readFloat();
-  count = (int)dis.readInt()&0x00FFFFFFFF;
-  status = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+233];
+  byte[] buffer = new byte[12+72];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -95,31 +80,32 @@ public byte[] encode() throws IOException {
   dos.writeByte(messageType & 0x00FF);
   dos.writeByte((messageType >> 8) & 0x00FF);
   dos.writeByte((messageType >> 16) & 0x00FF);
-  dos.writeLong(tms);
-  for (int i=0; i<50; i++) {
-    dos.writeInt((int)(data[i]&0x00FFFFFFFF));
+  dos.writeInt((int)(id&0x00FFFFFFFF));
+  dos.writeByte(target_system&0x00FF);
+  dos.writeByte(target_component&0x00FF);
+  dos.writeByte(bus&0x00FF);
+  dos.writeByte(len&0x00FF);
+  for (int i=0; i<64; i++) {
+    dos.writeByte(data[i]&0x00FF);
   }
-  dos.writeFloat(cx);
-  dos.writeFloat(cy);
-  dos.writeFloat(cz);
-  dos.writeFloat(resolution);
-  dos.writeFloat(extension);
-  dos.writeInt((int)(count&0x00FFFFFFFF));
-  dos.writeByte(status&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 233);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 72);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[243] = crcl;
-  buffer[244] = crch;
+  buffer[82] = crcl;
+  buffer[83] = crch;
   dos.close();
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_MSP_MICRO_GRID : " +   "  tms="+tms
+return "MAVLINK_MSG_ID_CANFD_FRAME : " +   "  id="+id
++  "  target_system="+target_system
++  "  target_component="+target_component
++  "  bus="+bus
++  "  len="+len
 +  "  data[0]="+data[0]
 +  "  data[1]="+data[1]
 +  "  data[2]="+data[2]
@@ -170,13 +156,20 @@ return "MAVLINK_MSG_ID_MSP_MICRO_GRID : " +   "  tms="+tms
 +  "  data[47]="+data[47]
 +  "  data[48]="+data[48]
 +  "  data[49]="+data[49]
-+  "  cx="+format((float)cx)
-+  "  cy="+format((float)cy)
-+  "  cz="+format((float)cz)
-+  "  resolution="+format((float)resolution)
-+  "  extension="+format((float)extension)
-+  "  count="+count
-+  "  status="+status
++  "  data[50]="+data[50]
++  "  data[51]="+data[51]
++  "  data[52]="+data[52]
++  "  data[53]="+data[53]
++  "  data[54]="+data[54]
++  "  data[55]="+data[55]
++  "  data[56]="+data[56]
++  "  data[57]="+data[57]
++  "  data[58]="+data[58]
++  "  data[59]="+data[59]
++  "  data[60]="+data[60]
++  "  data[61]="+data[61]
++  "  data[62]="+data[62]
++  "  data[63]="+data[63]
 ;}
 
 }

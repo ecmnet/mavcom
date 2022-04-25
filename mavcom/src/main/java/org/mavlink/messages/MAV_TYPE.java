@@ -85,25 +85,25 @@ public interface MAV_TYPE {
      */
     public final static int MAV_TYPE_ONBOARD_CONTROLLER = 18;
     /**
-     * Two-rotor VTOL using control surfaces in vertical operation in addition. Tailsitter.
+     * Two-rotor Tailsitter VTOL that additionally uses control surfaces in vertical operation. Note, value previously named MAV_TYPE_VTOL_DUOROTOR.
      */
-    public final static int MAV_TYPE_VTOL_DUOROTOR = 19;
+    public final static int MAV_TYPE_VTOL_TAILSITTER_DUOROTOR = 19;
     /**
-     * Quad-rotor VTOL using a V-shaped quad config in vertical operation. Tailsitter.
+     * Quad-rotor Tailsitter VTOL using a V-shaped quad config in vertical operation. Note: value previously named MAV_TYPE_VTOL_QUADROTOR.
      */
-    public final static int MAV_TYPE_VTOL_QUADROTOR = 20;
+    public final static int MAV_TYPE_VTOL_TAILSITTER_QUADROTOR = 20;
     /**
-     * Tiltrotor VTOL
+     * Tiltrotor VTOL. Fuselage and wings stay (nominally) horizontal in all flight phases. It able to tilt (some) rotors to provide thrust in cruise flight.
      */
     public final static int MAV_TYPE_VTOL_TILTROTOR = 21;
     /**
-     * VTOL reserved 2
+     * VTOL with separate fixed rotors for hover and cruise flight. Fuselage and wings stay (nominally) horizontal in all flight phases.
      */
-    public final static int MAV_TYPE_VTOL_RESERVED2 = 22;
+    public final static int MAV_TYPE_VTOL_FIXEDROTOR = 22;
     /**
-     * VTOL reserved 3
+     * Tailsitter VTOL. Fuselage and wings orientation changes depending on flight phase: vertical for hover, horizontal for cruise. Use more specific VTOL MAV_TYPE_VTOL_DUOROTOR or MAV_TYPE_VTOL_QUADROTOR if appropriate.
      */
-    public final static int MAV_TYPE_VTOL_RESERVED3 = 23;
+    public final static int MAV_TYPE_VTOL_TAILSITTER = 23;
     /**
      * VTOL reserved 4
      */
@@ -176,4 +176,8 @@ public interface MAV_TYPE {
      * GPS
      */
     public final static int MAV_TYPE_GPS = 41;
+    /**
+     * Winch
+     */
+    public final static int MAV_TYPE_WINCH = 42;
 }

@@ -13,6 +13,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_POSITION_TARGET_LOCAL_NED = 85;
   public static int MAVLINK_MSG_ID_TIMESYNC = 111;
   public static int MAVLINK_MSG_ID_CURRENT_EVENT_SEQUENCE = 411;
+  public static int MAVLINK_MSG_ID_CANFD_FRAME = 387;
   public static int MAVLINK_MSG_ID_MISSION_ITEM_REACHED = 46;
   public static int MAVLINK_MSG_ID_MSP_STATUS = 180;
   public static int MAVLINK_MSG_ID_BATTERY_STATUS = 147;
@@ -117,7 +118,9 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_CONTROL_SYSTEM_STATE = 146;
   public static int MAVLINK_MSG_ID_V2_EXTENSION = 248;
   public static int MAVLINK_MSG_ID_DEBUG_VECT = 250;
+  public static int MAVLINK_MSG_ID_CAN_FILTER_MODIFY = 388;
   public static int MAVLINK_MSG_ID_ISBD_LINK_STATUS = 335;
+  public static int MAVLINK_MSG_ID_COMPONENT_METADATA = 397;
   public static int MAVLINK_MSG_ID_UAVCAN_NODE_STATUS = 310;
   public static int MAVLINK_MSG_ID_LOG_REQUEST_LIST = 117;
   public static int MAVLINK_MSG_ID_GIMBAL_MANAGER_SET_ATTITUDE = 282;
@@ -184,6 +187,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_FOLLOW_TARGET = 144;
   public static int MAVLINK_MSG_ID_SMART_BATTERY_INFO = 370;
   public static int MAVLINK_MSG_ID_ESC_STATUS = 291;
+  public static int MAVLINK_MSG_ID_CAN_FRAME = 386;
   public static int MAVLINK_MSG_ID_MISSION_REQUEST_INT = 51;
   public static int MAVLINK_MSG_ID_MANUAL_SETPOINT = 81;
   public static int MAVLINK_MSG_ID_SCALED_IMU = 26;

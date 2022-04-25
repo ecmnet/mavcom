@@ -24,4 +24,8 @@ public interface MAV_ODID_STATUS {
      * The UA is having an emergency.
      */
     public final static int MAV_ODID_STATUS_EMERGENCY = 3;
+    /**
+     * The remote ID system is failing or unreliable in some way.
+     */
+    public final static int MAV_ODID_STATUS_REMOTE_ID_SYSTEM_FAILURE = 4;
 }

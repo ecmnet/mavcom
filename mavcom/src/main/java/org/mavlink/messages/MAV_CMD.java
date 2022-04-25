@@ -354,10 +354,10 @@ public interface MAV_CMD {
      * PARAM 1 : Speed type (0=Airspeed, 1=Ground Speed, 2=Climb Speed, 3=Descent Speed)
      * PARAM 2 : Speed (-1 indicates no change)
      * PARAM 3 : Throttle (-1 indicates no change)
-     * PARAM 4 : 0: absolute, 1: relative
-     * PARAM 5 : Empty
-     * PARAM 6 : Empty
-     * PARAM 7 : Empty
+     * PARAM 4 : 
+     * PARAM 5 : 
+     * PARAM 6 : 
+     * PARAM 7 : 
      */
     public final static int MAV_CMD_DO_CHANGE_SPEED = 178;
     /**
@@ -427,8 +427,14 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_REPEAT_SERVO = 184;
     /**
-     * Terminate flight immediately
-     * PARAM 1 : Flight termination activated if > 0.5
+     * Terminate flight immediately.
+          Flight termination immediately and irreversably terminates the current flight, returning the vehicle to ground.
+          The vehicle will ignore RC or other input until it has been power-cycled.
+          Termination may trigger safety measures, including: disabling motors and deployment of parachute on multicopters, and setting flight surfaces to initiate a landing pattern on fixed-wing).
+          On multicopters without a parachute it may trigger a crash landing.
+          Support for this command can be tested using the protocol bit: MAV_PROTOCOL_CAPABILITY_FLIGHT_TERMINATION.
+          Support for this command can also be tested by sending the command with param1=0 (< 0.5); the ACK should be either MAV_RESULT_FAILED or MAV_RESULT_UNSUPPORTED.
+     * PARAM 1 : Flight termination activated if > 0.5. Otherwise not activated and ACK with MAV_RESULT_FAILED.
      * PARAM 2 : Empty
      * PARAM 3 : Empty
      * PARAM 4 : Empty
@@ -496,7 +502,7 @@ public interface MAV_CMD {
      * Reposition the vehicle to a specific WGS84 global position.
      * PARAM 1 : Ground speed, less than 0 (-1) for default
      * PARAM 2 : Bitmask of option flags.
-     * PARAM 3 : Reserved
+     * PARAM 3 : Loiter radius for planes. Positive values only, direction is controlled by Yaw value. A value of zero or NaN is ignored. 
      * PARAM 4 : Yaw heading. NaN to use the current system yaw heading mode (e.g. yaw towards next waypoint, yaw to home, etc.). For planes indicates loiter direction (0: clockwise, 1: counter clockwise)
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
@@ -832,8 +838,8 @@ public interface MAV_CMD {
     public final static int MAV_CMD_PREFLIGHT_UAVCAN = 243;
     /**
      * Request storage of different parameter values and logs. This command will be only accepted if in pre-flight mode.
-     * PARAM 1 : Parameter storage: 0: READ FROM FLASH/EEPROM, 1: WRITE CURRENT TO FLASH/EEPROM, 2: Reset to defaults, 3: Reset sensor calibration parameter data to factory default (or firmware default if not available)
-     * PARAM 2 : Mission storage: 0: READ FROM FLASH/EEPROM, 1: WRITE CURRENT TO FLASH/EEPROM, 2: Reset to defaults
+     * PARAM 1 : Action to perform on the persistent parameter storage
+     * PARAM 2 : Action to perform on the persistent mission storage
      * PARAM 3 : Onboard logging: 0: Ignore, 1: Start default rate logging, -1: Stop logging, > 1: logging rate (e.g. set to 1000 for 1000 Hz logging)
      * PARAM 4 : Reserved
      * PARAM 5 : Empty
@@ -1570,4 +1576,15 @@ public interface MAV_CMD {
      * PARAM 7 : User defined
      */
     public final static int MAV_CMD_USER_5 = 31014;
+    /**
+     * Request forwarding of CAN packets from the given CAN bus to this component. CAN Frames are sent using CAN_FRAME and CANFD_FRAME messages
+     * PARAM 1 : Bus number (0 to disable forwarding, 1 for first bus, 2 for 2nd bus, 3 for 3rd bus).
+     * PARAM 2 : Empty.
+     * PARAM 3 : Empty.
+     * PARAM 4 : Empty.
+     * PARAM 5 : Empty.
+     * PARAM 6 : Empty.
+     * PARAM 7 : Empty.
+     */
+    public final static int MAV_CMD_CAN_FORWARD = 32000;
 }

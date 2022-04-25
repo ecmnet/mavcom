@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_component_information
- * Information about a component. For camera components instead use CAMERA_INFORMATION, and for autopilots additionally use AUTOPILOT_VERSION. Components including GCSes should consider supporting requests of this message via MAV_CMD_REQUEST_MESSAGE.
+ * Component information message, which may be requested using MAV_CMD_REQUEST_MESSAGE.
  **/
 public class msg_component_information extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_COMPONENT_INFORMATION = 395;
@@ -32,15 +32,15 @@ public class msg_component_information extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * CRC32 of the TYPE_GENERAL file (can be used by a GCS for file caching). The general metadata file contains URLs to other files of different type according to COMP_METADATA_TYPE.
+   * CRC32 of the general metadata file (general_metadata_uri).
    */
   public long general_metadata_file_crc;
   /**
-   * CRC32 of the TYPE_PERIPHERALS file (can be used by a GCS for file caching).
+   * CRC32 of peripherals metadata file (peripherals_metadata_uri).
    */
   public long peripherals_metadata_file_crc;
   /**
-   * Component definition URI for TYPE_GENERAL. This must be a MAVLink FTP URI and the file might be compressed with xz.
+   * MAVLink FTP URI for the general metadata file (COMP_METADATA_TYPE_GENERAL), which may be compressed with xz. The file contains general component metadata, and may contain URI links for additional metadata (see COMP_METADATA_TYPE). The information is static from boot, and may be generated at compile time. The string needs to be zero terminated.
    */
   public char[] general_metadata_uri = new char[100];
   public void setGeneral_metadata_uri(String tmp) {
@@ -60,7 +60,7 @@ public class msg_component_information extends MAVLinkMessage {
     return result;
   }
   /**
-   * (Optional) Component definition URI for TYPE_PERIPHERALS. This must be a MAVLink FTP URI and the file might be compressed with xz. Peripherals are listed as a separate URL and not included in the general metadata file because it will likely be generated at runtime while the general (and other referenced files) might be generated at compile time.
+   * (Optional) MAVLink FTP URI for the peripherals metadata file (COMP_METADATA_TYPE_PERIPHERALS), which may be compressed with xz. This contains data about "attached components" such as UAVCAN nodes. The peripherals are in a separate file because the information must be generated dynamically at runtime. The string needs to be zero terminated.
    */
   public char[] peripherals_metadata_uri = new char[100];
   public void setPeripherals_metadata_uri(String tmp) {

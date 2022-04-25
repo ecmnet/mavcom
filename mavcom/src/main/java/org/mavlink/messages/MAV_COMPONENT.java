@@ -459,6 +459,10 @@ public interface MAV_COMPONENT {
      */
     public final static int MAV_COMP_ID_BATTERY2 = 181;
     /**
+     * CAN over MAVLink client.
+     */
+    public final static int MAV_COMP_ID_MAVCAN = 189;
+    /**
      * Component that can generate/supply a mission flight plan (e.g. GCS or developer API).
      */
     public final static int MAV_COMP_ID_MISSIONPLANNER = 190;

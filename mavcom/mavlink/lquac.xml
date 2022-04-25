@@ -246,8 +246,8 @@
            </message>
            <message id="183" name="MSP_MICRO_GRID">
                <description>MSP MICRO GRID Data encoded in longs</description>
-               <field type="int32_t[40]"   name="data">Encoded Grid data integers</field>
-               <field type="uint8_t"       name="status">Grid Status/type</field>
+               <field type="int32_t[50]"   name="data">Encoded Grid data integers</field>
+               <field type="uint8_t"       name="status">Grid Status</field>
                <field type="float"         name="cx" >CenterX</field>
                <field type="float"         name="cy" >CenterY</field>
                <field type="float"         name="cz" >CenterZ</field>

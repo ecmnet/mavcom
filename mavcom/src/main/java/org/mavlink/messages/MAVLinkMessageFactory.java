@@ -15,6 +15,7 @@ import org.mavlink.messages.lquac.msg_gps_rtk;
 import org.mavlink.messages.lquac.msg_position_target_local_ned;
 import org.mavlink.messages.lquac.msg_timesync;
 import org.mavlink.messages.lquac.msg_current_event_sequence;
+import org.mavlink.messages.lquac.msg_canfd_frame;
 import org.mavlink.messages.lquac.msg_mission_item_reached;
 import org.mavlink.messages.lquac.msg_battery_status;
 import org.mavlink.messages.lquac.msg_mission_current;
@@ -110,7 +111,9 @@ import org.mavlink.messages.lquac.msg_param_request_list;
 import org.mavlink.messages.lquac.msg_control_system_state;
 import org.mavlink.messages.lquac.msg_v2_extension;
 import org.mavlink.messages.lquac.msg_debug_vect;
+import org.mavlink.messages.lquac.msg_can_filter_modify;
 import org.mavlink.messages.lquac.msg_isbd_link_status;
+import org.mavlink.messages.lquac.msg_component_metadata;
 import org.mavlink.messages.lquac.msg_uavcan_node_status;
 import org.mavlink.messages.lquac.msg_log_request_list;
 import org.mavlink.messages.lquac.msg_gimbal_manager_set_attitude;
@@ -175,6 +178,7 @@ import org.mavlink.messages.lquac.msg_trajectory_representation_waypoints;
 import org.mavlink.messages.lquac.msg_follow_target;
 import org.mavlink.messages.lquac.msg_smart_battery_info;
 import org.mavlink.messages.lquac.msg_esc_status;
+import org.mavlink.messages.lquac.msg_can_frame;
 import org.mavlink.messages.lquac.msg_mission_request_int;
 import org.mavlink.messages.lquac.msg_manual_setpoint;
 import org.mavlink.messages.lquac.msg_scaled_imu;
@@ -222,6 +226,7 @@ import org.mavlink.messages.lquac.msg_gps_rtk;
 import org.mavlink.messages.lquac.msg_position_target_local_ned;
 import org.mavlink.messages.lquac.msg_timesync;
 import org.mavlink.messages.lquac.msg_current_event_sequence;
+import org.mavlink.messages.lquac.msg_canfd_frame;
 import org.mavlink.messages.lquac.msg_mission_item_reached;
 import org.mavlink.messages.lquac.msg_msp_status;
 import org.mavlink.messages.lquac.msg_battery_status;
@@ -320,7 +325,9 @@ import org.mavlink.messages.lquac.msg_param_request_list;
 import org.mavlink.messages.lquac.msg_control_system_state;
 import org.mavlink.messages.lquac.msg_v2_extension;
 import org.mavlink.messages.lquac.msg_debug_vect;
+import org.mavlink.messages.lquac.msg_can_filter_modify;
 import org.mavlink.messages.lquac.msg_isbd_link_status;
+import org.mavlink.messages.lquac.msg_component_metadata;
 import org.mavlink.messages.lquac.msg_uavcan_node_status;
 import org.mavlink.messages.lquac.msg_log_request_list;
 import org.mavlink.messages.lquac.msg_gimbal_manager_set_attitude;
@@ -387,6 +394,7 @@ import org.mavlink.messages.lquac.msg_trajectory_representation_waypoints;
 import org.mavlink.messages.lquac.msg_follow_target;
 import org.mavlink.messages.lquac.msg_smart_battery_info;
 import org.mavlink.messages.lquac.msg_esc_status;
+import org.mavlink.messages.lquac.msg_can_frame;
 import org.mavlink.messages.lquac.msg_mission_request_int;
 import org.mavlink.messages.lquac.msg_manual_setpoint;
 import org.mavlink.messages.lquac.msg_scaled_imu;
@@ -457,6 +465,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_CURRENT_EVENT_SEQUENCE:
       msg = new msg_current_event_sequence(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_CANFD_FRAME:
+      msg = new msg_canfd_frame(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_MISSION_ITEM_REACHED:
@@ -851,8 +863,16 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_debug_vect(sysId, componentId);
       msg.decode(dis);
       break;
+  case MAVLINK_MSG_ID_CAN_FILTER_MODIFY:
+      msg = new msg_can_filter_modify(sysId, componentId);
+      msg.decode(dis);
+      break;
   case MAVLINK_MSG_ID_ISBD_LINK_STATUS:
       msg = new msg_isbd_link_status(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_COMPONENT_METADATA:
+      msg = new msg_component_metadata(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_UAVCAN_NODE_STATUS:
@@ -1117,6 +1137,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_ESC_STATUS:
       msg = new msg_esc_status(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_CAN_FRAME:
+      msg = new msg_can_frame(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_MISSION_REQUEST_INT:

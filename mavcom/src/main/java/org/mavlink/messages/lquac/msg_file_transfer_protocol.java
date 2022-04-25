@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_file_transfer_protocol
- * File transfer message
+ * File transfer protocol message: https://mavlink.io/en/services/ftp.html.
  **/
 public class msg_file_transfer_protocol extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_FILE_TRANSFER_PROTOCOL = 110;
@@ -40,7 +40,7 @@ public class msg_file_transfer_protocol extends MAVLinkMessage {
    */
   public int target_component;
   /**
-   * Variable length payload. The length is defined by the remaining message length when subtracting the header and other fields.  The entire content of this block is opaque unless you understand any the encoding message_type.  The particular encoding used can be extension specific and might not always be documented as part of the mavlink specification.
+   * Variable length payload. The length is defined by the remaining message length when subtracting the header and other fields. The content/format of this block is defined in https://mavlink.io/en/services/ftp.html.
    */
   public int[] payload = new int[251];
 /**
