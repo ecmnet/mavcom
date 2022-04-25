@@ -81,8 +81,7 @@ public class Grid extends Segment {
 		return a;
 	}
 
-	// Transfer via block only. positive values => set block; negative => remove
-	// block
+	// Transfer via block only. 
 
 	public boolean toArray(long[] array) {
 		Long e;
@@ -120,7 +119,8 @@ public class Grid extends Segment {
 	}
 	
 	public void add(Long e) {
-		 transfer.add(e);
+	 if(!transfer.contains(e))
+		   transfer.add(e);
 	}
 
 	public void setIndicator(float ix, float iy, float iz) {

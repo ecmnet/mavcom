@@ -127,7 +127,6 @@ public class StartUp implements Runnable {
 	public void run() {
 		long tms = System.currentTimeMillis();
 
-		msg_msp_micro_grid grid = new msg_msp_micro_grid(1, 1);
 		msg_msp_status msg = new msg_msp_status(2, 1);
 
 		while (true) {
@@ -137,16 +136,6 @@ public class StartUp implements Runnable {
 					Thread.sleep(200);
 					control.connect();
 					continue;
-				}
-
-				while (model.grid.hasTransfers()) {
-					grid.resolution = 0;
-					grid.extension = 0;
-					grid.tms = DataModel.getSynchronizedPX4Time_us();
-					grid.count = model.grid.count;
-					if (model.grid.toArray(grid.data)) {
-						control.sendMAVLinkMessage(grid);
-					}
 				}
 
 				Thread.sleep(50);
