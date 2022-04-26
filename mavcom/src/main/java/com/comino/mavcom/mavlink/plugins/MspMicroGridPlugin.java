@@ -17,9 +17,9 @@ public class MspMicroGridPlugin extends MAVLinkPluginBase {
 		model.grid.fromArray(grid.data);
 		model.grid.count = (int) grid.count;
 		model.grid.status = (byte) grid.status;
-		model.grid.ix = grid.cx;
-		model.grid.iy = grid.cy;
-		model.grid.iz = grid.cz;
+		model.grid.ox = grid.cx;
+		model.grid.oy = grid.cy;
+		model.grid.oz = grid.cz;
 		model.grid.resolution = grid.resolution;
 		model.grid.tms = DataModel.getSynchronizedPX4Time_us();
 

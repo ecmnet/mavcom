@@ -50,7 +50,7 @@ public class Grid extends Segment {
 	public int count;
 	public byte status;
 
-	public float ix, iy, iz; // Indicator
+	public float ox, oy, oz; // Origin
 	public float vx, vy, vz; // Vehicle position
 	public float resolution;
 
@@ -63,9 +63,9 @@ public class Grid extends Segment {
 
 	public void set(Grid a) {
 
-		ix = a.ix;
-		iy = a.iy;
-		iz = a.iz;
+		ox = a.ox;
+		oy = a.oy;
+		oz = a.oz;
 
 		vx = a.vx;
 		vy = a.vy;
@@ -123,10 +123,10 @@ public class Grid extends Segment {
 		   transfer.add(e);
 	}
 
-	public void setIndicator(float ix, float iy, float iz) {
-		this.ix = ix;
-		this.iy = iy;
-		this.iz = iz;
+	public void setOrigin(float ox, float oy, float oz) {
+		this.ox = ox;
+		this.oy = oy;
+		this.oz = oz;
 	}
 	
 	public void setResolution(float resolution) {
