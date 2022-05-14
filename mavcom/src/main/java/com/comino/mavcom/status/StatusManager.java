@@ -57,6 +57,7 @@ public class StatusManager implements Runnable {
 	private static final long TIMEOUT_LPOS = 2000000;
 	private static final long TIMEOUT_GPS = 2000000;
 	private static final long TIMEOUT_SLAM = 5000000;
+	private static final long TIMEOUT_GRID = 5000000;
 	private static final long TIMEOUT_LIDAR = 2000000;
 	private static final long TIMEOUT_FLOW = 2000000;
 
@@ -424,6 +425,10 @@ public class StatusManager implements Runnable {
 		if (checkTimeOut(model.slam.tms, TIMEOUT_SLAM) && model.sys.isSensorAvailable(Status.MSP_SLAM_AVAILABILITY)) {
 			model.sys.setSensor(Status.MSP_SLAM_AVAILABILITY, false);
 			model.slam.clear();
+		}
+		
+		if (checkTimeOut(model.slam.tms, TIMEOUT_GRID) && model.sys.isSensorAvailable(Status.MSP_GRID_AVAILABILITY)) {
+			model.sys.setSensor(Status.MSP_GRID_AVAILABILITY, false);
 		}
 
 		if (checkTimeOutSystem(model.sys.gcl_tms, TIMEOUT_GCL_CONNECTED)
