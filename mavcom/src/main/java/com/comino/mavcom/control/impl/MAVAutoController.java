@@ -96,7 +96,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			last = comm.hashCode();
 			this.connected = true;
 			return true;
-		}
+		} 
 
 		if (comms[1].open()) {
 			comm = comms[1];

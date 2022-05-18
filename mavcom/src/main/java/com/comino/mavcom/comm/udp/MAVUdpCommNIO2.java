@@ -107,7 +107,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return true;
+		return channel.isConnected();
 	}
 
 	@Override
@@ -119,8 +119,13 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public void close() {
 		state = WAITING;
 		try {
+			
 			if (channel != null)
+			try {
 				channel.disconnect();
+			} catch (SocketException s) { }
+			
+	
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -130,10 +135,14 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	@Override
 	public void shutdown() {
 		try {
-			state = WAITING;
-			channel.disconnect();
+			
+			try {
+				channel.disconnect();
+			} catch (SocketException s) { }
 			channel.close();
+			state = WAITING;
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -220,20 +229,18 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 				e.printStackTrace();
 			}
 
-			while (channel.isOpen()) {
-
+			while (true) {
+			
 				while (state == WAITING) {
 
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
 					}
-
+					
 					transfer_speed = 0;
 					((Buffer) rxBuffer).clear();
 					try {
-
-						channel.disconnect();
 
 						try {
 							Thread.sleep(50);
@@ -252,7 +259,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 								continue;
 							}
 						}
-						channel.connect(peerPort);
+						
+						if(!channel.isConnected())
+						  channel.connect(peerPort);
 
 						if (selector.isOpen())
 							selector.close();
@@ -380,8 +389,14 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	}
 
 	public static void main(String[] args) {
-		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "172.168.178.22", 14555,
-				14550);
+//		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "172.168.178.22", 14555,
+//				14550);
+		
+//		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "127.0.0.1", 14580,14540);
+		
+		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "127.0.0.1", 14656,14650);
+		
+		
 
 		try {
 			while (true) {

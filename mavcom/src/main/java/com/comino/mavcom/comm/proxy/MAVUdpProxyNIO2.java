@@ -138,7 +138,9 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 		try {
 			System.out.println("[mgc] Closing channel...");
 			state = WAITING;
-			channel.disconnect();
+			try {
+				channel.disconnect();
+			} catch (SocketException s) { }
 			channel.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -268,14 +270,21 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 					transfer_speed = 0;
 					((Buffer) rxBuffer).clear();
 					try {
-						channel.disconnect();
+						
+						// Do not disconnect in SITL because of 12.4
+//						if(comm.isSerial())
+//							channel.disconnect();
+
 						if (!channel.socket().isBound()) {
 							channel.socket().bind(bindPort);
 						}
 						if (selector.isOpen())
 							selector.close();
 						selector = Selector.open();
-						channel.connect(peerPort);
+
+						if(!channel.isConnected())
+							channel.connect(peerPort);
+
 						channel.register(selector, SelectionKey.OP_READ);
 
 						if (channel.isConnected())
