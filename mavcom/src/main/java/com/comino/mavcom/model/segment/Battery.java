@@ -42,7 +42,7 @@ public class Battery extends Segment {
 	public float b0 = Float.NaN; // Voltage
 	public float c0 = Float.NaN; // Current
 	public float a0 = Float.NaN; // Accumulated consumption
-	public float p = Float.NaN;
+	public float p  = Float.NaN;
 
 	public void set(Battery m) {
 		a0 = m.a0;

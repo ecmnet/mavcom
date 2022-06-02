@@ -69,6 +69,7 @@ public class MAVTimeSync implements Runnable {
 							+ (1.0d - OFFSET_AVG_ALPHA) * (double) time_offset_ns);
 				}
 				DataModel.t_offset_ns = time_offset_ns;
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
