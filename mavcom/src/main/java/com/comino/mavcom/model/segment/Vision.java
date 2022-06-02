@@ -46,16 +46,19 @@ public class Vision extends Segment {
 	public static final int ENABLED = 0;
 	public static final int AVAILABLE = 1;
 	public static final int RESETTING = 2;
-	public static final int POS_VALID = 3;
-	public static final int SPEED_VALID = 4;
-	public static final int PUBLISHED = 5;
-	public static final int FIDUCIAL_ENABLED = 6;
-	public static final int FIDUCIAL_LOCKED = 7;
-	public static final int VIDEO_ENABLED = 8;
-	public static final int EXPERIMENTAL = 9;
+	public static final int ATT_VALID = 3;
+	public static final int POS_VALID = 4;
+	public static final int SPEED_VALID = 5;
+	public static final int PUBLISHED = 6;
+	public static final int FIDUCIAL_ENABLED = 7;
+	public static final int FIDUCIAL_LOCKED = 8;
+	public static final int VIDEO_ENABLED = 9;
+	public static final int EXPERIMENTAL = 10;
+	public static final int ERROR        = 11;
+	
 
-	private static final String[] MSP_VISION_TEXTS = { "Enabled", "Available", "Resetting", "Position valid",
-			"Speed valid", "Published", "Fiducual enabled", "Fiducial locked", "Video stream","Experimental" };
+	private static final String[] MSP_VISION_TEXTS = { "Enabled", "Available", "Resetting", "Attitude valid","Position valid",
+			"Speed valid", "Published", "Fiducual enabled", "Fiducial locked", "Video stream","Experimental","Error" };
 
 	private static final String[] MSP_VISION_TSEXTS = { "RESET", "EVPOS", "EVVEL" };
 
