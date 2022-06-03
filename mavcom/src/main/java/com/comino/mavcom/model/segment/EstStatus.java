@@ -39,14 +39,19 @@ public class EstStatus extends Segment {
 
 	private static final long serialVersionUID = -8204904128449328395L;
 
-	public static final int SENSOR_BARO = 0;
-	public static final int SENSOR_GPS = 1;
-	public static final int SENSOR_LIDAR = 2;
-	public static final int SENSOR_FLOW = 3;
-	public static final int SENSOR_SONAR = 4;
-	public static final int SENSOR_VISION = 5;
-	public static final int SENSOR_MOCAP = 6;
-
+	public static final int ATTITUDE_OK            = 0;
+	public static final int HORIZONTAL_VEL_OK      = 1;
+	public static final int VERTICAL_VEL_OK        = 2;
+	public static final int HORIZONTAL_REL_POS_OK  = 3;
+	public static final int HORIZONTAL_ABS_POS_OK  = 4;
+	public static final int VERTICAL_REL_POS_OK    = 5;
+	public static final int VERTICAL_ABS_POS_OK    = 6;
+	public static final int EKF_CONSTANT_POS_MODE  = 7;
+	public static final int EKF_REL_POS_DATA_AVAIL = 8;
+	public static final int EKF_ABS_POS_DATA_AVAIL = 9;
+	public static final int EKF_GPS_GLITCH         = 10;
+	public static final int EKF_ACC_GLITCH         = 11;
+	
 	public float haglRatio = Float.NaN;
 	public float magRatio = Float.NaN;
 	public float tasRatio = Float.NaN;
