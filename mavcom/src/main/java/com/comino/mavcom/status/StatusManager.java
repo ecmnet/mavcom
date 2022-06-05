@@ -342,8 +342,13 @@ public class StatusManager implements Runnable {
 
 			// Checks for MSP driven vehicles
 
-			if (model.est.posVertAccuracy > 0.10f && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY))
+			if (model.est.posVertAccuracy > 0.30f && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
 				return false;
+			}
+			
+			if (model.est.posHorizAccuracy > 0.30f && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
+				return false;
+			}
 
 			if (!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY)) {
 				return false;
