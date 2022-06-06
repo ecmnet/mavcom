@@ -2,6 +2,8 @@ package com.comino.mavcom.mavlink;
 
 import java.time.Instant;
 
+import org.mavlink.messages.lquac.msg_log_data;
+import org.mavlink.messages.lquac.msg_logging_data;
 import org.mavlink.messages.lquac.msg_timesync;
 
 import com.comino.mavcom.comm.IMAVComm;
@@ -22,19 +24,37 @@ public class MAVTimeSync implements Runnable {
 
 	private long time_offset_ns = 0;
 
+	private long    tms_logging = 0;
+
 	public MAVTimeSync(IMAVComm comm) {
 		this.comm = comm;
 
 		if (comm.isSerial() && comm.isConnected()) {
 			comm.getReader().getParser().registerListener(msg_timesync.class,
 					(o) -> handle_time_sync((msg_timesync) o));
-			wq.addCyclicTask("HP", 100, this);
-			System.out.println("Time synchronization started...");
-		}
+			
+			comm.getReader().getParser().registerListener(msg_log_data.class,
+					(o) -> check_logging((msg_log_data) o));
+			
+			System.out.println("Time synchronization started..."+comm.isConnected());
 
+			wq.addCyclicTask("HP", 100, this);
+
+		}
+		
+	}
+
+	
+	private void check_logging(msg_log_data log) {
+		tms_logging = System.currentTimeMillis();
 	}
 
 	private void handle_time_sync(msg_timesync sync) {
+
+		// Do not timesync during ULOG transfer
+		if(System.currentTimeMillis() - tms_logging < 500)
+			return;
+
 		try {
 
 			Instant ins = Instant.now();
@@ -69,7 +89,7 @@ public class MAVTimeSync implements Runnable {
 							+ (1.0d - OFFSET_AVG_ALPHA) * (double) time_offset_ns);
 				}
 				DataModel.t_offset_ns = time_offset_ns;
-				
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,6 +99,10 @@ public class MAVTimeSync implements Runnable {
 	@Override
 	public void run() {
 		// Publish timesync to Vehicle
+
+		// Do not timesync during ULOG transfer
+		if(System.currentTimeMillis() - tms_logging < 1000)
+			return;
 
 		try {
 			Instant ins = Instant.now();
