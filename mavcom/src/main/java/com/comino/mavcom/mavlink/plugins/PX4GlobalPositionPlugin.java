@@ -18,8 +18,6 @@ public class PX4GlobalPositionPlugin extends MAVLinkPluginBase {
 		model.state.g_lat = pos.lat / 1.0e7;
 		model.state.g_lon = pos.lon / 1.0e7;
 		model.state.g_alt = (pos.alt / 1000);
-		model.gps.heading = (short) (pos.hdg / 1000f);
-		model.gps.altitude = (short) (pos.alt / 1000);
 		model.state.g_vx = pos.vx / 100f;
 		model.state.g_vy = pos.vy / 100f;
 		model.state.g_vz = pos.vz / 100f;
