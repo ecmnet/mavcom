@@ -34,10 +34,10 @@ public class PX4RawGPSPlugin extends MAVLinkPluginBase {
 			model.gps.epv = gps.v_acc < 90000 && gps.v_acc > 0 ? gps.v_acc / 1000f : Float.NaN;
 			model.gps.hdop = gps.eph / 100f;
 
-			model.gps.latitude = gps.lat / 1e7;
+			model.gps.latitude  = gps.lat / 1e7;
 			model.gps.longitude = gps.lon / 1e7;
 
-			model.gps.altitude = (short) (gps.alt / 1000);
+			model.gps.altitude = gps.alt / 1000f;
 			model.gps.fixtype = (byte) gps.fix_type;
 			model.gps.tms = DataModel.getSynchronizedPX4Time_us();
 
