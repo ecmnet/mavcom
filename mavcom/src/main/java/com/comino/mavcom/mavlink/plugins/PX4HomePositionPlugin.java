@@ -23,7 +23,8 @@ public class PX4HomePositionPlugin extends MAVLinkPluginBase {
 		model.home_state.g_lon = ref.longitude / 1e7;
 		model.home_state.g_alt = (int) ((ref.altitude + 500) / 1000f);
 
-		MSPMathUtils.map_projection_init(model.home_state.g_lat, model.home_state.g_lon);
+		if (!MSPMathUtils.is_projection_initialized())
+		   MSPMathUtils.map_projection_init(model.home_state.g_lat, model.home_state.g_lon);
 
 	}
 }

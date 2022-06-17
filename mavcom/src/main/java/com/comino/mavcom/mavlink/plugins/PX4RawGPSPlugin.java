@@ -42,9 +42,10 @@ public class PX4RawGPSPlugin extends MAVLinkPluginBase {
 			model.gps.tms = DataModel.getSynchronizedPX4Time_us();
 
 			if (MSPMathUtils.is_projection_initialized()) {
-				MSPMathUtils.map_projection_project(model.gps.latitude, model.gps.longitude, p);
-				model.gps.lx = p[0];
-				model.gps.ly = p[1];
+				if(MSPMathUtils.map_projection_project(model.gps.latitude, model.gps.longitude, p)) {
+				  model.gps.lx = p[0];
+				  model.gps.ly = p[1];
+				}
 			}
 
 			model.sys.setSensor(Status.MSP_GPS_AVAILABILITY, true);
