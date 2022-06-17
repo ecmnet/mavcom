@@ -361,7 +361,10 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_CHANGE_SPEED = 178;
     /**
-     * Changes the home location either to the current location or a specified location.
+     * Sets the home position to either to the current position or a specified position.
+          The home position is the default position that the system will return to and land on.
+          The position is set automatically by the system during the takeoff (and may also be set using this command).
+          Note: the current home position may be emitted in a HOME_POSITION message on request (using MAV_CMD_REQUEST_MESSAGE with param1=242).
      * PARAM 1 : Use current (1=use current location, 0=use specified location)
      * PARAM 2 : Empty
      * PARAM 3 : Empty
@@ -925,6 +928,7 @@ public interface MAV_CMD {
     public final static int MAV_CMD_ILLUMINATOR_ON_OFF = 405;
     /**
      * Request the home position from the vehicle.
+	  The vehicle will ACK the command and then emit the HOME_POSITION message.
      * PARAM 1 : Reserved
      * PARAM 2 : Reserved
      * PARAM 3 : Reserved
@@ -948,7 +952,8 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_START_RX_PAIR = 500;
     /**
-     * Request the interval between messages for a particular MAVLink message ID. The receiver should ACK the command and then emit its response in a MESSAGE_INTERVAL message.
+     * Request the interval between messages for a particular MAVLink message ID.
+          The receiver should ACK the command and then emit its response in a MESSAGE_INTERVAL message.
      * PARAM 1 : The MAVLink message ID
      */
     public final static int MAV_CMD_GET_MESSAGE_INTERVAL = 510;

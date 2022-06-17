@@ -24,7 +24,7 @@ public class msg_efi_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_EFI_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 65;
+    payload_length = 69;
 }
 
   /**
@@ -95,6 +95,10 @@ public class msg_efi_status extends MAVLinkMessage {
    * EFI health status
    */
   public int health;
+  /**
+   * Supply voltage to EFI sparking system.  Zero in this value means "unknown", so if the supply voltage really is zero volts use 0.0001 instead.
+   */
+  public float ignition_voltage;
 /**
  * Decode message with raw data
  */
@@ -116,12 +120,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   throttle_out = (float)dis.readFloat();
   pt_compensation = (float)dis.readFloat();
   health = (int)dis.readUnsignedByte()&0x00FF;
+  ignition_voltage = (float)dis.readFloat();
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+65];
+  byte[] buffer = new byte[12+69];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -150,15 +155,16 @@ public byte[] encode() throws IOException {
   dos.writeFloat(throttle_out);
   dos.writeFloat(pt_compensation);
   dos.writeByte(health&0x00FF);
+  dos.writeFloat(ignition_voltage);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 65);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 69);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[75] = crcl;
-  buffer[76] = crch;
+  buffer[79] = crcl;
+  buffer[80] = crch;
   dos.close();
   return buffer;
 }
@@ -180,6 +186,7 @@ return "MAVLINK_MSG_ID_EFI_STATUS : " +   "  ecu_index="+format((float)ecu_index
 +  "  throttle_out="+format((float)throttle_out)
 +  "  pt_compensation="+format((float)pt_compensation)
 +  "  health="+health
++  "  ignition_voltage="+format((float)ignition_voltage)
 ;}
 
 }

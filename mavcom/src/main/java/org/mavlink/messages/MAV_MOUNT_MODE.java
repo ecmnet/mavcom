@@ -33,7 +33,7 @@ public interface MAV_MOUNT_MODE {
      */
     public final static int MAV_MOUNT_MODE_SYSID_TARGET = 5;
     /**
-     * Gimbal tracks home location
+     * Gimbal tracks home position
      */
     public final static int MAV_MOUNT_MODE_HOME_LOCATION = 6;
 }

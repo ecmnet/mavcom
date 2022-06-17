@@ -35,7 +35,8 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_MISSION = 2;
     /**
-     * Global (WGS84) coordinate frame + altitude relative to the home position. First value / x: latitude, second value / y: longitude, third value / z: positive altitude with 0 being at the altitude of the home location.
+     * Global (WGS84) coordinate frame + altitude relative to the home position.
+          First value / x: latitude, second value / y: longitude, third value / z: positive altitude with 0 being at the altitude of the home position.
      */
     public final static int MAV_FRAME_GLOBAL_RELATIVE_ALT = 3;
     /**
@@ -47,7 +48,8 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_GLOBAL_INT = 5;
     /**
-     * Global (WGS84) coordinate frame (scaled) + altitude relative to the home position. First value / x: latitude in degrees*1E7, second value / y: longitude in degrees*1E7, third value / z: positive altitude with 0 being at the altitude of the home location.
+     * Global (WGS84) coordinate frame (scaled) + altitude relative to the home position.
+          First value / x: latitude in degrees*1E7, second value / y: longitude in degrees*1E7, third value / z: positive altitude with 0 being at the altitude of the home position.
      */
     public final static int MAV_FRAME_GLOBAL_RELATIVE_ALT_INT = 6;
     /**
