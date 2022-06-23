@@ -285,7 +285,7 @@ public class StatusManager implements Runnable {
 					case EDGE_BOTH:
 						if (((status_current.est_state & entry.mask) == 0 && (status_old.est_state & entry.mask) != 0)
 								|| ((status_current.est_state & entry.mask) != 0
-										&& (status_old.est_state & entry.mask) == 0)) {
+								&& (status_old.est_state & entry.mask) == 0)) {
 							actions.add(new Action(entry.listener, status_current));
 							entry.last_triggered = DataModel.getSynchronizedPX4Time_us();
 						}
@@ -345,7 +345,7 @@ public class StatusManager implements Runnable {
 			if (model.est.posVertAccuracy > 0.30f && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
 				return false;
 			}
-			
+
 			if (model.est.posHorizAccuracy > 0.30f && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
 				return false;
 			}
@@ -367,15 +367,18 @@ public class StatusManager implements Runnable {
 				return false;
 			}
 			
+			if(!model.sys.isStatus(Status.MSP_RC_ATTACHED))
+				return false;
+
 			// Additional checks if GPS is available
 			if (model.sys.isSensorAvailable(Status.MSP_GPS_AVAILABILITY)) {
-				
+
 				if(!model.sys.isStatus(Status.MSP_GPOS_VALID))
 					return false;
-				
+
 			}
-			
-			
+
+
 		}
 
 		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
@@ -388,11 +391,11 @@ public class StatusManager implements Runnable {
 
 		int flags = (int) model.est.flags;
 
-//		if(flags == 0
-//				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_ACCEL_ERROR)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_ACCEL_ERROR
-//				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH) {
-//			return false;
-//		}
+		//		if(flags == 0
+		//				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_ACCEL_ERROR)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_ACCEL_ERROR
+		//				|| (flags & ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH)==ESTIMATOR_STATUS_FLAGS.ESTIMATOR_GPS_GLITCH) {
+		//			return false;
+		//		}
 
 		return true;
 	}
@@ -441,7 +444,7 @@ public class StatusManager implements Runnable {
 			model.sys.setSensor(Status.MSP_SLAM_AVAILABILITY, false);
 			model.slam.clear();
 		}
-		
+
 		if (checkTimeOut(model.slam.tms, TIMEOUT_GRID) && model.sys.isSensorAvailable(Status.MSP_GRID_AVAILABILITY)) {
 			model.sys.setSensor(Status.MSP_GRID_AVAILABILITY, false);
 		}

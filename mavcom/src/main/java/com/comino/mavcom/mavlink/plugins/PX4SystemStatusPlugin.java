@@ -22,7 +22,6 @@ public class PX4SystemStatusPlugin extends MAVLinkPluginBase {
 		if(!model.sys.isStatus(Status.MSP_SITL)) 
 		  model.sys.setStatus(Status.MSP_RC_ATTACHED, (sys.onboard_control_sensors_health & 0x10000) == 0x10000);
 	
-	
 
 	}
 }
