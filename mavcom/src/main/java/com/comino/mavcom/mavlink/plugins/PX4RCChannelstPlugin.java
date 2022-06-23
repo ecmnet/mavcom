@@ -15,10 +15,10 @@ public class PX4RCChannelstPlugin extends MAVLinkPluginBase {
 	public void received(Object o) {
 
 		msg_rc_channels rc = (msg_rc_channels) o;
-		model.rc.rssi = (short) (rc.rssi);
-
-		if (!model.sys.isStatus(Status.MSP_SITL))
-			model.sys.setStatus(Status.MSP_RC_ATTACHED, (model.rc.rssi > 0));
+		if(model.sys.isStatus(Status.MSP_RC_ATTACHED))
+		  model.rc.rssi = (short) (rc.rssi);
+		else
+		  model.rc.rssi = 0;
 
 		model.rc.s0 = rc.chan1_raw < 65534 ? (short) rc.chan1_raw : 1500;
 		model.rc.s1 = rc.chan2_raw < 65534 ? (short) rc.chan2_raw : 1500;

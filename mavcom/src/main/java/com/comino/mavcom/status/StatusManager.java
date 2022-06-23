@@ -366,6 +366,16 @@ public class StatusManager implements Runnable {
 			if (!model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
 				return false;
 			}
+			
+			// Additional checks if GPS is available
+			if (model.sys.isSensorAvailable(Status.MSP_GPS_AVAILABILITY)) {
+				
+				if(!model.sys.isStatus(Status.MSP_GPOS_VALID))
+					return false;
+				
+			}
+			
+			
 		}
 
 		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
