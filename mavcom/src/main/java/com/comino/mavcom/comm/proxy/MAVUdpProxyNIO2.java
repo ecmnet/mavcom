@@ -303,6 +303,10 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 						// e.printStackTrace();
 					}
 				}
+				
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e2) { }
 
 				start = System.currentTimeMillis();
 				while (state == RUNNING) {
