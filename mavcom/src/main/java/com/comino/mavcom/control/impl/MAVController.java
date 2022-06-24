@@ -162,7 +162,6 @@ public class MAVController implements IMAVController, Runnable {
 
 		try {
 			comm.write(msg);
-			// System.out.println("Execute: "+msg.toString());
 			return true;
 		} catch (Exception e1) {
 			commError++;
@@ -182,7 +181,7 @@ public class MAVController implements IMAVController, Runnable {
 
 		msg_command_long cmd = new msg_command_long(255, 1);
 		cmd.target_system = 1;
-		cmd.target_component = 1;
+		cmd.target_component = 0;
 		cmd.command = command;
 		cmd.confirmation = 1;
 

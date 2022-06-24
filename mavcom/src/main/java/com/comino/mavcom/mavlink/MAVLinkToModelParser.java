@@ -47,6 +47,7 @@ import org.mavlink.messages.MAV_RESULT;
 import org.mavlink.messages.MAV_SEVERITY;
 import org.mavlink.messages.lquac.msg_command_ack;
 import org.mavlink.messages.lquac.msg_statustext;
+import org.mavlink.messages.lquac.msg_statustext_long;
 
 import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.log.IMAVMessageListener;
@@ -157,6 +158,8 @@ public class MAVLinkToModelParser {
 				m.text = (new String(msg.text)).trim();
 				m.tms = DataModel.getSynchronizedPX4Time_us();
 				m.severity = msg.severity;
+				
+				System.err.println(m.text);
 
 				// if new message follows tha last one within 10ms, check severity and keep that
 				// one
@@ -171,6 +174,29 @@ public class MAVLinkToModelParser {
 				writeMessage(m);
 			}
 		});
+		
+//		registerListener(msg_statustext_long.class, new IMAVLinkListener() {
+//			@Override
+//			public void received(Object o) {
+//				msg_statustext msg = (msg_statustext) o;
+//				LogMessage m = new LogMessage();
+//				m.text = (new String(msg.text)).trim();
+//				m.tms = DataModel.getSynchronizedPX4Time_us();
+//				m.severity = msg.severity;
+//
+//				// if new message follows tha last one within 10ms, check severity and keep that
+//				// one
+//				// with higher severity
+//				if (model.msg != null && (m.tms - model.msg.tms) < 10000) {
+//					if (m.severity < model.msg.severity) {
+//						model.msg.set(m);
+//					}
+//				} else
+//					model.msg.set(m);
+//
+//				writeMessage(m);
+//			}
+//		});
 
 		System.out.println("MAVMSP parser: " + msglisteners.size() + " MAVLink messagetypes registered");
 

@@ -84,6 +84,7 @@ public class ParameterFactMetaData {
 			return;
 
 		attributes.name = name_n.getNamedItem("name").getNodeValue().toUpperCase();
+		//System.out.println(attributes.name+" -->"+attributes.group_name);
 
 		NamedNodeMap type_n = parameter.getAttributes();
 		if (type_n != null)
