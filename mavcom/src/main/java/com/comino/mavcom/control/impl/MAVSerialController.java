@@ -33,20 +33,37 @@
 
 package com.comino.mavcom.control.impl;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.mavlink.messages.MAV_STATE;
+import org.mavlink.messages.lquac.msg_heartbeat;
+import org.mavlink.messages.lquac.msg_statustext;
+
 import com.comino.mavcom.comm.serial.MAVSerialComm;
 import com.comino.mavcom.control.IMAVController;
+import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
+import com.comino.mavcom.model.DataModel;
+import com.comino.mavcom.model.segment.LogMessage;
 
 /*
  * Direct serial controller up to 115200 baud for telem1 connections e.g. Radio
  */
 
 public class MAVSerialController extends MAVController implements IMAVController {
-
+	
+	private static final msg_heartbeat beat_px4 = new msg_heartbeat(255, 0);
+	private List<IMAVMessageListener> messageListener = null;
+	
 	public MAVSerialController() {
 		super();
 		System.out.println("Serial Controller loaded");
-		comm = MAVSerialComm.getInstance(reader, 2000000);
+		comm = MAVSerialComm.getInstance(reader, 115200);
+		beat_px4.system_status = MAV_STATE.MAV_STATE_ACTIVE;
+		messageListener = new ArrayList<IMAVMessageListener>();
+		
 
 	}
 
@@ -54,12 +71,15 @@ public class MAVSerialController extends MAVController implements IMAVController
 		super();
 		System.out.println("Serial Controller loaded");
 		comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), baud);
+		beat_px4.system_status = MAV_STATE.MAV_STATE_ACTIVE;
+		messageListener = new ArrayList<IMAVMessageListener>();
 
 	}
 
 	@Override
 	public boolean connect() {
-		return comm.open();
+		boolean ok = comm.open();
+		return ok;
 	}
 
 	@Override
@@ -76,6 +96,44 @@ public class MAVSerialController extends MAVController implements IMAVController
 	public boolean close() {
 		comm.close();
 		return true;
+	}
+	
+	@Override
+	public void run() {
+		try {
+			comm.write(beat_px4);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(!comm.isConnected()) {
+			comm.close();
+			comm.open();
+		}
+	}
+	
+	@Override
+	public void addMAVMessageListener(IMAVMessageListener listener) {
+		messageListener.add(listener);
+	}
+	
+	@Override
+	public void writeLogMessage(LogMessage m) {
+		if (!m.isNew())
+			return;
+
+		this.model.msg = m;
+		this.model.msg.tms = DataModel.getSynchronizedPX4Time_us();
+
+		msg_statustext msg = new msg_statustext();
+		msg.setText(m.text);
+		msg.componentId = 1;
+		msg.severity = m.severity;
+		
+		if (messageListener != null) {
+			for (IMAVMessageListener msglistener : messageListener)
+				msglistener.messageReceived(m);
+		}
 	}
 
 }
