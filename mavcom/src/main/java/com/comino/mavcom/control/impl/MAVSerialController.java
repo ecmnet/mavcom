@@ -37,7 +37,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mavlink.messages.MAV_COMPONENT;
 import org.mavlink.messages.MAV_STATE;
+import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_statustext;
 
@@ -54,7 +56,7 @@ import com.comino.mavcom.model.segment.LogMessage;
 
 public class MAVSerialController extends MAVController implements IMAVController {
 	
-	private static final msg_heartbeat beat_px4 = new msg_heartbeat(255, 0);
+	private static final msg_heartbeat beat_px4 = new msg_heartbeat(255,MAV_COMPONENT.MAV_COMP_ID_MISSIONPLANNER);
 	private List<IMAVMessageListener> messageListener = null;
 	
 	public MAVSerialController() {
@@ -62,6 +64,7 @@ public class MAVSerialController extends MAVController implements IMAVController
 		System.out.println("Serial Controller loaded");
 		comm = MAVSerialComm.getInstance(reader, 115200);
 		beat_px4.system_status = MAV_STATE.MAV_STATE_ACTIVE;
+		beat_px4.type = MAV_TYPE.MAV_TYPE_GCS;
 		messageListener = new ArrayList<IMAVMessageListener>();
 		
 
@@ -69,9 +72,10 @@ public class MAVSerialController extends MAVController implements IMAVController
 
 	public MAVSerialController(int baud) {
 		super();
-		System.out.println("Serial Controller loaded");
+		System.out.println("Direct serial Controller loaded");
 		comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), baud);
 		beat_px4.system_status = MAV_STATE.MAV_STATE_ACTIVE;
+		beat_px4.type = MAV_TYPE.MAV_TYPE_GCS;
 		messageListener = new ArrayList<IMAVMessageListener>();
 
 	}
