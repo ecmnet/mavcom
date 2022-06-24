@@ -141,6 +141,8 @@ public class Status extends Segment {
 	public long gcl_tms = 0;
 	public long msp_tms = 0;
 	public short mem_m = 0;
+	
+	public long  health = 0;
 
 	public static String version = "";
 	public static String build = "";
@@ -170,6 +172,7 @@ public class Status extends Segment {
 		bat_temp = s.bat_temp;
 
 		mem_m = s.mem_m;
+		health = s.health;
 	}
 
 	public Status clone() {
@@ -293,6 +296,7 @@ public class Status extends Segment {
 		bat_state = 0;
 		bat_temp = 0;
 		mem_m = 0;
+		health = 0;
 	}
 
 	public int getStatus() {
