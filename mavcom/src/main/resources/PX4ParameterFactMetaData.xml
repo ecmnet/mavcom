@@ -1406,6 +1406,13 @@
       <decimal>0</decimal>
       <increment>0.05</increment>
     </parameter>
+    <parameter name="COM_SPOOLUP_TIME" default="1.0" type="FLOAT">
+      <short_desc>Enforced delay between arming and further navigation</short_desc>
+      <long_desc>The minimal time from arming the motors until moving the vehicle is possible is COM_SPOOLUP_TIME seconds. Goal: - Motors and propellers spool up to idle speed before getting commanded to spin faster - Timeout for ESCs and smart batteries to successfulyy do failure checks e.g. for stuck rotors before the vehicle is off the ground</long_desc>
+      <min>0</min>
+      <max>5</max>
+      <unit>s</unit>
+    </parameter>
     <parameter name="COM_TAKEOFF_ACT" default="0" type="INT32">
       <short_desc>Action after TAKEOFF has been accepted</short_desc>
       <long_desc>The mode transition after TAKEOFF has completed successfully.</long_desc>
@@ -4979,13 +4986,6 @@
         <value code="4">Acceleration based input</value>
       </values>
     </parameter>
-    <parameter name="MPC_SPOOLUP_TIME" default="1.0" type="FLOAT">
-      <short_desc>Enforced delay between arming and takeoff</short_desc>
-      <long_desc>For altitude controlled modes the time from arming the motors until a takeoff is possible gets forced to be at least MPC_SPOOLUP_TIME seconds to ensure the motors and propellers can sppol up and reach idle speed before getting commanded to spin faster. This delay is particularly useful for vehicles with slow motor spin-up e.g. because of large propellers.</long_desc>
-      <min>0</min>
-      <max>10</max>
-      <unit>s</unit>
-    </parameter>
     <parameter name="MPC_THR_CURVE" default="0" type="INT32">
       <short_desc>Thrust curve in Manual Mode</short_desc>
       <long_desc>This parameter defines how the throttle stick input is mapped to commanded thrust in Manual/Stabilized flight mode. In case the default is used ('Rescale to hover thrust'), the stick input is linearly rescaled, such that a centered stick corresponds to the hover throttle (see MPC_THR_HOVER). Select 'No Rescale' to directly map the stick 1:1 to the output. This can be useful in case the hover thrust is very low and the default would lead to too much distortion (e.g. if hover thrust is set to 20%, 80% of the upper thrust range is squeezed into the upper half of the stick range). Note: In case MPC_THR_HOVER is set to 50%, the modes 0 and 1 are the same.</long_desc>
@@ -7636,23 +7636,23 @@
       <short_desc>Differential pressure sensor offset</short_desc>
       <long_desc>The offset (zero-reading) in Pascal</long_desc>
     </parameter>
-    <parameter name="SENS_FLOW_MAXHGT" default="3.0" type="FLOAT">
+    <parameter name="SENS_FLOW_MAXHGT" default="100." type="FLOAT">
       <short_desc>Maximum height above ground when reliant on optical flow</short_desc>
       <long_desc>This parameter defines the maximum distance from ground at which the optical flow sensor operates reliably. The height setpoint will be limited to be no greater than this value when the navigation system is completely reliant on optical flow data and the height above ground estimate is valid. The sensor may be usable above this height, but accuracy will progressively degrade.</long_desc>
       <min>1.0</min>
-      <max>25.0</max>
+      <max>100.0</max>
       <unit>m</unit>
       <decimal>1</decimal>
       <increment>0.1</increment>
     </parameter>
-    <parameter name="SENS_FLOW_MAXR" default="2.5" type="FLOAT">
+    <parameter name="SENS_FLOW_MAXR" default="8." type="FLOAT">
       <short_desc>Magnitude of maximum angular flow rate reliably measurable by the optical flow sensor</short_desc>
       <long_desc>Optical flow data will not fused by the estimators if the magnitude of the flow rate exceeds this value and control loops will be instructed to limit ground speed such that the flow rate produced by movement over ground is less than 50% of this value.</long_desc>
       <min>1.0</min>
       <unit>rad/s</unit>
       <decimal>2</decimal>
     </parameter>
-    <parameter name="SENS_FLOW_MINHGT" default="0.7" type="FLOAT">
+    <parameter name="SENS_FLOW_MINHGT" default="0.08" type="FLOAT">
       <short_desc>Minimum height above ground when reliant on optical flow</short_desc>
       <long_desc>This parameter defines the minimum distance from ground at which the optical flow sensor operates reliably. The sensor may be usable below this height, but accuracy will progressively reduce to loss of focus.</long_desc>
       <min>0.0</min>
@@ -8109,11 +8109,11 @@
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="SENS_EN_PAA3905" default="0" type="INT32" boolean="true">
-      <short_desc>paa3905 Optical Flow</short_desc>
+      <short_desc>PAA3905 Optical Flow</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="SENS_EN_PAW3902" default="0" type="INT32" boolean="true">
-      <short_desc>PAW3902 &amp; PAW3903 Optical Flow</short_desc>
+      <short_desc>PAW3902/PAW3903 Optical Flow</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="SENS_EN_PCF8583" default="0" type="INT32">
@@ -8214,10 +8214,17 @@
       <short_desc>External I2C probe</short_desc>
       <long_desc>Probe for optional external I2C devices.</long_desc>
     </parameter>
-    <parameter name="SENS_FLOW_ROT" default="6" type="INT32">
-      <short_desc>PX4Flow board rotation</short_desc>
-      <long_desc>This parameter defines the yaw rotation of the PX4FLOW board relative to the vehicle body frame. Zero rotation is defined as X on flow board pointing towards front of vehicle. The recommneded installation default for the PX4FLOW board is with the Y axis forward (270 deg yaw).</long_desc>
+    <parameter name="SENS_FLOW_RATE" default="70.0" type="FLOAT">
+      <short_desc>Optical flow max rate</short_desc>
+      <long_desc>Optical flow data maximum publication rate. This is an upper bound, actual optical flow data rate is still dependant on the sensor.</long_desc>
+      <min>1</min>
+      <max>200</max>
+      <unit>Hz</unit>
       <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="SENS_FLOW_ROT" default="0" type="INT32">
+      <short_desc>Optical flow rotation</short_desc>
+      <long_desc>This parameter defines the yaw rotation of the optical flow relative to the vehicle body frame. Zero rotation is defined as X on flow board pointing towards front of vehicle.</long_desc>
       <values>
         <value code="0">No rotation</value>
         <value code="1">Yaw 45°</value>
@@ -8299,7 +8306,7 @@
       <long_desc>For systems with an external barometer, this should be set to false to make sure that the external is used.</long_desc>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter name="SENS_MAG_AUTOCAL" default="0" type="INT32" boolean="true" category="System">
+    <parameter name="SENS_MAG_AUTOCAL" default="1" type="INT32" boolean="true" category="System">
       <short_desc>Magnetometer auto calibration</short_desc>
       <long_desc>Automatically initialize magnetometer calibration from bias estimate if available.</long_desc>
     </parameter>
@@ -8755,6 +8762,28 @@
       <decimal>10</decimal>
       <increment>.000000001</increment>
       <reboot_required>true</reboot_required>
+    </parameter>
+  </group>
+  <group name="Serial">
+    <parameter name="SER_MXS_BAUD" default="5" type="INT32">
+      <short_desc>MXS Serial Communication Baud rate</short_desc>
+      <long_desc>Baudrate for the Serial Port connected to the MXS Transponder</long_desc>
+      <min>0</min>
+      <max>10</max>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">38400</value>
+        <value code="1">600</value>
+        <value code="2">4800</value>
+        <value code="3">9600</value>
+        <value code="4">RESERVED</value>
+        <value code="5">57600</value>
+        <value code="6">115200</value>
+        <value code="7">230400</value>
+        <value code="8">19200</value>
+        <value code="9">460800</value>
+        <value code="10">921600</value>
+      </values>
     </parameter>
   </group>
   <group name="Simulation In Hardware">
@@ -9715,26 +9744,162 @@
       <reboot_required>true</reboot_required>
     </parameter>
   </group>
+  <group name="Transponder">
+    <parameter name="ADSB_EMERGC" default="0" type="INT32">
+      <short_desc>ADSB-Out Emergency State</short_desc>
+      <long_desc>Sets the vehicle emergency state</long_desc>
+      <min>0</min>
+      <max>6</max>
+      <reboot_required>false</reboot_required>
+      <values>
+        <value code="0">NoEmergency</value>
+        <value code="1">General</value>
+        <value code="2">Medical</value>
+        <value code="3">LowFuel</value>
+        <value code="4">NoCommunications</value>
+        <value code="5">Interference</value>
+        <value code="6">Downed</value>
+      </values>
+    </parameter>
+    <parameter name="ADSB_EMIT_TYPE" default="14" type="INT32">
+      <short_desc>ADSB-Out Vehicle Emitter Type</short_desc>
+      <long_desc>Configure the emitter type of the vehicle.</long_desc>
+      <min>0</min>
+      <max>15</max>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">Unknown</value>
+        <value code="1">Light</value>
+        <value code="2">Small</value>
+        <value code="3">Large</value>
+        <value code="4">HighVortex</value>
+        <value code="5">Heavy</value>
+        <value code="6">Performance</value>
+        <value code="7">Rotorcraft</value>
+        <value code="8">RESERVED</value>
+        <value code="9">Glider</value>
+        <value code="10">LightAir</value>
+        <value code="11">Parachute</value>
+        <value code="12">UltraLight</value>
+        <value code="13">RESERVED</value>
+        <value code="14">UAV</value>
+        <value code="15">Space</value>
+        <value code="16">RESERVED</value>
+        <value code="17">EmergencySurf</value>
+        <value code="18">ServiceSurf</value>
+        <value code="19">PointObstacle</value>
+      </values>
+    </parameter>
+    <parameter name="ADSB_ICAO_ID" default="1194684" type="INT32">
+      <short_desc>ADSB-Out ICAO configuration</short_desc>
+      <long_desc>Defines the ICAO ID of the vehicle</long_desc>
+      <min>-1</min>
+      <max>16777215</max>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="ADSB_ICAO_SPECL" default="0" type="INT32">
+      <short_desc>ADSB-In Special ICAO configuration</short_desc>
+      <long_desc>This vehicle is always tracked. Use 0 to disable.</long_desc>
+      <min>0</min>
+      <max>16777215</max>
+      <reboot_required>false</reboot_required>
+    </parameter>
+    <parameter name="ADSB_IDENT" default="0" type="INT32" boolean="true">
+      <short_desc>ADSB-Out Ident Configuration</short_desc>
+      <long_desc>Enable Identification of Position feature</long_desc>
+      <reboot_required>false</reboot_required>
+    </parameter>
+    <parameter name="ADSB_LEN_WIDTH" default="1" type="INT32">
+      <short_desc>ADSB-Out Vehicle Size Configuration</short_desc>
+      <long_desc>Report the length and width of the vehicle in meters. In most cases, use '1' for the smallest vehicle size.</long_desc>
+      <min>0</min>
+      <max>15</max>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">SizeUnknown</value>
+        <value code="1">Len15_Wid23</value>
+        <value code="2">Len25_Wid28</value>
+        <value code="3">Len25_Wid34</value>
+        <value code="4">Len35_Wid33</value>
+        <value code="5">Len35_Wid38</value>
+        <value code="6">Len45_Wid39</value>
+        <value code="7">Len45_Wid45</value>
+        <value code="8">Len55_Wid45</value>
+        <value code="9">Len55_Wid52</value>
+        <value code="10">Len65_Wid59</value>
+        <value code="11">Len65_Wid67</value>
+        <value code="12">Len75_Wid72</value>
+        <value code="13">Len75_Wid80</value>
+        <value code="14">Len85_Wid80</value>
+        <value code="15">Len85_Wid90</value>
+      </values>
+    </parameter>
+    <parameter name="ADSB_LIST_MAX" default="25" type="INT32">
+      <short_desc>ADSB-In Vehicle List Size</short_desc>
+      <long_desc>Change number of targets to track</long_desc>
+      <min>0</min>
+      <max>50</max>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="ADSB_MAX_SPEED" default="0" type="INT32">
+      <short_desc>ADSB-Out Vehicle Max Speed</short_desc>
+      <long_desc>Informs ADSB vehicles of this vehicle's max speed capability</long_desc>
+      <min>0</min>
+      <max>6</max>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">UnknownMaxSpeed</value>
+        <value code="1">75Kts</value>
+        <value code="2">150Kts</value>
+        <value code="3">300Kts</value>
+        <value code="4">600Kts</value>
+        <value code="5">1200Kts</value>
+        <value code="6">Over1200Kts</value>
+      </values>
+    </parameter>
+    <parameter name="ADSB_SQUAWK" default="1200" type="INT32">
+      <short_desc>ADSB-Out squawk code configuration</short_desc>
+      <long_desc>This parameter defines the squawk code. Value should be between 0000 and 7777.</long_desc>
+      <min>0</min>
+      <max>7777</max>
+      <reboot_required>false</reboot_required>
+    </parameter>
+    <parameter name="MXS_EXT_CFG" default="0" type="INT32" boolean="true">
+      <short_desc>Sagetech External Configuration Mode</short_desc>
+      <long_desc>Disables auto-configuration mode enabling MXS config through external software.</long_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="MXS_OP_MODE" default="0" type="INT32">
+      <short_desc>Sagetech MXS mode configuration</short_desc>
+      <long_desc>This parameter defines the operating mode of the MXS</long_desc>
+      <min>0</min>
+      <max>3</max>
+      <reboot_required>false</reboot_required>
+      <values>
+        <value code="0">Off</value>
+        <value code="1">On</value>
+        <value code="2">Standby</value>
+        <value code="3">Alt</value>
+      </values>
+    </parameter>
+    <parameter name="MXS_TARG_PORT" default="1" type="INT32">
+      <short_desc>Sagetech MXS Participant Configuration</short_desc>
+      <long_desc>The MXS communication port to receive Target data from</long_desc>
+      <min>0</min>
+      <max>2</max>
+      <reboot_required>false</reboot_required>
+      <values>
+        <value code="0">Auto</value>
+        <value code="1">COM0</value>
+        <value code="2">COM1</value>
+      </values>
+    </parameter>
+  </group>
   <group name="UAVCAN">
     <parameter name="CANNODE_BITRATE" default="1000000" type="INT32">
       <short_desc>UAVCAN CAN bus bitrate</short_desc>
       <min>20000</min>
       <max>1000000</max>
-    </parameter>
-    <parameter name="CANNODE_FLOW_ROT" default="0" type="INT32">
-      <short_desc>Cannode flow board rotation</short_desc>
-      <long_desc>This parameter defines the yaw rotation of the Cannode flow board relative to the vehicle body frame. Zero rotation is defined as X on flow board pointing towards front of vehicle.</long_desc>
-      <reboot_required>true</reboot_required>
-      <values>
-        <value code="0">No rotation</value>
-        <value code="1">Yaw 45°</value>
-        <value code="2">Yaw 90°</value>
-        <value code="3">Yaw 135°</value>
-        <value code="4">Yaw 180°</value>
-        <value code="5">Yaw 225°</value>
-        <value code="6">Yaw 270°</value>
-        <value code="7">Yaw 315°</value>
-      </values>
     </parameter>
     <parameter name="CANNODE_GPS_RTCM" default="0" type="INT32" boolean="true">
       <short_desc>Enable RTCM pub/sub</short_desc>
