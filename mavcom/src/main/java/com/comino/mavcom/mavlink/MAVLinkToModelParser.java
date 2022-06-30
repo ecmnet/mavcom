@@ -159,7 +159,7 @@ public class MAVLinkToModelParser {
 				m.tms = DataModel.getSynchronizedPX4Time_us();
 				m.severity = msg.severity;
 				
-				System.err.println(m.text);
+//				System.err.println(m.text);
 
 				// if new message follows tha last one within 10ms, check severity and keep that
 				// one
