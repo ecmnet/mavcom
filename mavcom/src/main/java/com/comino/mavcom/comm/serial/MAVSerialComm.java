@@ -168,7 +168,7 @@ public class MAVSerialComm implements IMAVComm {
 			is.close();
 			os.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}
 	}
 	
