@@ -36,6 +36,7 @@ package com.comino.mavcom.control.impl;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.mavlink.messages.MAV_COMPONENT;
@@ -65,7 +66,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		this.peerPort = peerPort;
 		this.bindPort = bindPort;
 
-		comms[0] = MAVSerialComm.getInstance(reader, 57600);
+		comms[0] = MAVSerialComm.getInstance(reader, 115200);
 		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort);
 		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540);
 		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650);
@@ -79,6 +80,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 	@Override
 	public boolean connect() {
+		
+		// Note: Does not work with OSX 12.4.
 
 		if (comm != null && comm.isConnected())
 			return true;
@@ -146,7 +149,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	}
 	
 	private void sendDateTime() {
-		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm:ss YYYY");   
+		SimpleDateFormat sdf = new SimpleDateFormat("MMM dd HH:mm:ss YYYY", Locale.ENGLISH);   
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		String s = sdf.format(new Date());
 		System.out.println("Sending date & time: "+s);
@@ -157,7 +160,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	public boolean close() {
 		super.close();
 		this.connected = false;
-		model.sys.setStatus(Status.MSP_CONNECTED, false);
 		return true;
 	}
 
@@ -170,16 +172,14 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	public void run() {
 		super.run();
 		
+		
 		if (comm == null)
 			return;
 		
 		try {
-			if (!comm.isConnected() ||!model.sys.isStatus(Status.MSP_CONNECTED)) {
+			if (!comm.isConnected() || !model.sys.isStatus(Status.MSP_CONNECTED)) {
 				System.out.println("Reconnecting...");
-				close();
-				connected = false;
-				model.sys.setStatus(Status.MSP_CONNECTED,false);
-				connect();
+				close(); connect();
 			}
 			this.connected = true;
 			model.sys.setStatus(Status.MSP_SITL, isSimulation());
