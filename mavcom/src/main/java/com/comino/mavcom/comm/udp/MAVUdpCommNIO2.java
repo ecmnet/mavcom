@@ -118,18 +118,18 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	@Override
 	public void close() {
 		state = WAITING;
-		try {
-			
-			if (channel != null)
-			try {
-				channel.disconnect();
-			} catch (SocketException s) { }
-			
-	
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			
+//			if (channel != null)
+//			try {
+//				channel.disconnect();
+//			} catch (SocketException s) { }
+//			
+//	
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override
