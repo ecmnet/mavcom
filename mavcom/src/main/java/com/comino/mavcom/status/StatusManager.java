@@ -336,6 +336,8 @@ public class StatusManager implements Runnable {
 	}
 
 	private boolean checkFlightReadiness() {
+		
+		boolean is_ready = true;
 
 		if (model.sys.isStatus(Status.MSP_CONNECTED) && !model.sys.isStatus(Status.MSP_SITL)
 				&& !model.sys.isAutopilotMode(MSP_AUTOCONTROL_MODE.FCUM)) {
@@ -343,42 +345,42 @@ public class StatusManager implements Runnable {
 			// Checks for MSP driven vehicles
 
 			if (model.est.posVertAccuracy > 0.30f && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
-				return false;
+				is_ready = false;
 			}
 
 			if (model.est.posHorizAccuracy > 0.30f && model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
-				return false;
+				is_ready = false;
 			}
 
 			if (!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY)) {
-				return false;
+				is_ready = false;
 			}
 
 			if (!model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY) && model.vision.isStatus(Vision.ENABLED)) {
-				return false;
+				is_ready = false;
 			}
 
 			if ((Float.isNaN(model.vision.x) || Float.isNaN(model.vision.y) || Float.isNaN(model.vision.z))
 					&& model.vision.isStatus(Vision.ENABLED)) {
-				return false;
+				is_ready = false;
 			}
 
 			if (!model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
-				return false;
+				is_ready = false;
 			}
 			
 			if(!model.sys.isStatus(Status.MSP_RC_ATTACHED))
-				return false;
+				is_ready = false;
 
 			// Additional checks if GPS is available
 			if (model.sys.isSensorAvailable(Status.MSP_GPS_AVAILABILITY)) {
 
 				if(!model.sys.isStatus(Status.MSP_GPOS_VALID))
-					return false;
+					is_ready = false;
 
 			}
 
-
+           return is_ready;
 		}
 
 		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
