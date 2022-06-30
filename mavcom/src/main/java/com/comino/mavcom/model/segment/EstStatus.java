@@ -63,6 +63,7 @@ public class EstStatus extends Segment {
 	public float posVertAccuracy = Float.NaN;
 
 	public int flags = 0;
+	public int reset_counter = 0;
 
 	public void set(EstStatus a) {
 		this.haglRatio = a.haglRatio;
@@ -74,6 +75,7 @@ public class EstStatus extends Segment {
 
 		this.posHorizAccuracy = a.posHorizAccuracy;
 		this.posVertAccuracy = a.posVertAccuracy;
+		this.reset_counter = a.reset_counter;
 
 		this.flags = a.flags;
 
@@ -105,6 +107,7 @@ public class EstStatus extends Segment {
 		posHorizAccuracy = 0;
 		posVertAccuracy = 0;
 		flags = 0;
+		reset_counter = 0;
 	}
 
 }
