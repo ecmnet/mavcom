@@ -81,7 +81,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	@Override
 	public boolean connect() {
 		
-		// Note: Does not work with OSX 12.4.
 
 		if (comm != null && comm.isConnected())
 			return true;
@@ -167,11 +166,15 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	public boolean isConnected() {
 		return model.sys.isStatus(Status.MSP_CONNECTED) && comm!=null;
 	}
+	
+	@Override
+	public boolean isSimulation() {
+		return isSITL;
+	}
 
 	@Override
 	public void run() {
 		super.run();
-		
 		
 		if (comm == null)
 			return;
@@ -182,7 +185,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 				close(); connect();
 			}
 			this.connected = true;
-			model.sys.setStatus(Status.MSP_SITL, isSimulation());
+			model.sys.setStatus(Status.MSP_SITL, isSITL);
 			comm.write(beat);
 
 		} catch (Exception e) {
