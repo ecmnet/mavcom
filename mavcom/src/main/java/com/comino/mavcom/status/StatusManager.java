@@ -352,7 +352,7 @@ public class StatusManager implements Runnable {
 				is_ready = false;
 			}
 
-			if (!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY)) {
+			if (!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY) && !model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
 				is_ready = false;
 			}
 
