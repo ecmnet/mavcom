@@ -55,7 +55,7 @@ public class Vision extends Segment {
 	public static final int VIDEO_ENABLED = 9;
 	public static final int EXPERIMENTAL = 10;
 	public static final int ERROR        = 11;
-	
+
 
 	private static final String[] MSP_VISION_TEXTS = { "Enabled", "Available", "Resetting", "Attitude valid","Position valid",
 			"Speed valid", "Published", "Fiducual enabled", "Fiducial locked", "Video stream","Experimental","Error" };
@@ -87,6 +87,11 @@ public class Vision extends Segment {
 	public float vx = Float.NaN;
 	public float vy = Float.NaN;
 	public float vz = Float.NaN;
+
+	// Acceleration
+	public float ax = Float.NaN;
+	public float ay = Float.NaN;
+	public float az = Float.NaN;
 
 	// Covariance speed
 	public float cov_vx = Float.NaN;

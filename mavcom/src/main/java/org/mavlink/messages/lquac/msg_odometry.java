@@ -24,7 +24,7 @@ public class msg_odometry extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_ODOMETRY;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 232;
+    payload_length = 233;
 }
 
   /**
@@ -95,6 +95,10 @@ public class msg_odometry extends MAVLinkMessage {
    * Type of estimator that is providing the odometry.
    */
   public int estimator_type;
+  /**
+   * Optional odometry quality metric as a percentage. -1 = odometry has failed, 0 = unknown/unset quality, 1 = worst quality, 100 = best quality
+   */
+  public int quality;
 /**
  * Decode message with raw data
  */
@@ -122,12 +126,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   child_frame_id = (int)dis.readUnsignedByte()&0x00FF;
   reset_counter = (int)dis.readUnsignedByte()&0x00FF;
   estimator_type = (int)dis.readUnsignedByte()&0x00FF;
+  quality = (int)dis.readByte();
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+232];
+  byte[] buffer = new byte[12+233];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -162,15 +167,16 @@ public byte[] encode() throws IOException {
   dos.writeByte(child_frame_id&0x00FF);
   dos.writeByte(reset_counter&0x00FF);
   dos.writeByte(estimator_type&0x00FF);
+  dos.write(quality&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 232);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 233);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[242] = crcl;
-  buffer[243] = crch;
+  buffer[243] = crcl;
+  buffer[244] = crch;
   dos.close();
   return buffer;
 }
@@ -235,6 +241,7 @@ return "MAVLINK_MSG_ID_ODOMETRY : " +   "  time_usec="+time_usec
 +  "  child_frame_id="+child_frame_id
 +  "  reset_counter="+reset_counter
 +  "  estimator_type="+estimator_type
++  "  quality="+quality
 ;}
 
 }

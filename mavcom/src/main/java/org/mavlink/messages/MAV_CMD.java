@@ -918,7 +918,11 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_COMPONENT_ARM_DISARM = 400;
     /**
-     * Instructs system to run pre-arm checks. This command should return MAV_RESULT_TEMPORARILY_REJECTED in the case the system is armed, otherwise MAV_RESULT_ACCEPTED. Note that the return value from executing this command does not indicate whether the vehicle is armable or not, just whether the system has successfully run/is currently running the checks.  The result of the checks is reflected in the SYS_STATUS message.
+     * Instructs a target system to run pre-arm checks.
+          This allows preflight checks to be run on demand, which may be useful on systems that normally run them at low rate, or which do not trigger checks when the armable state might have changed.
+          This command should should return MAV_RESULT_ACCEPTED if it will run the checks.
+          The results of the checks are usually then reported in SYS_STATUS messages (this is system-specific).
+          The command should return MAV_RESULT_TEMPORARILY_REJECTED if the system is already armed.
      */
     public final static int MAV_CMD_RUN_PREARM_CHECKS = 401;
     /**
