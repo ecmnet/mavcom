@@ -43,28 +43,28 @@ public class Battery extends Segment {
 	public float c0 = Float.NaN; // Current
 	public float a0 = Float.NaN; // Accumulated consumption
 	public float p  = Float.NaN;
+	public int   tr = 0;         // Time remaining
 
 	public void set(Battery m) {
 		a0 = m.a0;
 		b0 = m.b0;
 		c0 = m.c0;
-		p = m.p;
+		p  = m.p;
+		tr = m.tr;
 	}
 
 	public Battery clone() {
 		Battery s = new Battery();
-		s.b0 = b0;
-		s.c0 = c0;
-		s.p = p;
-		s.a0 = a0;
+		s.set(this);
 		return s;
 	}
 
 	public void clear() {
 		b0 = 0;
 		c0 = 0;
-		p = 0;
+		p  = 0;
 		a0 = 0;
+		tr = 0;
 	}
 
 }
