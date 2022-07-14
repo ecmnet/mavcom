@@ -47,10 +47,10 @@ public class GPS extends Segment {
 
 	public int flags = 0;
 
-	public float numsat = Float.NaN;
+	public int numsat = 0;
 	public double latitude = Double.NaN;
 	public double longitude = Double.NaN;
-	public short heading = 0;
+	public float heading = 0;
 	public float altitude = 0;
 	public float eph = Float.NaN;
 	public float epv = Float.NaN;
@@ -64,15 +64,15 @@ public class GPS extends Segment {
 
 	}
 
-	public GPS(float _lat, float _lon, int _heading) {
+	public GPS(float _lat, float _lon, float _heading) {
 		latitude = _lat;
 		longitude = _lon;
-		heading = (short) _heading;
+		heading =  _heading;
 		setFlag(GPS_SAT_VALID, true);
 		numsat = 99;
 	}
 
-	public void set(int _fix, int _numsat, float _lat, float _lon, int _altitude, int _heading, float _eph,
+	public void set(int _fix, int _numsat, float _lat, float _lon, int _altitude, float _heading, float _eph,
 			float _speed) {
 
 		setFlag(GPS_SAT_FIX, _fix > 0);
@@ -85,7 +85,7 @@ public class GPS extends Segment {
 		numsat = (byte) _numsat;
 		latitude = _lat;
 		longitude = _lon;
-		heading = (short) _heading;
+		heading =  _heading;
 		altitude = (short) _altitude;
 		eph = _eph;
 		speed = _speed;

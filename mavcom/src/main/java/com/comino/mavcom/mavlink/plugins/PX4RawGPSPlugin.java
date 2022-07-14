@@ -29,6 +29,7 @@ public class PX4RawGPSPlugin extends MAVLinkPluginBase {
 
 			model.gps.setFlag(GPS.GPS_SAT_RTKFIX, (gps.fix_type & 0xF) > 5);
 			model.gps.setFlag(GPS.GPS_SAT_VALID, true);
+			model.gps.heading = gps.yaw / 1000f;
 
 			model.gps.eph = gps.h_acc < 90000 && gps.h_acc > 0 ? gps.h_acc / 1000f : Float.NaN;
 			model.gps.epv = gps.v_acc < 90000 && gps.v_acc > 0 ? gps.v_acc / 1000f : Float.NaN;
