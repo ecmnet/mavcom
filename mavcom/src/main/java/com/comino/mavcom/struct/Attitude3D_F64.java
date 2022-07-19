@@ -25,24 +25,28 @@ public class Attitude3D_F64 {
 		this.att[YAW] = y;
 	}
 
-	public void setFromMatrix(DMatrixRMaj rotation) {
+	public Attitude3D_F64 setFromMatrix(DMatrixRMaj rotation) {
 		ConvertRotation3D_F64.matrixToEuler(rotation, EulerType.XYZ, att);
+		return this;
 	}
 
-	public void setFromMatrix(DMatrixRMaj rotation, EulerType type) {
+	public Attitude3D_F64 setFromMatrix(DMatrixRMaj rotation, EulerType type) {
 		ConvertRotation3D_F64.matrixToEuler(rotation, type, att);
+		return this;
 	}
 
-	public void subtract(Attitude3D_F64 offset) {
+	public Attitude3D_F64 subtract(Attitude3D_F64 offset) {
 		att[0] -= offset.att[0];
 		att[1] -= offset.att[1];
 		att[2] -= offset.att[2];
+		return this;
 	}
 
-	public void add(Attitude3D_F64 offset) {
+	public Attitude3D_F64 add(Attitude3D_F64 offset) {
 		att[0] += offset.att[0];
 		att[1] += offset.att[1];
 		att[2] += offset.att[2];
+		return this;
 	}
 
 	public double getRoll() {
