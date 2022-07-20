@@ -329,4 +329,9 @@ public class MAVSerialComm implements IMAVComm {
 		return reader;
 	}
 
+	@Override
+	public String getHost() {
+		return "none";
+	}
+
 }

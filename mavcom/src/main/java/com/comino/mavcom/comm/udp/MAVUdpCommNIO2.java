@@ -64,6 +64,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	private Worker worker;
 
+	private String peerAddress;
+
 	private final static msg_heartbeat hb = new msg_heartbeat(255, 1);
 
 	public static MAVUdpCommNIO2 getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort,
@@ -79,6 +81,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		this.peerPort = new InetSocketAddress(peerAddress, pPort);
 		this.reader = reader;
 		this.bindPort = bPort;
+		this.peerAddress = peerAddress;
 
 		hb.isValid = true;
 		this.worker = new Worker();
@@ -188,6 +191,11 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	@Override
 	public MAVLinkBlockingReader getReader() {
 		return reader;
+	}
+	
+	@Override
+	public String getHost() {
+		return peerAddress;
 	}
 
 	private class Worker implements Runnable {

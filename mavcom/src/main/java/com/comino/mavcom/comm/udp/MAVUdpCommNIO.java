@@ -81,6 +81,8 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	private final ByteBuffer rxBuffer = ByteBuffer.allocate(BUFFER * 1024);
 	private final byte[] proxyBuffer = new byte[rxBuffer.capacity()];
 
+	private String peerAddress;
+
 	public static MAVUdpCommNIO getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort,
 			int bindPort) {
 		if (com == null)
@@ -93,6 +95,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		this.peerPort = new InetSocketAddress(peerAddress, pPort);
 		this.bindPort = new InetSocketAddress(bPort);
 		this.reader = reader;
+		this.peerAddress   = peerAddress;
 
 		System.out.println(
 				"Vehicle (NIO3): BindPort=" + bPort + " PeerPort=" + pPort + " BufferSize: " + rxBuffer.capacity());
@@ -347,6 +350,11 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 	@Override
 	public MAVLinkBlockingReader getReader() {
 		return reader;
+	}
+	
+	@Override
+	public String getHost() {
+		return peerAddress;
 	}
 
 }

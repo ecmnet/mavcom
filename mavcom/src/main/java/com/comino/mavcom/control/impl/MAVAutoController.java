@@ -171,6 +171,11 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	public boolean isSimulation() {
 		return isSITL;
 	}
+	
+	@Override
+	public String getConnectedAddress() {
+		return comm.getHost();
+	}
 
 	@Override
 	public void run() {

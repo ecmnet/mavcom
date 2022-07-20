@@ -68,5 +68,7 @@ public interface IMAVComm {
 	public long getTransferRate();
 
 	public void writeMessage(LogMessage m);
+	
+	public String getHost();
 
 }
