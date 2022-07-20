@@ -2,6 +2,8 @@ package com.comino.mavcom.struct;
 
 import org.ejml.data.DMatrixRMaj;
 
+import com.comino.mavutils.MSPMathUtils;
+
 import georegression.geometry.ConvertRotation3D_F64;
 import georegression.struct.EulerType;
 
@@ -36,16 +38,16 @@ public class Attitude3D_F64 {
 	}
 
 	public Attitude3D_F64 subtract(Attitude3D_F64 offset) {
-		att[0] -= offset.att[0];
-		att[1] -= offset.att[1];
-		att[2] -= offset.att[2];
+		att[0] = MSPMathUtils.normAngle(att[0] - offset.att[0],0);
+		att[1] = MSPMathUtils.normAngle(att[1] - offset.att[1],0);
+		att[2] = MSPMathUtils.normAngle(att[2] - offset.att[2],0);
 		return this;
 	}
 
 	public Attitude3D_F64 add(Attitude3D_F64 offset) {
-		att[0] += offset.att[0];
-		att[1] += offset.att[1];
-		att[2] += offset.att[2];
+		att[0] = MSPMathUtils.normAngle(att[0] + offset.att[0],0);
+		att[1] = MSPMathUtils.normAngle(att[1] + offset.att[1],0);
+		att[2] = MSPMathUtils.normAngle(att[2] + offset.att[2],0);		
 		return this;
 	}
 
