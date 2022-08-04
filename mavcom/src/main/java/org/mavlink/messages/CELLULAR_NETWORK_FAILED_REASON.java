@@ -21,7 +21,7 @@ public interface CELLULAR_NETWORK_FAILED_REASON {
      */
     public final static int CELLULAR_NETWORK_FAILED_REASON_SIM_MISSING = 2;
     /**
-     * SIM is available, but not usuable for connection
+     * SIM is available, but not usable for connection
      */
     public final static int CELLULAR_NETWORK_FAILED_REASON_SIM_ERROR = 3;
 }

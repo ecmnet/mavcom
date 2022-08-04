@@ -36,7 +36,7 @@ public class msg_radio_status extends MAVLinkMessage {
    */
   public int fixed;
   /**
-   * Local (message sender) recieved signal strength indication in device-dependent units/scale. Values: [0-254], UINT8_MAX: invalid/unknown.
+   * Local (message sender) received signal strength indication in device-dependent units/scale. Values: [0-254], UINT8_MAX: invalid/unknown.
    */
   public int rssi;
   /**

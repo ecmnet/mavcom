@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_can_filter_modify
- * Modify the filter of what CAN messages to forward over the mavlink. This can be used to make CAN forwarding work well on low bandwith links. The filtering is applied on bits 8 to 24 of the CAN id (2nd and 3rd bytes) which corresponds to the DroneCAN message ID for DroneCAN. Filters with more than 16 IDs can be constructed by sending multiple CAN_FILTER_MODIFY messages.
+ * Modify the filter of what CAN messages to forward over the mavlink. This can be used to make CAN forwarding work well on low bandwidth links. The filtering is applied on bits 8 to 24 of the CAN id (2nd and 3rd bytes) which corresponds to the DroneCAN message ID for DroneCAN. Filters with more than 16 IDs can be constructed by sending multiple CAN_FILTER_MODIFY messages.
  **/
 public class msg_can_filter_modify extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_CAN_FILTER_MODIFY = 388;
@@ -116,7 +116,7 @@ return "MAVLINK_MSG_ID_CAN_FILTER_MODIFY : " +   "  ids[0]="+ids[0] +
   "  ids[12]="+ids[12] +
   "  ids[13]="+ids[13] +
   "  ids[14]="+ids[14] +
-  "  ids[15]="+ids[15] 
+  "  ids[15]="+ids[15]
 +  "  target_system="+target_system
 +  "  target_component="+target_component
 +  "  bus="+bus

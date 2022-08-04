@@ -18,7 +18,7 @@ public interface NAV_VTOL_LAND_OPTIONS {
      */
     public final static int NAV_VTOL_LAND_OPTIONS_FW_DESCENT = 1;
     /**
-     * Land in multicopter mode on reaching the landing co-ordinates (the whole landing is by "hover descent").
+     * Land in multicopter mode on reaching the landing coordinates (the whole landing is by "hover descent").
      */
     public final static int NAV_VTOL_LAND_OPTIONS_HOVER_DESCENT = 2;
 }

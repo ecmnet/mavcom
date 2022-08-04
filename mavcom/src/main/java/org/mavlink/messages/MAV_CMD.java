@@ -920,7 +920,7 @@ public interface MAV_CMD {
     /**
      * Instructs a target system to run pre-arm checks.
           This allows preflight checks to be run on demand, which may be useful on systems that normally run them at low rate, or which do not trigger checks when the armable state might have changed.
-          This command should should return MAV_RESULT_ACCEPTED if it will run the checks.
+          This command should return MAV_RESULT_ACCEPTED if it will run the checks.
           The results of the checks are usually then reported in SYS_STATUS messages (this is system-specific).
           The command should return MAV_RESULT_TEMPORARILY_REJECTED if the system is already armed.
      */

@@ -5,10 +5,10 @@
 package org.mavlink.messages;
 /**
  * Interface MAV_FRAME
- * Co-ordinate frames used by MAVLink. Not all frames are supported by all commands, messages, or vehicles.
+ * Coordinate frames used by MAVLink. Not all frames are supported by all commands, messages, or vehicles.
       
       Global frames use the following naming conventions:
-      - "GLOBAL": Global co-ordinate frame with WGS84 latitude/longitude and altitude positive over mean sea level (MSL) by default. 
+      - "GLOBAL": Global coordinate frame with WGS84 latitude/longitude and altitude positive over mean sea level (MSL) by default. 
         The following modifiers may be used with "GLOBAL":
         - "RELATIVE_ALT": Altitude is relative to the vehicle home position rather than MSL.
         - "TERRAIN_ALT": Altitude is relative to ground level rather than MSL.
@@ -57,7 +57,7 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_LOCAL_OFFSET_NED = 7;
     /**
-     * Same as MAV_FRAME_LOCAL_NED when used to represent position values. Same as MAV_FRAME_BODY_FRD when used with velocity/accelaration values.
+     * Same as MAV_FRAME_LOCAL_NED when used to represent position values. Same as MAV_FRAME_BODY_FRD when used with velocity/acceleration values.
      */
     public final static int MAV_FRAME_BODY_NED = 8;
     /**

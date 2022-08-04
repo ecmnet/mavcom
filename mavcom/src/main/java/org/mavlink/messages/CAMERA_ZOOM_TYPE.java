@@ -21,7 +21,7 @@ public interface CAMERA_ZOOM_TYPE {
      */
     public final static int ZOOM_TYPE_RANGE = 2;
     /**
-     * Zoom value/variable focal length in milimetres. Note that there is no message to get the valid zoom range of the camera, so this can type can only be used for cameras where the zoom range is known (implying that this cannot reliably be used in a GCS for an arbitrary camera)
+     * Zoom value/variable focal length in millimetres. Note that there is no message to get the valid zoom range of the camera, so this can type can only be used for cameras where the zoom range is known (implying that this cannot reliably be used in a GCS for an arbitrary camera)
      */
     public final static int ZOOM_TYPE_FOCAL_LENGTH = 3;
 }
