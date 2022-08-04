@@ -80,7 +80,7 @@ public class LogMessage extends Segment {
 	}
 
 	public boolean isNew(int level_filter, long tms) {
-		if (text != null && (tms - this.tms) < 300000 && severity <= level_filter)
+		if (text != null && (tms - this.tms) < 1_000_000 && severity <= level_filter)
 			return true;
 		return false;
 	}
