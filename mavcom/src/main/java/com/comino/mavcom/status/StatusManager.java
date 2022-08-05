@@ -173,13 +173,13 @@ public class StatusManager implements Runnable {
 			model.sys.setStatus(Status.MSP_READY_FOR_FLIGHT, checkFlightReadiness());
 
 		status_current.set(model.sys);
-
-		if (status_current.isStatus(Status.MSP_ARMED)) {
-			if (!status_old.isStatus(Status.MSP_ARMED))
-				t_armed_start = System.currentTimeMillis();
+		
+		if(model.sys.isStatus(Status.MSP_ARMED))
 			model.sys.t_armed_ms = System.currentTimeMillis() - t_armed_start;
-		} else
+		else {
 			model.sys.t_armed_ms = 0;
+			t_armed_start = System.currentTimeMillis();
+		}
 
 		if (status_old.isEqual(status_current))
 			return;
@@ -336,7 +336,7 @@ public class StatusManager implements Runnable {
 	}
 
 	private boolean checkFlightReadiness() {
-		
+
 		boolean is_ready = true;
 
 		if (model.sys.isStatus(Status.MSP_CONNECTED) && !model.sys.isStatus(Status.MSP_SITL)
@@ -368,7 +368,7 @@ public class StatusManager implements Runnable {
 			if (!model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
 				is_ready = false;
 			}
-			
+
 			if(!model.sys.isStatus(Status.MSP_RC_ATTACHED))
 				is_ready = false;
 
@@ -380,7 +380,7 @@ public class StatusManager implements Runnable {
 
 			}
 
-           return is_ready;
+			return is_ready;
 		}
 
 		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
