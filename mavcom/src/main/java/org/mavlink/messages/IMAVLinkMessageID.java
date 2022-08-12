@@ -106,6 +106,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_LOCAL_POSITION_NED_SYSTEM_GLOBAL_OFFSET = 89;
   public static int MAVLINK_MSG_ID_RESOURCE_REQUEST = 142;
   public static int MAVLINK_MSG_ID_MSP_MICRO_SLAM = 184;
+  public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_ARM_STATUS = 12918;
   public static int MAVLINK_MSG_ID_ACTUATOR_CONTROL_TARGET = 140;
   public static int MAVLINK_MSG_ID_REQUEST_EVENT = 412;
   public static int MAVLINK_MSG_ID_SETUP_SIGNING = 256;
@@ -199,6 +200,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_VFR_HUD = 74;
   public static int MAVLINK_MSG_ID_EFI_STATUS = 225;
   public static int MAVLINK_MSG_ID_LOG_ENTRY = 118;
+  public static int MAVLINK_MSG_ID_MSP_EKF2_RESET = 186;
   public static int MAVLINK_MSG_ID_LINK_NODE_STATUS = 8;
   public static int MAVLINK_MSG_ID_SET_HOME_POSITION = 243;
   public static int MAVLINK_MSG_ID_GPS2_RAW = 124;
