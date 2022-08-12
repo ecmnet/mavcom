@@ -52,6 +52,10 @@ public class State extends Segment {
 	public float l_x = Float.NaN; // x-position in m (Roll)
 	public float l_y = Float.NaN; // y-position in m (Pitch)
 	public float l_z = Float.NaN; // z-position in m (Altitude)
+	
+	public float l_rx = 0;        // x-reset offset in m (Roll)
+	public float l_ry = 0;        // y-reset offset in m (Pitch)
+	public float l_rz = 0;        // z-reset offset in m (Altitude)
 
 	public float h = Float.NaN; // heading in radiant
 
@@ -60,7 +64,7 @@ public class State extends Segment {
 	public float l_vz = Float.NaN; // z speed in m/s
 
 	public float vh = Float.NaN; // heading speed in radiant/s
-	public float v = Float.NaN; // ground speed in m/s
+	public float v = Float.NaN;  // ground speed in m/s
 
 	public float l_ax = Float.NaN; // x acceleration in m/s^2
 	public float l_ay = Float.NaN; // y acceleration in m/s^2
@@ -100,6 +104,11 @@ public class State extends Segment {
 		t.l_x = l_x;
 		t.l_y = l_y;
 		t.l_z = l_z;
+		
+		t.l_rx = l_rx;
+		t.l_ry = l_ry;
+		t.l_rz = l_rz;
+		
 		t.h = h;
 		t.v = v;
 
@@ -127,9 +136,15 @@ public class State extends Segment {
 
 	public void set(State t) {
 		flags = t.flags;
+		
 		l_x = t.l_x;
 		l_y = t.l_y;
 		l_z = t.l_z;
+		
+		l_rx = t.l_rx;
+		l_ry = t.l_ry;
+		l_rz = t.l_rz;
+		
 		h = t.h;
 		v = t.v;
 
@@ -159,6 +174,11 @@ public class State extends Segment {
 		l_x = Float.NaN;
 		l_y = Float.NaN;
 		l_z = Float.NaN;
+		
+		l_rx = 0;
+		l_ry = 0;
+		l_rz = 0;
+		
 		h = 0;
 		l_vx = 0;
 		l_vy = 0;
