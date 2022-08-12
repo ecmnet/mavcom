@@ -302,5 +302,13 @@
 
                <field type="uint64_t"      name="tms">Timestamp</field>
            </message>
+           <message id="186" name="MSP_EKF2_RESET">
+               <description>EKF2 reset</description>
+               <field type="float"         name="offset_x">X Offset</field>
+               <field type="float"         name="offset_y">Y Offset</field>
+               <field type="float"         name="offset_z">Z Offset</field>
+               <field type="uint16_t"      name="counter">ResetCounter</field>
+               <field type="uint64_t"      name="tms">Timestamp</field>
+           </message>
       </messages>
 </mavlink>
