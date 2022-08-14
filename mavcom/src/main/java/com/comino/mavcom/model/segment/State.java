@@ -53,9 +53,9 @@ public class State extends Segment {
 	public float l_y = Float.NaN; // y-position in m (Pitch)
 	public float l_z = Float.NaN; // z-position in m (Altitude)
 	
-	public float l_rx = 0;        // x-reset offset in m (Roll)
-	public float l_ry = 0;        // y-reset offset in m (Pitch)
-	public float l_rz = 0;        // z-reset offset in m (Altitude)
+	public float l_rx = Float.NaN; // x-position corrected in m (Roll)
+	public float l_ry = Float.NaN; // y-position corrected in m (Pitch)
+	public float l_rz = Float.NaN; // z-position corrected in m (Altitude)
 
 	public float h = Float.NaN; // heading in radiant
 
@@ -175,9 +175,9 @@ public class State extends Segment {
 		l_y = Float.NaN;
 		l_z = Float.NaN;
 		
-		l_rx = 0;
-		l_ry = 0;
-		l_rz = 0;
+		l_rx = Float.NaN;
+		l_ry = Float.NaN;
+		l_rz = Float.NaN;
 		
 		h = 0;
 		l_vx = 0;

@@ -15,9 +15,15 @@ public class MspEkf2ResetPlugin extends MAVLinkPluginBase {
 	public void received(Object o) {
 
 		msg_msp_ekf2_reset reset = (msg_msp_ekf2_reset) o;
-		model.state.l_rx = reset.offset_x;
-		model.state.l_ry = reset.offset_y;
-		model.state.l_rz = reset.offset_z;
+		
+		model.est.l_x_reset = reset.offset_x;
+		model.est.l_y_reset = reset.offset_y;
+		model.est.l_z_reset = reset.offset_z;
+		
+		model.state.l_rx    = reset.cx;
+		model.state.l_ry    = reset.cy;
+		model.state.l_rz    = reset.cz;
+		
 	
 	}
 

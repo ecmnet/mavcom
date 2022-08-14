@@ -61,6 +61,10 @@ public class EstStatus extends Segment {
 
 	public float posHorizAccuracy = Float.NaN;
 	public float posVertAccuracy = Float.NaN;
+	
+	public float l_x_reset = 0;
+	public float l_y_reset = 0;
+	public float l_z_reset = 0;
 
 	public int flags = 0;
 	public int reset_counter = 0;
@@ -76,6 +80,10 @@ public class EstStatus extends Segment {
 		this.posHorizAccuracy = a.posHorizAccuracy;
 		this.posVertAccuracy = a.posVertAccuracy;
 		this.reset_counter = a.reset_counter;
+		
+		this.l_x_reset = a.l_x_reset;
+		this.l_y_reset = a.l_y_reset;
+		this.l_z_reset = a.l_z_reset;
 
 		this.flags = a.flags;
 
@@ -108,6 +116,10 @@ public class EstStatus extends Segment {
 		posVertAccuracy = 0;
 		flags = 0;
 		reset_counter = 0;
+		
+		 l_x_reset = 0;
+		 l_y_reset = 0;
+		 l_z_reset = 0;
 	}
 
 }
