@@ -24,7 +24,7 @@ public class msg_msp_ekf2_reset extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_EKF2_RESET;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 34;
+    payload_length = 22;
 }
 
   /**
@@ -44,18 +44,6 @@ public class msg_msp_ekf2_reset extends MAVLinkMessage {
    */
   public float offset_z;
   /**
-   * Corrected LPosX
-   */
-  public float cx;
-  /**
-   * Corrected LPosY
-   */
-  public float cy;
-  /**
-   * Corrected LPosZ
-   */
-  public float cz;
-  /**
    * ResetCounter
    */
   public int counter;
@@ -67,16 +55,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   offset_x = (float)dis.readFloat();
   offset_y = (float)dis.readFloat();
   offset_z = (float)dis.readFloat();
-  cx = (float)dis.readFloat();
-  cy = (float)dis.readFloat();
-  cz = (float)dis.readFloat();
   counter = (int)dis.readUnsignedShort()&0x00FFFF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+34];
+  byte[] buffer = new byte[12+22];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -92,19 +77,16 @@ public byte[] encode() throws IOException {
   dos.writeFloat(offset_x);
   dos.writeFloat(offset_y);
   dos.writeFloat(offset_z);
-  dos.writeFloat(cx);
-  dos.writeFloat(cy);
-  dos.writeFloat(cz);
   dos.writeShort(counter&0x00FFFF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 34);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 22);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[44] = crcl;
-  buffer[45] = crch;
+  buffer[32] = crcl;
+  buffer[33] = crch;
   dos.close();
   return buffer;
 }
@@ -113,9 +95,6 @@ return "MAVLINK_MSG_ID_MSP_EKF2_RESET : " +   "  tms="+tms
 +  "  offset_x="+format((float)offset_x)
 +  "  offset_y="+format((float)offset_y)
 +  "  offset_z="+format((float)offset_z)
-+  "  cx="+format((float)cx)
-+  "  cy="+format((float)cy)
-+  "  cz="+format((float)cz)
 +  "  counter="+counter
 ;}
 

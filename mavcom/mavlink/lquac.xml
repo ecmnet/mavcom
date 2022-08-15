@@ -273,6 +273,9 @@
                <field type="float"         name="ox" >Obstacle X</field>
                <field type="float"         name="oy" >Obstacle Y</field>
                <field type="float"         name="oz" >Obstacle Z</field>
+               <field type="float"         name="cx" >Corrected LPosX</field>
+               <field type="float"         name="cy" >Corrected LPosY</field>
+               <field type="float"         name="cz" >Corrected LPosZ</field>      
                <field type="float"         name="quality" >Quality</field>
                <field type="uint16_t"      name="flags">Offboard Flags</field>
                <field type="float"         name="fps">Rate in Hz</field>
@@ -307,9 +310,6 @@
                <field type="float"         name="offset_x">X Offset</field>
                <field type="float"         name="offset_y">Y Offset</field>
                <field type="float"         name="offset_z">Z Offset</field>
-               <field type="float"         name="cx" >Corrected LPosX</field>
-               <field type="float"         name="cy" >Corrected LPosY</field>
-               <field type="float"         name="cz" >Corrected LPosZ</field>      
                <field type="uint16_t"      name="counter">ResetCounter</field>
                <field type="uint64_t"      name="tms">Timestamp</field>
            </message>

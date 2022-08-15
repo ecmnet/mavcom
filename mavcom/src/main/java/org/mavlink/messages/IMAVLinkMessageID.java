@@ -217,6 +217,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_MANUAL_CONTROL = 69;
   public static int MAVLINK_MSG_ID_MESSAGE_INTERVAL = 244;
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_OPERATOR_ID = 12905;
+  public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_SYSTEM_UPDATE = 12919;
   public static int MAVLINK_MSG_ID_HIL_STATE_QUATERNION = 115;
   public static int MAVLINK_MSG_ID_STATUSTEXT = 253;
   public static int MAVLINK_MSG_ID_CELLULAR_CONFIG = 336;
