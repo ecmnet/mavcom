@@ -42,10 +42,11 @@ public class Hud extends Segment {
 	public float aX = Float.NaN; // angleX
 	public float aY = Float.NaN; // angleY
 
-	public float h = Float.NaN; // heading (compass)
+	public float h = Float.NaN;  // heading (compass)
 	public float al = Float.NaN; // altitude above ground
 	public float ag = Float.NaN; // est.altitude above sealevel
 	public float at = Float.NaN; // altitde terrain
+	public float am = Float.NaN; // altitde terrain
 	public float ar = Float.NaN; // altitde relative
 	public float bc = Float.NaN; // bottom clearance
 	public float ap = Float.NaN; // pressure altitude
@@ -67,6 +68,7 @@ public class Hud extends Segment {
 		bc = a.bc;
 		as = a.as;
 		ap = a.ap;
+		am = a.am;
 
 	}
 
@@ -91,6 +93,7 @@ public class Hud extends Segment {
 		bc = 0;
 		as = 0;
 		ap = 0;
+		am = 0;
 	}
 
 }
