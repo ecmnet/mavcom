@@ -406,7 +406,6 @@ import org.mavlink.messages.lquac.msg_rc_channels_override;
 import org.mavlink.messages.lquac.msg_vfr_hud;
 import org.mavlink.messages.lquac.msg_efi_status;
 import org.mavlink.messages.lquac.msg_log_entry;
-import org.mavlink.messages.lquac.msg_msp_ekf2_reset;
 import org.mavlink.messages.lquac.msg_link_node_status;
 import org.mavlink.messages.lquac.msg_set_home_position;
 import org.mavlink.messages.lquac.msg_gps2_raw;
@@ -421,6 +420,7 @@ import org.mavlink.messages.lquac.msg_set_position_target_global_int;
 import org.mavlink.messages.lquac.msg_hil_actuator_controls;
 import org.mavlink.messages.lquac.msg_manual_control;
 import org.mavlink.messages.lquac.msg_message_interval;
+import org.mavlink.messages.lquac.msg_msp_local_position_corrected;
 import org.mavlink.messages.lquac.msg_hil_state_quaternion;
 import org.mavlink.messages.lquac.msg_statustext;
 import org.mavlink.messages.lquac.msg_cellular_config;
@@ -1188,10 +1188,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_log_entry(sysId, componentId);
       msg.decode(dis);
       break;
-  case MAVLINK_MSG_ID_MSP_EKF2_RESET:
-      msg = new msg_msp_ekf2_reset(sysId, componentId);
-      msg.decode(dis);
-      break;
   case MAVLINK_MSG_ID_LINK_NODE_STATUS:
       msg = new msg_link_node_status(sysId, componentId);
       msg.decode(dis);
@@ -1246,6 +1242,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_MESSAGE_INTERVAL:
       msg = new msg_message_interval(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_MSP_LOCAL_POSITION_CORRECTED:
+      msg = new msg_msp_local_position_corrected(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_HIL_STATE_QUATERNION:

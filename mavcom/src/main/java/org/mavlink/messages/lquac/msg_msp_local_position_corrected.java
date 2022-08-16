@@ -1,5 +1,5 @@
 /**
- * Generated class : msg_msp_ekf2_reset
+ * Generated class : msg_msp_local_position_corrected
  * DO NOT MODIFY!
  **/
 package org.mavlink.messages.lquac;
@@ -11,17 +11,17 @@ import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
- * Class msg_msp_ekf2_reset
- * EKF2 reset
+ * Class msg_msp_local_position_corrected
+ * Corrected local position
  **/
-public class msg_msp_ekf2_reset extends MAVLinkMessage {
-  public static final int MAVLINK_MSG_ID_MSP_EKF2_RESET = 186;
-  private static final long serialVersionUID = MAVLINK_MSG_ID_MSP_EKF2_RESET;
-  public msg_msp_ekf2_reset() {
+public class msg_msp_local_position_corrected extends MAVLinkMessage {
+  public static final int MAVLINK_MSG_ID_MSP_LOCAL_POSITION_CORRECTED = 186;
+  private static final long serialVersionUID = MAVLINK_MSG_ID_MSP_LOCAL_POSITION_CORRECTED;
+  public msg_msp_local_position_corrected() {
     this(1,1);
 }
-  public msg_msp_ekf2_reset(int sysId, int componentId) {
-    messageType = MAVLINK_MSG_ID_MSP_EKF2_RESET;
+  public msg_msp_local_position_corrected(int sysId, int componentId) {
+    messageType = MAVLINK_MSG_ID_MSP_LOCAL_POSITION_CORRECTED;
     this.sysId = sysId;
     this.componentId = componentId;
     payload_length = 22;
@@ -32,17 +32,17 @@ public class msg_msp_ekf2_reset extends MAVLinkMessage {
    */
   public long tms;
   /**
-   * X Offset
+   * Corrected LPosX
    */
-  public float offset_x;
+  public float cx;
   /**
-   * Y Offset
+   * Corrected LPosY
    */
-  public float offset_y;
+  public float cy;
   /**
-   * Z Offset
+   * Corrected LPosZ
    */
-  public float offset_z;
+  public float cz;
   /**
    * ResetCounter
    */
@@ -52,9 +52,9 @@ public class msg_msp_ekf2_reset extends MAVLinkMessage {
  */
 public void decode(LittleEndianDataInputStream dis) throws IOException {
   tms = (long)dis.readLong();
-  offset_x = (float)dis.readFloat();
-  offset_y = (float)dis.readFloat();
-  offset_z = (float)dis.readFloat();
+  cx = (float)dis.readFloat();
+  cy = (float)dis.readFloat();
+  cz = (float)dis.readFloat();
   counter = (int)dis.readUnsignedShort()&0x00FFFF;
 }
 /**
@@ -74,9 +74,9 @@ public byte[] encode() throws IOException {
   dos.writeByte((messageType >> 8) & 0x00FF);
   dos.writeByte((messageType >> 16) & 0x00FF);
   dos.writeLong(tms);
-  dos.writeFloat(offset_x);
-  dos.writeFloat(offset_y);
-  dos.writeFloat(offset_z);
+  dos.writeFloat(cx);
+  dos.writeFloat(cy);
+  dos.writeFloat(cz);
   dos.writeShort(counter&0x00FFFF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
@@ -91,10 +91,10 @@ public byte[] encode() throws IOException {
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_MSP_EKF2_RESET : " +   "  tms="+tms
-+  "  offset_x="+format((float)offset_x)
-+  "  offset_y="+format((float)offset_y)
-+  "  offset_z="+format((float)offset_z)
+return "MAVLINK_MSG_ID_MSP_LOCAL_POSITION_CORRECTED : " +   "  tms="+tms
++  "  cx="+format((float)cx)
++  "  cy="+format((float)cy)
++  "  cz="+format((float)cz)
 +  "  counter="+counter
 ;}
 
