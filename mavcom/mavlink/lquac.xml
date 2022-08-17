@@ -234,9 +234,6 @@
                <field type="float"         name="h">Heading</field>
                <field type="float"         name="p">Pitch</field>
                <field type="float"         name="r">Roll</field>
-               <field type="float"         name="gx">X GroundTruth</field>
-               <field type="float"         name="gy">Y GroundTruth</field>
-               <field type="float"         name="gz">Z GroundTruth</field>
                <field type="float"         name="px">X PrecisionOffset</field>
                <field type="float"         name="py">Y PrecisionOffset</field>
                <field type="float"         name="pz">Z PrecisionOffset</field>
@@ -306,7 +303,10 @@
                <description>Corrected local position</description>
                <field type="float"         name="cx" >Corrected LPosX</field>
                <field type="float"         name="cy" >Corrected LPosY</field>
-               <field type="float"         name="cz" >Corrected LPosZ</field>      
+               <field type="float"         name="cz" >Corrected LPosZ</field> 
+               <field type="float"         name="gx">X GroundTruth</field>
+               <field type="float"         name="gy">Y GroundTruth</field>
+               <field type="float"         name="gz">Z GroundTruth</field>     
                <field type="uint16_t"      name="counter">ResetCounter</field>
                <field type="uint64_t"      name="tms">Timestamp</field>
            </message>

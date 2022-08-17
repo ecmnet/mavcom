@@ -24,7 +24,7 @@ public class msg_msp_local_position_corrected extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_LOCAL_POSITION_CORRECTED;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 22;
+    payload_length = 34;
 }
 
   /**
@@ -44,6 +44,18 @@ public class msg_msp_local_position_corrected extends MAVLinkMessage {
    */
   public float cz;
   /**
+   * X GroundTruth
+   */
+  public float gx;
+  /**
+   * Y GroundTruth
+   */
+  public float gy;
+  /**
+   * Z GroundTruth
+   */
+  public float gz;
+  /**
    * ResetCounter
    */
   public int counter;
@@ -55,13 +67,16 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   cx = (float)dis.readFloat();
   cy = (float)dis.readFloat();
   cz = (float)dis.readFloat();
+  gx = (float)dis.readFloat();
+  gy = (float)dis.readFloat();
+  gz = (float)dis.readFloat();
   counter = (int)dis.readUnsignedShort()&0x00FFFF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+22];
+  byte[] buffer = new byte[12+34];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -77,16 +92,19 @@ public byte[] encode() throws IOException {
   dos.writeFloat(cx);
   dos.writeFloat(cy);
   dos.writeFloat(cz);
+  dos.writeFloat(gx);
+  dos.writeFloat(gy);
+  dos.writeFloat(gz);
   dos.writeShort(counter&0x00FFFF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 22);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 34);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[32] = crcl;
-  buffer[33] = crch;
+  buffer[44] = crcl;
+  buffer[45] = crch;
   dos.close();
   return buffer;
 }
@@ -95,6 +113,9 @@ return "MAVLINK_MSG_ID_MSP_LOCAL_POSITION_CORRECTED : " +   "  tms="+tms
 +  "  cx="+format((float)cx)
 +  "  cy="+format((float)cy)
 +  "  cz="+format((float)cz)
++  "  gx="+format((float)gx)
++  "  gy="+format((float)gy)
++  "  gz="+format((float)gz)
 +  "  counter="+counter
 ;}
 

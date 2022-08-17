@@ -16,6 +16,10 @@ public class MspLocalPositionCorrectedPlugin extends MAVLinkPluginBase {
 		model.state.l_rx    = lpos.cx;
 		model.state.l_ry    = lpos.cy;
 		model.state.l_rz    = lpos.cz;
+		
+		model.vision.gx     = lpos.gx;
+		model.vision.gy     = lpos.gy;
+		model.vision.gz     = lpos.gz;
 	
 	}
 
