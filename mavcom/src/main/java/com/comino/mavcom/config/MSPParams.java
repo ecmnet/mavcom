@@ -8,6 +8,7 @@ public final class MSPParams {
 	public static final String AUTOPILOT_FORGET_MAP = "autopilot_forget_map";
 	public static final String AUTOPILOT_FLOW_CHECK = "autopilot_flow_check";
 	public static final String AUTOPILOT_TAKEOFF_PROC = "autopilot_takeoff_procedure";
+	public static final String AUTOPILOT_TAKEOFF_OFFBOARD = "autopilot_takeoff_offboard";
 	public static final String AUTOPILOT_PRECISION_LOCK = "autopilot_precision_lock";
 
 	// control publishing
