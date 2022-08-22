@@ -160,6 +160,9 @@ public class MAVController implements IMAVController, Runnable {
 	@Override
 	public boolean sendMAVLinkMessage(MAVLinkMessage msg) {
 
+		if(comm==null)
+			return false;
+		
 		try {
 			comm.write(msg);
 			return true;
