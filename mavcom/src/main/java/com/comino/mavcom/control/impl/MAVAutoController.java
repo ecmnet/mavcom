@@ -93,8 +93,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.isMSP  = false;
 			this.mode = MODE_USB;
 			model.sys.setStatus(Status.MSP_SITL, false);
-			if(last != comm.hashCode())
-			  System.out.println(comm);
+//			if(last != comm.hashCode())
+//			  System.out.println(comm);
 			last = comm.hashCode();
 			this.connected = true;
 			return true;
@@ -108,8 +108,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 //			comms[2].shutdown();
 //			comms[3].shutdown();
 			model.sys.setStatus(Status.MSP_SITL, false);
-			if(last != comm.hashCode())
-			  System.out.println(comm);
+//			if(last != comm.hashCode())
+//			  System.out.println(comm);
 			last = comm.hashCode();
 			this.connected = true;
 			return true;
@@ -122,8 +122,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.isMSP  = false;
 			this.mode = MODE_SITL;
 			model.sys.setStatus(Status.MSP_SITL, true);
-			if(last != comm.hashCode())
-			  System.out.println(comm);
+//			if(last != comm.hashCode())
+//			  System.out.println(comm);
 			last = comm.hashCode();
 			this.connected = true;
 			return true;
@@ -136,8 +136,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.isMSP  = true;
 			this.mode = MODE_SITL_PROXY;
 			model.sys.setStatus(Status.MSP_SITL, true);
-			if(last != comm.hashCode())
-			  System.out.println(comm+" PROXY");
+//			if(last != comm.hashCode())
+//			  System.out.println(comm+" PROXY");
 			last = comm.hashCode();
 			this.connected = true;
 			return true;
