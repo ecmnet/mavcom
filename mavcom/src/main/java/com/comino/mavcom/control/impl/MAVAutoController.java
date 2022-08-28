@@ -50,6 +50,7 @@ import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
+import com.fazecast.jSerialComm.SerialPort;
 
 public class MAVAutoController extends MAVController implements IMAVController, Runnable {
 
@@ -66,7 +67,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		this.peerPort = peerPort;
 		this.bindPort = bindPort;
 
-		comms[0] = MAVSerialComm.getInstance(reader, 115200);
+		comms[0] = MAVSerialComm.getInstance(reader, 115200,SerialPort.FLOW_CONTROL_DISABLED);
 		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort);
 		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540);
 		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650);

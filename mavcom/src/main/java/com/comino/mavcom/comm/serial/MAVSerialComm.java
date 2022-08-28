@@ -76,20 +76,22 @@ public class MAVSerialComm implements IMAVComm {
 	private IMAVProxy byteListener = null;
 
 	private int baudrate = 921600;
+	private int flowcontrol = SerialPort.FLOW_CONTROL_DISABLED;
 
 	private InputStream is;
 	private OutputStream os;
 
-	public static IMAVComm getInstance(MAVLinkBlockingReader reader, int baudrate) {
+	public static IMAVComm getInstance(MAVLinkBlockingReader reader, int baudrate, int flowcontrol) {
 		if (com == null)
-			com = new MAVSerialComm(reader, baudrate);
+			com = new MAVSerialComm(reader, baudrate, flowcontrol);
 		return com;
 	}
 
-	private MAVSerialComm(MAVLinkBlockingReader reader, int baudrate) {
+	private MAVSerialComm(MAVLinkBlockingReader reader, int baudrate, int flowcontrol) {
 
 		this.model = reader.getModel();
 		this.baudrate = baudrate;
+		this.flowcontrol = flowcontrol;
 
 		if(!searchPort()) {
 			System.out.println("! No Serial port found...");
@@ -116,7 +118,7 @@ public class MAVSerialComm implements IMAVComm {
 			return true;
 		}
 
-		while (!open(port, baudrate, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY)) {
+		while (!open(port, baudrate, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY,flowcontrol)) {
 			try {
 				if (serialPort.isOpen()) {
 					serialPort.removeDataListener();
@@ -214,7 +216,7 @@ public class MAVSerialComm implements IMAVComm {
 		return "Serial " + serialPort.getDescriptivePortName() + " (" + baudrate + ")";
 	}
 
-	private boolean open(String portName, int baudRate, int dataBits, int stopBits, int parity) {
+	private boolean open(String portName, int baudRate, int dataBits, int stopBits, int parity, int flowControl) {
 
 
 		if (serialPort == null)
@@ -225,6 +227,7 @@ public class MAVSerialComm implements IMAVComm {
 
 		try {
 			serialPort.setComPortParameters(baudRate, dataBits, stopBits, parity);
+			serialPort.setFlowControl(flowControl);
 			serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
 			serialPort.addDataListener(new SerialPortDataListener() {
 				int avail;

@@ -74,6 +74,7 @@ import com.comino.mavcom.status.StatusManager;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.hw.HardwareAbstraction;
 import com.comino.mavutils.workqueue.WorkQueue;
+import com.fazecast.jSerialComm.SerialPort;
 
 public class MAVProxyController implements IMAVMSPController, Runnable {
 
@@ -161,7 +162,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			
 			//TODO: Get baudrate from msp.properties
 			
-			comm = MAVSerialComm.getInstance(reader,baudrate);
+			comm = MAVSerialComm.getInstance(reader,baudrate,SerialPort.FLOW_CONTROL_DISABLED);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 
@@ -190,7 +191,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		case MAVController.MODE_USB:
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), DEFAULT_BAUDRATE);
+			comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), DEFAULT_BAUDRATE,SerialPort.FLOW_CONTROL_DISABLED);
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try {

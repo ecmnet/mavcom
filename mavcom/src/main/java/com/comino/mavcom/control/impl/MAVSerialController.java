@@ -49,6 +49,7 @@ import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
+import com.fazecast.jSerialComm.SerialPort;
 
 /*
  * Direct serial controller up to 115200 baud for telem1 connections e.g. Radio
@@ -62,7 +63,7 @@ public class MAVSerialController extends MAVController implements IMAVController
 	public MAVSerialController() {
 		super();
 		System.out.println("Serial Controller loaded");
-		comm = MAVSerialComm.getInstance(reader, 115200);
+		comm = MAVSerialComm.getInstance(reader, 115200,SerialPort.FLOW_CONTROL_DISABLED);
 		beat_px4.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 		beat_px4.type = MAV_TYPE.MAV_TYPE_GCS;
 		messageListener = new ArrayList<IMAVMessageListener>();
@@ -73,7 +74,7 @@ public class MAVSerialController extends MAVController implements IMAVController
 	public MAVSerialController(int baud) {
 		super();
 		System.out.println("Direct serial Controller loaded");
-		comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), baud);
+		comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), baud,SerialPort.FLOW_CONTROL_DISABLED);
 		beat_px4.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 		beat_px4.type = MAV_TYPE.MAV_TYPE_GCS;
 		messageListener = new ArrayList<IMAVMessageListener>();
