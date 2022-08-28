@@ -74,10 +74,10 @@ public class StartUp implements Runnable {
 
 		if (is_simulation) {
 			config = MSPConfig.getInstance(System.getProperty("user.home") + "/", "msp.properties");
-			control = new MAVProxyController(MAVController.MODE_SITL);
+			control = new MAVProxyController(MAVController.MODE_SITL,config);
 		} else {
 			config = MSPConfig.getInstance("/home/up", "msp.properties");
-			control = new MAVProxyController(MAVController.MODE_NORMAL);
+			control = new MAVProxyController(MAVController.MODE_NORMAL,config);
 		}
 
 		model = control.getCurrentModel();

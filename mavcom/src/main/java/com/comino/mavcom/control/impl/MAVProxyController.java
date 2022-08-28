@@ -56,6 +56,8 @@ import com.comino.mavcom.comm.IMAVProxy;
 import com.comino.mavcom.comm.proxy.MAVUdpProxyNIO2;
 import com.comino.mavcom.comm.serial.MAVSerialComm;
 import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
+import com.comino.mavcom.config.MSPConfig;
+import com.comino.mavcom.config.MSPParams;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.control.IMAVMSPController;
@@ -84,11 +86,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	protected DataModel model = null;
 	protected IMAVProxy proxy = null;
 
-	private static final int BAUDRATE_5 = 57600;
-	private static final int BAUDRATE_9 = 921600;
-	private static final int BAUDRATE_15 = 1500000;
-	private static final int BAUDRATE_20 = 2000000;
-	private static final int BAUDRATE_30 = 3000000;
+	private static final int DEFAULT_BAUDRATE = 57600;
 
 	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
 	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1, MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
@@ -107,7 +105,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		return controller;
 	}
 
-	public MAVProxyController(int mode) {
+	public MAVProxyController(int mode, MSPConfig config) {
 
 		this.mode = mode;
 		controller = this;
@@ -115,6 +113,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		reader = new MAVLinkBlockingReader(2, model);
 		status_manager = new StatusManager(model, false);
 		messageListener = new ArrayList<IMAVMessageListener>();
+		
+		int baudrate = config.getIntProperty(MSPParams.BAUDRATE, String.valueOf(DEFAULT_BAUDRATE));
+		System.out.println("PX4 connection baudrate set to "+baudrate+" baud");
 
 		model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, true);
 		model.sys.setStatus(Status.MSP_SITL, mode == MAVController.MODE_NORMAL);
@@ -157,7 +158,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		case MAVController.MODE_NORMAL:
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
-			comm = MAVSerialComm.getInstance(reader, BAUDRATE_9);
+			
+			//TODO: Get baudrate from msp.properties
+			
+			comm = MAVSerialComm.getInstance(reader,baudrate);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 
@@ -186,7 +190,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		case MAVController.MODE_USB:
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), BAUDRATE_5);
+			comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), DEFAULT_BAUDRATE);
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();
 			try {

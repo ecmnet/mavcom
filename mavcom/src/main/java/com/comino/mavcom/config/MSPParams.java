@@ -1,6 +1,11 @@
 package com.comino.mavcom.config;
 
 public final class MSPParams {
+	
+	// Connection
+	
+	public static final String BAUDRATE = "baudrate";
+	
 
 	// autopilot
 
