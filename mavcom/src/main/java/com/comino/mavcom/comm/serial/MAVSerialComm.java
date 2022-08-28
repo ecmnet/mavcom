@@ -132,7 +132,7 @@ public class MAVSerialComm implements IMAVComm {
 			return false;
 		}
 		
-	    System.out.println("Serial connection established...");
+	    System.out.println("Serial port opened...");
 		this.is = new BufferedInputStream(serialPort.getInputStream(), BUFFER * 1024 * 2);
 		this.os = new BufferedOutputStream(serialPort.getOutputStream(), 2048);
 
