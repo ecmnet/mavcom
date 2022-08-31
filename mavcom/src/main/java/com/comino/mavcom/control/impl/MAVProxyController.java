@@ -162,7 +162,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			
 			//TODO: Get baudrate from msp.properties
 			
-			comm = MAVSerialComm.getInstance(reader,baudrate,SerialPort.FLOW_CONTROL_DISABLED);
+			comm = MAVSerialComm.getInstance(reader,baudrate,SerialPort.FLOW_CONTROL_CTS_ENABLED | SerialPort.FLOW_CONTROL_RTS_ENABLED);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
 

@@ -2,6 +2,8 @@ package com.comino.mavcom.mavlink.plugins;
 
 import org.mavlink.messages.lquac.msg_vfr_hud;
 
+import com.comino.mavcom.model.segment.Status;
+
 public class PX4VfrHUDPlugin extends MAVLinkPluginBase {
 
 	public PX4VfrHUDPlugin() {
@@ -16,7 +18,7 @@ public class PX4VfrHUDPlugin extends MAVLinkPluginBase {
 		model.hud.vs = hud.climb;
 		model.hud.as = hud.airspeed;
 
-//		if (hud.heading < 360 && hud.heading >= 0)
+//		if (!model.sys.isStatus(Status.MSP_GPOS_VALID) && hud.heading < 360 && hud.heading >= 0)
 //			model.hud.h = hud.heading;
 
 		if (hud.throttle <= 100)

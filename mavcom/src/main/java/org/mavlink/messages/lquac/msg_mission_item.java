@@ -81,7 +81,7 @@ public class msg_mission_item extends MAVLinkMessage {
    */
   public int current;
   /**
-   * Autocontinue to next waypoint
+   * Autocontinue to next waypoint. 0: false, 1: true. Set false to pause mission after the item completes.
    */
   public int autocontinue;
   /**

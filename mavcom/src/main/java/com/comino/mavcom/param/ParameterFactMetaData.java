@@ -59,7 +59,7 @@ public class ParameterFactMetaData {
 			if (doc.hasChildNodes()) {
 				String v_major = doc.getElementsByTagName("parameter_version_major").item(0).getTextContent();
 				String v_minor = doc.getElementsByTagName("parameter_version_minor").item(0).getTextContent();
-				System.out.println("ParameterFactMetaData Version: " + v_major + "." + v_minor);
+				System.out.println("ParameterFactMetaData Version: " + v_major + "." + v_minor+" ("+filename+")");
 				buildParameterList(doc.getElementsByTagName("group"));
 			}
 		} catch (Exception e) {

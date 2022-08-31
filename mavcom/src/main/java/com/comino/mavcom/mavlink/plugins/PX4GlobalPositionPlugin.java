@@ -23,13 +23,12 @@ public class PX4GlobalPositionPlugin extends MAVLinkPluginBase {
 		model.state.g_vx = pos.vx / 100f;
 		model.state.g_vy = pos.vy / 100f;
 		model.state.g_vz = pos.vz / 100f;
-		
-		hdg = pos.hdg / 100f;
-		
-		if (hdg < 360 && hdg >= 0)
-			model.hud.h = hdg;
+
 
 		if (pos.lat != 0 && pos.lon != 0) {
+//			hdg = pos.hdg / 100f;
+//			if (hdg < 360 && hdg >= 0)
+//				model.hud.h = hdg;
 			model.state.gpos_tms = DataModel.getSynchronizedPX4Time_us();
 			model.sys.setStatus(Status.MSP_GPOS_VALID, true);
 		}

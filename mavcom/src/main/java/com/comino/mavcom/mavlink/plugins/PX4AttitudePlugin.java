@@ -4,6 +4,7 @@ import org.mavlink.messages.lquac.msg_attitude;
 
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
+import com.comino.mavutils.MSPMathUtils;
 
 public class PX4AttitudePlugin extends MAVLinkPluginBase {
 
@@ -29,6 +30,8 @@ public class PX4AttitudePlugin extends MAVLinkPluginBase {
 
 		model.hud.aX = att.roll;
 		model.hud.aY = att.pitch;
+		
+		model.hud.h = MSPMathUtils.fromRad2(att.yaw);
 
 		model.sys.t_boot_ms = att.time_boot_ms;
 
