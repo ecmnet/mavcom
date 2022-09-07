@@ -9,7 +9,9 @@ import com.comino.mavutils.MSPMathUtils;
 
 public class PX4RawGPSPlugin extends MAVLinkPluginBase {
 
-	private final static float[] p = new float[2];
+	private final static float[] p     = new float[2];
+	private final static float[] p_old = new float[2];
+	private static long  tms_old = 0;
 
 	public PX4RawGPSPlugin() {
 		super(msg_gps_raw_int.class);
@@ -42,10 +44,17 @@ public class PX4RawGPSPlugin extends MAVLinkPluginBase {
 			model.gps.fixtype = (byte) gps.fix_type;
 			model.gps.tms = DataModel.getSynchronizedPX4Time_us();
 
-			if (MSPMathUtils.is_projection_initialized()) {
+			if (MSPMathUtils.is_projection_initialized() && gps.fix_type > 2) {
 				if(MSPMathUtils.map_projection_project(model.gps.latitude, model.gps.longitude, p)) {
 				  model.gps.lx = p[0];
 				  model.gps.ly = p[1];
+				  if (tms_old > 0) {
+					  model.gps.lx_s = (p[0] - p_old[0]) * 1e6f / (gps.time_usec - tms_old);
+					  model.gps.ly_s = (p[1] - p_old[1]) * 1e6f / (gps.time_usec - tms_old);  
+				  }
+				  p_old[0] = p[0];
+				  p_old[1] = p[1];
+				  tms_old = gps.time_usec;
 				}
 			}
 

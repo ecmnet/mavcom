@@ -57,8 +57,12 @@ public class GPS extends Segment {
 	public float hdop = Float.NaN;
 	public float speed = Float.NaN;
 	public byte fixtype = (byte) 0;
+	
 	public float lx = Float.NaN;
 	public float ly = Float.NaN;
+	
+	public float lx_s = Float.NaN;
+	public float ly_s = Float.NaN;
 
 	public GPS() {
 
@@ -105,25 +109,13 @@ public class GPS extends Segment {
 		speed = gps.speed;
 		lx = gps.lx;
 		ly = gps.ly;
+		lx_s = gps.lx_s;
+		ly_s = gps.ly_s;
 	}
 
 	public GPS clone() {
 		GPS g = new GPS();
-
-		g.flags = flags;
-		g.numsat = numsat;
-		g.heading = heading;
-		g.latitude = latitude;
-		g.longitude = longitude;
-		g.eph = eph;
-		g.epv = epv;
-		g.hdop = hdop;
-		g.altitude = altitude;
-		g.speed = speed;
-		g.fixtype = fixtype;
-		g.lx = lx;
-		g.ly = ly;
-
+        g.set(this);
 		return g;
 	}
 
@@ -141,6 +133,8 @@ public class GPS extends Segment {
 		speed = 0;
 		lx = Float.NaN;
 		ly = Float.NaN;
+		lx_s = Float.NaN;
+		ly_s = Float.NaN;
 		fixtype = 0;
 
 	}
