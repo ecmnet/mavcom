@@ -31,7 +31,7 @@ public class PX4AttitudePlugin extends MAVLinkPluginBase {
 		model.hud.aX = att.roll;
 		model.hud.aY = att.pitch;
 		
-		model.hud.h = MSPMathUtils.fromRad2(att.yaw);
+		model.hud.h = MSPMathUtils.fromRad(att.yaw);
 
 		model.sys.t_boot_ms = att.time_boot_ms;
 
