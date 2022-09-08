@@ -5,9 +5,9 @@ import org.mavlink.messages.lquac.msg_rc_channels;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
-public class PX4RCChannelstPlugin extends MAVLinkPluginBase {
+public class PX4RCChannelPlugin extends MAVLinkPluginBase {
 
-	public PX4RCChannelstPlugin() {
+	public PX4RCChannelPlugin() {
 		super(msg_rc_channels.class);
 	}
 
@@ -15,10 +15,9 @@ public class PX4RCChannelstPlugin extends MAVLinkPluginBase {
 	public void received(Object o) {
 
 		msg_rc_channels rc = (msg_rc_channels) o;
-		if(model.sys.isStatus(Status.MSP_RC_ATTACHED))
-		  model.rc.rssi = (short) (rc.rssi);
-		else
-		  model.rc.rssi = 0;
+		
+		model.rc.rssi = (short) (rc.rssi);
+		model.sys.setStatus(Status.MSP_RC_ATTACHED,rc.rssi > 0);
 
 		model.rc.s0 = rc.chan1_raw < 65534 ? (short) rc.chan1_raw : 1500;
 		model.rc.s1 = rc.chan2_raw < 65534 ? (short) rc.chan2_raw : 1500;
