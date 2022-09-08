@@ -60,9 +60,7 @@ public class GPS extends Segment {
 	
 	public float lx = Float.NaN;
 	public float ly = Float.NaN;
-	
-	public float lx_s = Float.NaN;
-	public float ly_s = Float.NaN;
+
 
 	public GPS() {
 
@@ -109,8 +107,6 @@ public class GPS extends Segment {
 		speed = gps.speed;
 		lx = gps.lx;
 		ly = gps.ly;
-		lx_s = gps.lx_s;
-		ly_s = gps.ly_s;
 	}
 
 	public GPS clone() {
@@ -133,8 +129,6 @@ public class GPS extends Segment {
 		speed = 0;
 		lx = Float.NaN;
 		ly = Float.NaN;
-		lx_s = Float.NaN;
-		ly_s = Float.NaN;
 		fixtype = 0;
 
 	}
