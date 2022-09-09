@@ -17,7 +17,8 @@ public class PX4RCChannelPlugin extends MAVLinkPluginBase {
 		msg_rc_channels rc = (msg_rc_channels) o;
 		
 		model.rc.rssi = (short) (rc.rssi);
-		model.sys.setStatus(Status.MSP_RC_ATTACHED,rc.rssi > 0);
+		if(rc.rssi > 0)
+		  model.sys.setStatus(Status.MSP_RC_ATTACHED,true);
 
 		model.rc.s0 = rc.chan1_raw < 65534 ? (short) rc.chan1_raw : 1500;
 		model.rc.s1 = rc.chan2_raw < 65534 ? (short) rc.chan2_raw : 1500;
