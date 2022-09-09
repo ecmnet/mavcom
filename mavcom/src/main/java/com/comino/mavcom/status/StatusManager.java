@@ -51,7 +51,7 @@ public class StatusManager implements Runnable {
 	private static final long TIMEOUT_VISION = 3000000;
 	private static final long TIMEOUT_CONNECTED = 1000000;
 	private static final long TIMEOUT_GCL_CONNECTED = 2000000;
-	private static final long TIMEOUT_RC_ATTACHED = 5000000;
+	private static final long TIMEOUT_RC_ATTACHED = 1000000;
 	private static final long TIMEOUT_JOY_ATTACHED = 2000000;
 	private static final long TIMEOUT_GPOS = 2000000;
 	private static final long TIMEOUT_LPOS = 2000000;
@@ -375,7 +375,7 @@ public class StatusManager implements Runnable {
 					is_ready = false;
 				}
 
-				if (model.est.posHorizAccuracy > 1.0f) {
+				if (model.est.posHorizAccuracy > 0.5f) {
 					is_ready = false;
 				}
 
@@ -468,7 +468,7 @@ public class StatusManager implements Runnable {
 
 		if (!model.sys.isStatus(Status.MSP_SITL)) {
 			if (checkTimeOut(model.rc.tms, TIMEOUT_RC_ATTACHED)) {
-				model.sys.setStatus(Status.MSP_RC_ATTACHED, (false));
+				model.sys.setStatus(Status.MSP_RC_ATTACHED, false);
 				model.rc.rssi = 0;
 			}
 		}
