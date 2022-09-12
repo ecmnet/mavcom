@@ -778,18 +778,28 @@ public interface MAV_CMD {
      * PARAM 3 : Height delay. This is for commanding engine start only after the vehicle has gained the specified height. Used in VTOL vehicles during takeoff to start engine after the aircraft is off the ground. Zero for no delay.
      * PARAM 4 : Empty
      * PARAM 5 : Empty
-     * PARAM 5 : Empty
      * PARAM 6 : Empty
      * PARAM 7 : Empty
      */
     public final static int MAV_CMD_DO_ENGINE_CONTROL = 223;
     /**
-     * Set the mission item with sequence number seq as current item. This means that the MAV will continue to this mission item on the shortest path (not following the mission items in-between).
-     * PARAM 1 : Mission sequence value to set
-     * PARAM 2 : Empty
+     * Set the mission item with sequence number seq as the current item and emit MISSION_CURRENT (whether or not the mission number changed).
+          If a mission is currently being executed, the system will continue to this new mission item on the shortest path, skipping any intermediate mission items.
+	  Note that mission jump repeat counters are not reset unless param2 is set (see MAV_CMD_DO_JUMP param2).
+
+          This command may trigger a mission state-machine change on some systems: for example from MISSION_STATE_NOT_STARTED or MISSION_STATE_PAUSED to MISSION_STATE_ACTIVE.
+          If the system is in mission mode, on those systems this command might therefore start, restart or resume the mission.
+          If the system is not in mission mode this command must not trigger a switch to mission mode.
+
+          The mission may be "reset" using param2.
+          Resetting sets jump counters to initial values (to reset counters without changing the current mission item set the param1 to `-1`).
+          Resetting also explicitly changes a mission state of MISSION_STATE_COMPLETE to MISSION_STATE_PAUSED or MISSION_STATE_ACTIVE, potentially allowing it to resume when it is (next) in a mission mode.
+
+	  The command will ACK with MAV_RESULT_FAILED if the sequence number is out of range (including if there is no mission item).
+     * PARAM 1 : Mission sequence value to set. -1 for the current mission item (use to reset mission without changing current mission item).
+     * PARAM 2 : Resets mission. 1: true, 0: false. Resets jump counters to initial values and changes mission state "completed" to be "active" or "paused".
      * PARAM 3 : Empty
      * PARAM 4 : Empty
-     * PARAM 5 : Empty
      * PARAM 5 : Empty
      * PARAM 6 : Empty
      * PARAM 7 : Empty

@@ -22,6 +22,10 @@ public interface MSP_CMD {
      */
     public final static int MSP_CMD_SETDATETIME = 97;
     /**
+     * Triggers readiness check in MSP with logs
+     */
+    public final static int MSP_CMD_CHECK_READY = 95;
+    /**
      * Control offboard updater
      * PARAM 1 : component command
      */

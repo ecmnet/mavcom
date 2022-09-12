@@ -46,15 +46,15 @@ public class msg_home_position extends MAVLinkMessage {
    */
   public long altitude;
   /**
-   * Local X position of this position in the local coordinate frame
+   * Local X position of this position in the local coordinate frame (NED)
    */
   public float x;
   /**
-   * Local Y position of this position in the local coordinate frame
+   * Local Y position of this position in the local coordinate frame (NED)
    */
   public float y;
   /**
-   * Local Z position of this position in the local coordinate frame
+   * Local Z position of this position in the local coordinate frame (NED: positive "down")
    */
   public float z;
   /**

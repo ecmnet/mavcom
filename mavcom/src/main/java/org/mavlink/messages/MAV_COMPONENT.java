@@ -543,7 +543,7 @@ public interface MAV_COMPONENT {
      */
     public final static int MAV_COMP_ID_TUNNEL_NODE = 242;
     /**
-     * Component for handling system messages (e.g. to ARM, takeoff, etc.).
+     * Deprecated, don't use. Component for handling system messages (e.g. to ARM, takeoff, etc.).
      */
     public final static int MAV_COMP_ID_SYSTEM_CONTROL = 250;
 }

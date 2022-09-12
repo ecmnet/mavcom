@@ -18,6 +18,9 @@
                   <description>Sets companion date and time</description>
                   <param index="1">DateTimeUTC (310720211145)</param>
               </entry>
+              <entry value="95" name="MSP_CMD_CHECK_READY">
+                  <description>Triggers readiness check in MSP with logs</description>
+              </entry>
               <entry value="70" name="MSP_CMD_OFFBOARD">
                   <description>Control offboard updater</description>
                   <param index="1">component command</param>
