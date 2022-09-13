@@ -80,8 +80,7 @@ public class StatusManager implements Runnable {
 	public static final int MASK_ALL = 0xFFFFFFFF;
 
 	public final DataModel      model;
-	public final IMAVController control;
-
+	
 	private Status status_current       = null;
 	private Status status_old           = null;
 
@@ -95,9 +94,8 @@ public class StatusManager implements Runnable {
 	private final WorkQueue wq = WorkQueue.getInstance();
 	private boolean is_gcl = false;
 
-	public StatusManager(IMAVController control, boolean isGCL) {
-		this.control = control;
-		this.model = control.getCurrentModel();
+	public StatusManager(DataModel model, boolean isGCL) {
+		this.model = model;
 		this.status_current = new Status();
 		this.status_old = new Status();
 		this.list = new ArrayList<StatusListenerEntry>();
@@ -173,9 +171,6 @@ public class StatusManager implements Runnable {
 	public void run() {
 
 		checkTimeouts();
-
-		if (!is_gcl || !model.sys.isStatus(Status.MSP_ACTIVE))
-			model.sys.setStatus(Status.MSP_READY_FOR_FLIGHT, checkFlightReadiness(false));
 
 		status_current.set(model.sys);
 		
@@ -338,93 +333,6 @@ public class StatusManager implements Runnable {
 				wq.addSingleTask("NP", 0, actions.poll());
 			}
 		}
-	}
-
-	public boolean checkFlightReadiness(boolean logging) {
-
-		boolean is_ready = true;
-		
-
-		if (model.sys.isStatus(Status.MSP_CONNECTED) && !model.sys.isStatus(Status.MSP_SITL)
-				&& !model.sys.isAutopilotMode(MSP_AUTOCONTROL_MODE.FCUM)) {
-
-			// Checks for MSP driven vehicles
-
-
-			if (!model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY) && !model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
-				if(logging)
-					control.writeLogMessage(new LogMessage("[msp] No Flow or Vision sensor available.",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-				is_ready = false;
-			}
-
-			if (!model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY) && model.vision.isStatus(Vision.ENABLED)) {
-				if(logging)
-					control.writeLogMessage(new LogMessage("[msp] Vision not enabled.",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-				is_ready = false;
-			}
-
-			if ((Float.isNaN(model.vision.x) || Float.isNaN(model.vision.y) || Float.isNaN(model.vision.z))
-					&& model.vision.isStatus(Vision.ENABLED)) {
-				if(logging)
-					control.writeLogMessage(new LogMessage("[msp] Vision does not provide any data.",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-				is_ready = false;
-			}
-
-			if (!model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
-				if(logging)
-					control.writeLogMessage(new LogMessage("[msp] Distance sensor not available.",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-				is_ready = false;
-			}
-
-			if(!model.sys.isStatus(Status.MSP_RC_ATTACHED)) {
-				if(logging)
-					control.writeLogMessage(new LogMessage("[msp] RC not attached",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-				is_ready = false;
-			}
-
-		}
-		
-		if (model.sys.isSensorAvailable(Status.MSP_GPS_AVAILABILITY)) {
-
-			if(!model.sys.isStatus(Status.MSP_GPOS_VALID)) {
-				if(logging)
-					control.writeLogMessage(new LogMessage("[msp] No global position.",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-				is_ready = false;
-			}
-			
-			if (model.est.posVertAccuracy > 1.0f) {
-				if(logging)
-					control.writeLogMessage(new LogMessage("[msp] GPS vertical accurracy.",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-				is_ready = false;
-			}
-
-			if (model.est.posHorizAccuracy > 0.5f) {
-				if(logging)
-					control.writeLogMessage(new LogMessage("[msp] GPS horizontal accurracy.",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-				is_ready = false;
-			}
-
-		}
-
-		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
-			if(logging)
-				control.writeLogMessage(new LogMessage("[msp] GC not connected.",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-			return false;
-		}
-
-		if (!model.sys.isStatus(Status.MSP_LPOS_VALID)) {
-			if(logging)
-				control.writeLogMessage(new LogMessage("[msp] No local position.",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-			return false;
-		}
-		
-		if(Float.isNaN(model.hud.ag)) {
-			if(logging)
-				control.writeLogMessage(new LogMessage("[msp] No AMSL altitude.",MAV_SEVERITY.MAV_SEVERITY_WARNING));
-			is_ready = false;
-		}
-
-		return is_ready;
 	}
 
 	private void checkTimeouts() {

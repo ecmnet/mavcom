@@ -108,7 +108,7 @@ public class MAVController implements IMAVController, Runnable {
 		controller = this;
 		model = new DataModel();
 		reader = new MAVLinkBlockingReader(i, model);
-		status_manager = new StatusManager(this, true);
+		status_manager = new StatusManager(model, true);
 		wq.addCyclicTask("LP", 500, this);
 	}
 
@@ -397,5 +397,6 @@ public class MAVController implements IMAVController, Runnable {
 			return comm.getTransferRate();
 		return 0;
 	}
+
 
 }

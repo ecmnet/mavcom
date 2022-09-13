@@ -112,7 +112,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		controller = this;
 		model = new DataModel();
 		reader = new MAVLinkBlockingReader(2, model);
-		status_manager = new StatusManager(this, false);
+		status_manager = new StatusManager(model,false);
 		messageListener = new ArrayList<IMAVMessageListener>();
 		
 		int baudrate = config.getIntProperty(MSPParams.BAUDRATE, String.valueOf(DEFAULT_BAUDRATE));
