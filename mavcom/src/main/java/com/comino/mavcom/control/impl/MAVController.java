@@ -317,7 +317,7 @@ public class MAVController implements IMAVController, Runnable {
 	@Override
 	public boolean close() {
 		comm.close();
-		if (file_log_enabled)
+		if (file_log_enabled && ps_log!=null)
 			ps_log.close();
 		return true;
 	}
