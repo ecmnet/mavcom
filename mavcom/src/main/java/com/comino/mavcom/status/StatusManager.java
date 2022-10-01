@@ -50,10 +50,10 @@ import com.comino.mavutils.workqueue.WorkQueue;
 
 public class StatusManager implements Runnable {
 
-	private static final long TIMEOUT_IMU = 1000000;
+	private static final long TIMEOUT_IMU = 2000000;
 	private static final long TIMEOUT_VISION = 3000000;
-	private static final long TIMEOUT_CONNECTED = 1000000;
-	private static final long TIMEOUT_GCL_CONNECTED = 2000000;
+	private static final long TIMEOUT_CONNECTED = 3000000;
+	private static final long TIMEOUT_GCL_CONNECTED = 2_000_000;
 	private static final long TIMEOUT_RC_ATTACHED = 1000000;
 	private static final long TIMEOUT_JOY_ATTACHED = 2000000;
 	private static final long TIMEOUT_GPOS = 2000000;
