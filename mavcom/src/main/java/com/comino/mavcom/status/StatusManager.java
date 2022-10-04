@@ -409,6 +409,7 @@ public class StatusManager implements Runnable {
 			model.sys.setStatus(Status.MSP_CONNECTED, false);
 			model.sys.setStatus(Status.MSP_ACTIVE, false);
 			model.sys.clear();
+			model.vision.clear();
 			// System.out.println("..Connection timeout
 			// "+(model.sys.tms+TIMEOUT_CONNECTED)+" vs
 			// "+DataModel.getSynchronizedPX4Time_us()+" > "+model.sys.tms);
