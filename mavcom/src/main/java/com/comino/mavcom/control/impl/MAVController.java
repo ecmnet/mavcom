@@ -105,10 +105,12 @@ public class MAVController implements IMAVController, Runnable {
 	}
 
 	public MAVController(int i) {
+		
 		controller = this;
 		model = new DataModel();
 		reader = new MAVLinkBlockingReader(i, model);
 		status_manager = new StatusManager(model, true);
+		
 		wq.addCyclicTask("LP", 500, this);
 	}
 

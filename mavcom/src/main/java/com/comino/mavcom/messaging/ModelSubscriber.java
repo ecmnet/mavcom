@@ -1,4 +1,4 @@
-package com.comino.mavcom.flow;
+package com.comino.mavcom.messaging;
 
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;

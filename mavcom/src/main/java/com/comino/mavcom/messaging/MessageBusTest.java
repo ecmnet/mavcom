@@ -1,4 +1,4 @@
-package com.comino.mavcom.flow;
+package com.comino.mavcom.messaging;
 
 import com.comino.mavcom.model.segment.Battery;
 import com.comino.mavcom.model.segment.Vision;

@@ -1,4 +1,4 @@
-package com.comino.mavcom.flow;
+package com.comino.mavcom.messaging;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ public class MessageBus {
 	public static MessageBus getInstance() {
 		if (instance == null) {
 			instance = new MessageBus();
-			System.out.println("MessageBus instantiated");
+			System.out.println("MessageBus instance created");
 		}
 		return instance;
 	}

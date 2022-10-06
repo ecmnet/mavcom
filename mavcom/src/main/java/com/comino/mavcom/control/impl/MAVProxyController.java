@@ -67,6 +67,7 @@ import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVAcknowledge;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.mavlink.MAVTimeSync;
+import com.comino.mavcom.messaging.MessageBus;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
@@ -94,7 +95,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	private static final msg_heartbeat beat_obs = new msg_heartbeat(1, MAV_COMPONENT.MAV_COMP_ID_OBSTACLE_AVOIDANCE);
 
 	private StatusManager status_manager = null;
-	private List<IMAVMessageListener> messageListener = null;
+	private List<IMAVMessageListener> mavlinkListener = null;
 	private MAVTimeSync timesync = null;
 	private final MAVLinkBlockingReader reader;
 
@@ -113,7 +114,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		model = new DataModel();
 		reader = new MAVLinkBlockingReader(2, model);
 		status_manager = new StatusManager(model,false);
-		messageListener = new ArrayList<IMAVMessageListener>();
+		mavlinkListener = new ArrayList<IMAVMessageListener>();
+		
+		MessageBus.getInstance();
 		
 		int baudrate = config.getIntProperty(MSPParams.BAUDRATE, String.valueOf(DEFAULT_BAUDRATE));
 		System.out.println("PX4 connection baudrate set to "+baudrate+" baud");
@@ -413,7 +416,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void addMAVMessageListener(IMAVMessageListener listener) {
-		messageListener.add(listener);
+		mavlinkListener.add(listener);
 	}
 
 	@Override
@@ -430,8 +433,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		msg.componentId = 1;
 		msg.severity = m.severity;
 		proxy.write(msg);
-		if (messageListener != null) {
-			for (IMAVMessageListener msglistener : messageListener)
+		if (mavlinkListener != null) {
+			for (IMAVMessageListener msglistener : mavlinkListener)
 				msglistener.messageReceived(m);
 		}
 	}

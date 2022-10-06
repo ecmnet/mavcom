@@ -1,4 +1,4 @@
-package com.comino.mavcom.flow;
+package com.comino.mavcom.messaging;
 
 public interface ModelListener<T> {
 
