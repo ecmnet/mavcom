@@ -31,7 +31,7 @@ public class PX4HeartBeatPlugin extends MAVLinkPluginBase {
 		model.sys.setStatus(Status.MSP_ARMED, (hb.base_mode & MAV_MODE_FLAG.MAV_MODE_FLAG_SAFETY_ARMED) != 0);
 
 		if (model.sys.isStatus(Status.MSP_ARMED)) {
-
+			
 			// synchronized( this) {
 
 			if (MAV_CUST_MODE.is(hb.custom_mode, MAV_CUST_MODE.PX4_CUSTOM_MAIN_MODE_AUTO,
@@ -56,6 +56,10 @@ public class PX4HeartBeatPlugin extends MAVLinkPluginBase {
 
 			else if (MAV_CUST_MODE.is(hb.custom_mode, MAV_CUST_MODE.PX4_CUSTOM_MAIN_MODE_OFFBOARD))
 				model.sys.nav_state = Status.NAVIGATION_STATE_OFFBOARD;
+			
+			else if (MAV_CUST_MODE.is(hb.custom_mode, MAV_CUST_MODE.PX4_CUSTOM_MAIN_MODE_AUTO, 
+					MAV_CUST_MODE.PX4_CUSTOM_SUB_MODE_AUTO_PRECLAND))
+				model.sys.nav_state = Status.NAVIGATION_STATE_AUTO_PRECLAND;
 
 			else if (MAV_CUST_MODE.is(hb.custom_mode, MAV_CUST_MODE.PX4_CUSTOM_MAIN_MODE_POSCTL))
 				model.sys.nav_state = Status.NAVIGATION_STATE_POSCTL;
