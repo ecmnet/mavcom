@@ -136,6 +136,7 @@ public class Status extends Segment {
 	public long t_armed_ms = 0;
 	public long t_takeoff_ms = 0;
 	public long t_boot_ms = 0;
+	public long t_unix_us = 0;
 	public float wifi_quality = Float.NaN;
 
 	public long gcl_tms = 0;
@@ -166,6 +167,7 @@ public class Status extends Segment {
 		t_armed_ms = s.t_armed_ms;
 		t_takeoff_ms = s.t_takeoff_ms;
 		t_boot_ms = s.t_boot_ms;
+		t_unix_us   = s.t_unix_us;
 		wifi_quality = s.wifi_quality;
 
 		msp_temp = s.msp_temp;
@@ -286,6 +288,7 @@ public class Status extends Segment {
 		t_armed_ms = 0;
 		t_takeoff_ms = 0;
 		t_boot_ms = 0;
+		t_unix_us = 0;
 		px4_status = 0;
 		nav_state = 0;
 		status = 0;

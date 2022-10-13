@@ -71,6 +71,7 @@ public class DataModel extends Segment implements Serializable {
 	private static final long serialVersionUID = 3439530621929819600L;
 
 	public static long t_offset_ns = 0;
+	public static long tms_boot = getSynchronizedPX4Time_us();
 
 	public Attitude attitude = null;
 	public Battery battery = null;
@@ -252,6 +253,11 @@ public class DataModel extends Segment implements Serializable {
 		return tms_ms * 1000L - t_offset_ns / 1000L;
 	}
 
+	
+	public static long getBootTime() {
+		return tms_boot;
+	}
+	
 	public static long getUnixTime_us() {
 		Instant ins = Instant.now();
 		long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();

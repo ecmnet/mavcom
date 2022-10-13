@@ -185,7 +185,7 @@ public class StatusManager implements Runnable {
 			return;
 
 		// if(status_old.nav_state!=status_current.nav_state)
-		// System.out.println(status_old.nav_state+" -> "+status_current.nav_state);
+		// System.out.println(status_old.nav_state+" -> "+status_current.nav_state)
 
 		try {
 
