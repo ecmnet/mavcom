@@ -70,6 +70,8 @@ public class Status extends Segment {
 	private static final String[] MSP_PX4MODE_TEXTS = { "MANUAL", "ALTHOLD", "POSHOLD", "MISSION", "LOITER", "RTL",
 			"RCRECOVER", "RTGS", "ENGFAIL", "GPSFAIL", "ACRO", "UNKNOWN", "DESCEND", "TERMINATION", "OFFBOARD",
 			"STABILIZED", "RATTITUDE", "TAKEOFF", "LAND", "FOLLOW", "PRECLAND" };
+	
+	private static final String[] MSP_BATTYPE_TEXTS = { "UNKNOWN", "BATTERY", "TETHERED" };
 
 	// Low level sensors
 
@@ -115,6 +117,10 @@ public class Status extends Segment {
 	public static final int NAVIGATION_STATE_AUTO_LAND = 18; // Land
 	public static final int NAVIGATION_STATE_AUTO_FOLLOW_TARGET = 19; // Auto Follow
 	public static final int NAVIGATION_STATE_AUTO_PRECLAND = 20; // Precision land with landing target
+	
+	public static final int MSP_BAT_TYPE_UNKNOWN   = 0;
+	public static final int MSP_BAT_TYPE_BAT       = 1;
+	public static final int MSP_BAT_TYPE_TETHERED  = 2;
 
 	public long autopilot = 0;
 	public int px4_status = 0;
@@ -130,7 +136,7 @@ public class Status extends Segment {
 	public float drops_p = Float.NaN;
 	public byte imu_temp = 0;
 	public byte msp_temp = 0;
-	public byte bat_temp = 0;
+	public byte bat_type = 0;
 
 	public float load_m = Float.NaN; // MSP
 	public long t_armed_ms = 0;
@@ -171,7 +177,7 @@ public class Status extends Segment {
 		wifi_quality = s.wifi_quality;
 
 		msp_temp = s.msp_temp;
-		bat_temp = s.bat_temp;
+		bat_type= s.bat_type;
 
 		mem_m = s.mem_m;
 		health = s.health;
@@ -274,6 +280,10 @@ public class Status extends Segment {
 		}
 		return text;
 	}
+	
+	public String getBatTypeString() {
+		return MSP_BATTYPE_TEXTS[bat_type];
+	}
 
 	public String getModeString() {
 		return MSP_PX4MODE_TEXTS[nav_state];
@@ -297,7 +307,7 @@ public class Status extends Segment {
 		msp_temp = 0;
 		est_state = 0;
 		bat_state = 0;
-		bat_temp = 0;
+		bat_type = 0;
 		mem_m = 0;
 		health = 0;
 	}

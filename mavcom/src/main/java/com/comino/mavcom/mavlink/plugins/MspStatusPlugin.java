@@ -20,7 +20,7 @@ public class MspStatusPlugin extends MAVLinkPluginBase {
 		model.sys.autopilot = (long) status.autopilot_mode;
 		model.sys.wifi_quality = status.wifi_quality / 100f;
 		model.sys.msp_temp = (byte) status.cpu_temp;
-		model.sys.bat_temp = (byte) status.bat_temp;
+		model.sys.bat_type = (byte) status.bat_type;
 		model.sys.mem_m = (short) status.memory;
 		model.sys.t_takeoff_ms = status.takeoff_ms;
 		model.sys.msp_tms = System.currentTimeMillis() * 1000;

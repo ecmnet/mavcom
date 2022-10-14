@@ -72,9 +72,9 @@ public class msg_msp_status extends MAVLinkMessage {
    */
   public int cpu_temp;
   /**
-   * Battery Temperature
+   * Battery type
    */
-  public int bat_temp;
+  public int bat_type;
   /**
    * MSP software build
    */
@@ -130,7 +130,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   threads = (int)dis.readUnsignedByte()&0x00FF;
   wifi_quality = (int)dis.readUnsignedByte()&0x00FF;
   cpu_temp = (int)dis.readUnsignedByte()&0x00FF;
-  bat_temp = (int)dis.readUnsignedByte()&0x00FF;
+  bat_type = (int)dis.readUnsignedByte()&0x00FF;
   for (int i=0; i<16; i++) {
     version[i] = (char)dis.readByte();
   }
@@ -165,7 +165,7 @@ public byte[] encode() throws IOException {
   dos.writeByte(threads&0x00FF);
   dos.writeByte(wifi_quality&0x00FF);
   dos.writeByte(cpu_temp&0x00FF);
-  dos.writeByte(bat_temp&0x00FF);
+  dos.writeByte(bat_type&0x00FF);
   for (int i=0; i<16; i++) {
     dos.writeByte(version[i]);
   }
@@ -196,7 +196,7 @@ return "MAVLINK_MSG_ID_MSP_STATUS : " +   "  uptime_ms="+uptime_ms
 +  "  threads="+threads
 +  "  wifi_quality="+wifi_quality
 +  "  cpu_temp="+cpu_temp
-+  "  bat_temp="+bat_temp
++  "  bat_type="+bat_type
 +  "  version="+getVersion()
 +  "  arch="+getArch()
 ;}
