@@ -65,7 +65,7 @@ public class StatusManager implements Runnable {
 	private static final long TIMEOUT_FLOW = 2000000;
 
 	public static final byte TYPE_ALL = 0;
-	public static final byte TYPE_PX4_STATUS = 1;
+	public static final byte TYPE_MSP_STATUS = 1;
 	public static final byte TYPE_PX4_NAVSTATE = 2;
 	public static final byte TYPE_RESERVED = 3;
 	public static final byte TYPE_MSP_AUTOPILOT = 4;
@@ -144,11 +144,11 @@ public class StatusManager implements Runnable {
 	}
 
 	public void addListener(int box, IMSPStatusChangedListener listener) {
-		addListener(TYPE_PX4_STATUS, 1 << box, 0, EDGE_BOTH, listener);
+		addListener(TYPE_MSP_STATUS, 1 << box, 0, EDGE_BOTH, listener);
 	}
 
 	public void addListener(IMSPStatusChangedListener listener) {
-		addListener(TYPE_PX4_STATUS, MASK_ALL, 0, EDGE_BOTH, listener);
+		addListener(TYPE_MSP_STATUS, MASK_ALL, 0, EDGE_BOTH, listener);
 	}
 
 	public void removeAll() {
@@ -193,7 +193,7 @@ public class StatusManager implements Runnable {
 
 				switch (entry.type) {
 
-				case TYPE_PX4_STATUS:
+				case TYPE_MSP_STATUS:
 					switch (entry.state) {
 					case EDGE_BOTH:
 						if (status_current.isStatusChanged(status_old, entry.mask)) {
@@ -452,7 +452,7 @@ public class StatusManager implements Runnable {
 
 		public IMSPStatusChangedListener listener = null;
 		public int mask = MASK_ALL;
-		public byte type = TYPE_PX4_STATUS;
+		public byte type = TYPE_MSP_STATUS;
 		public long last_triggered = 0;
 		public int timeout_ms = 0;
 		public int state = EDGE_BOTH;

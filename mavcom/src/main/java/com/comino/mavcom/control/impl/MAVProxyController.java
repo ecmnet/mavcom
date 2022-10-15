@@ -134,25 +134,25 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		beat_obs.type = MAV_TYPE.MAV_TYPE_ONBOARD_CONTROLLER;
 		beat_obs.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 
-		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_RISING,
+		status_manager.addListener(StatusManager.TYPE_MSP_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_RISING,
 				(a) -> {
 					System.out.println("Connection to device established...");
 					model.sys.setStatus(Status.MSP_SITL, !comm.isSerial());
 				});
 
-		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_FALLING,
+		status_manager.addListener(StatusManager.TYPE_MSP_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_FALLING,
 				(a) -> {
 					model.sys.setStatus(Status.MSP_ACTIVE, false);
 					System.out.println("Connection to device lost...");
 				});
 
-		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_RISING,
+		status_manager.addListener(StatusManager.TYPE_MSP_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_RISING,
 				(a) -> {
 					System.out.println("Connection to GCS established...");
 					proxy.enableProxy(true);
 				});
 
-		status_manager.addListener(StatusManager.TYPE_PX4_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_FALLING,
+		status_manager.addListener(StatusManager.TYPE_MSP_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_FALLING,
 				(a) -> {
 					proxy.enableProxy(false);
 					System.out.println("Connection to GCS lost...");
