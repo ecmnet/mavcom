@@ -37,7 +37,6 @@ public final class MSPParams {
 	public static final String T265_OFFSET_X = "t265_offset_x";
 	public static final String T265_OFFSET_Y = "t265_offset_y";
 	public static final String T265_OFFSET_Z = "t265_offset_z";
-	public static final String T265_DRIFT_COMPENSATION = "t265_drift_compensation";
 	
 	// T265 checks
 	
@@ -58,5 +57,7 @@ public final class MSPParams {
 	public static final String OAKD_OFFSET_X = "oakd_offset_x";
 	public static final String OAKD_OFFSET_Y = "oakd_offset_y";
 	public static final String OAKD_OFFSET_Z = "oakd_offset_z";
+	
+	public static final String OAKD_YOLO_ENABLED = "oakd_yolo_enabled";
 
 }
