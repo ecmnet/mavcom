@@ -39,13 +39,14 @@ public class Slam extends Segment {
 
 	private static final long serialVersionUID = -353494527253663585L;
 
-	public static final short OFFBOARD_FLAG_NONE = 0;
-	public static final short OFFBOARD_FLAG_HOLD = 1;
-	public static final short OFFBOARD_FLAG_MOVE = 2;
-	public static final short OFFBOARD_FLAG_SPEED = 3;
-	public static final short OFFBOARD_FLAG_TURN = 4;
-	public static final short OFFBOARD_FLAG_LAND = 5;
-	public static final short OFFBOARD_FLAG_NEURAL = 6;
+	public static final short OFFBOARD_FLAG_NONE        = 0;
+	public static final short OFFBOARD_FLAG_YAW_DIRECT  = 1;
+	public static final short OFFBOARD_FLAG_YAW_PLANNER = 2;
+	public static final short OFFBOARD_FLAG_YAW_CONTROL = 3;
+	public static final short OFFBOARD_FLAG_XYZ_DIRECT  = 4;
+	public static final short OFFBOARD_FLAG_XYZ_PLANNER = 5;
+	public static final short OFFBOARD_FLAG_REACHED     = 6;
+	public static final short OFFBOARD_FLAG_TIMEOUT     = 7;
 
 	public static final short OFFBOARD_FLAG_DEBUG1 = 15;
 	public static final short OFFBOARD_FLAG_DEBUG2 = 16;
@@ -122,12 +123,24 @@ public class Slam extends Segment {
 		this.pp = pp;
 		this.pv = pv;
 	}
+	
 
-//	public boolean isFlag(int ...box) {
-//		for(int b : box)
-//			if((flags & (1<<b))==0)
-//				return false;
-//		return true;
-//	}
+	public boolean isFlag(int ...box) {
+		for(int b : box)
+			if((flags & (1<<b))==0)
+				return false;
+		return true;
+	}
+	
+	public void clearFlags() {
+		flags = 0;
+	}
+	
+	public void setFlag(int box, boolean val) {
+		if (val)
+			flags = (short) (flags | (1 << box));
+		else
+			flags = (short) (flags & ~(1 << box));
+	}
 
 }
