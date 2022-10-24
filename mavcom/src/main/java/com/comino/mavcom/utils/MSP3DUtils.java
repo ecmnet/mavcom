@@ -118,9 +118,10 @@ public class MSP3DUtils {
 	}
 
 	public static float angleXY(GeoTuple3D_F64<?> t) {
-
-		float dx = (float) t.getX();
-		float dy = (float) t.getY();
+		return angleXY((float)t.x,(float)t.y);
+	}
+	
+	public static float angleXY(float dx, float dy) {
 
 		if (dx == 0 && dy >= 0)
 			return (float) Math.PI / 2;
