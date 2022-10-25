@@ -121,8 +121,8 @@ public class MAVLinkToModelParser {
 
 					switch (ack.result) {
 					case MAV_RESULT.MAV_RESULT_ACCEPTED:
-						logger.writeLocalMsg("Command " + ack.command + " is accepted",
-								MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+//						logger.writeLocalMsg("Command " + ack.command + " is accepted",
+//								MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 						break;
 					case MAV_RESULT.MAV_RESULT_FAILED:
 						logger.writeLocalMsg("Command " + ack.command + " failed", MAV_SEVERITY.MAV_SEVERITY_WARNING);

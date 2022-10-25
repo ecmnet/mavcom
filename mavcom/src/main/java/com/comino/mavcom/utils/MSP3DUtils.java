@@ -10,8 +10,10 @@ import com.comino.mavcom.struct.Polar4D_F32;
 import georegression.geometry.ConvertRotation3D_F32;
 import georegression.geometry.ConvertRotation3D_F64;
 import georegression.struct.EulerType;
+import georegression.struct.GeoTuple3D_F32;
 import georegression.struct.GeoTuple3D_F64;
 import georegression.struct.GeoTuple4D_F32;
+import georegression.struct.GeoTuple4D_F64;
 import georegression.struct.point.Point3D_F64;
 import georegression.struct.point.Point3D_I32;
 import georegression.struct.point.Vector3D_F32;
@@ -47,7 +49,7 @@ public class MSP3DUtils {
 	public static double distance3D(Vector4D_F64 t, Vector4D_F64 c) {
 		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
-	
+
 	public static double distance3D(Vector3D_F64 t, Vector4D_F64 c) {
 		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
@@ -61,51 +63,63 @@ public class MSP3DUtils {
 	}
 
 	public static double distance2D(Vector3D_F64 t, Vector3D_F64 c) {
-		
+
 		if(Double.isNaN(t.x) || Double.isNaN(c.x))
 			return (float)Math.sqrt((t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 		if(Double.isNaN(t.y) || Double.isNaN(c.y))
 			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.z - c.z) * (t.z - c.z));
 		if(Double.isNaN(t.z) || Double.isNaN(c.z))
 			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
-		
+
 		return  Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
 	}
 
 	public static float distance3D(Vector3D_F32 t, Vector3D_F32 c) {
-		
+
 		if(Float.isNaN(t.x) || Float.isNaN(c.x))
 			return (float)Math.sqrt((t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 		if(Float.isNaN(t.y) || Float.isNaN(c.y))
 			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.z - c.z) * (t.z - c.z));
 		if(Float.isNaN(t.z) || Float.isNaN(c.z))
 			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
-		
+
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
 
 	public static double distance3D(GeoTuple3D_F64<?> t, GeoTuple3D_F64<?> c) {
-		
+
 		if(Double.isNaN(t.x) || Double.isNaN(c.x))
 			return (float)Math.sqrt((t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 		if(Double.isNaN(t.y) || Double.isNaN(c.y))
 			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.z - c.z) * (t.z - c.z));
 		if(Double.isNaN(t.z) || Double.isNaN(c.z))
 			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
-		
-		
+
+
 		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
-	
+
 	public static float distance3D(GeoTuple4D_F32<?> t, GeoTuple4D_F32<?> c) {
-		
+
 		if(Float.isNaN(t.x) || Float.isNaN(c.x))
 			return (float)Math.sqrt((t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 		if(Float.isNaN(t.y) || Float.isNaN(c.y))
 			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.z - c.z) * (t.z - c.z));
 		if(Float.isNaN(t.z) || Float.isNaN(c.z))
 			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
-		
+
+		return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+	}
+
+	public static float distance3D(GeoTuple4D_F64<?> t, GeoTuple3D_F64<?> c) {
+
+		if(Double.isNaN(t.x) || Double.isNaN(c.x))
+			return (float)Math.sqrt((t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+		if(Double.isNaN(t.y) || Double.isNaN(c.y))
+			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.z - c.z) * (t.z - c.z));
+		if(Double.isNaN(t.z) || Double.isNaN(c.z))
+			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
+
 		return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
 
@@ -121,6 +135,18 @@ public class MSP3DUtils {
 		return angleXY((float)t.x,(float)t.y);
 	}
 	
+	public static float angleXY(GeoTuple4D_F64<?> t) {
+		return angleXY((float)t.x,(float)t.y);
+	}
+	
+	public static float angleXY(GeoTuple3D_F32<?> t) {
+		return angleXY((float)t.x,(float)t.y);
+	}
+	
+	public static float angleXY(GeoTuple4D_F32<?> t) {
+		return angleXY((float)t.x,(float)t.y);
+	}
+
 	public static float angleXY(float dx, float dy) {
 
 		if (dx == 0 && dy >= 0)
@@ -140,6 +166,23 @@ public class MSP3DUtils {
 
 		float dx = t.getX() - c.getX();
 		float dy = t.getY() - c.getY();
+
+		if (dx == 0 && dy >= 0)
+			return (float) Math.PI / 2;
+		if (dx == 0 && dy < 0)
+			return -(float) Math.PI / 2;
+
+		if ((dx >= 0 && dy > 0) || (dx >= 0 && dy < 0))
+			return (float) Math.atan(dy / dx);
+		if ((dx < 0 && dy >= 0) || (dx < 0 && dy < 0))
+			return (float) (Math.atan(dy / dx) + Math.PI);
+
+		return 0;
+	}
+	
+	public static float angleXY(GeoTuple3D_F64<?> t, GeoTuple3D_F64<?> c) {
+		float dx = (float)t.getX() -  (float)c.getX();
+		float dy = (float)t.getY() -  (float)c.getY();
 
 		if (dx == 0 && dy >= 0)
 			return (float) Math.PI / 2;
@@ -193,11 +236,11 @@ public class MSP3DUtils {
 		return t;
 	}
 
-	public static boolean convertCurrentPosition(DataModel model, Vector4D_F32 vector) {
-		vector.setTo(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.y);
-		return isFinite(vector);
+	public static boolean convertCurrentPosition(DataModel model, GeoTuple4D_F64<?> point) {
+		point.setTo(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.y);
+		return isFinite(point);
 	}
-	
+
 	public static boolean convertCurrentPosition(DataModel model, GeoTuple4D_F32<?> vector) {
 		vector.setTo(model.state.l_x, model.state.l_y, model.state.l_z, model.attitude.y);
 		return isFinite(vector);
@@ -223,7 +266,7 @@ public class MSP3DUtils {
 		vector.setTo(model.target_state.l_x, model.target_state.l_y, model.target_state.l_z, model.attitude.y);
 		return isFinite(vector);
 	}
-	
+
 	public static boolean convertTargetState(DataModel model, GeoTuple4D_F32<?> vector) {
 		vector.setTo(model.target_state.l_x, model.target_state.l_y, model.target_state.l_z, model.attitude.y);
 		return isFinite(vector);
@@ -233,17 +276,17 @@ public class MSP3DUtils {
 		vector.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
 		return isFinite(vector);
 	}
-	
+
 	public static boolean convertCurrentSpeed(DataModel model, GeoTuple4D_F32<?> vector) {
 		vector.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
 		return isFinite(vector);
 	}
-	
+
 	public static boolean convertCurrentAcceleration(DataModel model, Vector4D_F32 vector) {
 		vector.setTo(model.state.l_ax, model.state.l_ay, model.state.l_az, 0);
 		return isFinite(vector);
 	}
-	
+
 	public static boolean convertCurrentAcceleration(DataModel model, GeoTuple4D_F32<?> vector) {
 		vector.setTo(model.state.l_ax, model.state.l_ay, model.state.l_az, 0);
 		return isFinite(vector);
@@ -319,10 +362,10 @@ public class MSP3DUtils {
 		return Float.isNaN(vector.x) && Float.isNaN(vector.y) && Float.isNaN(vector.z) && Float.isNaN(vector.w);
 	}
 
-	public static boolean isFinite(Vector4D_F32 vector) {
-		return Float.isFinite(vector.x) && Float.isFinite(vector.y) && Float.isFinite(vector.z);
+	public static boolean isFinite(GeoTuple4D_F64<?>  vector) {
+		return Double.isFinite(vector.x) && Double.isFinite(vector.y) && Double.isFinite(vector.z);
 	}
-	
+
 	public static boolean isFinite(GeoTuple4D_F32<?> vector) {
 		return Float.isFinite(vector.x) && Float.isFinite(vector.y) && Float.isFinite(vector.z);
 	}
@@ -410,7 +453,7 @@ public class MSP3DUtils {
 		ConvertRotation3D_F64.matrixToEuler(state.R, EulerType.XYZ, v);
 		return v[YAW];
 	}
-	
+
 	public static boolean isValid(Vector4D_F64 vector) {
 		return  Double.isFinite(vector.x)  &&
 				Double.isFinite(vector.y)  &&
@@ -418,7 +461,7 @@ public class MSP3DUtils {
 				Double.isFinite(vector.w);		
 	}
 
-	
+
 	public static boolean isValid(DataModel model) {
 		return  Float.isFinite(model.state.l_x)  &&
 				Float.isFinite(model.state.l_y)  &&
