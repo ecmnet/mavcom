@@ -115,9 +115,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		reader = new MAVLinkBlockingReader(2, model);
 		status_manager = new StatusManager(model,false);
 		mavlinkListener = new ArrayList<IMAVMessageListener>();
-		
+
 		MessageBus.getInstance();
-		
+
 		int baudrate = config.getIntProperty(MSPParams.BAUDRATE, String.valueOf(DEFAULT_BAUDRATE));
 		System.out.println("PX4 connection baudrate set to "+baudrate+" baud");
 
@@ -162,9 +162,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		case MAVController.MODE_NORMAL:
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
-			
+
 			//TODO: Get baudrate from msp.properties
-			
+
 			comm = MAVSerialComm.getInstance(reader,baudrate,SerialPort.FLOW_CONTROL_CTS_ENABLED | SerialPort.FLOW_CONTROL_RTS_ENABLED);
 			comm.open();
 			sendMAVLinkMessage(beat_px4);
@@ -206,50 +206,46 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			System.out.println("Proxy Controller (serial mode) loaded: " + peerAddress);
 			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
-//		case MAVController.SERVER:
-//
-//			comm = MAVSerialComm.getInstance(reader, BAUDRATE_9);
-//			comm.open();
-//			sendMAVLinkMessage(beat_px4);
-//
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//			}
-//
-//			if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) {
-//				proxy = new MAVUdpProxyNIO2(model, "192.168.178.60", 14550, "192.168.178.86", 14555, comm);
-//				peerAddress = "192.168.178.86";
-//			} else {
-//				proxy = new MAVUdpProxyNIO2(model, "172.168.178.60", 14550, "192.168.178.86", 14555, comm);
-//				peerAddress = "192.168.178.86";
-//			}
-//			System.out.println("Proxy Controller loaded: " + peerAddress);
-//			model.sys.setStatus(Status.MSP_SITL, false);
-//			break;
+			//		case MAVController.SERVER:
+			//
+			//			comm = MAVSerialComm.getInstance(reader, BAUDRATE_9);
+			//			comm.open();
+			//			sendMAVLinkMessage(beat_px4);
+			//
+			//			try {
+			//				Thread.sleep(100);
+			//			} catch (InterruptedException e) {
+			//			}
+			//
+			//			if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) {
+			//				proxy = new MAVUdpProxyNIO2(model, "192.168.178.60", 14550, "192.168.178.86", 14555, comm);
+			//				peerAddress = "192.168.178.86";
+			//			} else {
+			//				proxy = new MAVUdpProxyNIO2(model, "172.168.178.60", 14550, "192.168.178.86", 14555, comm);
+			//				peerAddress = "192.168.178.86";
+			//			}
+			//			System.out.println("Proxy Controller loaded: " + peerAddress);
+			//			model.sys.setStatus(Status.MSP_SITL, false);
+			//			break;
 		}
 
 		// comm.addMAVLinkListener(proxy);
 		// Direct byte based proxy
 		comm.setProxyListener(proxy);
 
-		// Register processing of PING sent by GCL
-		proxy.registerListener(msg_heartbeat.class, (o) -> {
-			model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
-			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
-		});
+		//		// Register processing of PING sent by GCL
+		//		proxy.registerListener(msg_heartbeat.class, (o) -> {
+		//			model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
+		//			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
+		//		});
+		//
+		//		// FWD PX4 heartbeat messages to GCL when not connected
+		//		reader.getParser().addMAVLinkListener((o) -> {
+		//			if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && o instanceof msg_heartbeat) {
+		//				proxy.write((MAVLinkMessage) o);
+		//			}
+		//		});
 
-		// FWD PX4 heartbeat messages to GCL when not connected
-		reader.getParser().addMAVLinkListener((o) -> {
-			if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && o instanceof msg_heartbeat) {
-				proxy.write((MAVLinkMessage) o);
-			}
-		});
-
-		wq.addSingleTask("LP", 5000, () -> {
-			timesync = new MAVTimeSync(comm);
-		});
-		wq.addCyclicTask("NP", 200, this);
 
 	}
 
@@ -462,7 +458,26 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public boolean start() {
 
-		status_manager.start();
+		status_manager.start();	
+		wq.addCyclicTask("NP", 200, this);	
+		wq.addSingleTask("LP", 5000, () -> {
+			timesync = new MAVTimeSync(comm);
+		});
+
+		// Register processing of PING sent by GCL
+		proxy.registerListener(msg_heartbeat.class, (o) -> {
+			model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
+			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
+		});
+
+		// FWD PX4 heartbeat messages to GCL when not connected
+		reader.getParser().addMAVLinkListener((o) -> {
+			if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && o instanceof msg_heartbeat) {
+				proxy.write((MAVLinkMessage) o);
+			}
+		});
+
+
 
 		if (isSimulation()) {
 			System.out.println("Setup MAVLink streams for simulation mode");
