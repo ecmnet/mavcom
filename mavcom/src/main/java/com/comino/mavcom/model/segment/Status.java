@@ -300,10 +300,10 @@ public class Status extends Segment {
 		t_takeoff_ms = 0;
 		t_boot_ms = 0;
 		t_unix_us = 0;
-		px4_status = 0;
-		nav_state = 0;
-		status = 0;
-		autopilot = 0;
+		//px4_status = 0;
+		//nav_state = 0;
+		//status = 0;
+		//autopilot = 0;
 		wifi_quality = 0;
 		msp_temp = 0;
 		est_state = 0;
