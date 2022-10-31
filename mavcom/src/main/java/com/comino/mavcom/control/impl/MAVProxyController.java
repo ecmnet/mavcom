@@ -96,7 +96,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	private StatusManager status_manager = null;
 	private List<IMAVMessageListener> mavlinkListener = null;
-	private MAVTimeSync timesync = null;
 	private final MAVLinkBlockingReader reader;
 
 	private final WorkQueue wq = WorkQueue.getInstance();
@@ -108,8 +107,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	}
 
 	public MAVProxyController(int mode, MSPConfig config) {
-
+	
 		this.mode = mode;
+		
 		controller = this;
 		model = new DataModel();
 		reader = new MAVLinkBlockingReader(2, model);
@@ -460,9 +460,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		status_manager.start();	
 		wq.addCyclicTask("NP", 200, this);	
-		wq.addSingleTask("LP", 5000, () -> {
-			timesync = new MAVTimeSync(comm);
-		});
+		wq.addSingleTask("LP", 5000, () -> new MAVTimeSync(comm));
 
 		// Register processing of PING sent by GCL
 		proxy.registerListener(msg_heartbeat.class, (o) -> {

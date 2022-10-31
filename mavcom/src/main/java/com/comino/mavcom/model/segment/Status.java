@@ -70,7 +70,7 @@ public class Status extends Segment {
 	private static final String[] MSP_PX4MODE_TEXTS = { "MANUAL", "ALTHOLD", "POSHOLD", "MISSION", "LOITER", "RTL",
 			"RCRECOVER", "RTGS", "ENGFAIL", "GPSFAIL", "ACRO", "UNKNOWN", "DESCEND", "TERMINATION", "OFFBOARD",
 			"STABILIZED", "RATTITUDE", "TAKEOFF", "LAND", "FOLLOW", "PRECLAND" };
-	
+
 	private static final String[] MSP_BATTYPE_TEXTS = { "UNKNOWN", "BATTERY", "TETHERED" };
 
 	// Low level sensors
@@ -106,7 +106,7 @@ public class Status extends Segment {
 	public static final int NAVIGATION_STATE_AUTO_RTGS = 7; // Auto return to groundstation on data link loss
 	public static final int NAVIGATION_STATE_AUTO_LANDENGFAIL = 8; // Auto land on engine failure
 	public static final int NAVIGATION_STATE_AUTO_LANDGPSFAIL = 9; // Auto land on gps failure (e.g. open loop loiter
-																	// down)
+	// down)
 	public static final int NAVIGATION_STATE_ACRO = 10; // Acro mode
 	public static final int NAVIGATION_STATE_UNUSED = 11; // Free slot
 	public static final int NAVIGATION_STATE_DESCEND = 12; // Descend mode (no position control)
@@ -118,7 +118,7 @@ public class Status extends Segment {
 	public static final int NAVIGATION_STATE_AUTO_LAND = 18; // Land
 	public static final int NAVIGATION_STATE_AUTO_FOLLOW_TARGET = 19; // Auto Follow
 	public static final int NAVIGATION_STATE_AUTO_PRECLAND = 20; // Precision land with landing target
-	
+
 	public static final int MSP_BAT_TYPE_UNKNOWN   = 0;
 	public static final int MSP_BAT_TYPE_BAT       = 1;
 	public static final int MSP_BAT_TYPE_TETHERED  = 2;
@@ -149,7 +149,7 @@ public class Status extends Segment {
 	public long gcl_tms = 0;
 	public long msp_tms = 0;
 	public short mem_m = 0;
-	
+
 	public long  health = 0;
 
 	public static String version = "";
@@ -204,9 +204,9 @@ public class Status extends Segment {
 		return true;
 	}
 
-//	public boolean isSensorChanged(Status old, int ...box) {
-//		return old.isSensorAvailable(box) != isSensorAvailable(box);
-//	}
+	//	public boolean isSensorChanged(Status old, int ...box) {
+	//		return old.isSensorAvailable(box) != isSensorAvailable(box);
+	//	}
 
 	public boolean isSensorChanged(Status old, int mask) {
 		return ((old.sensors & mask) != (sensors & mask) && ((sensors & mask) == mask))
@@ -281,7 +281,7 @@ public class Status extends Segment {
 		}
 		return text;
 	}
-	
+
 	public String getBatTypeString() {
 		return MSP_BATTYPE_TEXTS[bat_type];
 	}
@@ -300,10 +300,6 @@ public class Status extends Segment {
 		t_takeoff_ms = 0;
 		t_boot_ms = 0;
 		t_unix_us = 0;
-		//px4_status = 0;
-		//nav_state = 0;
-		//status = 0;
-		//autopilot = 0;
 		wifi_quality = 0;
 		msp_temp = 0;
 		est_state = 0;
@@ -311,6 +307,15 @@ public class Status extends Segment {
 		bat_type = 0;
 		mem_m = 0;
 		health = 0;
+		
+		
+	}
+
+	public void resetStatus() {
+		px4_status = 0;
+		nav_state = 0;
+		status = status & 0x0003;
+		autopilot = 0;
 	}
 
 	public int getStatus() {
