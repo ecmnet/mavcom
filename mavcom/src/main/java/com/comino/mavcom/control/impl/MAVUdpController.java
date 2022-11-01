@@ -76,7 +76,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 			comm.open();
 	
 		}
-
+        model.sys.resetStatus();
 		return true;
 	}
 

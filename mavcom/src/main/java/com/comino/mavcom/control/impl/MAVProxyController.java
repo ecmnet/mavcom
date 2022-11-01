@@ -364,6 +364,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		if (comm.isConnected()) {
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES, 1);
 		}
+		model.sys.resetStatus();
 		return true;
 	}
 
