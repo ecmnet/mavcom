@@ -15,7 +15,9 @@ public final class MSPParams {
 	public static final String AUTOPILOT_TAKEOFF_PROC = "autopilot_takeoff_procedure";
 	public static final String AUTOPILOT_TAKEOFF_OFFBOARD = "autopilot_takeoff_offboard";
 	public static final String AUTOPILOT_PRECISION_LOCK = "autopilot_precision_lock";
-
+	public static final String AUTOPILOT_MAX_XYZ_VEL = "autopilot_max_xyz_vel";
+	public static final String AUTOPILOT_RADIUS_ACCEPT = "autopilot_acceptance_radius";
+	
 	// control publishing
 
 	public static final String PUBLISH_DEBUG = "publish_debug";
