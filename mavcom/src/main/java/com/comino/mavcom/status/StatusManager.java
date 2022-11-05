@@ -389,7 +389,7 @@ public class StatusManager implements Runnable {
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, (false));
 			System.out.println(
 					("GCL lost at " + (model.sys.gcl_tms - DataModel.getSynchronizedPX4Time_us()) / 1000) + "ms");
-			System.out.println(model.sys);
+	//		System.out.println(model.sys);
 		}
 
 		if (checkTimeOutSystem(model.sys.msp_tms, TIMEOUT_GCL_CONNECTED)
@@ -414,7 +414,7 @@ public class StatusManager implements Runnable {
 			// "+(model.sys.tms+TIMEOUT_CONNECTED)+" vs
 			// "+DataModel.getSynchronizedPX4Time_us()+" > "+model.sys.tms);
 			System.out.println(("Connection lost: " + (DataModel.getSynchronizedPX4Time_us() - model.sys.tms) / 1000) + "ms");
-			System.out.println(model.sys);
+			//System.out.println(model.sys);
 			model.sys.wifi_quality = 0;
 			model.sys.tms = DataModel.getSynchronizedPX4Time_us();
 		}
