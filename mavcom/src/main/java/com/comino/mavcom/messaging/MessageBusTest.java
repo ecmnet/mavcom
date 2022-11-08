@@ -10,6 +10,8 @@ public class MessageBusTest {
 
 	public MessageBusTest() {
 
+		wq.start();
+		
 		// SubmissionPublisher<Vision> publisher = new SubmissionPublisher<>();
 
 		MessageBus bus = MessageBus.getInstance();
@@ -25,7 +27,7 @@ public class MessageBusTest {
 		bus.subscribe(subscriber);
 
 		ModelSubscriber<Battery> subscribe2 = new ModelSubscriber<Battery>(Battery.class, (n) -> {
-			System.out.println("received B: " + n.a0);
+			System.out.println("received B1: " + n.a0);
 		});
 
 		bus.subscribe(subscribe2);
@@ -37,11 +39,17 @@ public class MessageBusTest {
 		bus.subscribe(subscribe3);
 
 		bus.publish(v2);
+		
+		new Thread(() -> {
+		   bus.publish(new Battery());
+		}).start();
 
-		wq.addSingleTask("LP", 3000, () -> {
+		wq.addSingleTask("LP", 500, () -> {
+			
+			System.out.println("Publishing 1");
 
 			try {
-				MessageBus bus2 = MessageBus.getInstance();
+			   MessageBus bus2 = MessageBus.getInstance();
 
 				Vision v = new Vision();
 				v.x = 2.345f;
@@ -59,9 +67,29 @@ public class MessageBusTest {
 			}
 
 		});
+		
+		wq.addSingleTask("LP", 800, () -> {
+			
+			System.out.println("Publishing 2");
+
+			try {
+				MessageBus bus2 = MessageBus.getInstance();
+				
+				subscribe3.cancel();
+
+				Battery b = new Battery();
+				b.a0 = 8.4f;
+
+				bus2.publish(b);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		});
 
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(1000000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -39,6 +39,10 @@ public class ModelSubscriber<ModelType> {
 	public ModelType getData() {
 		return data;
 	}
+	
+	public void cancel() {
+		subscriber.cancel();
+	}
 
 	public void registerListener(ModelListener<ModelType> listener) {
 		this.listener = listener;
@@ -56,7 +60,6 @@ public class ModelSubscriber<ModelType> {
 		public void onSubscribe(Subscription subscription) {
 			this.subscription = subscription;
 			subscription.request(1);
-
 		}
 
 		@Override
@@ -76,6 +79,13 @@ public class ModelSubscriber<ModelType> {
 		public void onComplete() {
 
 		}
+		
+		public void cancel() {
+			if(subscription!=null)
+				subscription.cancel();
+		}
+		
+		
 
 	}
 
