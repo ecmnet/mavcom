@@ -57,6 +57,10 @@ public class MSP3DUtils {
 	public static float distance2D(Vector4D_F32 t, Vector4D_F32 c) {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
 	}
+	
+	public static float distance2D(GeoTuple3D_F64<?> t, GeoTuple3D_F64<?> c) {
+		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
+	}
 
 	public static float distance2D(Vector3D_F32 t, Vector3D_F32 c) {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
@@ -363,6 +367,10 @@ public class MSP3DUtils {
 	}
 
 	public static boolean isFinite(GeoTuple4D_F64<?>  vector) {
+		return Double.isFinite(vector.x) && Double.isFinite(vector.y) && Double.isFinite(vector.z);
+	}
+	
+	public static boolean isFinite(GeoTuple3D_F64<?>  vector) {
 		return Double.isFinite(vector.x) && Double.isFinite(vector.y) && Double.isFinite(vector.z);
 	}
 
