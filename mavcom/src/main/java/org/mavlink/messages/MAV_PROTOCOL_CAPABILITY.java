@@ -28,7 +28,7 @@ public interface MAV_PROTOCOL_CAPABILITY {
     public final static int MAV_PROTOCOL_CAPABILITY_COMMAND_INT = 8;
     /**
      * Parameter protocol uses byte-wise encoding of parameter values into param_value (float) fields: https://mavlink.io/en/services/parameter.html#parameter-encoding.
-          Note that either this flag or MAV_PROTOCOL_CAPABILITY_PARAM_ENCODE_BYTEWISE should be set if the parameter protocol is supported.
+          Note that either this flag or MAV_PROTOCOL_CAPABILITY_PARAM_ENCODE_C_CAST should be set if the parameter protocol is supported.
      */
     public final static int MAV_PROTOCOL_CAPABILITY_PARAM_ENCODE_BYTEWISE = 16;
     /**

@@ -200,7 +200,7 @@ public class Polar3D_F32 {
 	}
 
 	public String toString() {
-		return "XY=" + MSPMathUtils.fromRad2(angle_xy) + " XZ=" + MSPMathUtils.fromRad2(angle_xz) + " L=" + value;
+		return "XY=" + MSPMathUtils.fromRadSigned(angle_xy) + " XZ=" + MSPMathUtils.fromRadSigned(angle_xz) + " L=" + value;
 	}
 
 	public static void main(String[] args) {

@@ -350,10 +350,10 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_JUMP = 177;
     /**
-     * Change speed and/or throttle set points.
+     * Change speed and/or throttle set points. The value persists until it is overridden or there is a mode change.
      * PARAM 1 : Speed type (0=Airspeed, 1=Ground Speed, 2=Climb Speed, 3=Descent Speed)
-     * PARAM 2 : Speed (-1 indicates no change)
-     * PARAM 3 : Throttle (-1 indicates no change)
+     * PARAM 2 : Speed (-1 indicates no change, -2 indicates return to default vehicle speed)
+     * PARAM 3 : Throttle (-1 indicates no change, -2 indicates return to default vehicle throttle value)
      * PARAM 4 : 
      * PARAM 5 : 
      * PARAM 6 : 
@@ -469,14 +469,16 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_SET_ACTUATOR = 187;
     /**
-     * Mission command to perform a landing. This is used as a marker in a mission to tell the autopilot where a sequence of mission items that represents a landing starts. It may also be sent via a COMMAND_LONG to trigger a landing, in which case the nearest (geographically) landing sequence in the mission will be used. The Latitude/Longitude is optional, and may be set to 0 if not needed. If specified then it will be used to help find the closest landing sequence.
+     * Mission command to perform a landing. This is used as a marker in a mission to tell the autopilot where a sequence of mission items that represents a landing starts.
+	  It may also be sent via a COMMAND_LONG to trigger a landing, in which case the nearest (geographically) landing sequence in the mission will be used.
+	  The Latitude/Longitude/Altitude is optional, and may be set to 0 if not needed. If specified then it will be used to help find the closest landing sequence.
      * PARAM 1 : Empty
      * PARAM 2 : Empty
      * PARAM 3 : Empty
      * PARAM 4 : Empty
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
-     * PARAM 7 : Empty
+     * PARAM 7 : Altitude
      */
     public final static int MAV_CMD_DO_LAND_START = 189;
     /**
@@ -974,7 +976,7 @@ public interface MAV_CMD {
     /**
      * Set the interval between messages for a particular MAVLink message ID. This interface replaces REQUEST_DATA_STREAM.
      * PARAM 1 : The MAVLink message ID
-     * PARAM 2 : The interval between two messages. Set to -1 to disable and 0 to request default rate.
+     * PARAM 2 : The interval between two messages. -1: disable. 0: request default rate (which may be zero).
      * PARAM 7 : Target address of message stream (if message has target address fields). 0: Flight-stack default (recommended), 1: address of requestor, 2: broadcast.
      */
     public final static int MAV_CMD_SET_MESSAGE_INTERVAL = 511;

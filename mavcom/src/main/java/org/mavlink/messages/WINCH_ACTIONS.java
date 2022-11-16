@@ -44,4 +44,8 @@ public interface WINCH_ACTIONS {
      * Spool out the entire length of the line. Only action and instance command parameters are used, others are ignored.
      */
     public final static int WINCH_ABANDON_LINE = 8;
+    /**
+     * Spools out just enough to present the hook to the user to load the payload. Only action and instance command parameters are used, others are ignored
+     */
+    public final static int WINCH_LOAD_PAYLOAD = 9;
 }

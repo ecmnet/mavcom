@@ -52,4 +52,16 @@ public interface MAV_WINCH_STATUS_FLAG {
      * Winch is abandoning the line and possibly payload. Winch unspools the entire calculated line length. This is a failover state from REDELIVER if the number of attempts exceeds a threshold.
      */
     public final static int MAV_WINCH_STATUS_ABANDON_LINE = 1024;
+    /**
+     * Winch is engaging the locking mechanism.
+     */
+    public final static int MAV_WINCH_STATUS_LOCKING = 2048;
+    /**
+     * Winch is spooling on line.
+     */
+    public final static int MAV_WINCH_STATUS_LOAD_LINE = 4096;
+    /**
+     * Winch is loading a payload.
+     */
+    public final static int MAV_WINCH_STATUS_LOAD_PAYLOAD = 8192;
 }

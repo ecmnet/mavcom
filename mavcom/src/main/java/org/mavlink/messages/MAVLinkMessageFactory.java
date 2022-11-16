@@ -8,8 +8,6 @@ import org.mavlink.IMAVLinkMessage;
 import java.io.IOException;
 import org.mavlink.io.LittleEndianDataInputStream;
 import java.io.ByteArrayInputStream;
-import org.mavlink.messages.lquac.msg_protocol_version;
-import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_request_data_stream;
 import org.mavlink.messages.lquac.msg_gps_rtk;
 import org.mavlink.messages.lquac.msg_position_target_local_ned;
@@ -87,7 +85,6 @@ import org.mavlink.messages.lquac.msg_camera_fov_status;
 import org.mavlink.messages.lquac.msg_data_transmission_handshake;
 import org.mavlink.messages.lquac.msg_response_event_error;
 import org.mavlink.messages.lquac.msg_named_value_int;
-import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_mission_request_list;
 import org.mavlink.messages.lquac.msg_gps_status;
 import org.mavlink.messages.lquac.msg_winch_status;
@@ -140,7 +137,6 @@ import org.mavlink.messages.lquac.msg_wifi_config_ap;
 import org.mavlink.messages.lquac.msg_esc_info;
 import org.mavlink.messages.lquac.msg_scaled_pressure2;
 import org.mavlink.messages.lquac.msg_play_tune_v2;
-import org.mavlink.messages.lquac.msg_protocol_version;
 import org.mavlink.messages.lquac.msg_scaled_pressure3;
 import org.mavlink.messages.lquac.msg_ping;
 import org.mavlink.messages.lquac.msg_home_position;
@@ -300,7 +296,6 @@ import org.mavlink.messages.lquac.msg_camera_fov_status;
 import org.mavlink.messages.lquac.msg_data_transmission_handshake;
 import org.mavlink.messages.lquac.msg_response_event_error;
 import org.mavlink.messages.lquac.msg_named_value_int;
-import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_mission_request_list;
 import org.mavlink.messages.lquac.msg_gps_status;
 import org.mavlink.messages.lquac.msg_winch_status;
@@ -354,7 +349,6 @@ import org.mavlink.messages.lquac.msg_wifi_config_ap;
 import org.mavlink.messages.lquac.msg_esc_info;
 import org.mavlink.messages.lquac.msg_scaled_pressure2;
 import org.mavlink.messages.lquac.msg_play_tune_v2;
-import org.mavlink.messages.lquac.msg_protocol_version;
 import org.mavlink.messages.lquac.msg_scaled_pressure3;
 import org.mavlink.messages.lquac.msg_ping;
 import org.mavlink.messages.lquac.msg_home_position;
@@ -764,10 +758,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_named_value_int(sysId, componentId);
       msg.decode(dis);
       break;
-  case MAVLINK_MSG_ID_HEARTBEAT:
-      msg = new msg_heartbeat(sysId, componentId);
-      msg.decode(dis);
-      break;
   case MAVLINK_MSG_ID_MISSION_REQUEST_LIST:
       msg = new msg_mission_request_list(sysId, componentId);
       msg.decode(dis);
@@ -978,10 +968,6 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_PLAY_TUNE_V2:
       msg = new msg_play_tune_v2(sysId, componentId);
-      msg.decode(dis);
-      break;
-  case MAVLINK_MSG_ID_PROTOCOL_VERSION:
-      msg = new msg_protocol_version(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_SCALED_PRESSURE3:

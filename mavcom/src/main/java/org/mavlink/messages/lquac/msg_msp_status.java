@@ -72,7 +72,7 @@ public class msg_msp_status extends MAVLinkMessage {
    */
   public int cpu_temp;
   /**
-   * Battery type
+   * Battery Type
    */
   public int bat_type;
   /**
