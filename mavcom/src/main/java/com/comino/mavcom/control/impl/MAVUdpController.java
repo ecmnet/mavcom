@@ -105,7 +105,6 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 			}
 			this.connected = true;
 			model.sys.setStatus(Status.MSP_SITL, isSimulation());
-			comm.write(beat);
 
 		} catch (Exception e) {
 			e.printStackTrace();

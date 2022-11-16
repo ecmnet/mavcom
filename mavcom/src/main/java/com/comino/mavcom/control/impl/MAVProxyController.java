@@ -492,6 +492,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public void run() {
+		
+		
 
 		sendMAVLinkMessage(beat_px4);
 		sendMAVLinkMessage(beat_obs);

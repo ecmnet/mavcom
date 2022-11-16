@@ -92,6 +92,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_DATA_TRANSMISSION_HANDSHAKE = 130;
   public static int MAVLINK_MSG_ID_RESPONSE_EVENT_ERROR = 413;
   public static int MAVLINK_MSG_ID_NAMED_VALUE_INT = 252;
+  public static int MAVLINK_MSG_ID_HEARTBEAT = 0;
   public static int MAVLINK_MSG_ID_MISSION_REQUEST_LIST = 43;
   public static int MAVLINK_MSG_ID_GPS_STATUS = 25;
   public static int MAVLINK_MSG_ID_WINCH_STATUS = 9005;
@@ -147,6 +148,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_ESC_INFO = 290;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE2 = 137;
   public static int MAVLINK_MSG_ID_PLAY_TUNE_V2 = 400;
+  public static int MAVLINK_MSG_ID_PROTOCOL_VERSION = 300;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE3 = 143;
   public static int MAVLINK_MSG_ID_PING = 4;
   public static int MAVLINK_MSG_ID_HOME_POSITION = 242;

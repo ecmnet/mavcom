@@ -407,7 +407,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		//		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "172.168.178.22", 14555,
 		//				14550);
 
-		//		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "127.0.0.1", 14580,14540);
+		//	MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "127.0.0.1", 14580,14540);
 
 		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "127.0.0.1", 14656,14650);
 
@@ -423,7 +423,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						System.out.println(comm.isConnected() + " => " + comm + " => ANGLEX=" + comm.model.hud.aX
 								+ " ANGLEY=" + comm.model.hud.aY);
 					Thread.sleep(200);
-					comm.write(hb);
+					//comm.write(hb);
 				}
 				comm.close();
 				Thread.sleep(5000);

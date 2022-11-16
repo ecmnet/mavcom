@@ -431,6 +431,10 @@ public interface MAV_COMPONENT {
      */
     public final static int MAV_COMP_ID_PARACHUTE = 161;
     /**
+     * Winch component.
+     */
+    public final static int MAV_COMP_ID_WINCH = 169;
+    /**
      * Gimbal #2.
      */
     public final static int MAV_COMP_ID_GIMBAL2 = 171;
