@@ -38,7 +38,10 @@ public class PX4Parameters implements IMAVLinkListener {
 
 		this.control = control;
 		this.control.addMAVLinkListener(this);
-		this.metadata = new ParameterFactMetaData("PX4ParameterFactMetaData.xml");
+		if(control.isSimulation())
+		  this.metadata = new ParameterFactMetaData("PX4ParameterFactMetaData_sitl.xml");
+		else
+		  this.metadata = new ParameterFactMetaData("PX4ParameterFactMetaData.xml");
 		this.parameterList = new HashMap<String, ParameterAttributes>();
 
 	}
@@ -73,6 +76,7 @@ public class PX4Parameters implements IMAVLinkListener {
 	public void requestRefresh(boolean reload) {
 		if (!reload && isLoaded)
 			return;
+		
 		System.out.println("Parameter requested..");
 		isLoaded = false;
 		control.getCurrentModel().sys.setStatus(Status.MSP_PARAMS_LOADED, false);

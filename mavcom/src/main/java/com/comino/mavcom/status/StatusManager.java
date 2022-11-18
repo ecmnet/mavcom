@@ -106,7 +106,9 @@ public class StatusManager implements Runnable {
 	public void start() {
 		if (isRunning)
 			return;
-		wq.addCyclicTask("NP", 50, this);
+		this.status_old.status = 0;
+		this.status_current.status = 0;
+		wq.addCyclicTask("NP", 20, this);
 		isRunning = true;
 	}
 
