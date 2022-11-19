@@ -24,7 +24,7 @@ public class msg_msp_trajectory extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_TRAJECTORY;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 77;
+    payload_length = 89;
 }
 
   /**
@@ -100,6 +100,18 @@ public class msg_msp_trajectory extends MAVLinkMessage {
    */
   public float svz;
   /**
+   * Start AX
+   */
+  public float sax;
+  /**
+   * Start AY
+   */
+  public float say;
+  /**
+   * Start AZ
+   */
+  public float saz;
+  /**
    * Id
    */
   public int id;
@@ -125,13 +137,16 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   svx = (float)dis.readFloat();
   svy = (float)dis.readFloat();
   svz = (float)dis.readFloat();
+  sax = (float)dis.readFloat();
+  say = (float)dis.readFloat();
+  saz = (float)dis.readFloat();
   id = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+77];
+  byte[] buffer = new byte[12+89];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -161,16 +176,19 @@ public byte[] encode() throws IOException {
   dos.writeFloat(svx);
   dos.writeFloat(svy);
   dos.writeFloat(svz);
+  dos.writeFloat(sax);
+  dos.writeFloat(say);
+  dos.writeFloat(saz);
   dos.writeByte(id&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 77);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 89);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[87] = crcl;
-  buffer[88] = crch;
+  buffer[99] = crcl;
+  buffer[100] = crch;
   dos.close();
   return buffer;
 }
@@ -193,6 +211,9 @@ return "MAVLINK_MSG_ID_MSP_TRAJECTORY : " +   "  tms="+tms
 +  "  svx="+format((float)svx)
 +  "  svy="+format((float)svy)
 +  "  svz="+format((float)svz)
++  "  sax="+format((float)sax)
++  "  say="+format((float)say)
++  "  saz="+format((float)saz)
 +  "  id="+id
 ;}
 

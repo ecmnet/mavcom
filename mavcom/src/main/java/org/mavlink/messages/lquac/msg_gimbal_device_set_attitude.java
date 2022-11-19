@@ -28,19 +28,19 @@ public class msg_gimbal_device_set_attitude extends MAVLinkMessage {
 }
 
   /**
-   * Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation, the frame is depends on whether the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set, set all fields to NaN if only angular velocity should be used)
+   * Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation). The frame depends on whether the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set. Set fields to NaN to be ignored (only angular velocity should be used).
    */
   public float[] q = new float[4];
   /**
-   * X component of angular velocity, positive is rolling to the right, NaN to be ignored.
+   * X component of angular velocity (positive: rolling to the right). NaN to be ignored.
    */
   public float angular_velocity_x;
   /**
-   * Y component of angular velocity, positive is pitching up, NaN to be ignored.
+   * Y component of angular velocity (positive: pitching up). NaN to be ignored.
    */
   public float angular_velocity_y;
   /**
-   * Z component of angular velocity, positive is yawing to the right, NaN to be ignored.
+   * Z component of angular velocity (positive: yawing to the right). NaN to be ignored.
    */
   public float angular_velocity_z;
   /**

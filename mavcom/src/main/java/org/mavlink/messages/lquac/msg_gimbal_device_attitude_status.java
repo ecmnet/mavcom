@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_gimbal_device_attitude_status
- * Message reporting the status of a gimbal device. This message should be broadcasted by a gimbal device component. The angles encoded in the quaternion are relative to absolute North if the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set (roll: positive is rolling to the right, pitch: positive is pitching up, yaw is turn to the right) or relative to the vehicle heading if the flag is not set. This message should be broadcast at a low regular rate (e.g. 10Hz).
+ * Message reporting the status of a gimbal device. This message should be broadcast by a gimbal device component at a low regular rate (e.g. 5 Hz). The angles encoded in the quaternion and the angular velocities are relative to North if the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set or relative to the vehicle heading if the flag is not set.
  **/
 public class msg_gimbal_device_attitude_status extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS = 285;
@@ -32,23 +32,23 @@ public class msg_gimbal_device_attitude_status extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation, the frame is depends on whether the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set)
+   * Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation). The frame depends on whether the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set.
    */
   public float[] q = new float[4];
   /**
-   * X component of angular velocity (NaN if unknown)
+   * X component of angular velocity (positive: rolling to the right). The frame is as for the quaternion. NaN if unknown.
    */
   public float angular_velocity_x;
   /**
-   * Y component of angular velocity (NaN if unknown)
+   * Y component of angular velocity (positive: pitching up). The frame is as for the quaternion. NaN if unknown.
    */
   public float angular_velocity_y;
   /**
-   * Z component of angular velocity (NaN if unknown)
+   * Z component of angular velocity (positive: yawing to the right). The frame is as for the quaternion. NaN if unknown.
    */
   public float angular_velocity_z;
   /**
-   * Failure flags (0 for no failure)
+   * Failure flags (0 for no failure).
    */
   public long failure_flags;
   /**

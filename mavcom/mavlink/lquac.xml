@@ -299,6 +299,9 @@
                <field type="float"         name="svx" >Start VX</field>
                <field type="float"         name="svy" >Start VY</field>
                <field type="float"         name="svz" >Start VZ</field>
+               <field type="float"         name="sax" >Start AX</field>
+               <field type="float"         name="say" >Start AY</field>
+               <field type="float"         name="saz" >Start AZ</field>
 
                <field type="uint64_t"      name="tms">Timestamp</field>
            </message>

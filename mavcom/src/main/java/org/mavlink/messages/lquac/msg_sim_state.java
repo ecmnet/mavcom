@@ -24,7 +24,7 @@ public class msg_sim_state extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_SIM_STATE;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 84;
+    payload_length = 92;
 }
 
   /**
@@ -80,11 +80,11 @@ public class msg_sim_state extends MAVLinkMessage {
    */
   public float zgyro;
   /**
-   * Latitude
+   * Latitude (lower precision). Both this and the lat_int field should be set.
    */
   public float lat;
   /**
-   * Longitude
+   * Longitude (lower precision). Both this and the lon_int field should be set.
    */
   public float lon;
   /**
@@ -111,6 +111,14 @@ public class msg_sim_state extends MAVLinkMessage {
    * True velocity in down direction in earth-fixed NED frame
    */
   public float vd;
+  /**
+   * Latitude (higher precision). If 0, recipients should use the lat field value (otherwise this field is preferred).
+   */
+  public long lat_int;
+  /**
+   * Longitude (higher precision). If 0, recipients should use the lon field value (otherwise this field is preferred).
+   */
+  public long lon_int;
 /**
  * Decode message with raw data
  */
@@ -136,12 +144,14 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   vn = (float)dis.readFloat();
   ve = (float)dis.readFloat();
   vd = (float)dis.readFloat();
+  lat_int = (int)dis.readInt();
+  lon_int = (int)dis.readInt();
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+84];
+  byte[] buffer = new byte[12+92];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -174,15 +184,17 @@ public byte[] encode() throws IOException {
   dos.writeFloat(vn);
   dos.writeFloat(ve);
   dos.writeFloat(vd);
+  dos.writeInt((int)(lat_int&0x00FFFFFFFF));
+  dos.writeInt((int)(lon_int&0x00FFFFFFFF));
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 84);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 92);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[94] = crcl;
-  buffer[95] = crch;
+  buffer[102] = crcl;
+  buffer[103] = crch;
   dos.close();
   return buffer;
 }
@@ -208,6 +220,8 @@ return "MAVLINK_MSG_ID_SIM_STATE : " +   "  q1="+format((float)q1)
 +  "  vn="+format((float)vn)
 +  "  ve="+format((float)ve)
 +  "  vd="+format((float)vd)
++  "  lat_int="+lat_int
++  "  lon_int="+lon_int
 ;}
 
 }

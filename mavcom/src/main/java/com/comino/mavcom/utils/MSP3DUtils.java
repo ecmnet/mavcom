@@ -280,6 +280,16 @@ public class MSP3DUtils {
 		vector.setTo(model.target_state.l_vx, model.target_state.l_vy, model.target_state.l_vz, model.attitude.yr);
 		return isFinite(vector);
 	}
+	
+	public static boolean convertTargetAcceleration(DataModel model, GeoTuple3D_F32<?> vector) {
+		vector.setTo(model.target_state.l_ax, model.target_state.l_ay, model.target_state.l_az);
+		return isFinite(vector);
+	}
+	
+	public static boolean convertTargetAcceleration(DataModel model, GeoTuple4D_F32<?> vector) {
+		vector.setTo(model.target_state.l_ax, model.target_state.l_ay, model.target_state.l_az,0);
+		return isFinite(vector);
+	}
 
 	public static boolean convertCurrentSpeed(DataModel model, Vector4D_F32 vector) {
 		vector.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
@@ -369,6 +379,10 @@ public class MSP3DUtils {
 
 	public static boolean isNaN(Vector4D_F32 vector) {
 		return Float.isNaN(vector.x) && Float.isNaN(vector.y) && Float.isNaN(vector.z) && Float.isNaN(vector.w);
+	}
+	
+	public static boolean isFinite(GeoTuple3D_F32<?>  vector) {
+		return Double.isFinite(vector.x) && Double.isFinite(vector.y) && Double.isFinite(vector.z);
 	}
 
 	public static boolean isFinite(GeoTuple4D_F64<?>  vector) {

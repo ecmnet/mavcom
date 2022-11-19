@@ -63,6 +63,10 @@ public class Trajectory extends Segment {
 	public float svx = 0; // gamma
 	public float svy = 0;
 	public float svz = 0;
+	
+	public float sax = 0; // gamma
+	public float say = 0;
+	public float saz = 0;
 
 	public Trajectory clone() {
 		Trajectory t = new Trajectory();
@@ -93,6 +97,10 @@ public class Trajectory extends Segment {
 		svx = t.svx;
 		svy = t.svy;
 		svz = t.svz;
+		
+		sax = t.sax;
+		say = t.say;
+		saz = t.saz;
 
 	}
 
@@ -114,6 +122,10 @@ public class Trajectory extends Segment {
 		gz = 0;
 		sz = 0;
 		svz = 0;
+		sax = 0;
+		say = 0;
+		saz = 0;
+	  
 	}
 
 }
