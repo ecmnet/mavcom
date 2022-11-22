@@ -29,10 +29,6 @@ public interface MSP_AUTOCONTROL_MODE {
      */
     public final static int FOLLOW_OBJECT = 4;
     /**
-     * PX4 local planner
-     */
-    public final static int PX4_PLANNER = 8;
-    /**
      * Interactive mode (by mouse)
      */
     public final static int INTERACTIVE = 9;
@@ -45,11 +41,11 @@ public interface MSP_AUTOCONTROL_MODE {
      */
     public final static int PRECISION_LOCK = 11;
     /**
-     * FCUM mode
+     * Enable STIL_MODE1
      */
-    public final static int FCUM = 12;
+    public final static int SITL_MODE1 = 14;
     /**
-     * Experimental mode
+     * Enable STIL_MODE2
      */
-    public final static int EXPERIMENTAL = 13;
+    public final static int SITL_MODE2 = 15;
 }

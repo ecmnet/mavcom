@@ -56,4 +56,8 @@ public interface GIMBAL_DEVICE_CAP_FLAGS {
      * Gimbal device supports yawing/panning infinetely (e.g. using slip disk).
      */
     public final static int GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_INFINITE_YAW = 2048;
+    /**
+     * Gimbal device supports radio control inputs as an alternative input for controlling the gimbal orientation.
+     */
+    public final static int GIMBAL_DEVICE_CAP_FLAGS_HAS_RC_INPUTS = 8192;
 }

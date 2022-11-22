@@ -13,10 +13,6 @@ public interface MSP_AUTOCONTROL_ACTION {
      */
     public final static int RTL = 16;
     /**
-     * Executes a list of waypoints defined in MSP (param3)
-     */
-    public final static int WAYPOINT_MODE = 17;
-    /**
      * Execute a MSP mission (param3)
      */
     public final static int AUTO_MISSION = 18;
@@ -37,10 +33,6 @@ public interface MSP_AUTOCONTROL_ACTION {
      */
     public final static int LOAD_MAP2D = 22;
     /**
-     * Execute a test sequence for testing
-     */
-    public final static int TEST_SEQ1 = 24;
-    /**
      * Rotates to a given heading
      */
     public final static int ROTATE = 25;
@@ -57,11 +49,15 @@ public interface MSP_AUTOCONTROL_ACTION {
      */
     public final static int LOCK = 28;
     /**
-     * Applies a map filter to the current map
+     * Execute SITL action 1
      */
-    public final static int APPLY_MAP_FILTER = 60;
+    public final static int SITL_ACTION1 = 61;
     /**
-     * Controls offboard updater
+     * Execute SITL action 2
      */
-    public final static int OFFBOARD_UPDATER = 63;
+    public final static int SITL_ACTION2 = 62;
+    /**
+     * Execute SITL action 3
+     */
+    public final static int SITL_ACTION3 = 63;
 }

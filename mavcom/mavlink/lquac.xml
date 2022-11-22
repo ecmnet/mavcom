@@ -111,9 +111,6 @@
               <entry value="4" name="FOLLOW_OBJECT">
                   <description>Follow person</description>
               </entry>
-              <entry value="8" name="PX4_PLANNER">
-                  <description>PX4 local planner</description>
-              </entry>
               <entry value="9" name="INTERACTIVE">
                   <description>Interactive mode (by mouse)</description>
               </entry>
@@ -123,11 +120,11 @@
               <entry value="11" name="PRECISION_LOCK">
                   <description>Precision locking</description>
               </entry>
-              <entry value="12" name="FCUM">
-                  <description>FCUM mode</description>
+              <entry value="14" name="SITL_MODE1">
+                  <description>Enable STIL_MODE1</description>
               </entry>
-              <entry value="13" name="EXPERIMENTAL">
-                  <description>Experimental mode</description>
+              <entry value="15" name="SITL_MODE2">
+                  <description>Enable STIL_MODE2</description>
               </entry>
            </enum>
 
@@ -135,9 +132,6 @@
               <description>Auto-Control action (Bit 16-63)</description>
               <entry value="16" name="RTL">
                   <description>Returns to local home position and lands device</description>
-              </entry>
-              <entry value="17" name="WAYPOINT_MODE">
-                  <description>Executes a list of waypoints defined in MSP (param3)</description>
               </entry>
                <entry value="18" name="AUTO_MISSION">
                   <description>Execute a MSP mission (param3)</description>
@@ -154,9 +148,6 @@
               <entry value="22" name="LOAD_MAP2D">
                   <description>Load a map corresponding to the global position</description>
               </entry>
-              <entry value="24" name="TEST_SEQ1">
-                  <description>Execute a test sequence for testing </description>
-              </entry>
               <entry value="25" name="ROTATE">
                   <description>Rotates to a given heading </description>
               </entry>
@@ -169,11 +160,14 @@
               <entry value="28" name="LOCK">
                   <description>Offboard precision lock</description>
               </entry>
-              <entry value="60" name="APPLY_MAP_FILTER">
-                  <description>Applies a map filter to the current map </description>
+               <entry value="61" name="SITL_ACTION1">
+                  <description>Execute SITL action 1 </description>
               </entry>
-               <entry value="63" name="OFFBOARD_UPDATER">
-                  <description>Controls offboard updater</description>
+              <entry value="62" name="SITL_ACTION2">
+                  <description>Execute SITL action 2</description>
+              </entry>
+              <entry value="63" name="SITL_ACTION3">
+                  <description>Execute SITL action 3</description>
               </entry>
            </enum>
             <enum name="MSP_GRID_STATUS">
