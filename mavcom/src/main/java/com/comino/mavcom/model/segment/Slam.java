@@ -35,6 +35,8 @@ package com.comino.mavcom.model.segment;
 
 import com.comino.mavcom.model.segment.generic.Segment;
 
+import georegression.struct.GeoTuple4D_F32;
+
 public class Slam extends Segment {
 
 	private static final long serialVersionUID = -353494527253663585L;
@@ -52,12 +54,9 @@ public class Slam extends Segment {
 	public static final short OFFBOARD_FLAG_DEBUG2 = 16;
 	public static final short OFFBOARD_FLAG_DEBUG3 = 17;
 
-	public float px; // planned path x
-	public float py; // planned path y
-	public float pz; // planned path Z
-	public float pd; // planned direction XY
-	public float pp; // planned direction YZ
-	public float pv; // planned speed
+	public float ix; // Info point x
+	public float iy; // Info point y
+	public float iz; // Info point Z
 	public float dw; // distance to next waypoint
 	public float dm; // minimal distance to obstacle
 	public float di; // distance to target
@@ -74,12 +73,9 @@ public class Slam extends Segment {
 	}
 
 	public void set(Slam a) {
-		pv = a.pv;
-		pd = a.pd;
-		pp = a.pp;
-		px = a.px;
-		py = a.py;
-		pz = a.pz;
+		ix = a.ix;
+		iy = a.iy;
+		iz = a.iz;
 		di = a.di;
 		dw = a.dw;
 		dm = a.dm;
@@ -99,12 +95,9 @@ public class Slam extends Segment {
 	}
 
 	public void clear() {
-		pv = 0;
-		pd = 0;
-		pp = Float.NaN;
-		px = Float.NaN;
-		py = Float.NaN;
-		pz = Float.NaN;
+		ix = Float.NaN;
+		iy = Float.NaN;
+		iz = Float.NaN;
 		di = Float.NaN;
 		dw = Float.NaN;
 		dm = Float.NaN;
@@ -117,11 +110,11 @@ public class Slam extends Segment {
 		wpcount = 0;
 	}
 
-	public void set(float pd, float pp, float pv, float di) {
-		this.di = di;
-		this.pd = pd;
-		this.pp = pp;
-		this.pv = pv;
+	
+	public void setInfoPoint(GeoTuple4D_F32<?> p) {
+		this.ix = p.x;
+		this.iy = p.y;
+		this.iz = p.z;
 	}
 	
 

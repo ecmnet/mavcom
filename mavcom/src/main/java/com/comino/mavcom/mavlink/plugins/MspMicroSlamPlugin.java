@@ -15,12 +15,9 @@ public class MspMicroSlamPlugin extends MAVLinkPluginBase {
 	public void received(Object o) {
 
 		msg_msp_micro_slam slam = (msg_msp_micro_slam) o;
-		model.slam.pd = slam.pd;
-		model.slam.pp = slam.pp;
-		model.slam.pv = slam.pv;
-		model.slam.px = slam.px;
-		model.slam.py = slam.py;
-		model.slam.pz = slam.pz;
+		model.slam.ix = slam.ix;
+		model.slam.iy = slam.iy;
+		model.slam.iz = slam.iz;
 		model.slam.di = slam.md;
 		model.slam.dw = slam.mw;
 		model.slam.dm = slam.dm;

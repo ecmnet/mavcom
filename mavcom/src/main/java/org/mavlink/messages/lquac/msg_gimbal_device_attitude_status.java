@@ -12,7 +12,21 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_gimbal_device_attitude_status
- * Message reporting the status of a gimbal device. This message should be broadcast by a gimbal device component at a low regular rate (e.g. 5 Hz). The angles encoded in the quaternion and the angular velocities are relative to North if the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set or relative to the vehicle heading if the flag is not set.
+ * Message reporting the status of a gimbal device. 
+	  This message should be broadcast by a gimbal device component at a low regular rate (e.g. 5 Hz). 
+	  For the angles encoded in the quaternion and the angular velocities holds: 
+	  If the flag GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME is set, then they are relative to the vehicle heading (vehicle frame). 
+	  If the flag GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME is set, then they are relative to absolute North (earth frame). 
+	  If neither of these flags are set, then (for backwards compatibility) it holds: 
+	  If the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set, then they are relative to absolute North (earth frame), 
+	  else they are relative to the vehicle heading (vehicle frame). 
+	  Other conditions of the flags are not allowed. 
+	  The quaternion and angular velocities in the other frame can be calculated from delta_yaw and delta_yaw_velocity as 
+	  q_earth = q_delta_yaw * q_vehicle and w_earth = w_delta_yaw_velocity + w_vehicle (if not NaN).
+	  If neither the GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME nor the GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME flag is set, 
+	  then (for backwards compatibility) the data in the delta_yaw and delta_yaw_velocity fields are to be ignored.
+	  New implementations should always set either GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME or GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME, 
+	  and always should set delta_yaw and delta_yaw_velocity either to the proper value or NaN.
  **/
 public class msg_gimbal_device_attitude_status extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS = 285;
@@ -24,7 +38,7 @@ public class msg_gimbal_device_attitude_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 40;
+    payload_length = 48;
 }
 
   /**
@@ -32,23 +46,23 @@ public class msg_gimbal_device_attitude_status extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation). The frame depends on whether the flag GIMBAL_DEVICE_FLAGS_YAW_LOCK is set.
+   * Quaternion components, w, x, y, z (1 0 0 0 is the null-rotation). The frame is described in the message description.
    */
   public float[] q = new float[4];
   /**
-   * X component of angular velocity (positive: rolling to the right). The frame is as for the quaternion. NaN if unknown.
+   * X component of angular velocity (positive: rolling to the right). The frame is described in the message description. NaN if unknown.
    */
   public float angular_velocity_x;
   /**
-   * Y component of angular velocity (positive: pitching up). The frame is as for the quaternion. NaN if unknown.
+   * Y component of angular velocity (positive: pitching up). The frame is described in the message description. NaN if unknown.
    */
   public float angular_velocity_y;
   /**
-   * Z component of angular velocity (positive: yawing to the right). The frame is as for the quaternion. NaN if unknown.
+   * Z component of angular velocity (positive: yawing to the right). The frame is described in the message description. NaN if unknown.
    */
   public float angular_velocity_z;
   /**
-   * Failure flags (0 for no failure).
+   * Failure flags (0 for no failure)
    */
   public long failure_flags;
   /**
@@ -63,6 +77,14 @@ public class msg_gimbal_device_attitude_status extends MAVLinkMessage {
    * Component ID
    */
   public int target_component;
+  /**
+   * Yaw angle relating the quaternions in earth and body frames (see message description). NaN if unknown.
+   */
+  public float delta_yaw;
+  /**
+   * Yaw angular velocity relating the angular velocities in earth and body frames (see message description). NaN if unknown.
+   */
+  public float delta_yaw_velocity;
 /**
  * Decode message with raw data
  */
@@ -78,12 +100,14 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   flags = (int)dis.readUnsignedShort()&0x00FFFF;
   target_system = (int)dis.readUnsignedByte()&0x00FF;
   target_component = (int)dis.readUnsignedByte()&0x00FF;
+  delta_yaw = (float)dis.readFloat();
+  delta_yaw_velocity = (float)dis.readFloat();
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+40];
+  byte[] buffer = new byte[12+48];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -106,15 +130,17 @@ public byte[] encode() throws IOException {
   dos.writeShort(flags&0x00FFFF);
   dos.writeByte(target_system&0x00FF);
   dos.writeByte(target_component&0x00FF);
+  dos.writeFloat(delta_yaw);
+  dos.writeFloat(delta_yaw_velocity);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 40);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 48);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[50] = crcl;
-  buffer[51] = crch;
+  buffer[58] = crcl;
+  buffer[59] = crch;
   dos.close();
   return buffer;
 }
@@ -131,6 +157,8 @@ return "MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS : " +   "  time_boot_ms="+t
 +  "  flags="+flags
 +  "  target_system="+target_system
 +  "  target_component="+target_component
++  "  delta_yaw="+format((float)delta_yaw)
++  "  delta_yaw_velocity="+format((float)delta_yaw_velocity)
 ;}
 
 }

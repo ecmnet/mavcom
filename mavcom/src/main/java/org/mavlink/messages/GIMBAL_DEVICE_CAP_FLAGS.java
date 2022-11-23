@@ -57,6 +57,10 @@ public interface GIMBAL_DEVICE_CAP_FLAGS {
      */
     public final static int GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_INFINITE_YAW = 2048;
     /**
+     * Gimbal device supports yaw angles and angular velocities relative to North (earth frame). This usually requires support by an autopilot via AUTOPILOT_STATE_FOR_GIMBAL_DEVICE. Support can go on and off during runtime, which is reported by the flag GIMBAL_DEVICE_FLAGS_CAN_ACCEPT_YAW_IN_EARTH_FRAME.
+     */
+    public final static int GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_YAW_IN_EARTH_FRAME = 4096;
+    /**
      * Gimbal device supports radio control inputs as an alternative input for controlling the gimbal orientation.
      */
     public final static int GIMBAL_DEVICE_CAP_FLAGS_HAS_RC_INPUTS = 8192;

@@ -24,7 +24,7 @@ public class msg_msp_micro_slam extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_MICRO_SLAM;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 70;
+    payload_length = 58;
 }
 
   /**
@@ -32,29 +32,17 @@ public class msg_msp_micro_slam extends MAVLinkMessage {
    */
   public long tms;
   /**
-   * Planned path X
+   * Generic point  X
    */
-  public float px;
+  public float ix;
   /**
-   * Planned path Y
+   * Generic pointh Y
    */
-  public float py;
+  public float iy;
   /**
-   * Planned path Z
+   * Generic point  Z
    */
-  public float pz;
-  /**
-   * Planned direction XY
-   */
-  public float pd;
-  /**
-   * Planned direction YZ
-   */
-  public float pp;
-  /**
-   * Planned speed
-   */
-  public float pv;
+  public float iz;
   /**
    * Distance to target
    */
@@ -100,12 +88,9 @@ public class msg_msp_micro_slam extends MAVLinkMessage {
  */
 public void decode(LittleEndianDataInputStream dis) throws IOException {
   tms = (long)dis.readLong();
-  px = (float)dis.readFloat();
-  py = (float)dis.readFloat();
-  pz = (float)dis.readFloat();
-  pd = (float)dis.readFloat();
-  pp = (float)dis.readFloat();
-  pv = (float)dis.readFloat();
+  ix = (float)dis.readFloat();
+  iy = (float)dis.readFloat();
+  iz = (float)dis.readFloat();
   md = (float)dis.readFloat();
   mw = (float)dis.readFloat();
   dm = (float)dis.readFloat();
@@ -121,7 +106,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+70];
+  byte[] buffer = new byte[12+58];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -134,12 +119,9 @@ public byte[] encode() throws IOException {
   dos.writeByte((messageType >> 8) & 0x00FF);
   dos.writeByte((messageType >> 16) & 0x00FF);
   dos.writeLong(tms);
-  dos.writeFloat(px);
-  dos.writeFloat(py);
-  dos.writeFloat(pz);
-  dos.writeFloat(pd);
-  dos.writeFloat(pp);
-  dos.writeFloat(pv);
+  dos.writeFloat(ix);
+  dos.writeFloat(iy);
+  dos.writeFloat(iz);
   dos.writeFloat(md);
   dos.writeFloat(mw);
   dos.writeFloat(dm);
@@ -153,23 +135,20 @@ public byte[] encode() throws IOException {
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 70);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 58);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[80] = crcl;
-  buffer[81] = crch;
+  buffer[68] = crcl;
+  buffer[69] = crch;
   dos.close();
   return buffer;
 }
 public String toString() {
 return "MAVLINK_MSG_ID_MSP_MICRO_SLAM : " +   "  tms="+tms
-+  "  px="+format((float)px)
-+  "  py="+format((float)py)
-+  "  pz="+format((float)pz)
-+  "  pd="+format((float)pd)
-+  "  pp="+format((float)pp)
-+  "  pv="+format((float)pv)
++  "  ix="+format((float)ix)
++  "  iy="+format((float)iy)
++  "  iz="+format((float)iz)
 +  "  md="+format((float)md)
 +  "  mw="+format((float)mw)
 +  "  dm="+format((float)dm)

@@ -29,6 +29,18 @@ public interface GIMBAL_DEVICE_FLAGS {
      */
     public final static int GIMBAL_DEVICE_FLAGS_YAW_LOCK = 16;
     /**
+     * Yaw angle and z component of angular velocity are relative to the vehicle heading (vehicle frame, earth frame rotated such that the x-axis is pointing forward).
+     */
+    public final static int GIMBAL_DEVICE_FLAGS_YAW_IN_VEHICLE_FRAME = 32;
+    /**
+     * Yaw angle and z component of angular velocity are relative to North (earth frame, x-axis is pointing North).
+     */
+    public final static int GIMBAL_DEVICE_FLAGS_YAW_IN_EARTH_FRAME = 64;
+    /**
+     * Gimbal device can accept yaw angle inputs relative to North (earth frame). This flag is only for reporting (attempts to set this flag are ignored).
+     */
+    public final static int GIMBAL_DEVICE_FLAGS_ACCEPTS_YAW_IN_EARTH_FRAME = 128;
+    /**
      * The gimbal orientation is set exclusively by the RC signals feed to the gimbal's radio control inputs. MAVLink messages for setting the gimbal orientation (GIMBAL_DEVICE_SET_ATTITUDE) are ignored.
      */
     public final static int GIMBAL_DEVICE_FLAGS_RC_EXCLUSIVE = 256;
