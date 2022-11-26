@@ -445,7 +445,7 @@ import org.mavlink.messages.lquac.msg_gps_inject_data;
  **/
 public class MAVLinkMessageFactory implements IMAVLinkMessage, IMAVLinkMessageID {
 public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, byte[] rawData) throws IOException {
-    MAVLinkMessage msg=null;
+    final MAVLinkMessage msg;
     LittleEndianDataInputStream dis = new LittleEndianDataInputStream(new ByteArrayInputStream(rawData));
     switch(msgid) {
   case MAVLINK_MSG_ID_REQUEST_DATA_STREAM:
@@ -1321,6 +1321,7 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg.decode(dis);
       break;
   default:
+	  msg = null;
       System.out.println("Mavlink Factory Error : unknown MsgId : " + msgid);
     }
     dis.close();

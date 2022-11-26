@@ -666,7 +666,7 @@ public class MAVLinkGenerator {
 			writer.print("public class MAVLinkMessageFactory implements IMAVLinkMessage, IMAVLinkMessageID {\n");
 			writer.print(
 					"public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, byte[] rawData) throws IOException {\n");
-			writer.print("    MAVLinkMessage msg=null;\n");
+			writer.print("   final MAVLinkMessage msg;\n");
 			if (forEmbeddedJava) {
 				if (isLittleEndian) {
 					writer.print(
@@ -694,7 +694,7 @@ public class MAVLinkGenerator {
 				writer.print("      msg.decode(dis);\n");
 				writer.print("      break;\n");
 			}
-			writer.print("  default:\n");
+			writer.print("  default:\n msg=null;\n"); 
 			writer.print("      System.out.println(\"Mavlink Factory Error : unknown MsgId : \" + msgid);\n");
 			writer.print("    }\n");
 			writer.print("    dis.close();\n");
