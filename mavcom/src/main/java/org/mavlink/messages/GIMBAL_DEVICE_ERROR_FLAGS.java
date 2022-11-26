@@ -29,7 +29,7 @@ public interface GIMBAL_DEVICE_ERROR_FLAGS {
      */
     public final static int GIMBAL_DEVICE_ERROR_FLAGS_POWER_ERROR = 16;
     /**
-     * There is an error with the gimbal motor's.
+     * There is an error with the gimbal motors.
      */
     public final static int GIMBAL_DEVICE_ERROR_FLAGS_MOTOR_ERROR = 32;
     /**
@@ -41,7 +41,11 @@ public interface GIMBAL_DEVICE_ERROR_FLAGS {
      */
     public final static int GIMBAL_DEVICE_ERROR_FLAGS_COMMS_ERROR = 128;
     /**
-     * Gimbal is currently calibrating.
+     * Gimbal device is currently calibrating.
      */
     public final static int GIMBAL_DEVICE_ERROR_FLAGS_CALIBRATION_RUNNING = 256;
+    /**
+     * Gimbal device is not assigned to a gimbal manager.
+     */
+    public final static int GIMBAL_DEVICE_ERROR_FLAGS_NO_MANAGER = 512;
 }

@@ -36,11 +36,11 @@ public class msg_camera_settings extends MAVLinkMessage {
    */
   public int mode_id;
   /**
-   * Current zoom level (0.0 to 100.0, NaN if not known)
+   * Current zoom level as a percentage of the full range (0.0 to 100.0, NaN if not known)
    */
   public float zoomLevel;
   /**
-   * Current focus level (0.0 to 100.0, NaN if not known)
+   * Current focus level as a percentage of the full range (0.0 to 100.0, NaN if not known)
    */
   public float focusLevel;
 /**

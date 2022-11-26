@@ -180,6 +180,7 @@ public class MAVLinkGenerator {
 
 			generateMAVLinkClass(destination, implementations);
 			generateFactoryClass(mavlink, destination);
+			generateStaticFactoryClass(mavlink, destination);
 			generateIMavlinkId(mavlink, destination);
 			generateMavlinkCoder(mavlink, destination);
 			generateIMavlinkCRC(destination);
@@ -700,6 +701,103 @@ public class MAVLinkGenerator {
 			writer.print("    return msg;\n");
 			writer.print("  }\n");
 			writer.print("}\n");
+		} catch (Exception e) {
+			System.err.println("ERROR : " + e);
+			e.printStackTrace();
+		} finally {
+			try {
+				writer.close();
+				output.close();
+			} catch (Exception ex) {
+				System.err.println("ERROR : " + ex);
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	protected void generateStaticFactoryClass(MAVLinkData mavlink, String targetPath) {
+		System.err.println("Generate static Factory");
+		String packageRootName = "org.mavlink.messages";
+		String packageName = packageRootName;
+		String directory = targetPath + "/org/mavlink/messages/";
+		OutputStream output = null;
+		PrintWriter writer = null;
+		String className = "MAVLinkStaticMessageFactory";
+		String filename = directory + className + ".java";
+		try {
+			File file = new File(directory);
+			file.mkdirs();
+			output = new FileOutputStream(filename, false);
+			writer = new PrintWriter(output);
+			// Write Header
+			writer.print("/**\n * Generated class : " + className + "\n * DO NOT MODIFY!\n **/\n");
+			writer.print("package " + packageName + ";\n");
+			writer.print("import " + packageRootName + ".MAVLinkMessage;\n");
+			writer.print("import org.mavlink.IMAVLinkMessage;\n");
+			writer.print("import java.io.IOException;\n");
+			if (forEmbeddedJava) {
+				if (isLittleEndian) {
+					writer.print("import org.mavlink.io.LittleEndianDataInputStream;\n");
+					writer.print("import java.io.ByteArrayInputStream;\n");
+				} else {
+					writer.print("import java.io.DataInputStream;\n");
+					writer.print("import java.io.ByteArrayInputStream;\n");
+				}
+			} else {
+				writer.print("import java.nio.ByteBuffer;\n");
+				writer.print("import java.nio.ByteOrder;\n");
+				
+			}
+			writer.print("import java.util.HashMap;\n");
+			writer.print(imports);
+			writer.print(
+					"/**\n * Class MAVLinkStaticMessageFactory\n * Generate MAVLink message classes from byte array\n **/\n");
+			writer.print("public class MAVLinkStaticMessageFactory implements IMAVLinkMessage, IMAVLinkMessageID {\n");
+			
+			writer.print("\n\n");
+			writer.print("private static final HashMap<Integer,MAVLinkMessage> messages = new HashMap<>(){\n   {\n");
+			
+			for (MAVLinkMessage message : mavlink.getMessages().values()) {
+
+				if (message.getId() > 9998)
+					continue;
+				
+				String msgClassName = "msg_" + message.getName().toLowerCase();
+				String id = MAVLINK_MSG + "_ID_" + message.getName();
+				
+				writer.print("  put("+id+", new "+msgClassName+"(0,0));\n");
+			}
+			
+			writer.print("   }\n};\n\n");
+			
+			writer.print(
+					"public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, byte[] rawData) throws IOException {\n");
+			writer.print("    MAVLinkMessage msg=null;\n");
+			if (forEmbeddedJava) {
+				if (isLittleEndian) {
+					writer.print(
+							"    LittleEndianDataInputStream dis = new LittleEndianDataInputStream(new ByteArrayInputStream(rawData));\n");
+				} else {
+					writer.print("    DataInputStream dis = new DataInputStream(new ByteArrayInputStream(rawData));\n");
+				}
+			} else {
+				if (isLittleEndian) {
+					writer.print("    ByteBuffer dis = ByteBuffer.wrap(rawData).order(ByteOrder.LITTLE_ENDIAN);\n");
+				} else {
+					writer.print("    ByteBuffer dis = ByteBuffer.wrap(rawData).order(ByteOrder.BIG_ENDIAN);\n");
+				}
+			}
+			
+			writer.print("    msg = messages.get(msgid);\n");
+			writer.print("    msg.sysId = sysId;\n");
+			writer.print("    msg.componentId = componentId;\n");
+			writer.print("    msg.decode(dis);\n");
+			writer.print("    dis.close();\n");
+			writer.print("    return msg;\n");
+			writer.print("  }\n");
+			writer.print("}\n");
+			
+			
 		} catch (Exception e) {
 			System.err.println("ERROR : " + e);
 			e.printStackTrace();

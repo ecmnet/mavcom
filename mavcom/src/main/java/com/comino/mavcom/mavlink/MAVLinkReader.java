@@ -41,6 +41,7 @@ import org.mavlink.IMAVLinkMessage;
 import org.mavlink.MAVLinkCRC;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAVLinkMessageFactory;
+import org.mavlink.messages.MAVLinkStaticMessageFactory;
 
 public class MAVLinkReader {
 
@@ -258,7 +259,7 @@ public class MAVLinkReader {
 				}
 
 				if (rxmsg.msg_received == mavlink_framing_t.MAVLINK_FRAMING_OK) {
-					MAVLinkMessage msg = MAVLinkMessageFactory.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId,
+					MAVLinkMessage msg = MAVLinkStaticMessageFactory.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId,
 							rxmsg.rawData);
 					if (msg != null && (checkPacket(rxmsg.sysId, rxmsg.packet))) {
 						msg.isValid = true;

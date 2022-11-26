@@ -28,11 +28,11 @@ public final class LittleEndianDataOutputStream extends OutputStream implements 
 	}
 
 	public final void close() throws IOException {
-		dis.close();
+	  dis.close();
 	}
 
 	public void flush() throws IOException {
-		dis.flush();
+		//dis.flush();
 	}
 
 	public final synchronized void write(int ib) throws IOException {

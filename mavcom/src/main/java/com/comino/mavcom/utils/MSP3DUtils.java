@@ -564,4 +564,8 @@ public class MSP3DUtils {
 		return result;
 	}
 
+	public static float norm3D(GeoTuple4D_F32<?> v) {
+		return (float)Math.sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
+	}
+
 }

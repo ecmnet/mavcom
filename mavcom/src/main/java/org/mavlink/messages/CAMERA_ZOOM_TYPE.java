@@ -17,7 +17,7 @@ public interface CAMERA_ZOOM_TYPE {
      */
     public final static int ZOOM_TYPE_CONTINUOUS = 1;
     /**
-     * Zoom value as proportion of full camera range (a value between 0.0 and 100.0)
+     * Zoom value as proportion of full camera range (a percentage value between 0.0 and 100.0)
      */
     public final static int ZOOM_TYPE_RANGE = 2;
     /**

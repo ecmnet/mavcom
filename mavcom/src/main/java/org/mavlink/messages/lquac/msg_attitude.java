@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_attitude
- * The attitude in the aeronautical frame (right-handed, Z-down, X-front, Y-right).
+ * The attitude in the aeronautical frame (right-handed, Z-down, Y-right, X-front, ZYX, intrinsic).
  **/
 public class msg_attitude extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_ATTITUDE = 30;
