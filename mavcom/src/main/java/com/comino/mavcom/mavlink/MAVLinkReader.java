@@ -259,7 +259,7 @@ public class MAVLinkReader {
 				}
 
 				if (rxmsg.msg_received == mavlink_framing_t.MAVLINK_FRAMING_OK) {
-					MAVLinkMessage msg = MAVLinkStaticMessageFactory.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId,
+					MAVLinkMessage msg = MAVLinkMessageFactory.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId,
 							rxmsg.rawData);
 					if (msg != null && (checkPacket(rxmsg.sysId, rxmsg.packet))) {
 						msg.isValid = true;

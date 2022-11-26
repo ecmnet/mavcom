@@ -289,12 +289,12 @@ public class MAVLinkToModelParser {
 				msgListener = msglisteners.get(msg.getClass());
 				if (msgListener != null && msgListener.size() > 0)
 					for (IMAVLinkListener _listeners : msgListener)
-						_listeners.received(msg);
+					 synchronized(this) {_listeners.received(msg); }
 
 				try {
 					if (mavListener != null && mavListener.size() > 0)
 						for (IMAVLinkListener mavlistener : mavListener)
-							mavlistener.received(msg);
+							 synchronized(this) { mavlistener.received(msg); }
 
 				} catch (ConcurrentModificationException e) {
 				}

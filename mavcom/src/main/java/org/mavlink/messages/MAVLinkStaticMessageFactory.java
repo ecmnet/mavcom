@@ -670,7 +670,7 @@ private static final HashMap<Integer,MAVLinkMessage> messages = new HashMap<>(){
    }
 };
 
-public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, byte[] rawData) throws IOException {
+public static  MAVLinkMessage getMessage(int msgid, int sysId, int componentId, byte[] rawData) throws IOException {
     MAVLinkMessage msg=null;
     LittleEndianDataInputStream dis = new LittleEndianDataInputStream(new ByteArrayInputStream(rawData));
     msg = messages.get(msgid);
