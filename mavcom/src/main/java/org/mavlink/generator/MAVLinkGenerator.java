@@ -180,7 +180,7 @@ public class MAVLinkGenerator {
 
 			generateMAVLinkClass(destination, implementations);
 			generateFactoryClass(mavlink, destination);
-			generateStaticFactoryClass(mavlink, destination);
+		//	generateStaticFactoryClass(mavlink, destination); // Static messsages do not work
 			generateIMavlinkId(mavlink, destination);
 			generateMavlinkCoder(mavlink, destination);
 			generateIMavlinkCRC(destination);

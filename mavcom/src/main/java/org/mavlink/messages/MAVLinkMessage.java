@@ -128,6 +128,16 @@ public abstract class MAVLinkMessage extends MAVLinkMessageCoder implements IMAV
 	public MAVLinkMessage(byte[] raw) {
 		rawData = raw;
 	}
+	
+	public void clear() {
+		payload_length = -1;
+		incompat = 0;
+		compat = 0;
+		packet = -1;
+		isValid = false;
+		messageType = -1;
+		rawData = null;
+	}
 
 	/**
 	 * Decode TM with raw data

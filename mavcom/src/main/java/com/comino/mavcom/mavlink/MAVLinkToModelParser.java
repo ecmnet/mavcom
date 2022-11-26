@@ -121,8 +121,8 @@ public class MAVLinkToModelParser {
 
 					switch (ack.result) {
 					case MAV_RESULT.MAV_RESULT_ACCEPTED:
-//						logger.writeLocalMsg("Command " + ack.command + " is accepted",
-//								MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+						//						logger.writeLocalMsg("Command " + ack.command + " is accepted",
+						//								MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 						break;
 					case MAV_RESULT.MAV_RESULT_FAILED:
 						logger.writeLocalMsg("Command " + ack.command + " failed", MAV_SEVERITY.MAV_SEVERITY_WARNING);
@@ -158,8 +158,8 @@ public class MAVLinkToModelParser {
 				m.text = (new String(msg.text)).trim();
 				m.tms = DataModel.getSynchronizedPX4Time_us();
 				m.severity = msg.severity;
-				
-//				System.err.println(m.text);
+
+				//				System.err.println(m.text);
 
 				// if new message follows tha last one within 10ms, check severity and keep that
 				// one
@@ -174,29 +174,29 @@ public class MAVLinkToModelParser {
 				writeMessage(m);
 			}
 		});
-		
-//		registerListener(msg_statustext_long.class, new IMAVLinkListener() {
-//			@Override
-//			public void received(Object o) {
-//				msg_statustext msg = (msg_statustext) o;
-//				LogMessage m = new LogMessage();
-//				m.text = (new String(msg.text)).trim();
-//				m.tms = DataModel.getSynchronizedPX4Time_us();
-//				m.severity = msg.severity;
-//
-//				// if new message follows tha last one within 10ms, check severity and keep that
-//				// one
-//				// with higher severity
-//				if (model.msg != null && (m.tms - model.msg.tms) < 10000) {
-//					if (m.severity < model.msg.severity) {
-//						model.msg.set(m);
-//					}
-//				} else
-//					model.msg.set(m);
-//
-//				writeMessage(m);
-//			}
-//		});
+
+		//		registerListener(msg_statustext_long.class, new IMAVLinkListener() {
+		//			@Override
+		//			public void received(Object o) {
+		//				msg_statustext msg = (msg_statustext) o;
+		//				LogMessage m = new LogMessage();
+		//				m.text = (new String(msg.text)).trim();
+		//				m.tms = DataModel.getSynchronizedPX4Time_us();
+		//				m.severity = msg.severity;
+		//
+		//				// if new message follows tha last one within 10ms, check severity and keep that
+		//				// one
+		//				// with higher severity
+		//				if (model.msg != null && (m.tms - model.msg.tms) < 10000) {
+		//					if (m.severity < model.msg.severity) {
+		//						model.msg.set(m);
+		//					}
+		//				} else
+		//					model.msg.set(m);
+		//
+		//				writeMessage(m);
+		//			}
+		//		});
 
 		System.out.println("MAVMSP parser: " + msglisteners.size() + " MAVLink messagetypes registered");
 
@@ -287,16 +287,18 @@ public class MAVLinkToModelParser {
 			try {
 
 				msgListener = msglisteners.get(msg.getClass());
-				if (msgListener != null && msgListener.size() > 0)
-					for (IMAVLinkListener _listeners : msgListener)
-					 synchronized(this) {_listeners.received(msg); }
+				synchronized(this) {
+					if (msgListener != null && msgListener.size() > 0)
+						for (IMAVLinkListener _listeners : msgListener)
+							_listeners.received(msg); 
 
-				try {
-					if (mavListener != null && mavListener.size() > 0)
-						for (IMAVLinkListener mavlistener : mavListener)
-							 synchronized(this) { mavlistener.received(msg); }
+					try {
+						if (mavListener != null && mavListener.size() > 0)
+							for (IMAVLinkListener mavlistener : mavListener)
+								mavlistener.received(msg); 
 
-				} catch (ConcurrentModificationException e) {
+					} catch (ConcurrentModificationException e) {
+					}
 				}
 
 				mavList.put(msg.getClass(), msg);

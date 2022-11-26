@@ -41,7 +41,7 @@ import org.mavlink.IMAVLinkMessage;
 import org.mavlink.MAVLinkCRC;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAVLinkMessageFactory;
-import org.mavlink.messages.MAVLinkStaticMessageFactory;
+
 
 public class MAVLinkReader {
 
