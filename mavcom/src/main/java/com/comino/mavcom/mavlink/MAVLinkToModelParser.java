@@ -302,6 +302,8 @@ public class MAVLinkToModelParser {
 				}
 
 				mavList.put(msg.getClass(), msg);
+				
+				MAVLinkMessagePool.getInstance().invalidate(msg);
 
 			} catch (Exception e) {
 				e.printStackTrace();
