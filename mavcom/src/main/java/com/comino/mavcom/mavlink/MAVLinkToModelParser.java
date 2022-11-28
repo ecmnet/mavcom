@@ -234,10 +234,6 @@ public class MAVLinkToModelParser {
 		messageListener.add(listener);
 	}
 
-//	public Map<Class<?>, MAVLinkMessage> getMavLinkMessageMap() {
-//		return mavList;
-//	}
-
 	public void start(ByteChannel channel) {
 		System.err.println("Error: Deprecated ParserWorker");
 	}
@@ -287,7 +283,7 @@ public class MAVLinkToModelParser {
 			try {
 
 				msgListener = msglisteners.get(msg.getClass());
-			//	synchronized(this) {
+				synchronized(this) {
 					if (msgListener != null && msgListener.size() > 0)
 						for (IMAVLinkListener _listeners : msgListener)
 							_listeners.received(msg); 
@@ -299,10 +295,10 @@ public class MAVLinkToModelParser {
 
 					} catch (ConcurrentModificationException e) {
 					}
-		//		}
+				}
 
 				mavList.put(msg.getClass(), msg);
-				
+
 				MAVLinkMessagePool.getInstance().invalidate(msg);
 
 			} catch (Exception e) {
