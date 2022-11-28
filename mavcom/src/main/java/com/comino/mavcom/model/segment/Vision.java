@@ -59,7 +59,7 @@ public class Vision extends Segment {
 
 
 	private static final String[] MSP_VISION_TEXTS = { "Enabled", "Available", "Resetting", "Attitude valid","Position valid",
-			"Speed valid", "Published", "Fiducual enabled", "Fiducial locked", "Video stream"," AI", "Experimental","Error" };
+			"Speed valid", "Published", "Fiducual enabled", "Fiducial locked", "Video stream","AI", "Experimental","Error" };
 
 	private static final String[] MSP_VISION_TSEXTS = { "RESET", "EVPOS", "EVVEL" };
 

@@ -386,11 +386,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	}
 
 	@Override
-	public Map<Class<?>, MAVLinkMessage> getMavLinkMessageMap() {
-		return reader.getParser().getMavLinkMessageMap();
-	}
-
-	@Override
 	public boolean isSimulation() {
 		return !comm.isSerial();
 	}

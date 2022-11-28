@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class MAVLinkMessagePool {
 	}
 	
 	private MAVLinkMessagePool() {
-		this.pool = new HashMap<Integer,MessagePool>(300);
+		this.pool = new HashMap<Integer,MessagePool>();
 	}
 	
 	public MAVLinkMessage checkout(int msgId, int sysId, int componentId,  byte[] rawData) throws IOException {
@@ -61,38 +62,36 @@ public class MAVLinkMessagePool {
 
 	private class MessagePool {
 
-		private Hashtable<MAVLinkMessage,Boolean> locked, unlocked;
+		private final LinkedList<MAVLinkMessage> locked, unlocked;
 		private int hits = 0;
 
 		public MessagePool() {
-			locked   = new Hashtable<MAVLinkMessage,Boolean>(0);
-			unlocked = new Hashtable<MAVLinkMessage,Boolean>(0); 
+			locked   = new LinkedList<MAVLinkMessage>();
+			unlocked = new LinkedList<MAVLinkMessage>(); 
 		}
 		
-		public MAVLinkMessage checkout(int msgId, int sysId, int componentId,  byte[] rawData) throws IOException {
-			MAVLinkMessage o;
+		public MAVLinkMessage checkout(int msgId, int sysId, int componentId,  final byte[] rawData) throws IOException {
+			final MAVLinkMessage o;
 			if( unlocked.size() > 0 ) {
 				LittleEndianDataInputStream dis = new LittleEndianDataInputStream(new ByteArrayInputStream(rawData));
-				Enumeration<MAVLinkMessage> e = unlocked.keys();
-				o = e.nextElement();
+				o = unlocked.poll();
+				locked.push(o);
 				o.sysId = sysId;
 				o.componentId = componentId;
-				o.decode(dis);
+				o.decode(dis); 
 				dis.close();
-				unlocked.remove(o);
-				locked.put(o, true);
 				hits++;
 				return o;
 			}
 			o = MAVLinkMessageFactory.getMessage(msgId, sysId, componentId, rawData);
-			locked.put( o, true );
+			locked.push( o);
 			return o;
 		}
 		
 		public void invalidate(MAVLinkMessage o) {
 			if(locked.size()>0) {
 				locked.remove(o);
-				unlocked.put(o, true);
+				unlocked.push(o);
 			}
 		}
 		

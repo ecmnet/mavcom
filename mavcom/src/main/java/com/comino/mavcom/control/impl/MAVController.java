@@ -347,11 +347,6 @@ public class MAVController implements IMAVController, Runnable {
 	}
 
 	@Override
-	public Map<Class<?>, MAVLinkMessage> getMavLinkMessageMap() {
-		return reader.getParser().getMavLinkMessageMap();
-	}
-
-	@Override
 	public void shutdown() {
 		if (comm != null)
 			comm.shutdown();

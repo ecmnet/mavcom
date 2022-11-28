@@ -24,6 +24,7 @@ package org.mavlink.messages;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 
 import org.mavlink.IMAVLinkMessage;
 
@@ -61,7 +62,7 @@ public abstract class MAVLinkMessage extends MAVLinkMessageCoder implements IMAV
 	/**
 	 * Serial UID
 	 */
-	private static final long serialVersionUID = 2000873536402943462L;
+	protected static final long serialVersionUID = 2000873536402943462L;
 
 	private static final DecimalFormat f = new DecimalFormat("#0.00000");
 
@@ -106,10 +107,6 @@ public abstract class MAVLinkMessage extends MAVLinkMessageCoder implements IMAV
 	 */
 	public int componentId = -1;
 
-	/**
-	 * Raw data of TM for replay and storage
-	 */
-	protected byte[] rawData = null;
 
 	/**
 	 * True if message is correct
@@ -117,26 +114,20 @@ public abstract class MAVLinkMessage extends MAVLinkMessageCoder implements IMAV
 	public boolean isValid = false;
 
 	public MAVLinkMessage() {
-
+      clear();
 	}
 
-	/**
-	 * Constructor from raw data
-	 *
-	 * @param raw data received
-	 */
-	public MAVLinkMessage(byte[] raw) {
-		rawData = raw;
-	}
+
 	
 	public void clear() {
+		sysId = 0;
+		componentId = 0;
 		payload_length = -1;
 		incompat = 0;
 		compat = 0;
 		packet = -1;
 		isValid = false;
 		messageType = -1;
-		rawData = null;
 	}
 
 	/**
