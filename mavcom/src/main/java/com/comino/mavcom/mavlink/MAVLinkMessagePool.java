@@ -16,23 +16,23 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class MAVLinkMessagePool {
-	
+
 	private static MAVLinkMessagePool instance=null;
 
 	private final Map<Integer,MessagePool> pool;
-	
+
 	public static MAVLinkMessagePool getInstance() {
 		if(instance == null)
 			instance = new MAVLinkMessagePool();
 		return instance;
 	}
-	
+
 	private MAVLinkMessagePool() {
 		this.pool = new HashMap<Integer,MessagePool>();
 	}
-	
+
 	public MAVLinkMessage checkout(int msgId, int sysId, int componentId,  byte[] rawData) throws IOException {
-		
+
 		MessagePool msgPool = pool.get(msgId);
 		if(msgPool == null) {
 			msgPool = new MessagePool();
@@ -40,21 +40,21 @@ public class MAVLinkMessagePool {
 		}
 		return msgPool.checkout(msgId, sysId, componentId, rawData);
 	}
-	
+
 	public void invalidate(MAVLinkMessage o) {
 		MessagePool msgPool = pool.get(o.messageType);
 		if(msgPool == null)
 			return;
 		msgPool.invalidate(o);
 	}
-	
+
 	public int getHits() {
 		int size = 0;
 		for(Entry<Integer, MessagePool> p : pool.entrySet())
 			size = size+p.getValue().getHits();
 		return size;
 	}
-	
+
 	public int getPoolSize() {
 		return pool.size();
 	}
@@ -66,18 +66,20 @@ public class MAVLinkMessagePool {
 		private int hits = 0;
 
 		public MessagePool() {
+			
 			locked   = new LinkedList<MAVLinkMessage>();
 			unlocked = new LinkedList<MAVLinkMessage>(); 
 		}
-		
+
 		public MAVLinkMessage checkout(int msgId, int sysId, int componentId,  final byte[] rawData) throws IOException {
-			final MAVLinkMessage o;
-			if( unlocked.size() > 0 ) {
-				LittleEndianDataInputStream dis = new LittleEndianDataInputStream(new ByteArrayInputStream(rawData));
-				o = unlocked.poll();
+			MAVLinkMessage o;
+			o = unlocked.poll();
+			if(o!=null) {
 				locked.push(o);
 				o.sysId = sysId;
 				o.componentId = componentId;
+				o.isValid = true;
+				LittleEndianDataInputStream dis = new LittleEndianDataInputStream(new ByteArrayInputStream(rawData));
 				o.decode(dis); 
 				dis.close();
 				hits++;
@@ -87,14 +89,15 @@ public class MAVLinkMessagePool {
 			locked.push( o);
 			return o;
 		}
-		
+
 		public void invalidate(MAVLinkMessage o) {
 			if(locked.size()>0) {
+				o.isValid = false;
 				locked.remove(o);
 				unlocked.push(o);
 			}
 		}
-		
+
 		public int getHits() {
 			return hits;
 		}
