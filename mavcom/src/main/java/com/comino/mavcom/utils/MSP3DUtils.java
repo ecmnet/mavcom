@@ -46,11 +46,20 @@ public class MSP3DUtils {
 	public static float distance3D(Vector4D_F32 t, Vector4D_F32 c) {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
-	public static double distance3D(Vector4D_F64 t, Vector4D_F64 c) {
+	
+	public static float distance3D(Vector4D_F32 t, Vector3D_F32 c) {
+		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+	}
+	
+//	public static double distance3D(Vector4D_F64 t, Vector4D_F64 c) {
+//		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+//	}
+	
+	public static double distance3D(GeoTuple3D_F64<?> t, GeoTuple4D_F64<?> c) {
 		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
 
-	public static double distance3D(Vector3D_F64 t, Vector4D_F64 c) {
+	public static double distance3D(GeoTuple4D_F32<?> t, GeoTuple3D_F32<?> c) {
 		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
 
@@ -65,6 +74,7 @@ public class MSP3DUtils {
 	public static float distance2D(GeoTuple3D_F32<?> t, GeoTuple3D_F32<?> c) {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
 	}
+	
 	
 	public static float distance2D(GeoTuple4D_F32<?> t, GeoTuple3D_F32<?> c) {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
