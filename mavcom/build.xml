@@ -15,7 +15,7 @@
 				     
 	-->
 		
-		<get src="file:///Users/ecmnet/PixHawk/src/PX4-Autopilot/build/px4_sitl_default/parameters.xml" 
+	  <get src="file:///Users/ecmnet/PixHawk/src/PX4-Autopilot/build/px4_sitl_default/parameters.xml" 
 						 dest="src/main/resources/PX4ParameterFactMetaData_sitl.xml"
 					     ignoreerrors="true" maxtime="30" />
 		
