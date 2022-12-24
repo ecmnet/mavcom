@@ -44,27 +44,27 @@ public class msg_gimbal_device_information extends MAVLinkMessage {
    */
   public long hardware_version;
   /**
-   * Minimum hardware roll angle (positive: rolling to the right, negative: rolling to the left)
+   * Minimum hardware roll angle (positive: rolling to the right, negative: rolling to the left). NAN if unknown.
    */
   public float roll_min;
   /**
-   * Maximum hardware roll angle (positive: rolling to the right, negative: rolling to the left)
+   * Maximum hardware roll angle (positive: rolling to the right, negative: rolling to the left). NAN if unknown.
    */
   public float roll_max;
   /**
-   * Minimum hardware pitch angle (positive: up, negative: down)
+   * Minimum hardware pitch angle (positive: up, negative: down). NAN if unknown.
    */
   public float pitch_min;
   /**
-   * Maximum hardware pitch angle (positive: up, negative: down)
+   * Maximum hardware pitch angle (positive: up, negative: down). NAN if unknown.
    */
   public float pitch_max;
   /**
-   * Minimum hardware yaw angle (positive: to the right, negative: to the left)
+   * Minimum hardware yaw angle (positive: to the right, negative: to the left). NAN if unknown.
    */
   public float yaw_min;
   /**
-   * Maximum hardware yaw angle (positive: to the right, negative: to the left)
+   * Maximum hardware yaw angle (positive: to the right, negative: to the left). NAN if unknown.
    */
   public float yaw_max;
   /**

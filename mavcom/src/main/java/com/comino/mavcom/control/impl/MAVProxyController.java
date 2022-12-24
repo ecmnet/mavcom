@@ -175,10 +175,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			}
 
 			if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) {
-				proxy = new MAVUdpProxyNIO2(model, "172.168.178.2", 14550, "172.168.178.22", 14555, comm);
+				proxy = new MAVUdpProxyNIO2(model, "172.168.178.2", 14550, null, 14555, comm);
 				peerAddress = "172.168.178.22";
 			} else {
-				proxy = new MAVUdpProxyNIO2(model, "172.168.178.2", 14550, "172.168.178.1", 14555, comm);
+				proxy = new MAVUdpProxyNIO2(model, "172.168.178.2", 14550, null, 14555, comm);
 				peerAddress = "172.168.178.1";
 			}
 			System.out.println("Proxy Controller loaded: " + peerAddress);
@@ -193,7 +193,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			System.out.println("Proxy Controller (SITL mode) loaded");
 			break;
 		case MAVController.MODE_USB:
-			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
+			// comm = MAVSerialComm.getInstancqe(model, BAUDRATE_15, false);
 			comm = MAVSerialComm.getInstance(new MAVLinkBlockingReader(3, model), DEFAULT_BAUDRATE,SerialPort.FLOW_CONTROL_DISABLED);
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_9, false);
 			comm.open();

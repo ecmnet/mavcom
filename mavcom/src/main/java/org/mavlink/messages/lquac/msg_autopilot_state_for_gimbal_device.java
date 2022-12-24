@@ -36,23 +36,23 @@ public class msg_autopilot_state_for_gimbal_device extends MAVLinkMessage {
    */
   public float[] q = new float[4];
   /**
-   * Estimated delay of the attitude data.
+   * Estimated delay of the attitude data. 0 if unknown.
    */
   public long q_estimated_delay_us;
   /**
-   * X Speed in NED (North, East, Down).
+   * X Speed in NED (North, East, Down). NAN if unknown.
    */
   public float vx;
   /**
-   * Y Speed in NED (North, East, Down).
+   * Y Speed in NED (North, East, Down). NAN if unknown.
    */
   public float vy;
   /**
-   * Z Speed in NED (North, East, Down).
+   * Z Speed in NED (North, East, Down). NAN if unknown.
    */
   public float vz;
   /**
-   * Estimated delay of the speed data.
+   * Estimated delay of the speed data. 0 if unknown.
    */
   public long v_estimated_delay_us;
   /**

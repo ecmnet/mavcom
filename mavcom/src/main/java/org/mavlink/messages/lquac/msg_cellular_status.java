@@ -44,7 +44,7 @@ public class msg_cellular_status extends MAVLinkMessage {
    */
   public int status;
   /**
-   * Failure reason when status in in CELLUAR_STATUS_FAILED
+   * Failure reason when status in in CELLULAR_STATUS_FLAG_FAILED
    */
   public int failure_reason;
   /**

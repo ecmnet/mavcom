@@ -305,6 +305,7 @@ import org.mavlink.messages.lquac.msg_mission_request_list;
 import org.mavlink.messages.lquac.msg_gps_status;
 import org.mavlink.messages.lquac.msg_winch_status;
 import org.mavlink.messages.lquac.msg_scaled_pressure;
+import org.mavlink.messages.lquac.msg_msp_obstacle;
 import org.mavlink.messages.lquac.msg_hil_optical_flow;
 import org.mavlink.messages.lquac.msg_actuator_output_status;
 import org.mavlink.messages.lquac.msg_set_actuator_control_target;
@@ -445,7 +446,7 @@ import org.mavlink.messages.lquac.msg_gps_inject_data;
  **/
 public class MAVLinkMessageFactory implements IMAVLinkMessage, IMAVLinkMessageID {
 public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, byte[] rawData) throws IOException {
-    final MAVLinkMessage msg;
+   final MAVLinkMessage msg;
     LittleEndianDataInputStream dis = new LittleEndianDataInputStream(new ByteArrayInputStream(rawData));
     switch(msgid) {
   case MAVLINK_MSG_ID_REQUEST_DATA_STREAM:
@@ -782,6 +783,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_SCALED_PRESSURE:
       msg = new msg_scaled_pressure(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_MSP_OBSTACLE:
+      msg = new msg_msp_obstacle(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_HIL_OPTICAL_FLOW:
@@ -1321,7 +1326,7 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg.decode(dis);
       break;
   default:
-	  msg = null;
+ msg=null;
       System.out.println("Mavlink Factory Error : unknown MsgId : " + msgid);
     }
     dis.close();

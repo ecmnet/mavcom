@@ -97,6 +97,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_GPS_STATUS = 25;
   public static int MAVLINK_MSG_ID_WINCH_STATUS = 9005;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE = 29;
+  public static int MAVLINK_MSG_ID_MSP_OBSTACLE = 187;
   public static int MAVLINK_MSG_ID_HIL_OPTICAL_FLOW = 114;
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_LOCATION = 12901;
   public static int MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS = 375;

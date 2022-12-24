@@ -350,7 +350,8 @@ public class MAVLinkGenerator {
 					}
 					fieldLen += type.getLengthType();
 
-					if (field.getType().isArray && field.getType().type != MAVLinkDataType.CHAR) {
+					if (field.getType().isArray && field.getType().type != MAVLinkDataType.CHAR  && !message.getName().toLowerCase().contains("can")) {
+						
 						for (int i = 0; i < type.arrayLenth; i++) {
 							switch (field.getType().type) {
 

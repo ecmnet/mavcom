@@ -57,6 +57,14 @@ public interface GIMBAL_MANAGER_CAP_FLAGS {
      */
     public final static int GIMBAL_MANAGER_CAP_FLAGS_SUPPORTS_INFINITE_YAW = 2048;
     /**
+     * Based on GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_YAW_IN_EARTH_FRAME.
+     */
+    public final static int GIMBAL_MANAGER_CAP_FLAGS_SUPPORTS_YAW_IN_EARTH_FRAME = 4096;
+    /**
+     * Based on GIMBAL_DEVICE_CAP_FLAGS_HAS_RC_INPUTS.
+     */
+    public final static int GIMBAL_MANAGER_CAP_FLAGS_HAS_RC_INPUTS = 8192;
+    /**
      * Gimbal manager supports to point to a local position.
      */
     public final static int GIMBAL_MANAGER_CAP_FLAGS_CAN_POINT_LOCATION_LOCAL = 65536;

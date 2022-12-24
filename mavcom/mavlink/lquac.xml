@@ -307,5 +307,14 @@
                <field type="uint16_t"      name="counter">ResetCounter</field>
                <field type="uint64_t"      name="tms">Timestamp</field>
            </message>
+           <message id="187" name="MSP_OBSTACLE">
+               <description>MSP MICRO SLAM Data encoded in longs</description>
+               <field type="uint16_t"      name="id">Id</field>
+               <field type="float"         name="dm" >Distance</field>
+               <field type="float"         name="ox" >Obstacle X</field>
+               <field type="float"         name="oy" >Obstacle Y</field>
+               <field type="float"         name="oz" >Obstacle Z</field>
+               <field type="uint64_t"      name="tms">Timestamp</field>
+           </message>
       </messages>
 </mavlink>

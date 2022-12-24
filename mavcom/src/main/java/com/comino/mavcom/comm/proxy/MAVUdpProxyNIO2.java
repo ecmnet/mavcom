@@ -39,9 +39,11 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.SocketOption;
 import java.net.StandardSocketOptions;
+import java.net.UnknownHostException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
@@ -49,10 +51,12 @@ import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.locks.LockSupport;
 
 import org.mavlink.messages.MAVLinkMessage;
 
@@ -97,7 +101,12 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 			IMAVComm comm) {
 
 		peerPort = new InetSocketAddress(peerAddress, pPort);
-		bindPort = new InetSocketAddress(bindAddress, bPort);
+
+		if(bindAddress == null)
+			bindPort = new InetSocketAddress(getLocalAddress(), bPort);
+		else
+			bindPort = new InetSocketAddress(bindAddress, bPort);
+
 
 		reader = new MAVLinkReader(1);
 
@@ -157,6 +166,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 			DatagramPacket packet = new DatagramPacket("LQUAC".getBytes(), 5, InetAddress.getByName("255.255.255.255"),
 					BROADCAST_PORT);
 			socket.send(packet);
+			socket.receive(packet);
 			socket.close();
 		} catch (IOException e) {
 			System.err.println(bindPort.getAddress().getHostAddress() + ": " + e.getMessage());
@@ -221,6 +231,65 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 		}
 	}
 
+	private String getLocalAddress() {
+
+		InetAddress localAddress = null;
+		boolean found = false;
+
+		int count = 0;
+
+		Enumeration<?> e;
+
+		try {
+			while(!found && ++count < 50) {
+				e = NetworkInterface.getNetworkInterfaces();
+				while (e.hasMoreElements() && !found) {
+					NetworkInterface n = (NetworkInterface) e.nextElement();
+					if(!n.getDisplayName().startsWith("w"))
+						continue;
+					Enumeration<?> ee = n.getInetAddresses();
+					while (ee.hasMoreElements()) {
+						localAddress = (InetAddress) ee.nextElement();
+						if (!localAddress.getHostAddress().contains(":")) {
+							found = true;
+							break;
+						}
+					}
+				}
+				if(!found) LockSupport.parkNanos(200_000_000);
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return null;
+		}
+
+		if (found) {
+			System.out.println("LocalAdress identified: " + localAddress.getHostAddress());
+			return localAddress.getHostAddress();
+		}
+		System.out.println("No adapter found");
+		return null;
+	}
+
+	private String listenToBroadcast(int port) throws IOException {
+
+		DatagramSocket socket;
+		byte[] buf = new byte[5];
+		socket = new DatagramSocket(port);
+		DatagramPacket packet = new DatagramPacket(buf, buf.length);
+		System.out.println("Waiting for remote broadcast...");
+		socket.receive(packet);
+		System.out.println("Remote broadcast received. Binding..");
+		InetAddress address = packet.getAddress();
+		socket.close();
+		String received = new String(packet.getData(), 0, packet.getLength());
+		if (received.equals("LQUAC")) {
+			System.out.println("Address: " + address.getHostAddress());
+			return address.getHostAddress();
+		}
+		return null;
+	}
+
 	private class Worker implements Runnable {
 
 		SelectionKey key = null;
@@ -270,10 +339,10 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 					transfer_speed = 0;
 					((Buffer) rxBuffer).clear();
 					try {
-						
+
 						// Do not disconnect in SITL because of 12.4
-//						if(comm.isSerial())
-//							channel.disconnect();
+						//						if(comm.isSerial())
+						//							channel.disconnect();
 
 						if (!channel.socket().isBound()) {
 							channel.socket().bind(bindPort);
@@ -303,7 +372,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 						// e.printStackTrace();
 					}
 				}
-				
+
 				try {
 					Thread.sleep(200);
 				} catch (InterruptedException e2) { }

@@ -105,9 +105,9 @@ public interface MAV_TYPE {
      */
     public final static int MAV_TYPE_VTOL_TAILSITTER = 23;
     /**
-     * VTOL reserved 4
+     * Tiltwing VTOL. Fuselage stays horizontal in all flight phases. The whole wing, along with any attached engine, can tilt between vertical and horizontal mode.
      */
-    public final static int MAV_TYPE_VTOL_RESERVED4 = 24;
+    public final static int MAV_TYPE_VTOL_TILTWING = 24;
     /**
      * VTOL reserved 5
      */
