@@ -260,10 +260,6 @@
                <field type="float"         name="iz" >Generic point  Z</field>
                <field type="float"         name="md" >Distance to target</field>
                <field type="float"         name="mw" >Distance to waypoint</field>
-               <field type="float"         name="dm" >Min.Distance to obstacle</field>
-               <field type="float"         name="ox" >Obstacle X</field>
-               <field type="float"         name="oy" >Obstacle Y</field>
-               <field type="float"         name="oz" >Obstacle Z</field>
                <field type="float"         name="quality" >Quality</field>
                <field type="uint16_t"      name="flags">Offboard Flags</field>
                <field type="float"         name="fps">Rate in Hz</field>

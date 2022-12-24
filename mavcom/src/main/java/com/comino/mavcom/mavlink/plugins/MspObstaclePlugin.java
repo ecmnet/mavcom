@@ -1,6 +1,5 @@
 package com.comino.mavcom.mavlink.plugins;
 
-import org.mavlink.messages.lquac.msg_msp_micro_slam;
 import org.mavlink.messages.lquac.msg_msp_obstacle;
 
 import com.comino.mavcom.model.DataModel;
@@ -8,7 +7,7 @@ import com.comino.mavcom.model.DataModel;
 public class MspObstaclePlugin extends MAVLinkPluginBase {
 
 	public MspObstaclePlugin() {
-		super(msg_msp_micro_slam.class);
+		super(msg_msp_obstacle.class);
 	}
 
 	@Override
