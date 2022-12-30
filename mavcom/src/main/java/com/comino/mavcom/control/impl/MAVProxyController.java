@@ -33,6 +33,7 @@
 
 package com.comino.mavcom.control.impl;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,7 @@ import org.mavlink.messages.IMAVLinkMessageID;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAV_CMD;
 import org.mavlink.messages.MAV_COMPONENT;
+import org.mavlink.messages.MAV_SEVERITY;
 import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.SERIAL_CONTROL_DEV;
@@ -107,9 +109,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	}
 
 	public MAVProxyController(int mode, MSPConfig config) {
-	
+
 		this.mode = mode;
-		
+
 		controller = this;
 		model = new DataModel();
 		reader = new MAVLinkBlockingReader(2, model);
@@ -485,10 +487,20 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		return true;
 	}
 
+	int count=0;
+
 	@Override
 	public void run() {
+
+		count++;
 		
-		
+		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && (count % 10) == 0) {
+			if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) { 
+				setupWifi(); 
+				proxy.open();
+				return;
+			} 
+		}
 
 		sendMAVLinkMessage(beat_px4);
 		sendMAVLinkMessage(beat_obs);
@@ -499,12 +511,13 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 				return;
 		}
 
-		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED))
+		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
 			proxy.broadcast();
+		}
 
 		if (!comm.isConnected()) {
-			model.sys.setStatus(Status.MSP_ACTIVE, true);
 			comm.open();
+			model.sys.setStatus(Status.MSP_ACTIVE, true);
 		}
 
 	}
@@ -512,6 +525,22 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public long getTransferRate() {
 		return proxy.getTransferRate();
+	}
+
+	private void setupWifi() {
+
+		System.out.println("Restart wlan0 interface..");
+		executeConsoleCommand("ifdown wlan0");
+		executeConsoleCommand("ifup wlan0");
+	}
+
+	private void executeConsoleCommand(String command) {
+		try {
+			Runtime.getRuntime().exec(command);
+		} catch (IOException e) {
+			MSPLogger.getInstance().writeLocalMsg("LINUX command '"+command+"' failed: "+e.getMessage(),
+					MAV_SEVERITY.MAV_SEVERITY_CRITICAL);
+		}
 	}
 
 }

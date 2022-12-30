@@ -71,7 +71,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 
 	private static final int BROADCAST_PORT = 4445;
 
-	private static final int BUFFER_SIZE = 256;
+	private static final int BUFFER_SIZE = 512;
 
 	private static final int WAITING = 0;
 	private static final int RUNNING = 1;
@@ -160,16 +160,25 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 		if (bindPort.getAddress().isAnyLocalAddress()) {
 			return;
 		}
+		DatagramSocket socket;
 		try {
-			DatagramSocket socket = new DatagramSocket(BROADCAST_PORT, bindPort.getAddress());
+			socket = new DatagramSocket(BROADCAST_PORT, bindPort.getAddress());
+			socket.setSoTimeout(100);
 			socket.setBroadcast(true);
-			DatagramPacket packet = new DatagramPacket("LQUAC".getBytes(), 5, InetAddress.getByName("255.255.255.255"),
-					BROADCAST_PORT);
-			socket.send(packet);
-			socket.receive(packet);
-			socket.close();
-		} catch (IOException e) {
-			System.err.println(bindPort.getAddress().getHostAddress() + ": " + e.getMessage());
+			try {
+				DatagramPacket packet = new DatagramPacket("LQUAC".getBytes(), 5, InetAddress.getByName("255.255.255.255"),
+						BROADCAST_PORT);
+				socket.send(packet);
+				socket.receive(packet);
+				socket.close();
+			} catch (IOException e) {
+				socket.close();
+			//	System.err.println(bindPort.getAddress().getHostAddress() + ": " + e.getMessage());
+			}
+
+		} catch (SocketException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 
 	}
@@ -250,7 +259,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 					Enumeration<?> ee = n.getInetAddresses();
 					while (ee.hasMoreElements()) {
 						localAddress = (InetAddress) ee.nextElement();
-						if (!localAddress.getHostAddress().contains(":")) {
+						if (localAddress.getHostAddress().startsWith("172")) {
 							found = true;
 							break;
 						}
