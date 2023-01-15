@@ -8,6 +8,7 @@ import com.comino.mavutils.MSPMathUtils;
 
 public class PX4AttitudePlugin extends MAVLinkPluginBase {
 
+	
 	public PX4AttitudePlugin() {
 		super(msg_attitude.class);
 	}
@@ -33,7 +34,7 @@ public class PX4AttitudePlugin extends MAVLinkPluginBase {
 		
 		model.hud.h = MSPMathUtils.fromRad(att.yaw);
 
-		model.sys.t_boot_ms = att.time_boot_ms;
+		model.sys.t_boot_ms = att.time_boot_ms ;
 
 		model.sys.setSensor(Status.MSP_IMU_AVAILABILITY, true);
 

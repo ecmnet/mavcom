@@ -9,6 +9,7 @@ import com.comino.mavcom.model.segment.Status;
 public class PX4LocalPositionPlugin extends MAVLinkPluginBase {
 
 	private static State last = new State();
+	private static long boot_tms;
 
 	public PX4LocalPositionPlugin() {
 		super(msg_local_position_ned.class);
@@ -29,6 +30,9 @@ public class PX4LocalPositionPlugin extends MAVLinkPluginBase {
 		model.state.tms = DataModel.getSynchronizedPX4Time_us();
 
 		model.state.v = (float) Math.sqrt(ned.vx * ned.vx + ned.vy * ned.vy);
+		
+		if(boot_tms == 0 && ned.time_boot_ms <0 )
+			boot_tms = ned.time_boot_ms;
 
 		if (last.tms > 0) {
 			
@@ -38,7 +42,7 @@ public class PX4LocalPositionPlugin extends MAVLinkPluginBase {
 		}
 
 		last.set(model.state);
-		last.tms = ned.time_boot_ms;
+		last.tms = ned.time_boot_ms - boot_tms;
 
 		if ((ned.x != 0 || ned.y != 0) && Float.isFinite(ned.x) && Float.isFinite(ned.y)) {
 			model.sys.setStatus(Status.MSP_LPOS_VALID, true);
