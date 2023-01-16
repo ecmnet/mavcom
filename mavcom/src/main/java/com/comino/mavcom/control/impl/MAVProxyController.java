@@ -208,27 +208,13 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			System.out.println("Proxy Controller (serial mode) loaded: " + peerAddress);
 			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
-			//		case MAVController.SERVER:
-			//
-			//			comm = MAVSerialComm.getInstance(reader, BAUDRATE_9);
-			//			comm.open();
-			//			sendMAVLinkMessage(beat_px4);
-			//
-			//			try {
-			//				Thread.sleep(100);
-			//			} catch (InterruptedException e) {
-			//			}
-			//
-			//			if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) {
-			//				proxy = new MAVUdpProxyNIO2(model, "192.168.178.60", 14550, "192.168.178.86", 14555, comm);
-			//				peerAddress = "192.168.178.86";
-			//			} else {
-			//				proxy = new MAVUdpProxyNIO2(model, "172.168.178.60", 14550, "192.168.178.86", 14555, comm);
-			//				peerAddress = "192.168.178.86";
-			//			}
-			//			System.out.println("Proxy Controller loaded: " + peerAddress);
-			//			model.sys.setStatus(Status.MSP_SITL, false);
-			//			break;
+		case MAVController.MODE_SITL_PROXY:
+			comm = MAVUdpCommNIO2.getInstance(reader, "10.211.55.4", 14580, 14540);
+			proxy = new MAVUdpProxyNIO2(model, "127.0.0.1", 14650, "0.0.0.0", 14656, comm);
+			peerAddress = "10.211.55.4";
+			System.out.println("SITL Proxy Controller loaded: " + peerAddress);
+			model.sys.setStatus(Status.MSP_SITL, true);
+			break;
 		}
 
 		// comm.addMAVLinkListener(proxy);
@@ -493,9 +479,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	public void run() {
 
 		count++;
-		
+
 		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && (count % 10) == 0) {
-			if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON) { 
+			if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON && !this.isSimulation()) { 
 				setupWifi(); 
 				proxy.open();
 				return;

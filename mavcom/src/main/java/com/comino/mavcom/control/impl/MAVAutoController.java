@@ -69,8 +69,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 		comms[0] = MAVSerialComm.getInstance(reader, 115200,SerialPort.FLOW_CONTROL_DISABLED);
 		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort);
-		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540);
-		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650);
+		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650);
+		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540);
 
 		model.sys.setStatus(Status.MSP_PROXY, false);
 
@@ -120,11 +120,12 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			comm = comms[2];
 			comms[3].shutdown();
 			this.isSITL = true;
-			this.isMSP  = false;
-			this.mode = MODE_SITL;
+			this.isMSP  = true;
+			this.mode = MODE_SITL_PROXY;
 			model.sys.setStatus(Status.MSP_SITL, true);
 //			if(last != comm.hashCode())
 //			  System.out.println(comm);
+			System.out.println(comm+" PROXY");
 			last = comm.hashCode();
 			this.connected = true;
 			return true;
@@ -134,11 +135,11 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			comm = comms[3];
 			comms[2].shutdown();
 			this.isSITL = true;
-			this.isMSP  = true;
-			this.mode = MODE_SITL_PROXY;
+			this.isMSP  = false;
+			this.mode = MODE_SITL;
 			model.sys.setStatus(Status.MSP_SITL, true);
 //			if(last != comm.hashCode())
-//			  System.out.println(comm+" PROXY");
+			System.out.println(comm);
 			last = comm.hashCode();
 			this.connected = true;
 			return true;

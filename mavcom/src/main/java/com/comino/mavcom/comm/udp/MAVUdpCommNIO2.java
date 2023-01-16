@@ -257,7 +257,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						}
 
 						if (!channel.socket().isBound()) {
-							if (peerPort.getAddress().isLoopbackAddress()) {
+							if (peerPort.getAddress().isLoopbackAddress() || peerPort.getAddress().getHostAddress().contains("10.") ) {
 								channel.socket().bind(new InetSocketAddress(bindPort));
 							} else {
 								localAddress = getLocalAdress(BROADCAST_PORT);

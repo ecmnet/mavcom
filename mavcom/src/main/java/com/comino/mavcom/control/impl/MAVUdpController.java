@@ -96,18 +96,18 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 	@Override
 	public void run() {
 		super.run();
-		try {
-			if (!comm.isConnected()) {
-				this.connected = false;
-				comm.close();
-				comm.open();
-				return;
-			}
-			this.connected = true;
-			model.sys.setStatus(Status.MSP_SITL, isSimulation());
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			if (!comm.isConnected()) {
+//				this.connected = false;
+//				comm.close();
+//				comm.open();
+//				return;
+//			}
+//			this.connected = true;
+//			model.sys.setStatus(Status.MSP_SITL, isSimulation());
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 }

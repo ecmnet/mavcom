@@ -50,6 +50,9 @@ public class MAVTimeSync implements Runnable {
 	}
 
 	private void handle_time_sync(msg_timesync sync) {
+		
+		if(!comm.isSerial())
+			return;
 
 		// Do not timesync during ULOG transfer
 		if(System.currentTimeMillis() - tms_logging < 500)

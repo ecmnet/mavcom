@@ -63,7 +63,7 @@ public final class LittleEndianDataInputStream extends InputStream implements Da
 
 	public final int readInt() throws IOException {
 		dis.readFully(work, 0, 4);
-		return (work[3]) << 24 | (work[2] & 0xff) << 16 | (work[1] & 0xff) << 8 | (work[0] & 0xff);
+		return (int)(work[3]) << 24 | (work[2] & 0xff) << 16 | (work[1] & 0xff) << 8 | (work[0] & 0xff);
 	}
 
 	public final long readLong() throws IOException {
