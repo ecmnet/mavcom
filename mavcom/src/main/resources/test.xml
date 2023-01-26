@@ -1,0 +1,71 @@
+<scenario>
+	<name>Precision landing with osbtacle</name>
+	<type>SITL</type>
+	<description>
+		Takeoff, move with bending, rotate, set obstacle and perform precision landing		
+	</description>
+	<max_speed>1.5</max_speed>
+	<time_factor>1</time_factor>
+	<steps>
+		<arm />
+		<fiducial>
+			<position_local x="0.0" y="0.0" z="0.0" />
+		</fiducial>
+		<takeoff>
+			<altitude a="2.75" />
+		</takeoff>
+		<loop c="2">
+			<moveto>
+				<position_local x="2.0" y="2.0" z="NaN" />
+				<acceptance_radius r="1.0" />
+			</moveto>
+			<moveto>
+				<position_local x="5.0" y="2.0" z="NaN" />
+			</moveto>
+			<rotate>
+				<angle a="180" />
+			</rotate>
+			<moveto>
+				<position_local x="5" y="-3" z="-1.75" />
+				<acceptance_radius r="2" />
+			</moveto>
+		</loop>
+		<moveto>
+			<position_local x="1" y="1" z="-1.5" />
+			<acceptance_radius r="0.5" />
+		</moveto>
+		<moveto>
+			<position_local x="0" y="1" z="-1.5" />
+			<acceptance_radius r="0.5" />
+		</moveto>
+		<!-- 
+		Automated Testing NN Training:
+		<checkpoint></checkpoint>
+		-->
+		<!-- 
+		 New attributes: Use target from from previous step if provided otherwise skip step
+		 e.g.
+		     <search_object type="person">
+			 <rotate>
+				 <use_target_from_previous_step>
+			 </rotate>
+			 or
+			 <moveto>
+				<use_target_from_previous_step xy_distance_offset ="-1" z_offset = '-1'> 
+			</moveto>
+		-->
+		<!--
+		<pause>
+			<delay d="5000"/>
+		</pause>
+		<obstacle type="sphere">
+			<position_local x="1.0" y="1.0" z="NaN"/>
+			<size s="0.3"/>
+		</obstacle>
+		-->
+		<precision_land />
+		<disarm />
+		<fiducial />
+		<obstacle type="sphere" />
+	</steps>
+</scenario>
