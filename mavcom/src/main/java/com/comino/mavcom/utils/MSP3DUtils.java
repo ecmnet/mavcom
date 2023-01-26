@@ -240,6 +240,10 @@ public class MSP3DUtils {
 	public static float angleXZ(Vector4D_F32 t, Vector4D_F32 c) {
 		return (float) Math.asin((t.z - c.z) / distance3D(t, c));
 	}
+	
+	public static float angleXZ(GeoTuple4D_F32 t, GeoTuple4D_F32 c) {
+		return (float) Math.asin((t.z - c.z) / distance3D(t, c));
+	}
 
 	public static float angleXZ(Vector3D_F32 t, Vector3D_F32 c) {
 		return (float) Math.asin((t.z - c.z) / distance3D(t, c));

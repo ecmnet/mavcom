@@ -199,6 +199,8 @@ public class DataModel extends Segment implements Serializable {
 		this.sys.clear();
 		this.est.clear();
 		this.battery.clear();
+		this.slam.clear();
+		this.vision.clear();
 		this.tms = 0;
 
 	}
