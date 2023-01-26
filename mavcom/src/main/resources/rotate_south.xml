@@ -1,0 +1,8 @@
+<scenario>
+	<name>RotateSouth</name>
+	<steps>
+		<rotate>
+			<angle a="180" />
+		</rotate>
+	</steps>
+</scenario>
