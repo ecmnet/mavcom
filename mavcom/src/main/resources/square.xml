@@ -1,0 +1,25 @@
+<scenario>
+	<name>Square</name>
+	<steps>
+		<moveto>
+			<position_local x="1.0" y="1.0" z="NaN" />
+			<acceptance_radius r="0.1" />
+		</moveto>
+		<moveto>
+			<position_local x="1.0" y="2.0" z="NaN" />
+			<acceptance_radius r="0.1" />
+		</moveto>
+		<moveto>
+			<position_local x="2.0" y="2.0" z="NaN" />
+			<acceptance_radius r="0.1" />
+		</moveto>
+		<moveto>
+			<position_local x="2.0" y="1.0" z="NaN" />
+			<acceptance_radius r="0.1" />
+		</moveto>
+		<moveto>
+			<position_local x="1.0" y="1.0" z="NaN" />
+			<acceptance_radius r="0.1" />
+		</moveto>
+	</steps>
+</scenario>

@@ -14,23 +14,34 @@
 		<takeoff>
 			<altitude a="2.75" />
 		</takeoff>
+		<!--
+		<include f="square.xml"/>
+		-->
+		
 		<loop c="2">
 			<moveto>
-				<!-- Mybe add max speed to meveto -->
-				<position_local x="2.0" y="2.0" z="NaN" />
+				<position_local x="2.0" y="2.0" z="-1.75" />
 				<acceptance_radius r="1.0" />
 			</moveto>
 			<moveto>
 			    <position_local x="5.0" y="2.0" z="NaN" />
+			    <acceptance_radius r="0.5" />
 			</moveto>
 			<moveto>
-				<position_local x="5" y="-3" z="-1.75" />
+				<position_local x="5" y="-3" z="-4.75" />
 				<acceptance_radius r="2" />
 			</moveto>
 		</loop>
+		
+		<!--
+		<circle>
+			<center x="1" y="1" z="NaN" r="1.0" a="270" />
+		</circle>
+		-->
 		<moveto>
 			<position_local x="1" y="1" z="-1.5" />
 		</moveto>
+		<include f="square.xml"/>
 		<log_message m="included item(s) follows" t='W'/>
 		<include f="rotate_south.xml"/>>
 		<moveto>
@@ -38,9 +49,13 @@
 			<acceptance_radius r="0.5" />
 		</moveto>
 		
-		<!-- How to define a circle ?? -->
+		<!-- Handle Offboard Timeouts/Feasibility of plan -->
 		
+		<!-- Refactor/Generalize Relavtive positioning-->
 		
+		<!-- How to define a circle ?? 
+		   - Make an offboard low level task (16 segment plan)
+		-->
 		<!-- 
 		Automated Testing (also for NN Training)
 		 - performs different validity checks, e.g. planning costs
