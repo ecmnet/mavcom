@@ -5,6 +5,8 @@ import org.mavlink.messages.lquac.msg_local_position_ned;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.State;
 import com.comino.mavcom.model.segment.Status;
+import com.comino.mavcom.utils.MSP3DUtils;
+import com.comino.mavutils.MSPMathUtils;
 
 public class PX4LocalPositionPlugin extends MAVLinkPluginBase {
 
@@ -39,6 +41,9 @@ public class PX4LocalPositionPlugin extends MAVLinkPluginBase {
 			model.state.l_ax = (model.state.l_vx - last.l_vx) * 1_000f / (ned.time_boot_ms - last.tms);
 			model.state.l_ay = (model.state.l_vy - last.l_vy) * 1_000f / (ned.time_boot_ms - last.tms);
 			model.state.l_az = (model.state.l_vz - last.l_vz) * 1_000f / (ned.time_boot_ms - last.tms);
+			
+			if(Math.abs(model.state.l_vx)>0.05 || Math.abs(model.state.l_vy) > 0.05)
+			   model.hud.h = model.hud.h *0.5f + MSP3DUtils.angleXY(model.state.l_x - last.l_x, model.state.l_y - last.l_y) * 0.5f;
 		}
 
 		last.set(model.state);
