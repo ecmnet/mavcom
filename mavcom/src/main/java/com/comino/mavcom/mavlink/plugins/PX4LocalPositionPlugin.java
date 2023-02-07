@@ -38,9 +38,9 @@ public class PX4LocalPositionPlugin extends MAVLinkPluginBase {
 
 		if (last.tms > 0) {
 			
-			model.state.l_ax = (model.state.l_vx - last.l_vx) * 1_000f / (ned.time_boot_ms - last.tms);
-			model.state.l_ay = (model.state.l_vy - last.l_vy) * 1_000f / (ned.time_boot_ms - last.tms);
-			model.state.l_az = (model.state.l_vz - last.l_vz) * 1_000f / (ned.time_boot_ms - last.tms);
+//			model.state.l_ax = (model.state.l_vx - last.l_vx) * 1_000f / (ned.time_boot_ms - last.tms);
+//			model.state.l_ay = (model.state.l_vy - last.l_vy) * 1_000f / (ned.time_boot_ms - last.tms);
+//			model.state.l_az = (model.state.l_vz - last.l_vz) * 1_000f / (ned.time_boot_ms - last.tms);
 			
 			if(Math.abs(model.state.l_vx)>0.05 || Math.abs(model.state.l_vy) > 0.05)
 			   model.hud.h = model.hud.h *0.5f + MSP3DUtils.angleXY(model.state.l_x - last.l_x, model.state.l_y - last.l_y) * 0.5f;
