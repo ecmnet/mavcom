@@ -32,9 +32,9 @@ public class PX4PositionTargetLocalPlugin extends MAVLinkPluginBase {
 		model.target_state.l_ay = ned.afy;
 		model.target_state.l_az = ned.afz;
 		
-		model.state.l_ax = ned.afx;
-		model.state.l_ay = ned.afy;
-		model.state.l_az = ned.afz;
+//		model.state.l_ax = ned.afx;
+//		model.state.l_ay = ned.afy;
+//		model.state.l_az = ned.afz;
 
 		model.target_state.c_frame = ned.coordinate_frame;
 
