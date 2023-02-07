@@ -21,9 +21,8 @@
               <entry value="95" name="MSP_CMD_CHECK_READY">
                   <description>Triggers readiness check in MSP with logs</description>
               </entry>
-              <entry value="70" name="MSP_CMD_OFFBOARD">
-                  <description>Control offboard updater</description>
-                  <param index="1">component command</param>
+              <entry value="70" name="MSP_CMD_EXECUTE_SCENARIO">
+                  <description>Executes a scenario</description>
               </entry>
               <entry value="71" name="MSP_CMD_VISION">
                   <description>EControl vision system</description>

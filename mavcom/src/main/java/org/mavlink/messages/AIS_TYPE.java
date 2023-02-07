@@ -263,7 +263,7 @@ public interface AIS_TYPE {
     /**
      * null
      */
-    public final static int AIS_TYPE_AIS_TYPE_PASSENGER_HAZARDOUS_C = 63;
+    public final static int AIS_TYPE_PASSENGER_HAZARDOUS_C = 63;
     /**
      * null
      */
@@ -283,7 +283,7 @@ public interface AIS_TYPE {
     /**
      * null
      */
-    public final static int AIS_TYPE_AIS_TYPE_PASSENGER_RESERVED_4 = 68;
+    public final static int AIS_TYPE_PASSENGER_RESERVED_4 = 68;
     /**
      * null
      */

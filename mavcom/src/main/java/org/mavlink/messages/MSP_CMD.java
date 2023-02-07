@@ -26,10 +26,9 @@ public interface MSP_CMD {
      */
     public final static int MSP_CMD_CHECK_READY = 95;
     /**
-     * Control offboard updater
-     * PARAM 1 : component command
+     * Executes a scenario
      */
-    public final static int MSP_CMD_OFFBOARD = 70;
+    public final static int MSP_CMD_EXECUTE_SCENARIO = 70;
     /**
      * EControl vision system
      * PARAM 1 : component command
