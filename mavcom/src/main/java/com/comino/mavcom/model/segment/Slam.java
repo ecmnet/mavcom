@@ -41,18 +41,19 @@ public class Slam extends Segment {
 
 	private static final long serialVersionUID = -353494527253663585L;
 
-	public static final short OFFBOARD_FLAG_NONE        = 0;
-	public static final short OFFBOARD_FLAG_YAW_DIRECT  = 1;
-	public static final short OFFBOARD_FLAG_YAW_PLANNER = 2;
-	public static final short OFFBOARD_FLAG_YAW_CONTROL = 3;
-	public static final short OFFBOARD_FLAG_XYZ_DIRECT  = 4;
-	public static final short OFFBOARD_FLAG_XYZ_PLANNER = 5;
-	public static final short OFFBOARD_FLAG_REACHED     = 6;
-	public static final short OFFBOARD_FLAG_TIMEOUT     = 7;
-
-	public static final short OFFBOARD_FLAG_DEBUG1 = 15;
-	public static final short OFFBOARD_FLAG_DEBUG2 = 16;
-	public static final short OFFBOARD_FLAG_DEBUG3 = 17;
+	public static final short OFFBOARD_FLAG_NONE        	= 0;
+	public static final short OFFBOARD_FLAG_YAW_DIRECT  	= 1;
+	public static final short OFFBOARD_FLAG_YAW_PLANNER 	= 2;
+	public static final short OFFBOARD_FLAG_YAW_CONTROL 	= 3;
+	public static final short OFFBOARD_FLAG_XYZ_DIRECT  	= 4;
+	public static final short OFFBOARD_FLAG_XYZ_PLANNER 	= 5;
+	public static final short OFFBOARD_FLAG_REACHED     	= 6;
+	
+	public static final short OFFBOARD_FLAG_EXEC_SCENARIO   = 11;
+	public static final short OFFBOARD_FLAG_TIMEOUT         = 12;
+	public static final short OFFBOARD_FLAG_DEBUG1      	= 13;
+	public static final short OFFBOARD_FLAG_DEBUG2      	= 14;
+	public static final short OFFBOARD_FLAG_DEBUG3      	= 15;
 
 	public float ix; // Info point x
 	public float iy; // Info point y

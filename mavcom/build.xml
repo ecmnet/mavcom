@@ -9,23 +9,22 @@
 	  <get src="https://github.com/mavlink/mavlink/raw/master/message_definitions/v1.0/minimal.xml" dest="mavlink/minimal.xml" />
 	  <get src="https://github.com/mavlink/mavlink/raw/master/message_definitions/v1.0/minimal.xml" dest="mavlink/standard.xml" />
 
-	<!--
-	  <get src="https://s3.amazonaws.com/px4-travis/Firmware/master/parameters.xml" dest="src/main/resources/PX4ParameterFactMetaData.xml"
-				     ignoreerrors="true" maxtime="30" />
+	  <get src="https://raw.githubusercontent.com/mavlink/qgroundcontrol/master/src/FirmwarePlugin/PX4/PX4ParameterFactMetaData.xml"
+				     dest="src/main/resources/PX4ParameterFactMetaData.xml" />
 				     
-	-->
 		
+	<!--
 	  <get src="file:///Users/ecmnet/PixHawk/src/PX4-Autopilot/build/px4_sitl_default/parameters.xml" 
 						 dest="src/main/resources/PX4ParameterFactMetaData_sitl.xml"
 					     ignoreerrors="true" maxtime="30" />
+					     -->
 		
 	</target>
 	
 	<target name="get_metadata_param">
 
-		<get src="file:///Users/ecmnet/PixHawk/src/PX4-Autopilot/build/px4_fmu-v6c_default/parameters.xml" 
-				 dest="src/main/resources/PX4ParameterFactMetaData.xml"
-			     ignoreerrors="true" maxtime="30" />
+		  <get src="https://raw.githubusercontent.com/mavlink/qgroundcontrol/master/src/FirmwarePlugin/PX4/PX4ParameterFactMetaData.xml"
+					     dest="src/main/resources/PX4ParameterFactMetaData.xml" />
 	</target>
 
 	<target name="build_mavlink" depends="get_metadata_master">

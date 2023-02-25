@@ -67,7 +67,7 @@ public class StatusManager implements Runnable {
 	public static final byte TYPE_ALL = 0;
 	public static final byte TYPE_MSP_STATUS = 1;
 	public static final byte TYPE_PX4_NAVSTATE = 2;
-	public static final byte TYPE_RESERVED = 3;
+	public static final byte TYPE_MSP_SLAMSTATUS = 3;
 	public static final byte TYPE_MSP_AUTOPILOT = 4;
 	public static final byte TYPE_MSP_SERVICES = 5;
 	public static final byte TYPE_ESTIMATOR = 6;
@@ -244,9 +244,9 @@ public class StatusManager implements Runnable {
 
 					break;
 
-				case TYPE_RESERVED:
+				case TYPE_MSP_SLAMSTATUS:
 
-					// TODO: Implement MSP_STATUS
+					// TODO
 
 					break;
 				case TYPE_MSP_SERVICES:

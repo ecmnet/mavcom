@@ -209,7 +209,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
 		case MAVController.MODE_SITL_PROXY:
-			comm = MAVUdpCommNIO2.getInstance(reader, "10.211.55.4", 14580, 14540);
+			comm = MAVUdpCommNIO2.getInstance(reader, "10.211.55.5", 14580, 14540);
 			proxy = new MAVUdpProxyNIO2(model, "127.0.0.1", 14650, "0.0.0.0", 14656, comm);
 			peerAddress = "10.211.55.4";
 			System.out.println("SITL Proxy Controller loaded: " + peerAddress);
