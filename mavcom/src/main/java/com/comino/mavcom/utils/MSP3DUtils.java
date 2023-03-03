@@ -51,6 +51,11 @@ public class MSP3DUtils {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
 	
+	
+	public static float distance3DSQ(Vector4D_F32 t, Vector3D_F32 c) {
+		return (float)((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+	}
+	
 //	public static double distance3D(Vector4D_F64 t, Vector4D_F64 c) {
 //		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 //	}
@@ -63,6 +68,10 @@ public class MSP3DUtils {
 		return Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
 
+	public static double distance3DSQ(GeoTuple4D_F32<?> t, GeoTuple3D_F32<?> c) {
+		return (t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z);
+	}
+	
 	public static float distance2D(Vector4D_F32 t, Vector4D_F32 c) {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
 	}
@@ -71,8 +80,16 @@ public class MSP3DUtils {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
 	}
 	
+	public static float distance2DSQ(GeoTuple3D_F64<?> t, GeoTuple3D_F64<?> c) {
+		return (float)((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
+	}
+	
 	public static float distance2D(GeoTuple3D_F32<?> t, GeoTuple3D_F32<?> c) {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
+	}
+	
+	public static float distance2DSQ(GeoTuple3D_F32<?> t, GeoTuple3D_F32<?> c) {
+		return (t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y);
 	}
 	
 	
@@ -122,15 +139,19 @@ public class MSP3DUtils {
 	}
 
 	public static float distance3D(GeoTuple4D_F32<?> t, GeoTuple4D_F32<?> c) {
+        return (float)Math.sqrt(distance3DSQ(t,c));
+	}
+	
+	public static float distance3DSQ(GeoTuple4D_F32<?> t, GeoTuple4D_F32<?> c) {
 
 		if(Float.isNaN(t.x) || Float.isNaN(c.x))
-			return (float)Math.sqrt((t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+			return (float)((t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 		if(Float.isNaN(t.y) || Float.isNaN(c.y))
-			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.z - c.z) * (t.z - c.z));
+			return (float)((t.x - c.x) * (t.x - c.x) + (t.z - c.z) * (t.z - c.z));
 		if(Float.isNaN(t.z) || Float.isNaN(c.z))
-			return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
+			return (float)((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
 
-		return (float)Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
+		return (float)((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z));
 	}
 
 	public static float distance3D(GeoTuple4D_F64<?> t, GeoTuple3D_F64<?> c) {
