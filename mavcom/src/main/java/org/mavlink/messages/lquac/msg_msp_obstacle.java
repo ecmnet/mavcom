@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_msp_obstacle
- * MSP MICRO SLAM Data encoded in longs
+ * MSP Obstacle coordinates
  **/
 public class msg_msp_obstacle extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_MSP_OBSTACLE = 187;
@@ -24,7 +24,7 @@ public class msg_msp_obstacle extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_OBSTACLE;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 26;
+    payload_length = 38;
 }
 
   /**
@@ -48,6 +48,18 @@ public class msg_msp_obstacle extends MAVLinkMessage {
    */
   public float oz;
   /**
+   * Obstacle size X
+   */
+  public float dx;
+  /**
+   * Obstacle size Y
+   */
+  public float dy;
+  /**
+   * Obstacle size Z
+   */
+  public float dz;
+  /**
    * Id
    */
   public int id;
@@ -60,13 +72,16 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   ox = (float)dis.readFloat();
   oy = (float)dis.readFloat();
   oz = (float)dis.readFloat();
+  dx = (float)dis.readFloat();
+  dy = (float)dis.readFloat();
+  dz = (float)dis.readFloat();
   id = (int)dis.readUnsignedShort()&0x00FFFF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+26];
+  byte[] buffer = new byte[12+38];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -83,16 +98,19 @@ public byte[] encode() throws IOException {
   dos.writeFloat(ox);
   dos.writeFloat(oy);
   dos.writeFloat(oz);
+  dos.writeFloat(dx);
+  dos.writeFloat(dy);
+  dos.writeFloat(dz);
   dos.writeShort(id&0x00FFFF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 26);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 38);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[36] = crcl;
-  buffer[37] = crch;
+  buffer[48] = crcl;
+  buffer[49] = crch;
   dos.close();
   return buffer;
 }
@@ -102,6 +120,9 @@ return "MAVLINK_MSG_ID_MSP_OBSTACLE : " +   "  tms="+tms
 +  "  ox="+format((float)ox)
 +  "  oy="+format((float)oy)
 +  "  oz="+format((float)oz)
++  "  dx="+format((float)dx)
++  "  dy="+format((float)dy)
++  "  dz="+format((float)dz)
 +  "  id="+id
 ;}
 

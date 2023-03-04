@@ -61,9 +61,6 @@ public class Slam extends Segment {
 	public float dw; // distance to next waypoint
 	public float dm; // minimal distance to obstacle
 	public float di; // distance to target
-	public float ox; // nearest obstacle x
-	public float oy; // nearest obstacle y
-	public float oz; // nearest obstacle z
 	public short flags; // Offboard Flags
 	public float fps; // Rate in Hz.
 	public float quality; // SLAM quality
@@ -80,9 +77,6 @@ public class Slam extends Segment {
 		di = a.di;
 		dw = a.dw;
 		dm = a.dm;
-		ox = a.ox;
-		oy = a.oy;
-		oz = a.oz;
 		fps = a.fps;
 		flags = a.flags;
 		quality = a.quality;
@@ -102,9 +96,6 @@ public class Slam extends Segment {
 		di = Float.NaN;
 		dw = Float.NaN;
 		dm = Float.NaN;
-		ox = Float.NaN;
-		oy = Float.NaN;
-		oz = Float.NaN;
 		fps = 0;
 		flags = 0;
 		quality = 0;

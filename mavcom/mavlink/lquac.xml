@@ -303,12 +303,15 @@
                <field type="uint64_t"      name="tms">Timestamp</field>
            </message>
            <message id="187" name="MSP_OBSTACLE">
-               <description>MSP MICRO SLAM Data encoded in longs</description>
+               <description>MSP Obstacle coordinates</description>
                <field type="uint16_t"      name="id">Id</field>
                <field type="float"         name="dm" >Distance</field>
                <field type="float"         name="ox" >Obstacle X</field>
                <field type="float"         name="oy" >Obstacle Y</field>
                <field type="float"         name="oz" >Obstacle Z</field>
+               <field type="float"         name="dx" >Obstacle size X</field>
+               <field type="float"         name="dy" >Obstacle size Y</field>
+               <field type="float"         name="dz" >Obstacle size Z</field>
                <field type="uint64_t"      name="tms">Timestamp</field>
            </message>
       </messages>

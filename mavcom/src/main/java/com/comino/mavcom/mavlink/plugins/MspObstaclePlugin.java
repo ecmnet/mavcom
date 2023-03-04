@@ -13,11 +13,14 @@ public class MspObstaclePlugin extends MAVLinkPluginBase {
 	@Override
 	public void received(Object o) {
 
-		msg_msp_obstacle slam = (msg_msp_obstacle) o;
-		model.slam.dm = slam.dm;
-		model.slam.ox = slam.ox;
-		model.slam.oy = slam.oy;
-		model.slam.oz = slam.oz;	
+		msg_msp_obstacle obstacle = (msg_msp_obstacle) o;
+		model.slam.dm = obstacle.dm;
+		model.obs.x   = obstacle.ox;
+		model.obs.y   = obstacle.oy;
+		model.obs.z   = obstacle.oz;	
+		model.obs.sx  = obstacle.dx;
+		model.obs.sy  = obstacle.dy;
+		model.obs.sz  = obstacle.dz;	
 		model.slam.tms = DataModel.getSynchronizedPX4Time_us();
 
 	}

@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_command_long
- * Send a command with up to seven parameters to the MAV. The command microservice is documented at https://mavlink.io/en/services/command.html
+ * Send a command with up to seven parameters to the MAV. COMMAND_INT is generally preferred when sending MAV_CMD commands where param 5 and param 6 contain latitude/longitude data, as sending these in floats can result in a significant loss of precision. COMMAND_LONG is required for commands that mandate float values in params 5 and 6. The command microservice is documented at https://mavlink.io/en/services/command.html
  **/
 public class msg_command_long extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_COMMAND_LONG = 76;
