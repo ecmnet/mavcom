@@ -180,7 +180,7 @@ public class MAVLinkGenerator {
 
 			generateMAVLinkClass(destination, implementations);
 			generateFactoryClass(mavlink, destination);
-		//	generateStaticFactoryClass(mavlink, destination); // Static messsages do not work
+			//	generateStaticFactoryClass(mavlink, destination); // Static messsages do not work
 			generateIMavlinkId(mavlink, destination);
 			generateMavlinkCoder(mavlink, destination);
 			generateIMavlinkCRC(destination);
@@ -339,7 +339,7 @@ public class MAVLinkGenerator {
 						fieldWrite.append("  public void set" + attr + "(String tmp) {\n");
 						fieldWrite.append("    int len = Math.min(tmp.length(), " + type.arrayLenth + ");\n");
 						fieldWrite.append("    for (int i=0; i<len; i++) {\n      " + field.getName()
-								+ "[i] = tmp.charAt(i);\n    }\n");
+						+ "[i] = tmp.charAt(i);\n    }\n");
 						fieldWrite.append("    for (int i=len; i<" + type.arrayLenth + "; i++) {\n      "
 								+ field.getName() + "[i] = 0;\n    }\n  }\n");
 						fieldWrite.append("  public String get" + attr + "() {\n");
@@ -351,24 +351,24 @@ public class MAVLinkGenerator {
 					fieldLen += type.getLengthType();
 
 					if (field.getType().isArray && field.getType().type != MAVLinkDataType.CHAR  && !message.getName().toLowerCase().contains("can")) {
-						
+
 						for (int i = 0; i < type.arrayLenth; i++) {
 							switch (field.getType().type) {
 
 							case MAVLinkDataType.FLOAT:
 							case MAVLinkDataType.DOUBLE:
 								forToString = forToString + (j != 0 || i > 0 ? "+" : "") + "  \"  " + field.getName()
-										+ "[" + i + "]" + "=\"+" + "format((float)" + field.getName() + "[" + i + "])"
-										+ "\n";
+								+ "[" + i + "]" + "=\"+" + "format((float)" + field.getName() + "[" + i + "])"
+								+ "\n";
 								break;
 							default:
 
-								forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName() + "[" + i
-										+ "]" + "=\"+"
-										+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR
-												? "get" + attr + "()"
-												: field.getName())
-										+ "[" + i + "]" + "\n";
+								forToString = forToString + (j != 0 || i > 0 ? "+" : "") + "  \"  " + field.getName() + "[" + i
+								+ "]" + "=\"+"
+								+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR
+								? "get" + attr + "()"
+										: field.getName())
+								+ "[" + i + "]" + "\n";
 							}
 						}
 
@@ -383,7 +383,7 @@ public class MAVLinkGenerator {
 						default:
 							forToString = forToString + (j != 0 ? "+" : "") + "  \"  " + field.getName() + "=\"+"
 									+ (field.getType().isArray && field.getType().type == MAVLinkDataType.CHAR
-											? "get" + attr + "()"
+									? "get" + attr + "()"
 											: field.getName())
 									+ "\n";
 
@@ -476,17 +476,17 @@ public class MAVLinkGenerator {
 					writer.print("}\n\n");
 				}
 
-//				writer.print("public boolean equals(Object o) {\n");
-//				writer.print(" if (this == o)\n");
-//				writer.print("     return  true;\n");
-//				writer.print(" if(o == null || getClass() != o.getClass())\n");
-//				writer.print("     return  false;\n");
-//				writer.print("  return o.hashCode() == "+id+";\n");
-//				writer.print("}\n\n");
-//				
-//				writer.print("public int hashCode() {\n");
-//				writer.print(" return "+id+";");
-//				writer.print("}\n\n");
+				//				writer.print("public boolean equals(Object o) {\n");
+				//				writer.print(" if (this == o)\n");
+				//				writer.print("     return  true;\n");
+				//				writer.print(" if(o == null || getClass() != o.getClass())\n");
+				//				writer.print("     return  false;\n");
+				//				writer.print("  return o.hashCode() == "+id+";\n");
+				//				writer.print("}\n\n");
+				//				
+				//				writer.print("public int hashCode() {\n");
+				//				writer.print(" return "+id+";");
+				//				writer.print("}\n\n");
 
 				writer.print("}\n\n");
 				forToString = "";
@@ -605,7 +605,7 @@ public class MAVLinkGenerator {
 					"/**\n * Interface " + className + "\n * Implement all constants in enums and entries \n **/\n");
 			if (implementation.size() != 0) {
 				writer.print("public interface " + className + " extends " + allImpl.substring(0, allImpl.length() - 1)
-						+ " {\n}\n");
+				+ " {\n}\n");
 			} else {
 				writer.print("public interface " + className + " {\n}\n");
 			}
@@ -715,7 +715,7 @@ public class MAVLinkGenerator {
 			}
 		}
 	}
-	
+
 	protected void generateStaticFactoryClass(MAVLinkData mavlink, String targetPath) {
 		System.err.println("Generate static Factory");
 		String packageRootName = "org.mavlink.messages";
@@ -747,30 +747,30 @@ public class MAVLinkGenerator {
 			} else {
 				writer.print("import java.nio.ByteBuffer;\n");
 				writer.print("import java.nio.ByteOrder;\n");
-				
+
 			}
 			writer.print("import java.util.HashMap;\n");
 			writer.print(imports);
 			writer.print(
 					"/**\n * Class MAVLinkStaticMessageFactory\n * Generate MAVLink message classes from byte array\n **/\n");
 			writer.print("public class MAVLinkStaticMessageFactory implements IMAVLinkMessage, IMAVLinkMessageID {\n");
-			
+
 			writer.print("\n\n");
 			writer.print("private static final HashMap<Integer,MAVLinkMessage> messages = new HashMap<>(){\n   {\n");
-			
+
 			for (MAVLinkMessage message : mavlink.getMessages().values()) {
 
 				if (message.getId() > 9998)
 					continue;
-				
+
 				String msgClassName = "msg_" + message.getName().toLowerCase();
 				String id = MAVLINK_MSG + "_ID_" + message.getName();
-				
+
 				writer.print("  put("+id+", new "+msgClassName+"(0,0));\n");
 			}
-			
+
 			writer.print("   }\n};\n\n");
-			
+
 			writer.print(
 					"public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, byte[] rawData) throws IOException {\n");
 			writer.print("    MAVLinkMessage msg=null;\n");
@@ -788,7 +788,7 @@ public class MAVLinkGenerator {
 					writer.print("    ByteBuffer dis = ByteBuffer.wrap(rawData).order(ByteOrder.BIG_ENDIAN);\n");
 				}
 			}
-			
+
 			writer.print("    msg = messages.get(msgid);\n");
 			writer.print("    msg.sysId = sysId;\n");
 			writer.print("    msg.componentId = componentId;\n");
@@ -797,8 +797,8 @@ public class MAVLinkGenerator {
 			writer.print("    return msg;\n");
 			writer.print("  }\n");
 			writer.print("}\n");
-			
-			
+
+
 		} catch (Exception e) {
 			System.err.println("ERROR : " + e);
 			e.printStackTrace();

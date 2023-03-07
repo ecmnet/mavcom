@@ -24,17 +24,17 @@ public class msg_msp_micro_grid extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_MICRO_GRID;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 233;
+    payload_length = 193;
 }
 
+  /**
+   * Encoded Grid data long
+   */
+  public long[] data = new long[20];
   /**
    * Timestamp
    */
   public long tms;
-  /**
-   * Encoded Grid data integers
-   */
-  public long[] data = new long[50];
   /**
    * CenterX
    */
@@ -67,10 +67,10 @@ public class msg_msp_micro_grid extends MAVLinkMessage {
  * Decode message with raw data
  */
 public void decode(LittleEndianDataInputStream dis) throws IOException {
-  tms = (long)dis.readLong();
-  for (int i=0; i<50; i++) {
-    data[i] = (int)dis.readInt();
+  for (int i=0; i<20; i++) {
+    data[i] = (long)dis.readLong();
   }
+  tms = (long)dis.readLong();
   cx = (float)dis.readFloat();
   cy = (float)dis.readFloat();
   cz = (float)dis.readFloat();
@@ -83,7 +83,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+233];
+  byte[] buffer = new byte[12+193];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -95,10 +95,10 @@ public byte[] encode() throws IOException {
   dos.writeByte(messageType & 0x00FF);
   dos.writeByte((messageType >> 8) & 0x00FF);
   dos.writeByte((messageType >> 16) & 0x00FF);
-  dos.writeLong(tms);
-  for (int i=0; i<50; i++) {
-    dos.writeInt((int)(data[i]&0x00FFFFFFFF));
+  for (int i=0; i<20; i++) {
+    dos.writeLong(data[i]);
   }
+  dos.writeLong(tms);
   dos.writeFloat(cx);
   dos.writeFloat(cy);
   dos.writeFloat(cz);
@@ -109,18 +109,17 @@ public byte[] encode() throws IOException {
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 233);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 193);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[243] = crcl;
-  buffer[244] = crch;
+  buffer[203] = crcl;
+  buffer[204] = crch;
   dos.close();
   return buffer;
 }
 public String toString() {
-return "MAVLINK_MSG_ID_MSP_MICRO_GRID : " +   "  tms="+tms
-+  "  data[0]="+data[0]
+return "MAVLINK_MSG_ID_MSP_MICRO_GRID : " +   "  data[0]="+data[0]
 +  "  data[1]="+data[1]
 +  "  data[2]="+data[2]
 +  "  data[3]="+data[3]
@@ -140,36 +139,7 @@ return "MAVLINK_MSG_ID_MSP_MICRO_GRID : " +   "  tms="+tms
 +  "  data[17]="+data[17]
 +  "  data[18]="+data[18]
 +  "  data[19]="+data[19]
-+  "  data[20]="+data[20]
-+  "  data[21]="+data[21]
-+  "  data[22]="+data[22]
-+  "  data[23]="+data[23]
-+  "  data[24]="+data[24]
-+  "  data[25]="+data[25]
-+  "  data[26]="+data[26]
-+  "  data[27]="+data[27]
-+  "  data[28]="+data[28]
-+  "  data[29]="+data[29]
-+  "  data[30]="+data[30]
-+  "  data[31]="+data[31]
-+  "  data[32]="+data[32]
-+  "  data[33]="+data[33]
-+  "  data[34]="+data[34]
-+  "  data[35]="+data[35]
-+  "  data[36]="+data[36]
-+  "  data[37]="+data[37]
-+  "  data[38]="+data[38]
-+  "  data[39]="+data[39]
-+  "  data[40]="+data[40]
-+  "  data[41]="+data[41]
-+  "  data[42]="+data[42]
-+  "  data[43]="+data[43]
-+  "  data[44]="+data[44]
-+  "  data[45]="+data[45]
-+  "  data[46]="+data[46]
-+  "  data[47]="+data[47]
-+  "  data[48]="+data[48]
-+  "  data[49]="+data[49]
++  "  tms="+tms
 +  "  cx="+format((float)cx)
 +  "  cy="+format((float)cy)
 +  "  cz="+format((float)cz)

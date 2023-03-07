@@ -15,8 +15,8 @@ public class MspMicroGridPlugin extends MAVLinkPluginBase {
 	public void received(Object o) {
 
 		msg_msp_micro_grid grid = (msg_msp_micro_grid) o;
-		model.grid.fromArray(grid.data);
-		model.grid.count = (int) grid.count;
+//		model.grid.fromArray(grid.data);
+//		model.grid.count = (int) grid.count;
 		model.grid.status = (byte) grid.status;
 		model.grid.ox = grid.cx;
 		model.grid.oy = grid.cy;
