@@ -119,7 +119,7 @@ public class Grid extends Segment {
 	}
 	
 	public void add(Long e) {
-	// if(!transfer.contains(e))
+	  if(!transfer.contains(e))
 		   transfer.add(e);
 	}
 

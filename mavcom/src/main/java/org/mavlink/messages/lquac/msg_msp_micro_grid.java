@@ -24,13 +24,13 @@ public class msg_msp_micro_grid extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_MICRO_GRID;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 193;
+    payload_length = 233;
 }
 
   /**
    * Encoded Grid data long
    */
-  public long[] data = new long[20];
+  public long[] data = new long[25];
   /**
    * Timestamp
    */
@@ -67,7 +67,7 @@ public class msg_msp_micro_grid extends MAVLinkMessage {
  * Decode message with raw data
  */
 public void decode(LittleEndianDataInputStream dis) throws IOException {
-  for (int i=0; i<20; i++) {
+  for (int i=0; i<25; i++) {
     data[i] = (long)dis.readLong();
   }
   tms = (long)dis.readLong();
@@ -83,7 +83,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+193];
+  byte[] buffer = new byte[12+233];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -95,7 +95,7 @@ public byte[] encode() throws IOException {
   dos.writeByte(messageType & 0x00FF);
   dos.writeByte((messageType >> 8) & 0x00FF);
   dos.writeByte((messageType >> 16) & 0x00FF);
-  for (int i=0; i<20; i++) {
+  for (int i=0; i<25; i++) {
     dos.writeLong(data[i]);
   }
   dos.writeLong(tms);
@@ -109,12 +109,12 @@ public byte[] encode() throws IOException {
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 193);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 233);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[203] = crcl;
-  buffer[204] = crch;
+  buffer[243] = crcl;
+  buffer[244] = crch;
   dos.close();
   return buffer;
 }
@@ -139,6 +139,11 @@ return "MAVLINK_MSG_ID_MSP_MICRO_GRID : " +   "  data[0]="+data[0]
 +  "  data[17]="+data[17]
 +  "  data[18]="+data[18]
 +  "  data[19]="+data[19]
++  "  data[20]="+data[20]
++  "  data[21]="+data[21]
++  "  data[22]="+data[22]
++  "  data[23]="+data[23]
++  "  data[24]="+data[24]
 +  "  tms="+tms
 +  "  cx="+format((float)cx)
 +  "  cy="+format((float)cy)

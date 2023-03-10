@@ -27,5 +27,5 @@ public interface MAV_BATTERY_FUNCTION {
     /**
      * Payload battery
      */
-    public final static int MAV_BATTERY_TYPE_PAYLOAD = 4;
+    public final static int MAV_BATTERY_FUNCTION_PAYLOAD = 4;
 }
