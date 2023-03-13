@@ -70,7 +70,7 @@ public class Grid extends Segment {
 		vx = a.vx;
 		vy = a.vy;
 		vz = a.vz;
-		
+
 		resolution = a.resolution;
 
 	}
@@ -88,15 +88,15 @@ public class Grid extends Segment {
 		try {
 			if (!hasTransfers() || transfer==null)
 				return false;
-			
+
 			if (transfer.isEmpty() || array == null)
 				return false;
 
-				Arrays.fill(array, 0);
-				for (int i = 0; i < array.length && !transfer.isEmpty(); i++) {
-					e = transfer.poll();
-					if(e!=null)
-					   array[i] = e.longValue();
+			Arrays.fill(array, 0);
+			for (int i = 0; i < array.length && !transfer.isEmpty(); i++) {
+				e = transfer.poll();
+				if(e!=null)
+					array[i] = e.longValue();
 
 			}
 			return true;
@@ -113,14 +113,20 @@ public class Grid extends Segment {
 	public LinkedList<Long> getTransfers() {
 		return transfer;
 	}
-	
+
 	public Long pop() {
 		return transfer.pop();
 	}
-	
+
 	public void add(Long e) {
-	  if(!transfer.contains(e))
-		   transfer.add(e);
+		if(!transfer.contains(e))
+			transfer.add(e);
+	}
+
+	public boolean add(Long e, int blocksize) {
+		if(!transfer.contains(e))
+			transfer.add(e);
+		return transfer.size() >= blocksize;
 	}
 
 	public void setOrigin(float ox, float oy, float oz) {
@@ -128,7 +134,7 @@ public class Grid extends Segment {
 		this.oy = oy;
 		this.oz = oz;
 	}
-	
+
 	public void setResolution(float resolution) {
 		this.resolution = resolution;
 	}
