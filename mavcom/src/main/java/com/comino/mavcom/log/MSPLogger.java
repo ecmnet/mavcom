@@ -46,6 +46,9 @@ public class MSPLogger {
 	private static MSPLogger log = null;
 	private IMAVController control = null;
 	private boolean debug_msg_enabled = false;
+	
+	private String last_msg;
+	private long   last_msg_tms;
 
 	public static MSPLogger getInstance(IMAVController control) {
 		if (log == null) {
@@ -68,11 +71,20 @@ public class MSPLogger {
 
 	public void writeLocalMsg(String msg) {
 		writeLocalMsg(msg, MAV_SEVERITY.MAV_SEVERITY_INFO);
-
+		last_msg = msg;
+		last_msg_tms = System.currentTimeMillis();
 	}
 
 	public void writeLocalDebugMsg(String msg) {
 		writeLocalMsg(msg, MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+		last_msg = msg;
+		last_msg_tms = System.currentTimeMillis();
+	}
+	
+	public void writeLocalMsg(String msg, int severity, long silence_ms) {
+		if(msg.equals(last_msg) && (System.currentTimeMillis() - last_msg_tms) <silence_ms)
+           return;
+		writeLocalMsg(msg,severity);
 	}
 
 	public void writeLocalMsg(String msg, int severity) {
@@ -84,6 +96,8 @@ public class MSPLogger {
 		m.severity = severity;
 		m.tms = DataModel.getSynchronizedPX4Time_us();
 		control.writeLogMessage(m);
+		last_msg = msg;
+		last_msg_tms = System.currentTimeMillis();
 	}
 
 }
