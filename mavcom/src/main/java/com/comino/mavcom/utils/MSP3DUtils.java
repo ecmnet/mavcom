@@ -338,6 +338,11 @@ public class MSP3DUtils {
 		vector.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
 		return isFinite(vector);
 	}
+	
+	public static boolean convertCurrentSpeed(DataModel model, Vector3D_F32 vector) {
+		vector.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz);
+		return isFinite(vector);
+	}
 
 	public static boolean convertCurrentSpeed(DataModel model, GeoTuple4D_F32<?> vector) {
 		vector.setTo(model.state.l_vx, model.state.l_vy, model.state.l_vz, model.attitude.yr);
