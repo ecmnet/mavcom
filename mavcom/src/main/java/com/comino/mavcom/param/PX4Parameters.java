@@ -40,7 +40,7 @@ public class PX4Parameters implements IMAVLinkListener {
 		this.control.addMAVLinkListener(this);
 		if(control.isSimulation()) {
 		  MSPLogger.getInstance().writeLocalMsg("Use _sitl parameter meta data", MAV_SEVERITY.MAV_SEVERITY_INFO);
-		  this.metadata = new ParameterFactMetaData("PX4ParameterFactMetaData_sitl.xml");
+		  this.metadata = new ParameterFactMetaData("PX4ParameterFactMetaData.xml");
 		}
 		else
 		  this.metadata = new ParameterFactMetaData("PX4ParameterFactMetaData.xml");
