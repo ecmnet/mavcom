@@ -10,7 +10,7 @@ public final class MSPParams {
 	// autopilot
 
 	public static final String AUTOPILOT_CLASS = "autopilot_class";
-	public static final String AUTOPILOT_FORGET_MAP = "autopilot_forget_map";
+	public static final String AUTOPILOT_FORGET_MAP_MS = "autopilot_forget_map_ms";
 	public static final String AUTOPILOT_FLOW_CHECK = "autopilot_flow_check";
 	public static final String AUTOPILOT_TAKEOFF_PROC = "autopilot_takeoff_procedure";
 	public static final String AUTOPILOT_TAKEOFF_OFFBOARD = "autopilot_takeoff_offboard";
