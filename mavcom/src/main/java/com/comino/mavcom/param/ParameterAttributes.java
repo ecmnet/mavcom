@@ -73,7 +73,7 @@ public class ParameterAttributes implements Comparable<ParameterAttributes> {
 	}
 
 	public String toString() {
-		return "group=" + group_name + " name=" + name + " description=" + description + " type=" + type;
+		return "group=" + group_name + " name=" + name + " description=" + description + " type=" + type+" value="+value;
 	}
 
 	@Override

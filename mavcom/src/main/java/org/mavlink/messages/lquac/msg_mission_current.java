@@ -34,7 +34,7 @@ public class msg_mission_current extends MAVLinkMessage {
    */
   public int seq;
   /**
-   * Total number of mission items. 0: Not supported, UINT16_MAX if no mission is present on the vehicle.
+   * Total number of mission items on vehicle (on last item, sequence == total). If the autopilot stores its home location as part of the mission this will be excluded from the total. 0: Not supported, UINT16_MAX if no mission is present on the vehicle.
    */
   public int total;
   /**

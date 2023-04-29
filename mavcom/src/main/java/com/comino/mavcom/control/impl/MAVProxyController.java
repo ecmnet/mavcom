@@ -478,14 +478,17 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public void run() {
 
-		count++;
+	//	count++;
 
-		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && (count % 10) == 0) {
-			if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON && !this.isSimulation()) { 
-				setupWifi(); 
-				proxy.open();
-				return;
-			} 
+		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
+			count++;
+			if((count % 10) == 0) {
+				if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON && !this.isSimulation()) { 
+					setupWifi(); 
+					proxy.open();
+					return;
+				} 
+			}
 		}
 
 		sendMAVLinkMessage(beat_px4);
