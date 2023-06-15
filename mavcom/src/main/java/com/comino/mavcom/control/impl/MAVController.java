@@ -70,6 +70,7 @@ public class MAVController implements IMAVController, Runnable {
 	public static final int MODE_SITL = 1;
 	public static final int MODE_USB = 2;
 	public static final int MODE_SITL_PROXY = 3;
+	public static final int MODE_ORIN       = 4;
 
 	protected String peerAddress = null;
 	protected int peerPort = 0;

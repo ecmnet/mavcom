@@ -187,6 +187,28 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
 
+		case MAVController.MODE_ORIN:
+			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
+			// comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
+
+			//TODO: Get baudrate from msp.properties
+
+			comm = MAVSerialComm.getInstance(reader,baudrate,SerialPort.FLOW_CONTROL_CTS_ENABLED | SerialPort.FLOW_CONTROL_RTS_ENABLED);
+			comm.open();
+			sendMAVLinkMessage(beat_px4);
+
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
+
+			proxy = new MAVUdpProxyNIO2(model, "192.168.178.156", 14550, null, 14555, comm);
+			peerAddress = "192.168.178.48";
+
+			System.out.println("Proxy Controller loaded (ORIN): " + peerAddress);
+			model.sys.setStatus(Status.MSP_SITL, false);
+			break;
+
 		case MAVController.MODE_SITL:
 			model.sys.setStatus(Status.MSP_SITL, true);
 			comm = MAVUdpCommNIO2.getInstance(reader, "127.0.0.1", 14580, 14540);
@@ -209,9 +231,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
 		case MAVController.MODE_SITL_PROXY:
-			comm = MAVUdpCommNIO2.getInstance(reader, "10.211.55.5", 14580, 14540);
-			proxy = new MAVUdpProxyNIO2(model, "127.0.0.1", 14650, "0.0.0.0", 14656, comm);
-			peerAddress = "10.211.55.4";
+			comm = MAVUdpCommNIO2.getInstance(reader, "10.211.55.8", 14541, 14587);
+			proxy = new MAVUdpProxyNIO2(model, "10.211.55.2", 14650, "0.0.0.0", 14656, comm);
+			peerAddress = "10.211.55.2";
 			System.out.println("SITL Proxy Controller loaded: " + peerAddress);
 			model.sys.setStatus(Status.MSP_SITL, true);
 			break;
@@ -478,7 +500,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public void run() {
 
-	//	count++;
+		//	count++;
 
 		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
 			count++;
@@ -492,7 +514,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		}
 
 		sendMAVLinkMessage(beat_px4);
-		sendMAVLinkMessage(beat_obs);
+	//	sendMAVLinkMessage(beat_obs);
 
 		if (!proxy.isConnected()) {
 			proxy.close();

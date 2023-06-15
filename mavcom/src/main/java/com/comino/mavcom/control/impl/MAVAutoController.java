@@ -57,7 +57,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	private boolean connected;
 
 	private final msg_heartbeat beat = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_OSD);
-	private final IMAVComm[] comms = new IMAVComm[4];
+	private final IMAVComm[] comms = new IMAVComm[5];
 	private boolean isMSP = true;
 	private int     last=0;
 
@@ -71,6 +71,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort);
 		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650);
 		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540);
+		comms[4] = new MAVUdpCommNIO2(reader, "10.211.55.8", 14656, 14650);
 
 		model.sys.setStatus(Status.MSP_PROXY, false);
 
@@ -115,6 +116,20 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.connected = true;
 			return true;
 		}
+		
+		if (comms[4].open()) {
+			comm = comms[4];
+			comms[1].shutdown();
+			this.isSITL = true;
+			this.isMSP  = false;
+			this.mode = MODE_SITL;
+			model.sys.setStatus(Status.MSP_SITL, true);
+//			if(last != comm.hashCode())
+			System.out.println(comm);
+			last = comm.hashCode();
+			this.connected = true;
+			return true;
+		}
 
 		if (comms[2].open()) {
 			comm = comms[2];
@@ -144,6 +159,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.connected = true;
 			return true;
 		}
+		
+		
 	
 
 		return true;
