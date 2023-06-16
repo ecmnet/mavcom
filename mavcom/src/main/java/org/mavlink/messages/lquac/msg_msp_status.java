@@ -24,7 +24,7 @@ public class msg_msp_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MSP_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 64;
+    payload_length = 68;
 }
 
   /**
@@ -43,6 +43,10 @@ public class msg_msp_status extends MAVLinkMessage {
    * MSP Statusflags
    */
   public long status;
+  /**
+   * MSP Sensorflags
+   */
+  public long sensors;
   /**
    * Autopilot mode
    */
@@ -123,6 +127,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   unix_time_us = (long)dis.readLong();
   com_error = (int)dis.readInt()&0x00FFFFFFFF;
   status = (int)dis.readInt()&0x00FFFFFFFF;
+  sensors = (int)dis.readInt()&0x00FFFFFFFF;
   autopilot_mode = (int)dis.readInt()&0x00FFFFFFFF;
   takeoff_ms = (int)dis.readInt();
   load = (int)dis.readUnsignedByte()&0x00FF;
@@ -142,7 +147,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+64];
+  byte[] buffer = new byte[12+68];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -158,6 +163,7 @@ public byte[] encode() throws IOException {
   dos.writeLong(unix_time_us);
   dos.writeInt((int)(com_error&0x00FFFFFFFF));
   dos.writeInt((int)(status&0x00FFFFFFFF));
+  dos.writeInt((int)(sensors&0x00FFFFFFFF));
   dos.writeInt((int)(autopilot_mode&0x00FFFFFFFF));
   dos.writeInt((int)(takeoff_ms&0x00FFFFFFFF));
   dos.writeByte(load&0x00FF);
@@ -175,12 +181,12 @@ public byte[] encode() throws IOException {
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 64);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 68);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[74] = crcl;
-  buffer[75] = crch;
+  buffer[78] = crcl;
+  buffer[79] = crch;
   dos.close();
   return buffer;
 }
@@ -189,6 +195,7 @@ return "MAVLINK_MSG_ID_MSP_STATUS : " +   "  uptime_ms="+uptime_ms
 +  "  unix_time_us="+unix_time_us
 +  "  com_error="+com_error
 +  "  status="+status
++  "  sensors="+sensors
 +  "  autopilot_mode="+autopilot_mode
 +  "  takeoff_ms="+takeoff_ms
 +  "  load="+load

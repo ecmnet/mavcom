@@ -9,7 +9,7 @@ package org.mavlink.messages;
  **/
 public interface MAV_CMD {
     /**
-     * Navigate to waypoint.
+     * Navigate to waypoint. This is intended for use in missions (for guided commands outside of missions use MAV_CMD_DO_REPOSITION).
      * PARAM 1 : Hold time. (ignored by fixed wing, time to stay at waypoint for rotary wing)
      * PARAM 2 : Acceptance radius (if the sphere with this radius is hit, the waypoint counts as reached)
      * PARAM 3 : 0 to pass through the WP, if > 0 radius to pass by WP. Positive value for clockwise orbit, negative value for counter-clockwise orbit. Allows trajectory control.
@@ -504,7 +504,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_GO_AROUND = 191;
     /**
-     * Reposition the vehicle to a specific WGS84 global position.
+     * Reposition the vehicle to a specific WGS84 global position. This command is intended for guided commands (for missions use MAV_CMD_NAV_WAYPOINT instead).
      * PARAM 1 : Ground speed, less than 0 (-1) for default
      * PARAM 2 : Bitmask of option flags.
      * PARAM 3 : Loiter radius for planes. Positive values only, direction is controlled by Yaw value. A value of zero or NaN is ignored. 
@@ -1097,7 +1097,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_JUMP_TAG = 601;
     /**
-     * High level setpoint to be sent to a gimbal manager to set a gimbal attitude. It is possible to set combinations of the values below. E.g. an angle as well as a desired angular rate can be used to get to this angle at a certain angular rate, or an angular rate only will result in continuous turning. NaN is to be used to signal unset. Note: a gimbal is never to react to this command but only the gimbal manager.
+     * Set gimbal manager pitch/yaw setpoints (low rate command). It is possible to set combinations of the values below. E.g. an angle as well as a desired angular rate can be used to get to this angle at a certain angular rate, or an angular rate only will result in continuous turning. NaN is to be used to signal unset. Note: only the gimbal manager will react to this command - it will be ignored by a gimbal device. Use GIMBAL_MANAGER_SET_PITCHYAW if you need to stream pitch/yaw setpoints at higher rate.
      * PARAM 1 : Pitch angle (positive to pitch up, relative to vehicle for FOLLOW mode, relative to world horizon for LOCK mode).
      * PARAM 2 : Yaw angle (positive to yaw to the right, relative to vehicle for FOLLOW mode, absolute to North for LOCK mode).
      * PARAM 3 : Pitch rate (positive to pitch up).
@@ -1132,6 +1132,8 @@ public interface MAV_CMD {
      * PARAM 2 : 
      * PARAM 3 : 
      * PARAM 4 : 
+     * PARAM 5 : 
+     * PARAM 6 : 
      * PARAM 7 : 
      */
     public final static int MAV_CMD_IMAGE_STOP_CAPTURE = 2001;
@@ -1141,6 +1143,8 @@ public interface MAV_CMD {
      * PARAM 2 : 
      * PARAM 3 : 
      * PARAM 4 : 
+     * PARAM 5 : 
+     * PARAM 6 : 
      * PARAM 7 : 
      */
     public final static int MAV_CMD_REQUEST_CAMERA_IMAGE_CAPTURE = 2002;
@@ -1396,8 +1400,8 @@ public interface MAV_CMD {
      * PARAM 2 : Desired approach vector in compass heading. A negative value indicates the system can define the approach vector at will.
      * PARAM 3 : Desired ground speed at release time. This can be overridden by the airframe in case it needs to meet minimum airspeed. A negative value indicates the system can define the ground speed at will.
      * PARAM 4 : Minimum altitude clearance to the release position. A negative value indicates the system can define the clearance at will.
-     * PARAM 5 : Latitude. Note, if used in MISSION_ITEM (deprecated) the units are degrees (unscaled)
-     * PARAM 6 : Longitude. Note, if used in MISSION_ITEM (deprecated) the units are degrees (unscaled)
+     * PARAM 5 : Latitude.
+     * PARAM 6 : Longitude.
      * PARAM 7 : Altitude (MSL)
      */
     public final static int MAV_CMD_PAYLOAD_PREPARE_DEPLOY = 30001;

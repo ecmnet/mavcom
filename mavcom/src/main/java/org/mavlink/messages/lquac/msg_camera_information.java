@@ -32,19 +32,19 @@ public class msg_camera_information extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * Version of the camera firmware, encoded as: (Dev & 0xff) << 24 | (Patch & 0xff) << 16 | (Minor & 0xff) << 8 | (Major & 0xff)
+   * Version of the camera firmware, encoded as: (Dev & 0xff) << 24 | (Patch & 0xff) << 16 | (Minor & 0xff) << 8 | (Major & 0xff). Use 0 if not known.
    */
   public long firmware_version;
   /**
-   * Focal length
+   * Focal length. Use NaN if not known.
    */
   public float focal_length;
   /**
-   * Image sensor size horizontal
+   * Image sensor size horizontal. Use NaN if not known.
    */
   public float sensor_size_h;
   /**
-   * Image sensor size vertical
+   * Image sensor size vertical. Use NaN if not known.
    */
   public float sensor_size_v;
   /**
@@ -52,15 +52,15 @@ public class msg_camera_information extends MAVLinkMessage {
    */
   public long flags;
   /**
-   * Horizontal image resolution
+   * Horizontal image resolution. Use 0 if not known.
    */
   public int resolution_h;
   /**
-   * Vertical image resolution
+   * Vertical image resolution. Use 0 if not known.
    */
   public int resolution_v;
   /**
-   * Camera definition version (iteration)
+   * Camera definition version (iteration).  Use 0 if not known.
    */
   public int cam_definition_version;
   /**
@@ -72,11 +72,11 @@ public class msg_camera_information extends MAVLinkMessage {
    */
   public int[] model_name = new int[32];
   /**
-   * Reserved for a lens ID
+   * Reserved for a lens ID.  Use 0 if not known.
    */
   public int lens_id;
   /**
-   * Camera definition URI (if any, otherwise only basic functions will be available). HTTP- (http://) and MAVLink FTP- (mavlinkftp://) formatted URIs are allowed (and both must be supported by any GCS that implements the Camera Protocol). The definition file may be xz compressed, which will be indicated by the file extension .xml.xz (a GCS that implements the protocol must support decompressing the file). The string needs to be zero terminated.
+   * Camera definition URI (if any, otherwise only basic functions will be available). HTTP- (http://) and MAVLink FTP- (mavlinkftp://) formatted URIs are allowed (and both must be supported by any GCS that implements the Camera Protocol). The definition file may be xz compressed, which will be indicated by the file extension .xml.xz (a GCS that implements the protocol must support decompressing the file). The string needs to be zero terminated.  Use a zero-length string if not known.
    */
   public char[] cam_definition_uri = new char[140];
   public void setCam_definition_uri(String tmp) {

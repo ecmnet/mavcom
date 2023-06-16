@@ -52,9 +52,9 @@ public interface MAV_PROTOCOL_CAPABILITY {
      */
     public final static int MAV_PROTOCOL_CAPABILITY_TERRAIN = 512;
     /**
-     * Autopilot supports direct actuator control.
+     * Reserved for future use.
      */
-    public final static int MAV_PROTOCOL_CAPABILITY_SET_ACTUATOR_TARGET = 1024;
+    public final static int MAV_PROTOCOL_CAPABILITY_RESERVED3 = 1024;
     /**
      * Autopilot supports the MAV_CMD_DO_FLIGHTTERMINATION command (flight termination).
      */

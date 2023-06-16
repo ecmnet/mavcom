@@ -65,7 +65,7 @@ public class Status extends Segment {
 			"LPOS valid", "Parameter loaded", "Reserved", "Ready for flight" };
 
 	private static final String[] MSP_SENSOR_TEXTS = { "EKF2", "LIDAR", "SONAR", "GPS", "FLOW", "MSP", "CV", "PX4",
-			"SLAM", "BASE", "RTK", "GND", "LOCK","GRID","AI" };
+			"SLAM", "BASE", "RTK", "GND", "LOCK","GRID","AI","ROS" };
 
 	private static final String[] MSP_PX4MODE_TEXTS = { "MANUAL", "ALTHOLD", "POSHOLD", "MISSION", "LOITER", "RTL",
 			"RCRECOVER", "RTGS", "ENGFAIL", "GPSFAIL", "ACRO", "UNKNOWN", "DESCEND", "TERMINATION", "OFFBOARD",
@@ -93,6 +93,7 @@ public class Status extends Segment {
 	public static final int MSP_FIDUCIAL_LOCKED = 12;
 	public static final int MSP_GRID_AVAILABILITY = 13;
 	public static final int MSP_AI_AVAILABILITY = 14;
+	public static final int MSP_ROS_AVAILABILITY = 15;
 
 	// Navigation states
 
@@ -320,6 +321,10 @@ public class Status extends Segment {
 
 	public int getStatus() {
 		return status;
+	}
+	
+	public int getSensors() {
+		return sensors;
 	}
 
 	public int getEstStatus() {

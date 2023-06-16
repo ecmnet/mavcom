@@ -60,7 +60,7 @@ public class msg_gimbal_manager_information extends MAVLinkMessage {
    */
   public float yaw_max;
   /**
-   * Gimbal device ID that this gimbal manager is responsible for.
+   * Gimbal device ID that this gimbal manager is responsible for. This should be a MAVLink component ID.
    */
   public int gimbal_device_id;
 /**

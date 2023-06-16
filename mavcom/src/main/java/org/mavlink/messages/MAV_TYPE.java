@@ -180,4 +180,8 @@ public interface MAV_TYPE {
      * Winch
      */
     public final static int MAV_TYPE_WINCH = 42;
+    /**
+     * Generic multirotor that does not fit into a specific type or whose type is unknown
+     */
+    public final static int MAV_TYPE_GENERIC_MULTIROTOR = 43;
 }

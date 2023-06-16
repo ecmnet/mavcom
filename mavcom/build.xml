@@ -44,7 +44,7 @@
 
 	<target name="mvn">
 		    <exec dir="." executable="sh">
-		        <arg line="-c '/usr/local/Cellar/maven/3.9.0/bin/mvn clean install'" />
+		        <arg line="-c '/usr/local/Cellar/maven/3.9.2/bin/mvn clean install'" />
 		    </exec>
 		</target>
 

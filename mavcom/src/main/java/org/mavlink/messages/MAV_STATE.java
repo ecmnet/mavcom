@@ -29,11 +29,11 @@ public interface MAV_STATE {
      */
     public final static int MAV_STATE_ACTIVE = 4;
     /**
-     * System is in a non-normal flight mode. It can however still navigate.
+     * System is in a non-normal flight mode (failsafe). It can however still navigate.
      */
     public final static int MAV_STATE_CRITICAL = 5;
     /**
-     * System is in a non-normal flight mode. It lost control over parts or over the whole airframe. It is in mayday and going down.
+     * System is in a non-normal flight mode (failsafe). It lost control over parts or over the whole airframe. It is in mayday and going down.
      */
     public final static int MAV_STATE_EMERGENCY = 6;
     /**
@@ -41,7 +41,7 @@ public interface MAV_STATE {
      */
     public final static int MAV_STATE_POWEROFF = 7;
     /**
-     * System is terminating itself.
+     * System is terminating itself (failsafe or commanded).
      */
     public final static int MAV_STATE_FLIGHT_TERMINATION = 8;
 }
