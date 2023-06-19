@@ -84,7 +84,7 @@ public class Grid extends Segment {
 	// Transfer via block only. 
 
 	public boolean toArray(long[] array) {
-		Long e;
+		Long e; 
 		try {
 			if (!hasTransfers() || transfer==null)
 				return false;
@@ -95,8 +95,9 @@ public class Grid extends Segment {
 			Arrays.fill(array, 0);
 			for (int i = 0; i < array.length && !transfer.isEmpty(); i++) {
 				e = transfer.poll();
-				if(e!=null)
+				if(e!=null) {
 					array[i] = e.longValue();
+				}
 
 			}
 			return true;
@@ -113,18 +114,22 @@ public class Grid extends Segment {
 	public LinkedList<Long> getTransfers() {
 		return transfer;
 	}
+	
+	public int getTransferSize() {
+		return transfer.size();
+	}
 
 	public Long pop() {
 		return transfer.pop();
 	}
 
 	public void add(Long e) {
-		if(!transfer.contains(e))
+		if(!transfer.contains(e) && e != 0)
 			transfer.add(e);
 	}
 
 	public boolean add(Long e, int blocksize) {
-		if(!transfer.contains(e))
+		if(!transfer.contains(e) && e != 0)
 			transfer.add(e);
 		return transfer.size() >= blocksize;
 	}
