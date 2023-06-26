@@ -84,7 +84,7 @@ public class Grid extends Segment {
 	// Transfer via block only. 
 
 	public boolean toArray(long[] array) {
-		Long e; 
+		Long e;  boolean ok;
 		try {
 			if (!hasTransfers() || transfer==null)
 				return false;
@@ -92,15 +92,16 @@ public class Grid extends Segment {
 			if (transfer.isEmpty() || array == null)
 				return false;
 
-			Arrays.fill(array, 0);
+			Arrays.fill(array, 0); ok = false;
 			for (int i = 0; i < array.length && !transfer.isEmpty(); i++) {
 				e = transfer.poll();
-				if(e!=null) {
+				if(e!=null && e.longValue()!=0) {
 					array[i] = e.longValue();
+					ok = true;
 				}
 
 			}
-			return true;
+			return ok;
 		} catch (Exception k) {
 			k.printStackTrace();
 			return false;
