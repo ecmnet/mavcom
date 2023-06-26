@@ -37,6 +37,7 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.time.Instant;
 
+import com.comino.mavcom.model.buffers.BodyToNedBuffer;
 import com.comino.mavcom.model.segment.Attitude;
 import com.comino.mavcom.model.segment.Battery;
 import com.comino.mavcom.model.segment.Debug;
@@ -62,9 +63,13 @@ import com.comino.mavcom.model.segment.Vision;
 import com.comino.mavcom.model.segment.Waypoints;
 import com.comino.mavcom.model.segment.generic.Segment;
 
+import georegression.struct.se.Se3_F64;
+
 // Consolidated device data model after IMU
 
 public class DataModel extends Segment implements Serializable {
+	
+	private static final int NED_BUFFER_SIZE = 50;
 
 	/**
 	 *
@@ -73,6 +78,8 @@ public class DataModel extends Segment implements Serializable {
 
 	public static long t_offset_ns = 0;
 	public static long tms_boot = getSynchronizedPX4Time_us();
+	
+	public final BodyToNedBuffer<Se3_F64> toNEDBuffer;
 
 	public Attitude attitude = null;
 	public Battery battery = null;
@@ -102,6 +109,7 @@ public class DataModel extends Segment implements Serializable {
 	public Obstacle  obs = null;
 
 	public DataModel() {
+		this.toNEDBuffer = new BodyToNedBuffer<Se3_F64>(this,NED_BUFFER_SIZE);
 		this.attitude = new Attitude();
 		this.battery = new Battery();
 		this.hud = new Hud();
@@ -132,6 +140,7 @@ public class DataModel extends Segment implements Serializable {
 	}
 
 	public DataModel(DataModel m) {
+		this.toNEDBuffer = m.toNEDBuffer;
 		this.copy(m);
 	}
 
@@ -197,6 +206,10 @@ public class DataModel extends Segment implements Serializable {
 
 	public DataModel clone() {
 		return new DataModel(this);
+	}
+	
+	public BodyToNedBuffer<Se3_F64> getBodyToNedBuffer() {
+		return toNEDBuffer;
 	}
 
 	public void clear() {

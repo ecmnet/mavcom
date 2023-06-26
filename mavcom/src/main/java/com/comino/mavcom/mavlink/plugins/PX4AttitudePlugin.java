@@ -26,6 +26,8 @@ public class PX4AttitudePlugin extends MAVLinkPluginBase {
 		model.attitude.rr = att.rollspeed;
 		model.attitude.pr = att.pitchspeed;
 		model.attitude.yr = att.yawspeed;
+		
+		model.getBodyToNedBuffer().add(System.currentTimeMillis());
 
 		model.attitude.tms = DataModel.getSynchronizedPX4Time_us();
 
