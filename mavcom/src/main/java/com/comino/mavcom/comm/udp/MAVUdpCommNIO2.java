@@ -67,17 +67,19 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	private String peerAddress;
 
+	private boolean search_local_address = true;
+
 	private final static msg_heartbeat hb = new msg_heartbeat(255, 1);
 
 	public static MAVUdpCommNIO2 getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort,
 			int bindPort) {
 		if (com == null)
-			com = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort);
+			com = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort,true);
 		return com;
 	}
 
-	public MAVUdpCommNIO2(MAVLinkBlockingReader reader, String peerAddress, int pPort, int bPort) {
-
+	public MAVUdpCommNIO2(MAVLinkBlockingReader reader, String peerAddress, int pPort, int bPort, boolean search_local_address) {
+		this.search_local_address = search_local_address;
 		this.model = reader.getModel();
 		this.peerPort = new InetSocketAddress(peerAddress, pPort);
 		this.reader = reader;
@@ -93,9 +95,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public String toString() {
 		return "UDP " + peerPort.getHostString();
 	}
-
-	@Override
+	
 	public boolean open() {
+	
 
 		if(state == RUNNING)
 			return true;
@@ -257,7 +259,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						}
 
 						if (!channel.socket().isBound()) {
-							if (peerPort.getAddress().isLoopbackAddress() || peerPort.getAddress().getHostAddress().contains("10.") ) {
+							if (peerPort.getAddress().isLoopbackAddress() || !search_local_address) {
 								channel.socket().bind(new InetSocketAddress(bindPort));
 							} else {
 								localAddress = getLocalAdress(BROADCAST_PORT);
@@ -409,7 +411,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 		//	MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "127.0.0.1", 14580,14540);
 
-		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "127.0.0.1", 14656,14650);
+		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "127.0.0.1", 14656,14650,true);
 
 
 

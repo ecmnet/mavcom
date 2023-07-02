@@ -188,7 +188,7 @@ public class MAVSerialComm implements IMAVComm {
 				
 				if (ports[i].getSystemPortName().contains("tty.SLAB")
 						|| ports[i].getSystemPortName().contains("tty.usb")
-						|| ports[i].getSystemPortName().contains("ttyTHS1")
+						|| ports[i].getSystemPortName().contains("ttyTHS")
 						|| ports[i].getSystemPortName().contains("ttyS1")
 						|| ports[i].getSystemPortName().contains("ttyS4")
 						|| ports[i].getSystemPortName().contains("ttyACM0")
@@ -334,7 +334,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	@Override
 	public String getHost() {
-		return "none";
+		return "Serial";
 	}
 
 }

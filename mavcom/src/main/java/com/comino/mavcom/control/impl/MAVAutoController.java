@@ -68,10 +68,14 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		this.bindPort = bindPort;
 
 		comms[0] = MAVSerialComm.getInstance(reader, 115200,SerialPort.FLOW_CONTROL_DISABLED);
-		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort);
-		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650);
-		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540);
-		comms[4] = new MAVUdpCommNIO2(reader, "10.211.55.8", 14656, 14650);
+		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort,false);
+		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650,false);
+		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
+	    comms[4] = new MAVUdpCommNIO2(reader, "10.211.55.8", 14656, 14650, false);
+	   
+	    
+	   
+		
 
 		model.sys.setStatus(Status.MSP_PROXY, false);
 
@@ -88,6 +92,9 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			return true;
 		
 		model.sys.setStatus(Status.MSP_CONNECTED, false);
+		
+//		for(int i=0;i<comms.length;i++)
+//			comms[i].shutdown();
 
 		if (comms[0].open()) {
 			comm = comms[0];
@@ -111,7 +118,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 //			comms[3].shutdown();
 			model.sys.setStatus(Status.MSP_SITL, false);
 //			if(last != comm.hashCode())
-//			  System.out.println(comm);
+			  System.out.println(comm);
 			last = comm.hashCode();
 			this.connected = true;
 			return true;
