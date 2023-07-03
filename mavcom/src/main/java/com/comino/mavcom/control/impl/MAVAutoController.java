@@ -72,11 +72,9 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650,false);
 		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
 	    comms[4] = new MAVUdpCommNIO2(reader, "10.211.55.8", 14656, 14650, false);
+	  
 	   
-	    
 	   
-		
-
 		model.sys.setStatus(Status.MSP_PROXY, false);
 
 		beat.type = MAV_TYPE.MAV_TYPE_GCS;
@@ -108,6 +106,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			this.connected = true;
 			return true;
 		} 
+		
 
 		if (comms[1].open()) {
 			comm = comms[1];
@@ -118,25 +117,27 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 //			comms[3].shutdown();
 			model.sys.setStatus(Status.MSP_SITL, false);
 //			if(last != comm.hashCode())
-			  System.out.println(comm);
+			  System.err.println(comm);
 			last = comm.hashCode();
 			this.connected = true;
 			return true;
 		}
+
 		
 		if (comms[4].open()) {
 			comm = comms[4];
-			comms[1].shutdown();
+		//	comms[1].shutdown();
 			this.isSITL = true;
 			this.isMSP  = false;
 			this.mode = MODE_SITL;
 			model.sys.setStatus(Status.MSP_SITL, true);
 //			if(last != comm.hashCode())
-			System.out.println(comm);
+			System.err.println(comm);
 			last = comm.hashCode();
 			this.connected = true;
 			return true;
 		}
+		
 
 		if (comms[2].open()) {
 			comm = comms[2];
@@ -200,6 +201,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	
 	@Override
 	public String getConnectedAddress() {
+		System.err.println(comm.getHost());
 		return comm.getHost();
 	}
 

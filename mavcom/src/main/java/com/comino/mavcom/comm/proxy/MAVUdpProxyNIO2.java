@@ -259,7 +259,9 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 					Enumeration<?> ee = n.getInetAddresses();
 					while (ee.hasMoreElements()) {
 						localAddress = (InetAddress) ee.nextElement();
-						if (localAddress.getHostAddress().startsWith("172") || localAddress.getHostAddress().startsWith("192")) {
+						if (localAddress.getHostAddress().startsWith("172") || 
+							localAddress.getHostAddress().startsWith("192") || 
+							localAddress.getHostAddress().startsWith("10")) {
 							found = true;
 							break;
 						}

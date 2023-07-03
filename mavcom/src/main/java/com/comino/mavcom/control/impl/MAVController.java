@@ -112,7 +112,7 @@ public class MAVController implements IMAVController, Runnable {
 		reader = new MAVLinkBlockingReader(i, model);
 		status_manager = new StatusManager(model, true);
 		
-		wq.addCyclicTask("LP", 2000, this);
+		wq.addCyclicTask("LP", 500, this);
 	}
 
 	public String enableFileLogging(boolean enable, String directory_name) {
