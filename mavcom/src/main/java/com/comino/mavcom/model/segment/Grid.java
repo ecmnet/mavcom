@@ -95,9 +95,10 @@ public class Grid extends Segment {
 			Arrays.fill(array, 0); ok = false;
 			for (int i = 0; i < array.length && !transfer.isEmpty(); i++) {
 				e = transfer.poll();
-				if(e!=null && e.longValue()!=0) {
+				if(e!=null) {
 					array[i] = e.longValue();
-					ok = true;
+					if(array[i]!=0)
+					   ok = true;
 				}
 
 			}
