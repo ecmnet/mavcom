@@ -69,7 +69,7 @@ import georegression.struct.se.Se3_F64;
 
 public class DataModel extends Segment implements Serializable {
 	
-	private static final int NED_BUFFER_SIZE = 50;
+	private static final int NED_BUFFER_SIZE = 100;
 
 	/**
 	 *
