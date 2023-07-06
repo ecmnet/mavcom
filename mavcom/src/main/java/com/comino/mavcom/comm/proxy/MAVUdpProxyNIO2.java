@@ -157,11 +157,13 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 	}
 
 	public void broadcast() {
-		if (bindPort.getAddress().isAnyLocalAddress()) {
+		if (bindPort.getAddress().isLoopbackAddress()) {
 			return;
 		}
+		
 		DatagramSocket socket;
 		try {
+			
 			socket = new DatagramSocket(BROADCAST_PORT, bindPort.getAddress());
 			socket.setSoTimeout(100);
 			socket.setBroadcast(true);

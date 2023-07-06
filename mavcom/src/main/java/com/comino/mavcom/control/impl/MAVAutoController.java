@@ -34,6 +34,10 @@
 package com.comino.mavcom.control.impl;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -53,14 +57,16 @@ import com.comino.mavcom.model.segment.Status;
 import com.fazecast.jSerialComm.SerialPort;
 
 public class MAVAutoController extends MAVController implements IMAVController, Runnable {
+	
+	private static final int BROADCAST_PORT = 4445;
 
 	private boolean connected;
 
 	private final msg_heartbeat beat = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_OSD);
 	private final IMAVComm[] comms = new IMAVComm[5];
-	private boolean isMSP = true;
-	private int     last=0;
-
+	private String host;
+	private DatagramSocket socket;
+	
 	public MAVAutoController(String peerAddress, int peerPort, int bindPort) {
 		super(2);
 		this.peerAddress = peerAddress;
@@ -68,12 +74,16 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		this.bindPort = bindPort;
 
 		comms[0] = MAVSerialComm.getInstance(reader, 115200,SerialPort.FLOW_CONTROL_DISABLED);
-		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort,false);
+		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort,true);
 		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650,false);
 		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
-	    comms[4] = new MAVUdpCommNIO2(reader, "10.211.55.8", 14656, 14650, false);
+	    comms[4] = new MAVUdpCommNIO2(reader, "10.211.55.8", 14656, 14650, true);
 	  
 	   
+	    try {
+			socket = new DatagramSocket(BROADCAST_PORT);
+		} catch (SocketException e) {
+		}
 	   
 		model.sys.setStatus(Status.MSP_PROXY, false);
 
@@ -89,89 +99,60 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comm != null && comm.isConnected())
 			return true;
 		
-		model.sys.setStatus(Status.MSP_CONNECTED, false);
-		
-//		for(int i=0;i<comms.length;i++)
-//			comms[i].shutdown();
 
 		if (comms[0].open()) {
 			comm = comms[0];
 			this.isSITL = false;
-			this.isMSP  = false;
 			this.mode = MODE_USB;
 			model.sys.setStatus(Status.MSP_SITL, false);
-//			if(last != comm.hashCode())
-//			  System.out.println(comm);
-			last = comm.hashCode();
 			this.connected = true;
 			return true;
 		} 
 		
-
-		if (comms[1].open()) {
-			comm = comms[1];
-			this.isSITL = false;
-			this.mode = MODE_NORMAL;
-			this.isMSP  = true;
-//			comms[2].shutdown();
-//			comms[3].shutdown();
-			model.sys.setStatus(Status.MSP_SITL, false);
-//			if(last != comm.hashCode())
-			  System.err.println(comm);
-			last = comm.hashCode();
-			this.connected = true;
+		try {
+			
+			if(host==null)
+				host = listenToBroadcast();
+			
+			 for(int i=1;i<comms.length;i++) {
+		    	   if(comms[i].getHost().equals(host)) {
+		    			if (comms[i].open()) {
+		    				comm = comms[i];
+		    				this.isSITL = host.startsWith("10") || host.startsWith("127");
+		    				if(isSITL)
+		    					this.mode = MODE_SITL;
+		    				else
+		    				   this.mode = MODE_NORMAL;
+		    				model.sys.setStatus(Status.MSP_SITL, isSITL);
+		    				this.connected = true;
+		    		 } 
+		    	   } 
+		       }
+				
 			return true;
+		} catch (IOException e) {
 		}
-
-		
-		if (comms[4].open()) {
-			comm = comms[4];
-		//	comms[1].shutdown();
-			this.isSITL = true;
-			this.isMSP  = false;
-			this.mode = MODE_SITL;
-			model.sys.setStatus(Status.MSP_SITL, true);
-//			if(last != comm.hashCode())
-			System.err.println(comm);
-			last = comm.hashCode();
-			this.connected = true;
-			return true;
-		}
-		
-
-		if (comms[2].open()) {
-			comm = comms[2];
-			comms[3].shutdown();
-			this.isSITL = true;
-			this.isMSP  = true;
-			this.mode = MODE_SITL_PROXY;
-			model.sys.setStatus(Status.MSP_SITL, true);
-//			if(last != comm.hashCode())
-//			  System.out.println(comm);
-			System.out.println(comm+" PROXY");
-			last = comm.hashCode();
-			this.connected = true;
-			return true;
-		}
-		
-		if (comms[3].open()) {
-			comm = comms[3];
-			comms[2].shutdown();
-			this.isSITL = true;
-			this.isMSP  = false;
-			this.mode = MODE_SITL;
-			model.sys.setStatus(Status.MSP_SITL, true);
-//			if(last != comm.hashCode())
-			System.out.println(comm);
-			last = comm.hashCode();
-			this.connected = true;
-			return true;
-		}
-		
-		
-	
 
 		return true;
+	}
+	
+	private String listenToBroadcast() throws IOException {
+
+		byte[] buf = new byte[5];
+		
+		socket.setSoTimeout(200);
+		DatagramPacket packet = new DatagramPacket(buf, buf.length);
+		System.out.println("Waiting for remote broadcast...");
+		socket.receive(packet);
+		System.out.println("Remote broadcast received. Binding..");
+		InetAddress address = packet.getAddress();
+		socket.close();
+		String received = new String(packet.getData(), 0, packet.getLength());
+		if (received.equals("LQUAC")) {
+			System.out.println("Address: " + address.getHostAddress());
+			return address.getHostAddress();
+		}
+		return null;
 	}
 	
 	private void sendDateTime() {
@@ -201,7 +182,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	
 	@Override
 	public String getConnectedAddress() {
-		System.err.println(comm.getHost());
 		return comm.getHost();
 	}
 
@@ -209,17 +189,19 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	public void run() {
 		super.run();
 		
-		if (comm == null)
+		if (comm == null) {
+			 connect();
 			return;
+		}
 		
 		try {
-			if (!comm.isConnected() || !model.sys.isStatus(Status.MSP_CONNECTED)) {
+			if (!comm.isConnected() ) {
 				close(); connect();
 			}
 			this.connected = true;
-			model.sys.setStatus(Status.MSP_SITL, isSITL);
 			comm.write(beat);
-
+			
+		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

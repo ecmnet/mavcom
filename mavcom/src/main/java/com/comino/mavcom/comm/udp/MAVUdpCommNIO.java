@@ -101,6 +101,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 				"Vehicle (NIO3): BindPort=" + bPort + " PeerPort=" + pPort + " BufferSize: " + rxBuffer.capacity());
 
 	}
+	
 
 	public boolean open() {
 

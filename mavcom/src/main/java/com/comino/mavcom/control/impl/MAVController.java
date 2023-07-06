@@ -275,14 +275,16 @@ public class MAVController implements IMAVController, Runnable {
 	@Override
 	public boolean sendShellCommand(String s) {
 		String command = s + "\n";
-		msg_serial_control msg = new msg_serial_control(1, 1);
+		msg_serial_control msg = new msg_serial_control(255, 1);
 		try {
+			msg.target_system    = 1;
+			msg.target_component = 1;
 			byte[] bytes = command.getBytes("US-ASCII");
 			for (int i = 0; i < bytes.length && i < 70; i++)
 				msg.data[i] = bytes[i];
 			msg.count = bytes.length;
 			msg.device = SERIAL_CONTROL_DEV.SERIAL_CONTROL_DEV_SHELL;
-			msg.flags = SERIAL_CONTROL_FLAG.SERIAL_CONTROL_FLAG_RESPOND;
+			msg.flags = SERIAL_CONTROL_FLAG.SERIAL_CONTROL_FLAG_RESPOND | SERIAL_CONTROL_FLAG.SERIAL_CONTROL_FLAG_EXCLUSIVE;
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

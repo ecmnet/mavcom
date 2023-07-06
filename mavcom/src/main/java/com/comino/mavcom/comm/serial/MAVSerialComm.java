@@ -101,7 +101,8 @@ public class MAVSerialComm implements IMAVComm {
 		this.reader = reader;
 
 	}
-
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -95,9 +95,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	public String toString() {
 		return "UDP " + peerPort.getHostString();
 	}
-	
+
 	public boolean open() {
-	
+
 
 		if(state == RUNNING)
 			return true;
@@ -124,18 +124,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	@Override
 	public void close() {
 		state = WAITING;
-		//		try {
-		//			
-		//			if (channel != null)
-		//			try {
-		//				channel.disconnect();
-		//			} catch (SocketException s) { }
-		//			
-		//	
-		//		} catch (IOException e) {
-		//			// TODO Auto-generated catch block
-		//			e.printStackTrace();
-		//		}
 	}
 
 	@Override
@@ -248,6 +236,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
 					}
+					
+					if(!channel.isOpen())
+						return;
 
 					transfer_speed = 0;
 					((Buffer) rxBuffer).clear();
@@ -303,6 +294,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						}
 
 						selectedKeys = selector.selectedKeys().iterator();
+					
 
 						while (selectedKeys.hasNext()) {
 
@@ -315,6 +307,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 							if (key.isReadable()) {
 								if (channel.isConnected() && channel.receive(rxBuffer) != null) {
+									
 									((Buffer) rxBuffer).flip();
 									msg_length = 0;
 									while (rxBuffer.hasRemaining()) {
@@ -358,6 +351,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			try {
 				while(!found && ++count < 50) {
 					String peer = listenToBroadcast(port);
+					System.err.println(peer);
 					e = NetworkInterface.getNetworkInterfaces();
 					while (e.hasMoreElements() && !found) {
 						NetworkInterface n = (NetworkInterface) e.nextElement();
@@ -373,7 +367,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 					if(!found) LockSupport.parkNanos(200_000_000);
 				}
 			} catch (IOException e1) {
-				e1.printStackTrace();
 				return null;
 			}
 
@@ -390,6 +383,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			DatagramSocket socket;
 			byte[] buf = new byte[5];
 			socket = new DatagramSocket(port);
+			socket.setSoTimeout(500);
 			DatagramPacket packet = new DatagramPacket(buf, buf.length);
 			System.out.println("Waiting for remote broadcast...");
 			socket.receive(packet);
