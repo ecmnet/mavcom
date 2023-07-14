@@ -81,22 +81,35 @@ public class MAVSerialComm implements IMAVComm {
 	private InputStream is;
 	private OutputStream os;
 
-	public static IMAVComm getInstance(MAVLinkBlockingReader reader, int baudrate, int flowcontrol) {
+	public static IMAVComm getInstance(MAVLinkBlockingReader reader, String port_baudrate, int flowcontrol) {
 		if (com == null)
-			com = new MAVSerialComm(reader, baudrate, flowcontrol);
+			com = new MAVSerialComm(reader, port_baudrate, flowcontrol);
 		return com;
 	}
 
-	private MAVSerialComm(MAVLinkBlockingReader reader, int baudrate, int flowcontrol) {
+	private MAVSerialComm(MAVLinkBlockingReader reader, String port_baudrate, int flowcontrol) {
+		
 
+		String[] defs = port_baudrate.split("@");
+		if(defs.length==2) {
+			this.baudrate = Integer.parseInt(defs[1]);
+			if(!searchPort(defs[0])) {
+				System.out.println("Serial port " +defs[0] +" not found...");
+				return;
+			}
+			
+		} else {
+			this.baudrate = Integer.parseInt(port_baudrate);
+			if(!searchPort(null)) {
+				System.out.println("No Serial port found...");
+				return;
+			}
+		}
+		
 		this.model = reader.getModel();
-		this.baudrate = baudrate;
 		this.flowcontrol = flowcontrol;
 
-		if(!searchPort()) {
-			System.out.println("! No Serial port found...");
-			return;
-		}
+		System.out.println("PX4 connection using "+port+" at "+baudrate+" baud");
 
 		this.reader = reader;
 
@@ -111,9 +124,6 @@ public class MAVSerialComm implements IMAVComm {
 	@Override
 	public boolean open() {
 		
-		if (!searchPort()) {
-			 return false;
-		}
 
 		if (serialPort.isOpen()) {
 			return true;
@@ -175,7 +185,7 @@ public class MAVSerialComm implements IMAVComm {
 		}
 	}
 	
-	public boolean searchPort() {
+	public boolean searchPort(String pattern) {
 		int i; boolean found = false;
 		
 		SerialPort[] ports = SerialPort.getCommPorts();
@@ -187,13 +197,19 @@ public class MAVSerialComm implements IMAVComm {
 				if(serialPort!=null && ports[i].getSystemPortName().equals(serialPort.getSystemPortName()))
 					return true;
 				
-				if (ports[i].getSystemPortName().contains("tty.SLAB")
-						|| ports[i].getSystemPortName().contains("tty.usb")
-						|| ports[i].getSystemPortName().contains("ttyTHS")
-						|| ports[i].getSystemPortName().contains("ttyS1")
-						|| ports[i].getSystemPortName().contains("ttyS4")
-						|| ports[i].getSystemPortName().contains("ttyACM0")
-						|| ports[i].getSystemPortName().contains("ttyAMA0")) {
+				if (pattern != null && ports[i].getSystemPortName().contains(pattern)) {
+					found = true;
+					break;
+				}
+				
+				if (pattern == null && (ports[i].getSystemPortName().contains("tty.SLAB")
+						             || ports[i].getSystemPortName().contains("tty.usb")
+						             || ports[i].getSystemPortName().contains("ttyTHS")
+						             || ports[i].getSystemPortName().contains("ttyS1")
+						             || ports[i].getSystemPortName().contains("ttyS4")
+						             || ports[i].getSystemPortName().contains("ttyACM0")
+						             || ports[i].getSystemPortName().contains("ttyAMA0")) 
+					) {
 					found = true;
 					break;
 				}
@@ -206,7 +222,6 @@ public class MAVSerialComm implements IMAVComm {
 
 		if (found) {
 			this.port = serialPort.getSystemPortName();
-			System.out.println(port + " found");
 			return true;
 		} else {
 			return false;

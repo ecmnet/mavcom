@@ -431,6 +431,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 												for (IMAVLinkListener listener : listener_list)
 													listener.received(msg);
 											}
+											
 											if (comm.isConnected())
 												comm.write(msg);
 										}

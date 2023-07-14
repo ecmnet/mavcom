@@ -90,7 +90,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	protected DataModel model = null;
 	protected IMAVProxy proxy = null;
 
-	private static final int DEFAULT_BAUDRATE = 57600;
+	private static final String DEFAULT_BAUDRATE = "57600";
 
 	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
 	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1, MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
@@ -120,8 +120,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		MessageBus.getInstance();
 
-		int baudrate = config.getIntProperty(MSPParams.BAUDRATE, String.valueOf(DEFAULT_BAUDRATE));
-		System.out.println("PX4 connection baudrate set to "+baudrate+" baud");
+		String baudrate = config.getProperty(MSPParams.BAUDRATE, DEFAULT_BAUDRATE);
 
 		model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, true);
 		model.sys.setStatus(Status.MSP_SITL, mode == MAVController.MODE_NORMAL);
@@ -191,18 +190,16 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
 
-			//TODO: Get baudrate from msp.properties
+			comm = MAVSerialComm.getInstance(reader,"ttyTHS0@921600",SerialPort.FLOW_CONTROL_DISABLED );
+			comm.open();
+			sendMAVLinkMessage(beat_px4);
 
-//			comm = MAVSerialComm.getInstance(reader,baudrate,SerialPort.FLOW_CONTROL_CTS_ENABLED | SerialPort.FLOW_CONTROL_RTS_ENABLED);
-//			comm.open();
-//			sendMAVLinkMessage(beat_px4);
-//
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
 
-			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14541, 14587,false);
+//			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14541, 14587,false);
 			proxy = new MAVUdpProxyNIO2(model, "192.168.178.156", 14650, null, 14656, comm);
 			peerAddress = "192.168.178.46";
 

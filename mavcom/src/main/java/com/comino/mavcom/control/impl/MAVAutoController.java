@@ -63,7 +63,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	private boolean connected;
 
 	private final msg_heartbeat beat = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_OSD);
-	private final IMAVComm[] comms = new IMAVComm[5];
+	private final IMAVComm[] comms = new IMAVComm[6];
 	private String host;
 	private DatagramSocket socket;
 	
@@ -73,11 +73,12 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		this.peerPort = peerPort;
 		this.bindPort = bindPort;
 
-		comms[0] = MAVSerialComm.getInstance(reader, 115200,SerialPort.FLOW_CONTROL_DISABLED);
+		comms[0] = MAVSerialComm.getInstance(reader, "115200",SerialPort.FLOW_CONTROL_DISABLED);
 		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort,true);
 		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650,false);
 		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
 	    comms[4] = new MAVUdpCommNIO2(reader, "10.211.55.8", 14656, 14650, true);
+	    comms[5] = new MAVUdpCommNIO2(reader, "192.168.178.46", 14656, 14650, true);
 	  
 	   
 	    try {
@@ -120,7 +121,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		    				comm = comms[i];
 		    				this.isSITL = host.startsWith("10") || host.startsWith("127");
 		    				if(isSITL)
-		    					this.mode = MODE_SITL;
+		    				   this.mode = MODE_SITL;
 		    				else
 		    				   this.mode = MODE_NORMAL;
 		    				model.sys.setStatus(Status.MSP_SITL, isSITL);
