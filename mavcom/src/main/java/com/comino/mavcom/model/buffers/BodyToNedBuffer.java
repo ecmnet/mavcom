@@ -19,7 +19,7 @@ public class BodyToNedBuffer<T> {
 	}
 	
      public void add(long timestamp) {
-    	 Se3_F64 t = buffer.ceilingEntry(0L).getValue();
+    	 Se3_F64 t = buffer.firstEntry().getValue();
     	 MSP3DUtils.convertModelToSe3_F64(model, t);
     	 buffer.put(timestamp, t); 	 
      }
@@ -33,13 +33,12 @@ public class BodyToNedBuffer<T> {
     	 return this.buffer.floorEntry(timestamp).getKey();
      }
      
-     public void print() {
-    	 System.out.println(System.currentTimeMillis()+":");
-    	buffer.entrySet().forEach((s) -> {
-    		System.out.println("Timestamp: "+s.getKey()+" Position: "+s.getValue().T);
-    	});
-    	
-    	System.out.println();
+     public long getDelta(long tms) {
+    	 return buffer.lastKey()-buffer.floorKey(tms);
      }
-
+     
+     public long getIndexAt(long tms) {
+    	 return buffer.subMap(tms, Long.MAX_VALUE).size();
+     }
+    
 }
