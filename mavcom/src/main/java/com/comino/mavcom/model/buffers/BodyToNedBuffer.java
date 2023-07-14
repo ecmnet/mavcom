@@ -18,27 +18,27 @@ public class BodyToNedBuffer<T> {
 		}
 	}
 	
-     public void add(long timestamp) {
+     public void add(long timestamp_us) {
     	 Se3_F64 t = buffer.firstEntry().getValue();
     	 MSP3DUtils.convertModelToSe3_F64(model, t);
-    	 buffer.put(timestamp, t); 	 
+    	 buffer.put(timestamp_us, t); 	 
      }
      
-     public Se3_F64 get(long timestamp) {
+     public Se3_F64 get(long timestamp_us) {
     	// System.out.println(buffer.floorEntry(Long.MAX_VALUE).getKey() - buffer.floorEntry(timestamp).getKey());
-    	 return this.buffer.floorEntry(timestamp).getValue();
+    	 return this.buffer.floorEntry(timestamp_us).getValue();
      }
      
-     public long getTimestampAt(long timestamp) {
-    	 return this.buffer.floorEntry(timestamp).getKey();
+     public long getTimestampAt(long timestamp_us) {
+    	 return this.buffer.floorEntry(timestamp_us).getKey();
      }
      
-     public long getDelta(long tms) {
-    	 return buffer.lastKey()-buffer.floorKey(tms);
+     public long getDelta(long tms_us) {
+    	 return buffer.lastKey()-buffer.floorKey(tms_us);
      }
      
-     public long getIndexAt(long tms) {
-    	 return buffer.subMap(tms, Long.MAX_VALUE).size();
+     public long getIndexAt(long tms_us) {
+    	 return buffer.subMap(tms_us, Long.MAX_VALUE).size();
      }
     
 }

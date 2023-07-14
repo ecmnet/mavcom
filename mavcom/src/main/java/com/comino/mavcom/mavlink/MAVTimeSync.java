@@ -20,7 +20,7 @@ public class MAVTimeSync implements Runnable {
 	private final IMAVComm comm;
 	private final WorkQueue wq = WorkQueue.getInstance();
 
-	private final msg_timesync sync_s = new msg_timesync(1, 1);
+	private final msg_timesync sync_s = new msg_timesync(2, 1);
 
 	private long time_offset_ns = 0;
 
@@ -29,7 +29,7 @@ public class MAVTimeSync implements Runnable {
 	public MAVTimeSync(IMAVComm comm) {
 		this.comm = comm;
 
-		if (comm.isSerial() && comm.isConnected()) {
+		if (comm.isConnected()) {
 			comm.getReader().getParser().registerListener(msg_timesync.class,
 					(o) -> handle_time_sync((msg_timesync) o));
 			
@@ -42,6 +42,9 @@ public class MAVTimeSync implements Runnable {
 
 		}
 		
+		sync_s.target_system    = 1;
+		sync_s.target_component = 1;
+		
 	}
 
 	
@@ -51,8 +54,8 @@ public class MAVTimeSync implements Runnable {
 
 	private void handle_time_sync(msg_timesync sync) {
 		
-		if(!comm.isSerial())
-			return;
+//		if(!comm.isSerial())
+//			return;
 
 		// Do not timesync during ULOG transfer
 		if(System.currentTimeMillis() - tms_logging < 500)
@@ -63,8 +66,8 @@ public class MAVTimeSync implements Runnable {
 			Instant ins = Instant.now();
 			long now_ns = ins.getEpochSecond() * 1000000000L + ins.getNano();
 
-			// System.out.println(sync.sysId+":
-			// "+sync.ts1+"/"+sync.tc1+"/"+now_ns+"/"+DataModel.t_offset_ns);
+//			 System.out.println(sync.sysId+"/ "+
+//			       sync.ts1+"/ "+sync.tc1+"/ "+now_ns+"/ "+DataModel.t_offset_ns);
 
 			if (sync.tc1 == 0) {
 				synchronized (this) {
@@ -92,6 +95,7 @@ public class MAVTimeSync implements Runnable {
 							+ (1.0d - OFFSET_AVG_ALPHA) * (double) time_offset_ns);
 				}
 				DataModel.t_offset_ns = time_offset_ns;
+			//	System.out.println("PX4 "+DataModel.getSynchronizedPX4Time_us());
 
 			}
 		} catch (Exception e) {
