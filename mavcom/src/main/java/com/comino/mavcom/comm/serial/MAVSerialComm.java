@@ -124,6 +124,9 @@ public class MAVSerialComm implements IMAVComm {
 	@Override
 	public boolean open() {
 		
+		if(serialPort==null)
+			return false;
+		
 
 		if (serialPort.isOpen()) {
 			return true;

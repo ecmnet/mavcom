@@ -96,6 +96,9 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	@Override
 	public boolean connect() {
 		
+		if(comms[0]==null)
+			return false;
+		
 
 		if (comm != null && comm.isConnected())
 			return true;
