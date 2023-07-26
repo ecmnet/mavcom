@@ -24,7 +24,7 @@ public class msg_gimbal_device_information extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_GIMBAL_DEVICE_INFORMATION;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 144;
+    payload_length = 145;
 }
 
   /**
@@ -135,6 +135,10 @@ public class msg_gimbal_device_information extends MAVLinkMessage {
     }
     return result;
   }
+  /**
+   * This field is to be used if the gimbal manager and the gimbal device are the same component and hence have the same component ID. This field is then set to a number between 1-6. If the component ID is separate, this field is not required and must be set to 0.
+   */
+  public int gimbal_device_id;
 /**
  * Decode message with raw data
  */
@@ -160,12 +164,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   for (int i=0; i<32; i++) {
     custom_name[i] = (char)dis.readByte();
   }
+  gimbal_device_id = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+144];
+  byte[] buffer = new byte[12+145];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -198,15 +203,16 @@ public byte[] encode() throws IOException {
   for (int i=0; i<32; i++) {
     dos.writeByte(custom_name[i]);
   }
+  dos.writeByte(gimbal_device_id&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 144);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 145);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[154] = crcl;
-  buffer[155] = crch;
+  buffer[155] = crcl;
+  buffer[156] = crch;
   dos.close();
   return buffer;
 }
@@ -226,6 +232,7 @@ return "MAVLINK_MSG_ID_GIMBAL_DEVICE_INFORMATION : " +   "  uid="+uid
 +  "  vendor_name="+getVendor_name()
 +  "  model_name="+getModel_name()
 +  "  custom_name="+getCustom_name()
++  "  gimbal_device_id="+gimbal_device_id
 ;}
 
 }

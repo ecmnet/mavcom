@@ -36,7 +36,7 @@ public class msg_gimbal_manager_status extends MAVLinkMessage {
    */
   public long flags;
   /**
-   * Gimbal device ID that this gimbal manager is responsible for. This should be a MAVLink component ID.
+   * Gimbal device ID that this gimbal manager is responsible for. Component ID of gimbal device (or 1-6 for non-MAVLink gimbal).
    */
   public int gimbal_device_id;
   /**

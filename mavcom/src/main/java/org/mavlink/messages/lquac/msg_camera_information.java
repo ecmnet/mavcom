@@ -24,7 +24,7 @@ public class msg_camera_information extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_CAMERA_INFORMATION;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 235;
+    payload_length = 236;
 }
 
   /**
@@ -95,6 +95,10 @@ public class msg_camera_information extends MAVLinkMessage {
     }
     return result;
   }
+  /**
+   * Gimbal id of a gimbal associated with this camera. This is the component id of the gimbal device, or 1-6 for non mavlink gimbals. Use 0 if no gimbal is associated with the camera.
+   */
+  public int gimbal_device_id;
 /**
  * Decode message with raw data
  */
@@ -118,12 +122,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   for (int i=0; i<140; i++) {
     cam_definition_uri[i] = (char)dis.readByte();
   }
+  gimbal_device_id = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+235];
+  byte[] buffer = new byte[12+236];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -154,15 +159,16 @@ public byte[] encode() throws IOException {
   for (int i=0; i<140; i++) {
     dos.writeByte(cam_definition_uri[i]);
   }
+  dos.writeByte(gimbal_device_id&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 235);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 236);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[245] = crcl;
-  buffer[246] = crch;
+  buffer[246] = crcl;
+  buffer[247] = crch;
   dos.close();
   return buffer;
 }
@@ -242,6 +248,7 @@ return "MAVLINK_MSG_ID_CAMERA_INFORMATION : " +   "  time_boot_ms="+time_boot_ms
 +  "  model_name[31]="+model_name[31]
 +  "  lens_id="+lens_id
 +  "  cam_definition_uri="+getCam_definition_uri()
++  "  gimbal_device_id="+gimbal_device_id
 ;}
 
 }
