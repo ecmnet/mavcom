@@ -23,7 +23,7 @@
 		<dependency>
 			<groupId>org.boofcv</groupId>
 			<artifactId>boofcv-core</artifactId>
-			<version>0.42</version>
+			<version>0.43.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ejml</groupId>
