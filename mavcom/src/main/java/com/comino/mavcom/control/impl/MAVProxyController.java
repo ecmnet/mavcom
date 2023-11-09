@@ -348,8 +348,14 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	public boolean isConnected() {
 		// model.sys.setStatus(Status.MSP_ACTIVE, comm.isConnected());
-		if (mode == MAVController.MODE_NORMAL)
+		if (mode == MAVController.MODE_NORMAL) {
+			if(proxy2!=null)
+				return (proxy1.isConnected() || proxy2.isConnected() ) && comm.isConnected();
 			return proxy1.isConnected() && comm.isConnected();
+		}
+		if(proxy2!=null)
+			return proxy1.isConnected() || proxy2.isConnected();
+		
 		return proxy1.isConnected();
 	}
 
@@ -363,6 +369,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		proxy1.open();
 		if(proxy2!=null)
 			proxy2.open();
+		
 		if (comm.isConnected()) {
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES, 1);
 		}
@@ -471,6 +478,12 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
 		});
+		if(proxy2!=null) {
+		proxy2.registerListener(msg_heartbeat.class, (o) -> {
+			model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
+			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
+		});
+		}
 
 		// FWD PX4 heartbeat messages to GCL when not connected
 		reader.getParser().addMAVLinkListener((o) -> {
@@ -523,18 +536,18 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		if (!proxy1.isConnected()) {
 			proxy1.close();
-			if (!proxy1.open())
-				return;
+			proxy1.open();
 		}
 
-		if (!comm.isConnected()) {
-			comm.open();
-			model.sys.setStatus(Status.MSP_ACTIVE, true);
-		}
 
 		if (proxy2!=null && !proxy2.isConnected()) {
 			proxy2.close();
 			proxy2.open();
+		}
+		
+		if (!comm.isConnected()) {
+			comm.open();
+			model.sys.setStatus(Status.MSP_ACTIVE, true);
 		}
 
 	}
