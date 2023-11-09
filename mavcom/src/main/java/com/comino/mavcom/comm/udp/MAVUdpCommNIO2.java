@@ -431,5 +431,17 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 		}
 	}
+	
+	
+
+	@Override
+	public void foreward(byte[] b, int len) throws IOException {
+		try {
+			if (state == RUNNING && channel.isConnected())
+				channel.write(ByteBuffer.wrap(b,0,len));
+		} catch (IOException e) {
+		}
+		
+	}
 
 }

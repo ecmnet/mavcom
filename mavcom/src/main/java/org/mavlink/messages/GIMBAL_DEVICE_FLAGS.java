@@ -9,7 +9,7 @@ package org.mavlink.messages;
  **/
 public interface GIMBAL_DEVICE_FLAGS {
     /**
-     * Set to retracted safe position (no stabilization), takes presedence over all other flags.
+     * Set to retracted safe position (no stabilization), takes precedence over all other flags.
      */
     public final static int GIMBAL_DEVICE_FLAGS_RETRACT = 1;
     /**

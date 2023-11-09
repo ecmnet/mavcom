@@ -358,4 +358,15 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 		return peerAddress;
 	}
 
+	@Override
+	public void foreward(byte[] b, int len) throws IOException {
+		try {
+			
+				channel.write(ByteBuffer.wrap(b));
+		} catch (IOException e) {
+		}
+		
+	}
+
+
 }

@@ -350,8 +350,8 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_JUMP = 177;
     /**
-     * Change speed and/or throttle set points. The value persists until it is overridden or there is a mode change.
-     * PARAM 1 : Speed type (0=Airspeed, 1=Ground Speed, 2=Climb Speed, 3=Descent Speed)
+     * Change speed and/or throttle set points. The value persists until it is overridden or there is a mode change
+     * PARAM 1 : Speed type of value set in param2 (such as airspeed, ground speed, and so on)
      * PARAM 2 : Speed (-1 indicates no change, -2 indicates return to default vehicle speed)
      * PARAM 3 : Throttle (-1 indicates no change, -2 indicates return to default vehicle throttle value)
      * PARAM 4 : 
@@ -431,7 +431,7 @@ public interface MAV_CMD {
     public final static int MAV_CMD_DO_REPEAT_SERVO = 184;
     /**
      * Terminate flight immediately.
-          Flight termination immediately and irreversably terminates the current flight, returning the vehicle to ground.
+          Flight termination immediately and irreversibly terminates the current flight, returning the vehicle to ground.
           The vehicle will ignore RC or other input until it has been power-cycled.
           Termination may trigger safety measures, including: disabling motors and deployment of parachute on multicopters, and setting flight surfaces to initiate a landing pattern on fixed-wing).
           On multicopters without a parachute it may trigger a crash landing.
@@ -938,7 +938,7 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_RUN_PREARM_CHECKS = 401;
     /**
-     * Turns illuminators ON/OFF. An illuminator is a light source that is used for lighting up dark areas external to the sytstem: e.g. a torch or searchlight (as opposed to a light source for illuminating the system itself, e.g. an indicator light).
+     * Turns illuminators ON/OFF. An illuminator is a light source that is used for lighting up dark areas external to the system: e.g. a torch or searchlight (as opposed to a light source for illuminating the system itself, e.g. an indicator light).
      * PARAM 1 : 0: Illuminators OFF, 1: Illuminators ON
      */
     public final static int MAV_CMD_ILLUMINATOR_ON_OFF = 405;
@@ -1116,8 +1116,20 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_GIMBAL_MANAGER_CONFIGURE = 1001;
     /**
-     * Start image capture sequence. Sends CAMERA_IMAGE_CAPTURED after each capture. Use NaN for reserved values.
-     * PARAM 1 : Reserved (Set to 0)
+     * Start image capture sequence. CAMERA_IMAGE_CAPTURED must be emitted after each capture.
+
+          Param1 (id) may be used to specify the target camera: 0: all cameras, 1 to 6: autopilot-connected cameras, 7-255: MAVLink camera component ID.
+          It is needed in order to target specific cameras connected to the autopilot, or specific sensors in a multi-sensor camera (neither of which have a distinct MAVLink component ID).
+          It is also needed to specify the target camera in missions.
+
+          When used in a mission, an autopilot should execute the MAV_CMD for a specified local camera (param1 = 1-6), or resend it as a command if it is intended for a MAVLink camera (param1 = 7 - 255), setting the command's target_component as the param1 value (and setting param1 in the command to zero).
+          If the param1 is 0 the autopilot should do both.
+          
+          When sent in a command the target MAVLink address is set using target_component.
+          If addressed specifically to an autopilot: param1 should be used in the same way as it is for missions (though command should NACK with MAV_RESULT_DENIED if a specified local camera does not exist).
+          If addressed to a MAVLink camera, param 1 can be used to address all cameras (0), or to separately address 1 to 7 individual sensors. Other values should be NACKed with MAV_RESULT_DENIED.
+          If the command is broadcast (target_component is 0) then param 1 should be set to 0 (any other value should be NACKED with MAV_RESULT_DENIED). An autopilot would trigger any local cameras and forward the command to all channels.
+     * PARAM 1 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras that don't have a distinct component id (such as autopilot-attached cameras). 0: all cameras. This is used to specifically target autopilot-connected cameras or individual sensors in a multi-sensor MAVLink camera. It is also used to target specific cameras when the MAV_CMD is used in a mission
      * PARAM 2 : Desired elapsed time between two consecutive pictures (in seconds). Minimum values depend on hardware (typically greater than 2 seconds).
      * PARAM 3 : Total number of images to capture. 0 to capture forever/until MAV_CMD_IMAGE_STOP_CAPTURE.
      * PARAM 4 : Capture sequence number starting from 1. This is only valid for single-capture (param3 == 1), otherwise set to 0. Increment the capture ID for each capture command to prevent double captures when a command is re-transmitted.
@@ -1127,8 +1139,20 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_IMAGE_START_CAPTURE = 2000;
     /**
-     * Stop image capture sequence Use NaN for reserved values.
-     * PARAM 1 : Reserved (Set to 0)
+     * Stop image capture sequence.
+        
+          Param1 (id) may be used to specify the target camera: 0: all cameras, 1 to 6: autopilot-connected cameras, 7-255: MAVLink camera component ID.
+          It is needed in order to target specific cameras connected to the autopilot, or specific sensors in a multi-sensor camera (neither of which have a distinct MAVLink component ID).
+          It is also needed to specify the target camera in missions.
+
+          When used in a mission, an autopilot should execute the MAV_CMD for a specified local camera (param1 = 1-6), or resend it as a command if it is intended for a MAVLink camera (param1 = 7 - 255), setting the command's target_component as the param1 value (and setting param1 in the command to zero).
+          If the param1 is 0 the autopilot should do both.
+
+          When sent in a command the target MAVLink address is set using target_component.
+          If addressed specifically to an autopilot: param1 should be used in the same way as it is for missions (though command should NACK with MAV_RESULT_DENIED if a specified local camera does not exist).
+          If addressed to a MAVLink camera, param1 can be used to address all cameras (0), or to separately address 1 to 7 individual sensors. Other values should be NACKed with MAV_RESULT_DENIED.
+          If the command is broadcast (target_component is 0) then param 1 should be set to 0 (any other value should be NACKED with MAV_RESULT_DENIED). An autopilot would trigger any local cameras and forward the command to all channels.
+     * PARAM 1 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras that don't have a distinct component id (such as autopilot-attached cameras). 0: all cameras. This is used to specifically target autopilot-connected cameras or individual sensors in a multi-sensor MAVLink camera. It is also used to target specific cameras when the MAV_CMD is used in a mission
      * PARAM 2 : 
      * PARAM 3 : 
      * PARAM 4 : 

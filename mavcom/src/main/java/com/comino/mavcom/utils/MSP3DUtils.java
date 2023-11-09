@@ -72,7 +72,8 @@ public class MSP3DUtils {
 		return (t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y) + (t.z - c.z) * (t.z - c.z);
 	}
 	
-	public static float distance2D(Vector4D_F32 t, Vector4D_F32 c) {
+	
+	public static float distance2D(GeoTuple4D_F32<?> t, GeoTuple4D_F32<?> c) {
 		return (float) Math.sqrt((t.x - c.x) * (t.x - c.x) + (t.y - c.y) * (t.y - c.y));
 	}
 	

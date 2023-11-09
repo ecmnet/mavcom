@@ -9,7 +9,7 @@ package org.mavlink.messages;
  **/
 public interface MAV_MOUNT_MODE {
     /**
-     * Load and keep safe position (Roll,Pitch,Yaw) from permant memory and stop stabilization
+     * Load and keep safe position (Roll,Pitch,Yaw) from permanent memory and stop stabilization
      */
     public final static int MAV_MOUNT_MODE_RETRACT = 0;
     /**

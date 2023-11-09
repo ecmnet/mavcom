@@ -53,7 +53,7 @@ public interface GIMBAL_DEVICE_CAP_FLAGS {
      */
     public final static int GIMBAL_DEVICE_CAP_FLAGS_HAS_YAW_LOCK = 1024;
     /**
-     * Gimbal device supports yawing/panning infinetely (e.g. using slip disk).
+     * Gimbal device supports yawing/panning infinitely (e.g. using slip disk).
      */
     public final static int GIMBAL_DEVICE_CAP_FLAGS_SUPPORTS_INFINITE_YAW = 2048;
     /**

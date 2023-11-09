@@ -32,7 +32,7 @@ public class msg_set_attitude_target extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * Attitude quaternion (w, x, y, z order, zero-rotation is 1, 0, 0, 0)
+   * Attitude quaternion (w, x, y, z order, zero-rotation is 1, 0, 0, 0) from MAV_FRAME_LOCAL_NED to MAV_FRAME_BODY_FRD
    */
   public float[] q = new float[4];
   /**
@@ -97,8 +97,8 @@ public byte[] encode() throws IOException {
   dos.writeByte(incompat & 0x00FF);
   dos.writeByte(compat & 0x00FF);
   dos.writeByte(packet & 0x00FF);
-  dos.writeByte(sysId & 0x00FF);
-  dos.writeByte(componentId & 0x00FF);
+  dos.writeByte(sysId & 0x007F);
+  dos.writeByte(componentId & 0x007F);
   dos.writeByte(messageType & 0x00FF);
   dos.writeByte((messageType >> 8) & 0x00FF);
   dos.writeByte((messageType >> 16) & 0x00FF);

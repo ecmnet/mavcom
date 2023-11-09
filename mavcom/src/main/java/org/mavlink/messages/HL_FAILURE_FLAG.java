@@ -5,7 +5,7 @@
 package org.mavlink.messages;
 /**
  * Interface HL_FAILURE_FLAG
- * Flags to report failure cases over the high latency telemtry.
+ * Flags to report failure cases over the high latency telemetry.
  **/
 public interface HL_FAILURE_FLAG {
     /**
@@ -41,7 +41,7 @@ public interface HL_FAILURE_FLAG {
      */
     public final static int HL_FAILURE_FLAG_BATTERY = 128;
     /**
-     * RC receiver failure/no rc connection.
+     * RC receiver failure/no RC connection.
      */
     public final static int HL_FAILURE_FLAG_RC_RECEIVER = 256;
     /**

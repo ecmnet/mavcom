@@ -73,7 +73,7 @@ public interface MAV_SYS_STATUS_SENSOR {
      */
     public final static int MAV_SYS_STATUS_SENSOR_MOTOR_OUTPUTS = 32768;
     /**
-     * 0x10000 rc receiver
+     * 0x10000 RC receiver
      */
     public final static int MAV_SYS_STATUS_SENSOR_RC_RECEIVER = 65536;
     /**

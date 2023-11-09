@@ -34,11 +34,10 @@
 package com.comino.mavcom.comm;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+
 import org.mavlink.messages.MAVLinkMessage;
 
-import com.comino.mavcom.log.IMAVMessageListener;
-import com.comino.mavcom.mavlink.IMAVLinkListener;
-import com.comino.mavcom.mavlink.MAVAcknowledge;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
@@ -56,7 +55,9 @@ public interface IMAVComm {
 	public void shutdown();
 
 	public void write(MAVLinkMessage msg) throws IOException;
-
+	
+	public void foreward(byte[] b, int len) throws IOException;
+	
 	public void setProxyListener(IMAVProxy proxy);
 
 	public boolean isConnected();

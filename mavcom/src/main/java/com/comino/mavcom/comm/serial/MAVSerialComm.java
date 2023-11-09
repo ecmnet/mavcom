@@ -38,6 +38,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.concurrent.locks.LockSupport;
 
@@ -309,6 +310,7 @@ public class MAVSerialComm implements IMAVComm {
 		}
 	}
 
+
 	@Override
 	public boolean isConnected() {
 		return (serialPort != null && serialPort.isOpen());
@@ -354,6 +356,12 @@ public class MAVSerialComm implements IMAVComm {
 	@Override
 	public String getHost() {
 		return "Serial";
+	}
+
+	@Override
+	public void foreward(byte[] b, int len) throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

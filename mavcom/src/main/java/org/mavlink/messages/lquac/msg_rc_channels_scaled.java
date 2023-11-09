@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_rc_channels_scaled
- * The scaled values of the RC channels received: (-100%) -10000, (0%) 0, (100%) 10000. Channels that are inactive should be set to UINT16_MAX.
+ * The scaled values of the RC channels received: (-100%) -10000, (0%) 0, (100%) 10000. Channels that are inactive should be set to INT16_MAX.
  **/
 public class msg_rc_channels_scaled extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_RC_CHANNELS_SCALED = 34;
@@ -98,8 +98,8 @@ public byte[] encode() throws IOException {
   dos.writeByte(incompat & 0x00FF);
   dos.writeByte(compat & 0x00FF);
   dos.writeByte(packet & 0x00FF);
-  dos.writeByte(sysId & 0x00FF);
-  dos.writeByte(componentId & 0x00FF);
+  dos.writeByte(sysId & 0x007F);
+  dos.writeByte(componentId & 0x007F);
   dos.writeByte(messageType & 0x00FF);
   dos.writeByte((messageType >> 8) & 0x00FF);
   dos.writeByte((messageType >> 16) & 0x00FF);

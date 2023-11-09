@@ -133,8 +133,8 @@ public byte[] encode() throws IOException {
   dos.writeByte(incompat & 0x00FF);
   dos.writeByte(compat & 0x00FF);
   dos.writeByte(packet & 0x00FF);
-  dos.writeByte(sysId & 0x00FF);
-  dos.writeByte(componentId & 0x00FF);
+  dos.writeByte(sysId & 0x007F);
+  dos.writeByte(componentId & 0x007F);
   dos.writeByte(messageType & 0x00FF);
   dos.writeByte((messageType >> 8) & 0x00FF);
   dos.writeByte((messageType >> 16) & 0x00FF);

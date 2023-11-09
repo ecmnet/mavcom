@@ -29,7 +29,7 @@ public class MAVTimeSync implements Runnable {
 	public MAVTimeSync(IMAVComm comm) {
 		this.comm = comm;
 
-		if (comm.isConnected()) {
+		if (comm.isConnected() && comm.isSerial()) {
 			comm.getReader().getParser().registerListener(msg_timesync.class,
 					(o) -> handle_time_sync((msg_timesync) o));
 			

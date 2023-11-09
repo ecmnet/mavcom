@@ -69,11 +69,12 @@ public class MAVLinkReader {
 	private final int[] lastPacket = new int[256];
 
 	private int packet_lost = 0;
+	private int id;
 
 	/**
 	 * MAVLink messages received
 	 */
-	protected final Vector<MAVLinkMessage> packets = new Vector<MAVLinkMessage>(10);
+	protected final Vector<MAVLinkMessage> packets = new Vector<MAVLinkMessage>(50);
 
 	private volatile int lengthToRead = 0;
 	private volatile boolean noCRCCheck = false;
@@ -83,6 +84,7 @@ public class MAVLinkReader {
 	}
 
 	public MAVLinkReader(int id, boolean noCRCCheck) {
+		this.id = id;
 		this.noCRCCheck = noCRCCheck;
 		for (int i = 0; i < lastPacket.length; i++) {
 			lastPacket[i] = -1;
@@ -136,15 +138,21 @@ public class MAVLinkReader {
 	}
 
 	private int c = 0;
+	
+//	private byte[] testbuffer = new byte[300];
+//	private int testcount = 0;
 
 	private boolean readMavLinkMessageFromBuffer(int v) {
 		try {
 
-			c = (v & 0x00FF);
+			c = v & 0x000000FF;
 			// System.out.println(state+":"+byteToHex(c));
+			
+//			testbuffer[testcount++] = (byte)c;
 
 			switch (state) {
 			case MAVLINK_PARSE_STATE_IDLE:
+//				testcount = 1;
 				if ((byte) c == IMAVLinkMessage.MAVPROT_PACKET_START_V20) {
 					rxmsg.clear();
 					rxmsg.start = IMAVLinkMessage.MAVPROT_PACKET_START_V20;
@@ -159,11 +167,14 @@ public class MAVLinkReader {
 				}
 				break;
 			case MAVLINK_PARSE_STATE_GOT_STX:
+		//		Arrays.fill(testbuffer, 2,299 ,(byte) 0);
+				Arrays.fill(rxmsg.rawData, 0,MAVLINK_MAX_PAYLOAD_SIZE, (byte) 0);
 				rxmsg.len = c;
 				lengthToRead = 0;
 				rxmsg.crc = MAVLinkCRC.crc_accumulate((byte) c, rxmsg.crc);
-				if (rxmsg.start == IMAVLinkMessage.MAVPROT_PACKET_START_V10)
+				if (rxmsg.start == IMAVLinkMessage.MAVPROT_PACKET_START_V10) {
 					state = t_parser_state.MAVLINK_PARSE_STATE_GOT_COMPAT_FLAGS;
+				}
 				else
 					state = t_parser_state.MAVLINK_PARSE_STATE_GOT_LENGTH;
 				break;
@@ -195,9 +206,9 @@ public class MAVLinkReader {
 			case MAVLINK_PARSE_STATE_GOT_COMPID:
 				rxmsg.msgId = c;
 				rxmsg.crc = MAVLinkCRC.crc_accumulate((byte) c, rxmsg.crc);
-				if (rxmsg.start == IMAVLinkMessage.MAVPROT_PACKET_START_V10)
+				if (((byte)rxmsg.start) == IMAVLinkMessage.MAVPROT_PACKET_START_V10) {
 					state = t_parser_state.MAVLINK_PARSE_STATE_GOT_MSGID3;
-				else
+				}else 
 					state = t_parser_state.MAVLINK_PARSE_STATE_GOT_MSGID1;
 				break;
 			case MAVLINK_PARSE_STATE_GOT_MSGID1:
@@ -215,7 +226,6 @@ public class MAVLinkReader {
 				rxmsg.crc = MAVLinkCRC.crc_accumulate((byte) c, rxmsg.crc);
 				if (++lengthToRead >= rxmsg.len) {
 					// clear some additional bytes of the payload buffer
-					Arrays.fill(rxmsg.rawData, lengthToRead, lengthToRead + 32, (byte) 0);
 					state = t_parser_state.MAVLINK_PARSE_STATE_GOT_PAYLOAD;
 				}
 				break;
@@ -260,8 +270,15 @@ public class MAVLinkReader {
 
 				if (rxmsg.msg_received == mavlink_framing_t.MAVLINK_FRAMING_OK) {
 					
+					
 			//		MAVLinkMessage msg = MAVLinkMessagePool.getInstance().checkout(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId,rxmsg.rawData);
 					MAVLinkMessage msg = MAVLinkMessageFactory.getMessage(rxmsg.msgId, rxmsg.sysId, rxmsg.componentId,rxmsg.rawData);
+						
+//					if(id==1) {
+//					printTestBuffer();
+//					System.out.println(msg);
+//					}
+					
 					if (msg != null && (checkPacket(rxmsg.sysId, rxmsg.packet))) {
 						msg.isValid = true;
 						msg.packet = rxmsg.packet;
@@ -375,9 +392,16 @@ public class MAVLinkReader {
 		hexChars[1] = hexArray[v & 0x0F];
 		return new String(hexChars);
 	}
+	
+//	private void printTestBuffer() {
+//		String s = "";
+//		for(int i=0; i<testbuffer.length;i++)
+//			s = s + " "+byteToHex(testbuffer[i]);
+//		System.out.println(s);
+//	}
 
 	private class RxMsg {
-		public int start;
+		public byte start;
 		public int len;
 		public int incompat;
 		public int compat;
@@ -407,8 +431,13 @@ public class MAVLinkReader {
 		}
 
 		public String toString() {
-			return " MSG " + msgId + " STX=" + start + " LEN=" + len + " PAK=" + packet + " SYS=" + sysId + " => "
+			String s=  " MSG " + msgId + " STX=" + start + " LEN=" + len + " PAK=" + packet + " SYS=" + sysId + " COMP="+componentId+" => "
 					+ msg_received;
+			
+			for(int i=0; i<MAVLINK_MAX_PAYLOAD_SIZE;i++)
+				s = s + " "+rawData[i];
+			
+			return s;
 		}
 
 	}
