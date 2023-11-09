@@ -200,7 +200,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			} catch (InterruptedException e) {
 			}
 
-//			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14541, 14587,false);
+			//			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14541, 14587,false);
 			proxy1 = new MAVUdpProxyNIO2(model, "192.168.178.156", 14650, null, 14656, comm);
 			peerAddress = "192.168.178.46";
 
@@ -230,7 +230,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
 		case MAVController.MODE_SITL_PROXY:
-			
+
 			comm = new MAVUdpCommNIO2(reader, "10.211.55.8", 14541, 14587,false);
 			proxy1 = new MAVUdpProxyNIO2(model, "10.211.55.2", 14650, "0.0.0.0", 14656, comm);
 			proxy2 = new MAVUdpProxyNIO2(model, "10.211.55.2", 14750, "0.0.0.0", 14657, comm);
@@ -242,7 +242,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		// Direct byte based proxy
 		comm.setProxyListener(proxy1);
-		comm.setProxyListener(proxy2);
+		if(proxy2!=null)
+			comm.setProxyListener(proxy2);
 
 	}
 
@@ -341,7 +342,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	public void registerListener(Class<?> clazz, IMAVLinkListener listener) {
 		proxy1.registerListener(clazz, listener);
-		proxy2.registerListener(clazz, listener);
+		if(proxy2!=null)
+			proxy2.registerListener(clazz, listener);
 	}
 
 	public boolean isConnected() {
@@ -359,7 +361,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		}
 		comm.open();
 		proxy1.open();
-		proxy2.open();
+		if(proxy2!=null)
+			proxy2.open();
 		if (comm.isConnected()) {
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES, 1);
 		}
@@ -370,7 +373,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public boolean close() {
 		proxy1.close();
-		proxy2.close();
+		if(proxy2!=null)
+			proxy2.close();
 		comm.close();
 		return true;
 	}
@@ -378,7 +382,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	@Override
 	public void shutdown() {
 		proxy1.shutdown();
-		proxy2.shutdown();
+		if(proxy2!=null)
+			proxy2.shutdown();
 	}
 
 	@Override
@@ -426,7 +431,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		msg.componentId = 1;
 		msg.severity = m.severity;
 		proxy1.write(msg);
-		proxy2.write(msg);
+		if(proxy2!=null)
+			proxy2.write(msg);
 		if (mavlinkListener != null) {
 			for (IMAVMessageListener msglistener : mavlinkListener)
 				msglistener.messageReceived(m);
@@ -470,7 +476,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		reader.getParser().addMAVLinkListener((o) -> {
 			if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED) && o instanceof msg_heartbeat) {
 				proxy1.write((MAVLinkMessage) o);
-				proxy2.write((MAVLinkMessage) o);
+				if(proxy2!=null)
+					proxy2.write((MAVLinkMessage) o);
 			}
 		});
 
@@ -500,31 +507,31 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			if((count % 10) == 0) {
 				if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON && !this.isSimulation()) { 
 					if(mode!=MAVController.MODE_ORIN)
-					   setupWifi(); 
+						setupWifi(); 
 					proxy1.open();
 					return;
 				} 
 			}
 		}
-		
+
 		if (!model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
 			proxy1.broadcast();
 		}
 
 		sendMAVLinkMessage(beat_px4);
-	//	sendMAVLinkMessage(beat_obs);
+		//	sendMAVLinkMessage(beat_obs);
 
 		if (!proxy1.isConnected()) {
 			proxy1.close();
 			if (!proxy1.open())
 				return;
 		}
-		
+
 		if (!comm.isConnected()) {
 			comm.open();
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
 		}
-		
+
 		if (proxy2!=null && !proxy2.isConnected()) {
 			proxy2.close();
 			proxy2.open();
