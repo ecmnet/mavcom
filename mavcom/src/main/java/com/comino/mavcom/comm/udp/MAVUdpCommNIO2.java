@@ -15,8 +15,10 @@ import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.LockSupport;
@@ -57,7 +59,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	private DatagramChannel channel = null;
 	private Selector selector = null;
 
-	private IMAVProxy byteListener = null;
+	private List<IMAVProxy> byteListener = new ArrayList<IMAVProxy>();
 	private Thread wt = null;
 
 	private final ByteBuffer rxBuffer = ByteBuffer.allocateDirect(BUFFER_SIZE * 1024);
@@ -151,7 +153,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	@Override
 	public void setProxyListener(IMAVProxy proxy) {
-		this.byteListener = proxy;
+		this.byteListener.add(proxy);
 	}
 
 	@Override
@@ -315,8 +317,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 									}
 									rxBuffer.compact();
 
-									if (byteListener != null)
-										byteListener.write(proxyBuffer, msg_length);
+									byteListener.forEach( (proxy) -> proxy.write(proxyBuffer, msg_length));
+										
 									reader.put(proxyBuffer, msg_length);
 									bcount = bcount + msg_length;
 								}
