@@ -49,6 +49,7 @@ import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.SERIAL_CONTROL_DEV;
 import org.mavlink.messages.SERIAL_CONTROL_FLAG;
 import org.mavlink.messages.lquac.msg_command_long;
+import org.mavlink.messages.lquac.msg_event;
 import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_serial_control;
 import org.mavlink.messages.lquac.msg_statustext;
@@ -63,6 +64,7 @@ import com.comino.mavcom.config.MSPParams;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.control.IMAVMSPController;
+import com.comino.mavcom.events.MAVEventMataData;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
@@ -92,6 +94,8 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	protected IMAVProxy proxy2 = null;
 
 	private static final String DEFAULT_BAUDRATE = "57600";
+
+	private static final MAVEventMataData eventMetaData = MAVEventMataData.getInstance();
 
 	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
 	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1, MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
@@ -355,7 +359,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		}
 		if(proxy2!=null)
 			return proxy1.isConnected() || proxy2.isConnected();
-		
+
 		return proxy1.isConnected();
 	}
 
@@ -369,7 +373,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		proxy1.open();
 		if(proxy2!=null)
 			proxy2.open();
-		
+
 		if (comm.isConnected()) {
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_REQUEST_AUTOPILOT_CAPABILITIES, 1);
 		}
@@ -473,16 +477,31 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		wq.addCyclicTask("NP", 250, this);	
 		wq.addSingleTask("LP", 5000, () -> new MAVTimeSync(comm));
 
+		// Foreward events from PX4 to LogMessages to be sent to MAVGCL
+		//
+		reader.getParser().addMAVLinkListener((o) -> {
+			if(o instanceof msg_event) {
+				
+				msg_event msg = (msg_event)o;
+				if((msg.log_levels >> 4 & 0x0F) < MAV_SEVERITY.MAV_SEVERITY_DEBUG) {
+					this.writeLogMessage(
+						new LogMessage("[px4] "+eventMetaData.buildMessageFromMAVLink(msg),	(msg.log_levels >> 4 & 0x0F))
+						);
+				}
+			}
+		});
+
 		// Register processing of PING sent by GCL
 		proxy1.registerListener(msg_heartbeat.class, (o) -> {
 			model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
 		});
+		
 		if(proxy2!=null) {
-		proxy2.registerListener(msg_heartbeat.class, (o) -> {
-			model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
-			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
-		});
+			proxy2.registerListener(msg_heartbeat.class, (o) -> {
+				model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
+				model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
+			});
 		}
 
 		// FWD PX4 heartbeat messages to GCL when not connected
@@ -544,7 +563,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			proxy2.close();
 			proxy2.open();
 		}
-		
+
 		if (!comm.isConnected()) {
 			comm.open();
 			model.sys.setStatus(Status.MSP_ACTIVE, true);
