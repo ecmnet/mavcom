@@ -64,7 +64,6 @@ import com.comino.mavcom.config.MSPParams;
 import com.comino.mavcom.control.IMAVCmdAcknowledge;
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.control.IMAVMSPController;
-import com.comino.mavcom.events.MAVEventMataData;
 import com.comino.mavcom.log.IMAVMessageListener;
 import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
@@ -95,7 +94,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	private static final String DEFAULT_BAUDRATE = "57600";
 
-	private static final MAVEventMataData eventMetaData = MAVEventMataData.getInstance();
 
 	private static final msg_heartbeat beat_gcs = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
 	private static final msg_heartbeat beat_px4 = new msg_heartbeat(1, MAV_COMPONENT.MAV_COMP_ID_ONBOARD_COMPUTER);
@@ -477,19 +475,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		wq.addCyclicTask("NP", 250, this);	
 		wq.addSingleTask("LP", 5000, () -> new MAVTimeSync(comm));
 
-		// Foreward events from PX4 to LogMessages to be sent to MAVGCL
-		//
-		reader.getParser().addMAVLinkListener((o) -> {
-			if(o instanceof msg_event) {
-				
-				msg_event msg = (msg_event)o;
-				if((msg.log_levels >> 4 & 0x0F) < MAV_SEVERITY.MAV_SEVERITY_DEBUG) {
-					this.writeLogMessage(
-						new LogMessage("[px4] "+eventMetaData.buildMessageFromMAVLink(msg),	(msg.log_levels >> 4 & 0x0F))
-						);
-				}
-			}
-		});
 
 		// Register processing of PING sent by GCL
 		proxy1.registerListener(msg_heartbeat.class, (o) -> {
