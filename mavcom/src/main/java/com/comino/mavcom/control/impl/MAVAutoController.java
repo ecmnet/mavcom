@@ -63,7 +63,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	private boolean connected;
 
 	private final msg_heartbeat beat = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_OSD);
-	private final IMAVComm[] comms = new IMAVComm[6];
+	private final IMAVComm[] comms = new IMAVComm[7];
 	private String host;
 	private DatagramSocket socket;
 	
@@ -73,7 +73,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		this.peerPort = peerPort;
 		this.bindPort = bindPort;
 
-		comms[0] = MAVSerialComm.getInstance(reader, "115200",SerialPort.FLOW_CONTROL_DISABLED);
+		comms[0] = MAVSerialComm.getInstance(reader, "57800",SerialPort.FLOW_CONTROL_DISABLED);
 		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort,true);
 		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650,false);
 		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
@@ -119,7 +119,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 				host = listenToBroadcast();
 			
 			 for(int i=1;i<comms.length;i++) {
-		    	   if(comms[i].getHost().equals(host)) {
+		    	   if(comms[i] != null && comms[i].getHost().equals(host)) {
 		    			if (comms[i].open()) {
 		    				comm = comms[i];
 		    				this.isSITL = host.startsWith("10") || host.startsWith("127");
