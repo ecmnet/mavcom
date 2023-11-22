@@ -8,16 +8,17 @@
       <get src="https://github.com/mavlink/mavlink/raw/master/message_definitions/v1.0/common.xml" dest="mavlink/common.xml" />
 	  <get src="https://github.com/mavlink/mavlink/raw/master/message_definitions/v1.0/minimal.xml" dest="mavlink/minimal.xml" />
 	  <get src="https://github.com/mavlink/mavlink/raw/master/message_definitions/v1.0/minimal.xml" dest="mavlink/standard.xml" />
-
+<!--
 	  <get src="https://raw.githubusercontent.com/mavlink/qgroundcontrol/master/src/FirmwarePlugin/PX4/PX4ParameterFactMetaData.xml"
 				     dest="src/main/resources/PX4ParameterFactMetaData.xml" />
+-->
 				     
 		
-	<!--
-	  <get src="file:///Users/ecmnet/PixHawk/src/PX4-Autopilot/build/px4_sitl_default/parameters.xml" 
-						 dest="src/main/resources/PX4ParameterFactMetaData_sitl.xml"
+
+	  <get src="file:///Volumes/ecmnet/PX4-Autopilot/build/px4_sitl_default/parameters.xml" 
+						 dest="src/main/resources/PX4ParameterFactMetaData.xml"
 					     ignoreerrors="true" maxtime="30" />
-					     -->
+		
 		
 	</target>
 	
