@@ -101,7 +101,7 @@ public interface MAV_TYPE {
      */
     public final static int MAV_TYPE_VTOL_FIXEDROTOR = 22;
     /**
-     * Tailsitter VTOL. Fuselage and wings orientation changes depending on flight phase: vertical for hover, horizontal for cruise. Use more specific VTOL MAV_TYPE_VTOL_DUOROTOR or MAV_TYPE_VTOL_QUADROTOR if appropriate.
+     * Tailsitter VTOL. Fuselage and wings orientation changes depending on flight phase: vertical for hover, horizontal for cruise. Use more specific VTOL MAV_TYPE_VTOL_TAILSITTER_DUOROTOR or MAV_TYPE_VTOL_TAILSITTER_QUADROTOR if appropriate.
      */
     public final static int MAV_TYPE_VTOL_TAILSITTER = 23;
     /**

@@ -307,9 +307,9 @@ public interface MAV_CMD {
     public final static int MAV_CMD_CONDITION_DISTANCE = 114;
     /**
      * Reach a certain target angle.
-     * PARAM 1 : target angle, 0 is north
+     * PARAM 1 : target angle [0-360]. Absolute angles: 0 is north. Relative angle: 0 is initial yaw. Direction set by param3.
      * PARAM 2 : angular speed
-     * PARAM 3 : direction: -1: counter clockwise, 1: clockwise
+     * PARAM 3 : direction: -1: counter clockwise, 0: shortest direction, 1: clockwise
      * PARAM 4 : 0: absolute angle, 1: relative offset
      * PARAM 5 : Empty
      * PARAM 6 : Empty
@@ -366,9 +366,9 @@ public interface MAV_CMD {
           The position is set automatically by the system during the takeoff (and may also be set using this command).
           Note: the current home position may be emitted in a HOME_POSITION message on request (using MAV_CMD_REQUEST_MESSAGE with param1=242).
      * PARAM 1 : Use current (1=use current location, 0=use specified location)
-     * PARAM 2 : Empty
-     * PARAM 3 : Empty
-     * PARAM 4 : Yaw angle. NaN to use default heading
+     * PARAM 2 : Roll angle (of surface). Range: -180..180 degrees. NAN or 0 means value not set. 0.01 indicates zero roll.
+     * PARAM 3 : Pitch angle (of surface). Range: -90..90 degrees. NAN or 0 means value not set. 0.01 means zero pitch.
+     * PARAM 4 : Yaw angle. NaN to use default heading. Range: -180..180 degrees.
      * PARAM 5 : Latitude
      * PARAM 6 : Longitude
      * PARAM 7 : Altitude
@@ -1462,6 +1462,17 @@ public interface MAV_CMD {
      * PARAM 7 : Empty.
      */
     public final static int MAV_CMD_DO_WINCH = 42600;
+    /**
+     * Provide an external position estimate for use when dead-reckoning. This is meant to be used for occasional position resets that may be provided by a external system such as a remote pilot using landmarks over a video link.
+     * PARAM 1 : Timestamp that this message was sent as a time in the transmitters time domain. The sender should wrap this time back to zero based on required timing accuracy for the application and the limitations of a 32 bit float. For example, wrapping at 10 hours would give approximately 1ms accuracy. Recipient must handle time wrap in any timing jitter correction applied to this field. Wrap rollover time should not be at not more than 250 seconds, which would give approximately 10 microsecond accuracy.
+     * PARAM 2 : The time spent in processing the sensor data that is the basis for this position. The recipient can use this to improve time alignment of the data. Set to zero if not known.
+     * PARAM 3 : estimated one standard deviation accuracy of the measurement. Set to NaN if not known.
+     * PARAM 4 : Empty
+     * PARAM 5 : Latitude
+     * PARAM 6 : Longitude
+     * PARAM 7 : Altitude, not used. Should be sent as NaN. May be supported in a future version of this message.
+     */
+    public final static int MAV_CMD_EXTERNAL_POSITION_ESTIMATE = 43003;
     /**
      * User defined waypoint item. Ground Station will show the Vehicle as flying through this item.
      * PARAM 1 : User defined

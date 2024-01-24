@@ -26,13 +26,25 @@ public class msg_mission_current extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_MISSION_CURRENT;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 6;
+    payload_length = 18;
 }
 
   /**
    * Sequence
    */
   public int seq;
+  /**
+   * Id of current on-vehicle mission plan, or 0 if IDs are not supported or there is no mission loaded. GCS can use this to track changes to the mission plan type. The same value is returned on mission upload (in the MISSION_ACK).
+   */
+  public long mission_id;
+  /**
+   * Id of current on-vehicle fence plan, or 0 if IDs are not supported or there is no fence loaded. GCS can use this to track changes to the fence plan type. The same value is returned on fence upload (in the MISSION_ACK).
+   */
+  public long fence_id;
+  /**
+   * Id of current on-vehicle rally point plan, or 0 if IDs are not supported or there are no rally points loaded. GCS can use this to track changes to the rally point plan type. The same value is returned on rally point upload (in the MISSION_ACK).
+   */
+  public long rally_points_id;
   /**
    * Total number of mission items on vehicle (on last item, sequence == total). If the autopilot stores its home location as part of the mission this will be excluded from the total. 0: Not supported, UINT16_MAX if no mission is present on the vehicle.
    */
@@ -50,6 +62,9 @@ public class msg_mission_current extends MAVLinkMessage {
  */
 public void decode(LittleEndianDataInputStream dis) throws IOException {
   seq = (int)dis.readUnsignedShort()&0x00FFFF;
+  mission_id = (int)dis.readInt()&0x00FFFFFFFF;
+  fence_id = (int)dis.readInt()&0x00FFFFFFFF;
+  rally_points_id = (int)dis.readInt()&0x00FFFFFFFF;
   total = (int)dis.readUnsignedShort()&0x00FFFF;
   mission_state = (int)dis.readUnsignedByte()&0x00FF;
   mission_mode = (int)dis.readUnsignedByte()&0x00FF;
@@ -58,7 +73,7 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+6];
+  byte[] buffer = new byte[12+18];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -71,23 +86,29 @@ public byte[] encode() throws IOException {
   dos.writeByte((messageType >> 8) & 0x00FF);
   dos.writeByte((messageType >> 16) & 0x00FF);
   dos.writeShort(seq&0x00FFFF);
+  dos.writeInt((int)(mission_id&0x00FFFFFFFF));
+  dos.writeInt((int)(fence_id&0x00FFFFFFFF));
+  dos.writeInt((int)(rally_points_id&0x00FFFFFFFF));
   dos.writeShort(total&0x00FFFF);
   dos.writeByte(mission_state&0x00FF);
   dos.writeByte(mission_mode&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 6);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 18);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[16] = crcl;
-  buffer[17] = crch;
+  buffer[28] = crcl;
+  buffer[29] = crch;
   dos.close();
   return buffer;
 }
 public String toString() {
 return "MAVLINK_MSG_ID_MISSION_CURRENT : " +   "  seq="+seq
++  "  mission_id="+mission_id
++  "  fence_id="+fence_id
++  "  rally_points_id="+rally_points_id
 +  "  total="+total
 +  "  mission_state="+mission_state
 +  "  mission_mode="+mission_mode

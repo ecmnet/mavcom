@@ -1360,9 +1360,9 @@
       </entry>
       <entry value="115" name="MAV_CMD_CONDITION_YAW" hasLocation="false" isDestination="false">
         <description>Reach a certain target angle.</description>
-        <param index="1" label="Angle" units="deg">target angle, 0 is north</param>
-        <param index="2" label="Angular Speed" units="deg/s">angular speed</param>
-        <param index="3" label="Direction" minValue="-1" maxValue="1" increment="2">direction: -1: counter clockwise, 1: clockwise</param>
+        <param index="1" label="Angle" units="deg" minValue="0" maxValue="360">target angle [0-360]. Absolute angles: 0 is north. Relative angle: 0 is initial yaw. Direction set by param3.</param>
+        <param index="2" label="Angular Speed" units="deg/s" minValue="0">angular speed</param>
+        <param index="3" label="Direction" minValue="-1" maxValue="1" increment="1">direction: -1: counter clockwise, 0: shortest direction, 1: clockwise</param>
         <param index="4" label="Relative" minValue="0" maxValue="1" increment="1">0: absolute angle, 1: relative offset</param>
         <param index="5">Empty</param>
         <param index="6">Empty</param>
@@ -1416,9 +1416,9 @@
           Note: the current home position may be emitted in a HOME_POSITION message on request (using MAV_CMD_REQUEST_MESSAGE with param1=242).
         </description>
         <param index="1" label="Use Current" minValue="0" maxValue="1" increment="1">Use current (1=use current location, 0=use specified location)</param>
-        <param index="2">Empty</param>
-        <param index="3">Empty</param>
-        <param index="4" label="Yaw" units="deg">Yaw angle. NaN to use default heading</param>
+        <param index="2" label="Roll" units="deg" minValue="-180" maxValue="180">Roll angle (of surface). Range: -180..180 degrees. NAN or 0 means value not set. 0.01 indicates zero roll.</param>
+        <param index="3" label="Pitch" units="deg" minValue="-90" maxValue="90">Pitch angle (of surface). Range: -90..90 degrees. NAN or 0 means value not set. 0.01 means zero pitch.</param>
+        <param index="4" label="Yaw" units="deg" minValue="-180" maxValue="180">Yaw angle. NaN to use default heading. Range: -180..180 degrees.</param>
         <param index="5" label="Latitude">Latitude</param>
         <param index="6" label="Longitude">Longitude</param>
         <param index="7" label="Altitude" units="m">Altitude</param>
@@ -2452,6 +2452,17 @@
         <param index="6">Empty.</param>
         <param index="7">Empty.</param>
       </entry>
+      <!-- from ardupilotmega.xml (hence ID is in that range) -->
+      <entry value="43003" name="MAV_CMD_EXTERNAL_POSITION_ESTIMATE" hasLocation="true" isDestination="false">
+        <description>Provide an external position estimate for use when dead-reckoning. This is meant to be used for occasional position resets that may be provided by a external system such as a remote pilot using landmarks over a video link.</description>
+        <param index="1" label="transmission_time" units="s">Timestamp that this message was sent as a time in the transmitters time domain. The sender should wrap this time back to zero based on required timing accuracy for the application and the limitations of a 32 bit float. For example, wrapping at 10 hours would give approximately 1ms accuracy. Recipient must handle time wrap in any timing jitter correction applied to this field. Wrap rollover time should not be at not more than 250 seconds, which would give approximately 10 microsecond accuracy.</param>
+        <param index="2" label="processing_time" units="s">The time spent in processing the sensor data that is the basis for this position. The recipient can use this to improve time alignment of the data. Set to zero if not known.</param>
+        <param index="3" label="accuracy">estimated one standard deviation accuracy of the measurement. Set to NaN if not known.</param>
+        <param index="4">Empty</param>
+        <param index="5" label="Latitude">Latitude</param>
+        <param index="6" label="Longitude">Longitude</param>
+        <param index="7" label="Altitude" units="m">Altitude, not used. Should be sent as NaN. May be supported in a future version of this message.</param>
+      </entry>
       <!-- END of payload range (30000 to 30999) -->
       <!-- BEGIN user defined range (31000 to 31999) -->
       <entry value="31000" name="MAV_CMD_WAYPOINT_USER_1" hasLocation="true" isDestination="true">
@@ -2763,10 +2774,10 @@
         <description>Command has been cancelled (as a result of receiving a COMMAND_CANCEL message).</description>
       </entry>
       <entry value="7" name="MAV_RESULT_COMMAND_LONG_ONLY">
-        <description>Command is valid, but it is only accepted when sent as a COMMAND_LONG (as it has float values for params 5 and 6).</description>
+        <description>Command is only accepted when sent as a COMMAND_LONG.</description>
       </entry>
       <entry value="8" name="MAV_RESULT_COMMAND_INT_ONLY">
-        <description>Command is valid, but it is only accepted when sent as a COMMAND_INT (as it encodes a location in params 5, 6 and 7, and hence requires a reference MAV_FRAME).</description>
+        <description>Command is only accepted when sent as a COMMAND_INT.</description>
       </entry>
       <entry value="9" name="MAV_RESULT_COMMAND_UNSUPPORTED_MAV_FRAME">
         <description>Command is invalid because a frame is required and the specified frame is not supported.</description>
@@ -5330,6 +5341,9 @@
       <field type="uint16_t" name="total" invalid="UINT16_MAX">Total number of mission items on vehicle (on last item, sequence == total). If the autopilot stores its home location as part of the mission this will be excluded from the total. 0: Not supported, UINT16_MAX if no mission is present on the vehicle.</field>
       <field type="uint8_t" name="mission_state" enum="MISSION_STATE" invalid="0">Mission state machine state. MISSION_STATE_UNKNOWN if state reporting not supported.</field>
       <field type="uint8_t" name="mission_mode" invalid="0">Vehicle is in a mode that can execute mission items or suspended. 0: Unknown, 1: In mission mode, 2: Suspended (not in mission mode).</field>
+      <field type="uint32_t" name="mission_id" invalid="0">Id of current on-vehicle mission plan, or 0 if IDs are not supported or there is no mission loaded. GCS can use this to track changes to the mission plan type. The same value is returned on mission upload (in the MISSION_ACK).</field>
+      <field type="uint32_t" name="fence_id" invalid="0">Id of current on-vehicle fence plan, or 0 if IDs are not supported or there is no fence loaded. GCS can use this to track changes to the fence plan type. The same value is returned on fence upload (in the MISSION_ACK).</field>
+      <field type="uint32_t" name="rally_points_id" invalid="0">Id of current on-vehicle rally point plan, or 0 if IDs are not supported or there are no rally points loaded. GCS can use this to track changes to the rally point plan type. The same value is returned on rally point upload (in the MISSION_ACK).</field>
     </message>
     <message id="43" name="MISSION_REQUEST_LIST">
       <description>Request the overall list of mission items from the system/component.</description>
@@ -5345,6 +5359,13 @@
       <field type="uint16_t" name="count">Number of mission items in the sequence</field>
       <extensions/>
       <field type="uint8_t" name="mission_type" enum="MAV_MISSION_TYPE">Mission type.</field>
+      <field type="uint32_t" name="opaque_id" invalid="0">Id of current on-vehicle mission, fence, or rally point plan (on download from vehicle).
+        This field is used when downloading a plan from a vehicle to a GCS.
+        0 on upload to the vehicle from GCS.
+        0 if plan ids are not supported.
+        The current on-vehicle plan ids are streamed in `MISSION_CURRENT`, allowing a GCS to determine if any part of the plan has changed and needs to be re-uploaded.
+        The ids are recalculated by the vehicle when any part of the on-vehicle plan changes (when a new plan is uploaded, the vehicle returns the new id to the GCS in MISSION_ACK).
+      </field>
     </message>
     <message id="45" name="MISSION_CLEAR_ALL">
       <description>Delete all mission items at once.</description>
@@ -5364,6 +5385,13 @@
       <field type="uint8_t" name="type" enum="MAV_MISSION_RESULT">Mission result.</field>
       <extensions/>
       <field type="uint8_t" name="mission_type" enum="MAV_MISSION_TYPE">Mission type.</field>
+      <field type="uint32_t" name="opaque_id" invalid="0">Id of new on-vehicle mission, fence, or rally point plan (on upload to vehicle).
+        The id is calculated and returned by a vehicle when a new plan is uploaded by a GCS.
+        The only requirement on the id is that it must change when there is any change to the on-vehicle plan type (there is no requirement that the id be globally unique).
+        0 on download from the vehicle to the GCS (on download the ID is set in MISSION_COUNT).
+        0 if plan ids are not supported.
+        The current on-vehicle plan ids are streamed in `MISSION_CURRENT`, allowing a GCS to determine if any part of the plan has changed and needs to be re-uploaded.
+      </field>
     </message>
     <message id="48" name="SET_GPS_GLOBAL_ORIGIN">
       <description>Sets the GPS coordinates of the vehicle local origin (0,0,0) position. Vehicle should emit GPS_GLOBAL_ORIGIN irrespective of whether the origin is changed. This enables transform between the local coordinate frame and the global (GPS) coordinate frame, which may be necessary when (for example) indoor and outdoor settings are connected and the MAV should move from in- to outdoor.</description>
@@ -5498,7 +5526,7 @@
       <field type="uint8_t" name="rssi" invalid="UINT8_MAX">Receive signal strength indicator in device-dependent units/scale. Values: [0-254], UINT8_MAX: invalid/unknown.</field>
     </message>
     <message id="66" name="REQUEST_DATA_STREAM">
-      <deprecated since="2015-08" replaced_by="SET_MESSAGE_INTERVAL"/>
+      <deprecated since="2015-08" replaced_by="MAV_CMD_SET_MESSAGE_INTERVAL "/>
       <description>Request a data stream.</description>
       <field type="uint8_t" name="target_system">The target requested to send the message stream.</field>
       <field type="uint8_t" name="target_component">The target requested to send the message stream.</field>

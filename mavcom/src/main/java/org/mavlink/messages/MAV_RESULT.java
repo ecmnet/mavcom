@@ -37,11 +37,11 @@ public interface MAV_RESULT {
      */
     public final static int MAV_RESULT_CANCELLED = 6;
     /**
-     * Command is valid, but it is only accepted when sent as a COMMAND_LONG (as it has float values for params 5 and 6).
+     * Command is only accepted when sent as a COMMAND_LONG.
      */
     public final static int MAV_RESULT_COMMAND_LONG_ONLY = 7;
     /**
-     * Command is valid, but it is only accepted when sent as a COMMAND_INT (as it encodes a location in params 5, 6 and 7, and hence requires a reference MAV_FRAME).
+     * Command is only accepted when sent as a COMMAND_INT.
      */
     public final static int MAV_RESULT_COMMAND_INT_ONLY = 8;
     /**
