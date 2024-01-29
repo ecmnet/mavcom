@@ -57,6 +57,7 @@ import com.comino.mavcom.model.segment.Status;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
+import com.fazecast.jSerialComm.SerialPortMessageListener;
 
 public class MAVSerialComm implements IMAVComm {
 
@@ -81,6 +82,8 @@ public class MAVSerialComm implements IMAVComm {
 
 	private InputStream is;
 	private OutputStream os;
+	
+	private boolean is_connected = false;
 
 	public static IMAVComm getInstance(MAVLinkBlockingReader reader, String port_baudrate, int flowcontrol) {
 		if (com == null)
@@ -177,6 +180,8 @@ public class MAVSerialComm implements IMAVComm {
 	 */
 	@Override
 	public void close() {
+		model.sys.setStatus(Status.MSP_CONNECTED, false);
+		is_connected = false;
 		if (serialPort != null) {
 			serialPort.removeDataListener();
 			serialPort.closePort();
@@ -248,9 +253,10 @@ public class MAVSerialComm implements IMAVComm {
 		try {
 			serialPort.setComPortParameters(baudRate, dataBits, stopBits, parity);
 			serialPort.setFlowControl(flowControl);
-			serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 0, 0);
+			serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 500, 500);
 			serialPort.addDataListener(new SerialPortDataListener() {
 				int avail;
+				
 
 				@Override
 				public int getListeningEvents() {
@@ -259,8 +265,9 @@ public class MAVSerialComm implements IMAVComm {
 
 				@Override
 				public void serialEvent(SerialPortEvent event) {
-					if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE)
+					if (event.getEventType() != SerialPort.LISTENING_EVENT_DATA_AVAILABLE) {
 						return;
+					}
 
 					try {
 						avail = is.available();
@@ -270,16 +277,19 @@ public class MAVSerialComm implements IMAVComm {
 								if (byteListener != null)
 									byteListener.write(buf, avail);
 								reader.put(buf, avail);
+								is_connected = true;
+								model.sys.setStatus(Status.MSP_CONNECTED, true);
 							}
 						}
 					} catch (Exception e) {
-//						e.printStackTrace();
+					//	e.printStackTrace();
 					}
 				}
 			});
+			
 
 			serialPort.openPort();
-			model.sys.setStatus(Status.MSP_CONNECTED, true);
+			
 			model.sys.tms = DataModel.getSynchronizedPX4Time_us();
 
 		} catch (Exception e2) {
@@ -299,13 +309,15 @@ public class MAVSerialComm implements IMAVComm {
 	 */
 	@Override
 	public void write(MAVLinkMessage msg) throws IOException {
-		if (!serialPort.isOpen())
+		if (!serialPort.isOpen()) {
 			return;
+		}
 		try {
 			byte[] buffer = msg.encode();
 			os.write(buffer, 0, buffer.length);
 			os.flush();
 		} catch (Exception e) {
+			close();
 			return;
 		}
 	}
@@ -313,7 +325,7 @@ public class MAVSerialComm implements IMAVComm {
 
 	@Override
 	public boolean isConnected() {
-		return (serialPort != null && serialPort.isOpen());
+		return (serialPort != null && serialPort.isOpen() && is_connected);
 	}
 
 	@Override

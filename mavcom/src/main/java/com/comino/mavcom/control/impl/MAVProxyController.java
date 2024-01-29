@@ -164,10 +164,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		switch (mode) {
 		case MAVController.MODE_NORMAL:
-			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
-			// comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
-
-			//TODO: Get baudrate from msp.properties
 
 			comm = MAVSerialComm.getInstance(reader,baudrate,SerialPort.FLOW_CONTROL_CTS_ENABLED | SerialPort.FLOW_CONTROL_RTS_ENABLED);
 			comm.open();
@@ -523,8 +519,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			count++;
 			if((count % 10) == 0) {
 				if (HardwareAbstraction.instance().getArchId() == HardwareAbstraction.JETSON && !this.isSimulation()) { 
-					if(mode!=MAVController.MODE_ORIN)
-						setupWifi(); 
+					setupWifi(); 
 					proxy1.open();
 					return;
 				} 
@@ -562,6 +557,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	}
 
 	private void setupWifi() {
+		
+		// TODO: Does not work: Should only restart if 
+		if(!comm.isConnected() || !comm.isSerial())
+			return;
 
 		System.out.println("Restart wlan0 interface..");
 		executeConsoleCommand("ifdown wlan0");

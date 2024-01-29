@@ -43,7 +43,6 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.SocketOption;
 import java.net.StandardSocketOptions;
-import java.net.UnknownHostException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.ClosedChannelException;
