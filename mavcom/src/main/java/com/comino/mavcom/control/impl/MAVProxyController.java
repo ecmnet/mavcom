@@ -250,13 +250,10 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		try {
 			if (msg.sysId == 2) {
-				if (proxy1.isConnected() && model.sys.isStatus(Status.MSP_GCL_CONNECTED))
+				if (model.sys.isStatus(Status.MSP_GCL_CONNECTED))
 					proxy1.write(msg);
-			} else {
-				if (comm.isConnected()) {
-					comm.write(msg);
-				}
-			}
+			} else 
+				comm.write(msg);
 			return true;
 		} catch (Exception e1) {
 			return false;
@@ -477,7 +474,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
 			model.sys.setStatus(Status.MSP_GCL_CONNECTED, true);
 		});
-		
+
 		if(proxy2!=null) {
 			proxy2.registerListener(msg_heartbeat.class, (o) -> {
 				model.sys.gcl_tms = System.currentTimeMillis() * 1000L;
@@ -557,7 +554,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 	}
 
 	private void setupWifi() {
-		
+
 		// TODO: Does not work: Should only restart if 
 		if(!comm.isConnected() || !comm.isSerial())
 			return;
