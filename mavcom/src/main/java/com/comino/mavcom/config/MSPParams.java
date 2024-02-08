@@ -11,12 +11,12 @@ public final class MSPParams {
 
 	public static final String AUTOPILOT_CLASS = "autopilot_class";
 	public static final String AUTOPILOT_FORGET_MAP_MS = "autopilot_forget_map_ms";
-	public static final String AUTOPILOT_FLOW_CHECK = "autopilot_flow_check";
 	public static final String AUTOPILOT_TAKEOFF_PROC = "autopilot_takeoff_procedure";
 	public static final String AUTOPILOT_TAKEOFF_OFFBOARD = "autopilot_takeoff_offboard";
 	public static final String AUTOPILOT_PRECISION_LOCK = "autopilot_precision_lock";
 	public static final String AUTOPILOT_MAX_XYZ_VEL = "autopilot_max_xyz_vel";
 	public static final String AUTOPILOT_RADIUS_ACCEPT = "autopilot_acceptance_radius";
+	public static final String AUTOPILOT_HEALTH_CHECK = "autopilot_healt_check";
 	
 	// control publishing
 
