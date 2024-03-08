@@ -290,7 +290,6 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 		byte[] buf = new byte[5];
 		socket = new DatagramSocket(port);
 		DatagramPacket packet = new DatagramPacket(buf, buf.length);
-		System.out.println("Waiting for remote broadcast...");
 		socket.receive(packet);
 		System.out.println("Remote broadcast received. Binding..");
 		InetAddress address = packet.getAddress();

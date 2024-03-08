@@ -387,7 +387,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			socket = new DatagramSocket(port);
 			socket.setSoTimeout(500);
 			DatagramPacket packet = new DatagramPacket(buf, buf.length);
-			System.out.println("Waiting for remote broadcast...");
 			socket.receive(packet);
 			System.out.println("Remote broadcast received. Binding..");
 			InetAddress address = packet.getAddress();

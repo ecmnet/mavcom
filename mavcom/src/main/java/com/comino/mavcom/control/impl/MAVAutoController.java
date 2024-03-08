@@ -146,7 +146,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		
 		socket.setSoTimeout(200);
 		DatagramPacket packet = new DatagramPacket(buf, buf.length);
-		System.out.println("Waiting for remote broadcast...");
 		socket.receive(packet);
 		System.out.println("Remote broadcast received. Binding..");
 		InetAddress address = packet.getAddress();
