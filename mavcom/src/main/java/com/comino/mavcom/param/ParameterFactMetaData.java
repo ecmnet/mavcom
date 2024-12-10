@@ -121,7 +121,8 @@ public class ParameterFactMetaData {
 					Node value = node.getChildNodes().item(j);
 					if (value.getNodeName().equals("bit")) {
 						int index = Integer.parseInt(value.getAttributes().getNamedItem("index").getNodeValue());
-						attributes.bitMask.add(index, value.getTextContent());
+						if(index >= 0) 
+						  attributes.bitMask.add(index, value.getTextContent());
 					}
 				}
 			}

@@ -28,4 +28,8 @@ public interface ORBIT_YAW_BEHAVIOUR {
      * Yaw controlled by RC input.
      */
     public final static int ORBIT_YAW_BEHAVIOUR_RC_CONTROLLED = 4;
+    /**
+     * Vehicle uses current yaw behaviour (unchanged). The vehicle-default yaw behaviour is used if this value is specified when orbit is first commanded.
+     */
+    public final static int ORBIT_YAW_BEHAVIOUR_UNCHANGED = 5;
 }

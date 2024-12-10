@@ -5,15 +5,15 @@
 package org.mavlink.messages;
 /**
  * Interface RC_TYPE
- * RC type
+ * RC type. Used in MAV_CMD_START_RX_PAIR.
  **/
 public interface RC_TYPE {
     /**
-     * Spektrum DSM2
+     * Spektrum
      */
-    public final static int RC_TYPE_SPEKTRUM_DSM2 = 0;
+    public final static int RC_TYPE_SPEKTRUM = 0;
     /**
-     * Spektrum DSMX
+     * CRSF
      */
-    public final static int RC_TYPE_SPEKTRUM_DSMX = 1;
+    public final static int RC_TYPE_CRSF = 1;
 }

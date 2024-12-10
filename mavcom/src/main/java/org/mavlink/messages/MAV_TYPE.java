@@ -184,4 +184,8 @@ public interface MAV_TYPE {
      * Generic multirotor that does not fit into a specific type or whose type is unknown
      */
     public final static int MAV_TYPE_GENERIC_MULTIROTOR = 43;
+    /**
+     * Illuminator. An illuminator is a light source that is used for lighting up dark areas external to the sytstem: e.g. a torch or searchlight (as opposed to a light source for illuminating the system itself, e.g. an indicator light).
+     */
+    public final static int MAV_TYPE_ILLUMINATOR = 44;
 }

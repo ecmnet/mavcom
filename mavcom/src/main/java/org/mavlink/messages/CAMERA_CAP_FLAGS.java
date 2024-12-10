@@ -56,4 +56,8 @@ public interface CAMERA_CAP_FLAGS {
      * Camera supports tracking geo status (CAMERA_TRACKING_GEO_STATUS).
      */
     public final static int CAMERA_CAP_FLAGS_HAS_TRACKING_GEO_STATUS = 2048;
+    /**
+     * Camera supports absolute thermal range (request CAMERA_THERMAL_RANGE with MAV_CMD_REQUEST_MESSAGE).
+     */
+    public final static int CAMERA_CAP_FLAGS_HAS_THERMAL_RANGE = 4096;
 }

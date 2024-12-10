@@ -24,7 +24,7 @@ public class msg_camera_tracking_image_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_CAMERA_TRACKING_IMAGE_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 31;
+    payload_length = 32;
 }
 
   /**
@@ -67,6 +67,10 @@ public class msg_camera_tracking_image_status extends MAVLinkMessage {
    * Defines location of target data
    */
   public int target_data;
+  /**
+   * Camera id of a non-MAVLink camera attached to an autopilot (1-6).  0 if the component is a MAVLink camera (with its own component id).
+   */
+  public int camera_device_id;
 /**
  * Decode message with raw data
  */
@@ -81,12 +85,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   tracking_status = (int)dis.readUnsignedByte()&0x00FF;
   tracking_mode = (int)dis.readUnsignedByte()&0x00FF;
   target_data = (int)dis.readUnsignedByte()&0x00FF;
+  camera_device_id = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+31];
+  byte[] buffer = new byte[12+32];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -108,15 +113,16 @@ public byte[] encode() throws IOException {
   dos.writeByte(tracking_status&0x00FF);
   dos.writeByte(tracking_mode&0x00FF);
   dos.writeByte(target_data&0x00FF);
+  dos.writeByte(camera_device_id&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 31);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 32);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[41] = crcl;
-  buffer[42] = crch;
+  buffer[42] = crcl;
+  buffer[43] = crch;
   dos.close();
   return buffer;
 }
@@ -131,6 +137,7 @@ return "MAVLINK_MSG_ID_CAMERA_TRACKING_IMAGE_STATUS : " +   "  point_x="+format(
 +  "  tracking_status="+tracking_status
 +  "  tracking_mode="+tracking_mode
 +  "  target_data="+target_data
++  "  camera_device_id="+camera_device_id
 ;}
 
 }

@@ -16,4 +16,8 @@ public interface VIDEO_STREAM_STATUS_FLAGS {
      * Stream is thermal imaging
      */
     public final static int VIDEO_STREAM_STATUS_FLAGS_THERMAL = 2;
+    /**
+     * Stream can report absolute thermal range (see CAMERA_THERMAL_RANGE).
+     */
+    public final static int VIDEO_STREAM_STATUS_FLAGS_THERMAL_RANGE_ENABLED = 4;
 }

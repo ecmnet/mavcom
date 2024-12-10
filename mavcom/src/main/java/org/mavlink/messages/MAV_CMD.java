@@ -469,6 +469,25 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_DO_SET_ACTUATOR = 187;
     /**
+     * Mission item to specify the start of a failsafe/landing return-path segment (the end of the segment is the next MAV_CMD_DO_LAND_START item).
+          A vehicle that is using missions for landing (e.g. in a return mode) will join the mission on the closest path of the return-path segment (instead of MAV_CMD_DO_LAND_START or the nearest waypoint).
+          The main use case is to minimize the failsafe flight path in corridor missions, where the inbound/outbound paths are constrained (by geofences) to the same particular path.
+          The MAV_CMD_NAV_RETURN_PATH_START would be placed at the start of the return path.
+          If a failsafe occurs on the outbound path the vehicle will move to the nearest point on the return path (which is parallel for this kind of mission), effectively turning round and following the shortest path to landing.
+          If a failsafe occurs on the inbound path the vehicle is already on the return segment and will continue to landing.
+          The Latitude/Longitude/Altitude are optional, and may be set to 0 if not needed.
+          If specified, the item defines the waypoint at which the return segment starts.
+          If sent using as a command, the vehicle will perform a mission landing (using the land segment if defined) or reject the command if mission landings are not supported, or no mission landing is defined. When used as a command any position information in the command is ignored.
+     * PARAM 1 : Empty
+     * PARAM 2 : Empty
+     * PARAM 3 : Empty
+     * PARAM 4 : Empty
+     * PARAM 5 : Latitudee. 0: not used.
+     * PARAM 6 : Longitudee. 0: not used.
+     * PARAM 7 : Altitudee. 0: not used.
+     */
+    public final static int MAV_CMD_DO_RETURN_PATH_START = 188;
+    /**
      * Mission command to perform a landing. This is used as a marker in a mission to tell the autopilot where a sequence of mission items that represents a landing starts.
 	  It may also be sent via a COMMAND_LONG to trigger a landing, in which case the nearest (geographically) landing sequence in the mission will be used.
 	  The Latitude/Longitude/Altitude is optional, and may be set to 0 if not needed. If specified then it will be used to help find the closest landing sequence.
@@ -646,16 +665,20 @@ public interface MAV_CMD {
      * PARAM 1 : Camera trigger distance. 0 to stop triggering.
      * PARAM 2 : Camera shutter integration time. -1 or 0 to ignore
      * PARAM 3 : Trigger camera once immediately. (0 = no trigger, 1 = trigger)
-     * PARAM 4 : Empty
+     * PARAM 4 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      * PARAM 5 : Empty
      * PARAM 6 : Empty
      * PARAM 7 : Empty
      */
     public final static int MAV_CMD_DO_SET_CAM_TRIGG_DIST = 206;
     /**
-     * Mission command to enable the geofence
+     * Enable the geofence.
+          This can be used in a mission or via the command protocol.
+          The persistence/lifetime of the setting is undefined.
+          Depending on flight stack implementation it may persist until superseded, or it may revert to a system default at the end of a mission.
+          Flight stacks typically reset the setting to system defaults on reboot.
      * PARAM 1 : enable? (0=disable, 1=enable, 2=disable_floor_only)
-     * PARAM 2 : Empty
+     * PARAM 2 : Fence types to enable or disable as a bitmask. A value of 0 indicates that all fences should be enabled or disabled. This parameter is ignored if param 1 has the value 2
      * PARAM 3 : Empty
      * PARAM 4 : Empty
      * PARAM 5 : Empty
@@ -733,7 +756,7 @@ public interface MAV_CMD {
      * Mission command to set camera trigger interval for this flight. If triggering is enabled, the camera is triggered each time this interval expires. This command can also be used to set the shutter integration time for the camera.
      * PARAM 1 : Camera trigger cycle time. -1 or 0 to ignore.
      * PARAM 2 : Camera shutter integration time. Should be less than trigger cycle time. -1 or 0 to ignore.
-     * PARAM 3 : Empty
+     * PARAM 3 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      * PARAM 4 : Empty
      * PARAM 5 : Empty
      * PARAM 6 : Empty
@@ -943,6 +966,14 @@ public interface MAV_CMD {
      */
     public final static int MAV_CMD_ILLUMINATOR_ON_OFF = 405;
     /**
+     * Configures illuminator settings. An illuminator is a light source that is used for lighting up dark areas external to the system: e.g. a torch or searchlight (as opposed to a light source for illuminating the system itself, e.g. an indicator light).
+     * PARAM 1 : Mode
+     * PARAM 2 : 0%: Off, 100%: Max Brightness
+     * PARAM 3 : Strobe period in seconds where 0 means strobing is not used
+     * PARAM 4 : Strobe duty cycle where 100% means it is on constantly and 0 means strobing is not used
+     */
+    public final static int MAV_CMD_DO_ILLUMINATOR_CONFIGURE = 406;
+    /**
      * Request the home position from the vehicle.
 	  The vehicle will ACK the command and then emit the HOME_POSITION message.
      * PARAM 1 : Reserved
@@ -963,8 +994,8 @@ public interface MAV_CMD {
     public final static int MAV_CMD_INJECT_FAILURE = 420;
     /**
      * Starts receiver pairing.
-     * PARAM 1 : 0:Spektrum.
-     * PARAM 2 : RC type.
+     * PARAM 1 : RC type.
+     * PARAM 2 : RC sub type.
      */
     public final static int MAV_CMD_START_RX_PAIR = 500;
     /**
@@ -977,6 +1008,10 @@ public interface MAV_CMD {
      * Set the interval between messages for a particular MAVLink message ID. This interface replaces REQUEST_DATA_STREAM.
      * PARAM 1 : The MAVLink message ID
      * PARAM 2 : The interval between two messages. -1: disable. 0: request default rate (which may be zero).
+     * PARAM 3 : Use for index ID, if required. Otherwise, the use of this parameter (if any) must be defined in the requested message. By default assumed not used (0).
+     * PARAM 4 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 5 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
+     * PARAM 6 : The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).
      * PARAM 7 : Target address of message stream (if message has target address fields). 0: Flight-stack default (recommended), 1: address of requestor, 2: broadcast.
      */
     public final static int MAV_CMD_SET_MESSAGE_INTERVAL = 511;
@@ -1045,12 +1080,12 @@ public interface MAV_CMD {
     /**
      * Reset all camera settings to Factory Default
      * PARAM 1 : 0: No Action 1: Reset all settings
-     * PARAM 2 : Reserved (all remaining params)
+     * PARAM 2 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      */
     public final static int MAV_CMD_RESET_CAMERA_SETTINGS = 529;
     /**
      * Set camera running mode. Use NaN for reserved values. GCS will send a MAV_CMD_REQUEST_VIDEO_STREAM_STATUS command after a mode change if the camera supports video streaming.
-     * PARAM 1 : Reserved (Set to 0)
+     * PARAM 1 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      * PARAM 2 : Camera mode
      * PARAM 3 : 
      * PARAM 4 : 
@@ -1061,18 +1096,16 @@ public interface MAV_CMD {
      * Set camera zoom. Camera must respond with a CAMERA_SETTINGS message (on success).
      * PARAM 1 : Zoom type
      * PARAM 2 : Zoom value. The range of valid values depend on the zoom type.
-     * PARAM 3 : 
+     * PARAM 3 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      * PARAM 4 : 
-     * PARAM 7 : 
      */
     public final static int MAV_CMD_SET_CAMERA_ZOOM = 531;
     /**
      * Set camera focus. Camera must respond with a CAMERA_SETTINGS message (on success).
      * PARAM 1 : Focus type
      * PARAM 2 : Focus value
-     * PARAM 3 : 
+     * PARAM 3 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      * PARAM 4 : 
-     * PARAM 7 : 
      */
     public final static int MAV_CMD_SET_CAMERA_FOCUS = 532;
     /**
@@ -1085,6 +1118,13 @@ public interface MAV_CMD {
      * PARAM 2 : Usage flags
      */
     public final static int MAV_CMD_SET_STORAGE_USAGE = 533;
+    /**
+     * Set camera source. Changes the camera's active sources on cameras with multiple image sensors.
+     * PARAM 1 : Component Id of camera to address or 1-6 for non-MAVLink cameras, 0 for all cameras.
+     * PARAM 2 : Primary Source
+     * PARAM 3 : Secondary Source. If non-zero the second source will be displayed as picture-in-picture.
+     */
+    public final static int MAV_CMD_SET_CAMERA_SOURCE = 534;
     /**
      * Tagged jump target. Can be jumped to with MAV_CMD_DO_JUMP_TAG.
      * PARAM 1 : Tag.
@@ -1124,12 +1164,12 @@ public interface MAV_CMD {
 
           When used in a mission, an autopilot should execute the MAV_CMD for a specified local camera (param1 = 1-6), or resend it as a command if it is intended for a MAVLink camera (param1 = 7 - 255), setting the command's target_component as the param1 value (and setting param1 in the command to zero).
           If the param1 is 0 the autopilot should do both.
-          
+
           When sent in a command the target MAVLink address is set using target_component.
           If addressed specifically to an autopilot: param1 should be used in the same way as it is for missions (though command should NACK with MAV_RESULT_DENIED if a specified local camera does not exist).
           If addressed to a MAVLink camera, param 1 can be used to address all cameras (0), or to separately address 1 to 7 individual sensors. Other values should be NACKed with MAV_RESULT_DENIED.
           If the command is broadcast (target_component is 0) then param 1 should be set to 0 (any other value should be NACKED with MAV_RESULT_DENIED). An autopilot would trigger any local cameras and forward the command to all channels.
-     * PARAM 1 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras that don't have a distinct component id (such as autopilot-attached cameras). 0: all cameras. This is used to specifically target autopilot-connected cameras or individual sensors in a multi-sensor MAVLink camera. It is also used to target specific cameras when the MAV_CMD is used in a mission
+     * PARAM 1 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      * PARAM 2 : Desired elapsed time between two consecutive pictures (in seconds). Minimum values depend on hardware (typically greater than 2 seconds).
      * PARAM 3 : Total number of images to capture. 0 to capture forever/until MAV_CMD_IMAGE_STOP_CAPTURE.
      * PARAM 4 : Capture sequence number starting from 1. This is only valid for single-capture (param3 == 1), otherwise set to 0. Increment the capture ID for each capture command to prevent double captures when a command is re-transmitted.
@@ -1140,7 +1180,7 @@ public interface MAV_CMD {
     public final static int MAV_CMD_IMAGE_START_CAPTURE = 2000;
     /**
      * Stop image capture sequence.
-        
+
           Param1 (id) may be used to specify the target camera: 0: all cameras, 1 to 6: autopilot-connected cameras, 7-255: MAVLink camera component ID.
           It is needed in order to target specific cameras connected to the autopilot, or specific sensors in a multi-sensor camera (neither of which have a distinct MAVLink component ID).
           It is also needed to specify the target camera in missions.
@@ -1152,7 +1192,7 @@ public interface MAV_CMD {
           If addressed specifically to an autopilot: param1 should be used in the same way as it is for missions (though command should NACK with MAV_RESULT_DENIED if a specified local camera does not exist).
           If addressed to a MAVLink camera, param1 can be used to address all cameras (0), or to separately address 1 to 7 individual sensors. Other values should be NACKed with MAV_RESULT_DENIED.
           If the command is broadcast (target_component is 0) then param 1 should be set to 0 (any other value should be NACKED with MAV_RESULT_DENIED). An autopilot would trigger any local cameras and forward the command to all channels.
-     * PARAM 1 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras that don't have a distinct component id (such as autopilot-attached cameras). 0: all cameras. This is used to specifically target autopilot-connected cameras or individual sensors in a multi-sensor MAVLink camera. It is also used to target specific cameras when the MAV_CMD is used in a mission
+     * PARAM 1 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      * PARAM 2 : 
      * PARAM 3 : 
      * PARAM 4 : 
@@ -1177,13 +1217,15 @@ public interface MAV_CMD {
      * PARAM 1 : Trigger enable/disable (0 for disable, 1 for start), -1 to ignore
      * PARAM 2 : 1 to reset the trigger sequence, -1 or 0 to ignore
      * PARAM 3 : 1 to pause triggering, but without switching the camera off or retracting it. -1 to ignore
+     * PARAM 4 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      */
     public final static int MAV_CMD_DO_TRIGGER_CONTROL = 2003;
     /**
      * If the camera supports point visual tracking (CAMERA_CAP_FLAGS_HAS_TRACKING_POINT is set), this command allows to initiate the tracking.
      * PARAM 1 : Point to track x value (normalized 0..1, 0 is left, 1 is right).
      * PARAM 2 : Point to track y value (normalized 0..1, 0 is top, 1 is bottom).
-     * PARAM 3 : Point radius (normalized 0..1, 0 is image left, 1 is image right).
+     * PARAM 3 : Point radius (normalized 0..1, 0 is one pixel, 1 is full image width).
+     * PARAM 4 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      */
     public final static int MAV_CMD_CAMERA_TRACK_POINT = 2004;
     /**
@@ -1192,17 +1234,19 @@ public interface MAV_CMD {
      * PARAM 2 : Top left corner of rectangle y value (normalized 0..1, 0 is top, 1 is bottom).
      * PARAM 3 : Bottom right corner of rectangle x value (normalized 0..1, 0 is left, 1 is right).
      * PARAM 4 : Bottom right corner of rectangle y value (normalized 0..1, 0 is top, 1 is bottom).
+     * PARAM 5 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      */
     public final static int MAV_CMD_CAMERA_TRACK_RECTANGLE = 2005;
     /**
      * Stops ongoing tracking.
+     * PARAM 1 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      */
     public final static int MAV_CMD_CAMERA_STOP_TRACKING = 2010;
     /**
      * Starts video capture (recording).
      * PARAM 1 : Video Stream ID (0 for all streams)
      * PARAM 2 : Frequency CAMERA_CAPTURE_STATUS messages should be sent while recording (0 for no messages, otherwise frequency)
-     * PARAM 3 : 
+     * PARAM 3 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      * PARAM 4 : 
      * PARAM 5 : 
      * PARAM 6 : 
@@ -1212,7 +1256,7 @@ public interface MAV_CMD {
     /**
      * Stop the current video capture (recording).
      * PARAM 1 : Video Stream ID (0 for all streams)
-     * PARAM 2 : 
+     * PARAM 2 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      * PARAM 3 : 
      * PARAM 4 : 
      * PARAM 5 : 
@@ -1223,11 +1267,13 @@ public interface MAV_CMD {
     /**
      * Start video streaming
      * PARAM 1 : Video Stream ID (0 for all streams, 1 for first, 2 for second, etc.)
+     * PARAM 2 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      */
     public final static int MAV_CMD_VIDEO_START_STREAMING = 2502;
     /**
      * Stop the given video stream
      * PARAM 1 : Video Stream ID (0 for all streams, 1 for first, 2 for second, etc.)
+     * PARAM 2 : Target camera ID. 7 to 255: MAVLink camera component id. 1 to 6 for cameras attached to the autopilot, which don't have a distinct component id. 0: all cameras. This is used to target specific autopilot-connected cameras. It is also used to target specific cameras when the MAV_CMD is used in a mission.
      */
     public final static int MAV_CMD_VIDEO_STOP_STREAMING = 2503;
     /**
@@ -1407,6 +1453,17 @@ public interface MAV_CMD {
      * PARAM 7 : Reserved (set to 0)
      */
     public final static int MAV_CMD_UAVCAN_GET_NODE_INFO = 5200;
+    /**
+     * Change state of safety switch.
+     * PARAM 1 : New safety switch state.
+     * PARAM 2 : Empty.
+     * PARAM 3 : Empty.
+     * PARAM 4 : Empty
+     * PARAM 5 : Empty.
+     * PARAM 6 : Empty.
+     * PARAM 7 : Empty.
+     */
+    public final static int MAV_CMD_DO_SET_SAFETY_SWITCH_STATE = 5300;
     /**
      * Trigger the start of an ADSB-out IDENT. This should only be used when requested to do so by an Air Traffic Controller in controlled airspace. This starts the IDENT which is then typically held for 18 seconds by the hardware per the Mode A, C, and S transponder spec.
      * PARAM 1 : Reserved (set to 0)

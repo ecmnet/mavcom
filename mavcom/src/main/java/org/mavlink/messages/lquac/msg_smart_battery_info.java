@@ -12,7 +12,7 @@ import org.mavlink.io.LittleEndianDataInputStream;
 import org.mavlink.io.LittleEndianDataOutputStream;
 /**
  * Class msg_smart_battery_info
- * Smart Battery information (static/infrequent update). Use for updates from: smart battery to flight stack, flight stack to GCS. Use BATTERY_STATUS for smart battery frequent updates.
+ * Smart Battery information (static/infrequent update). Use for updates from: smart battery to flight stack, flight stack to GCS. Use BATTERY_STATUS for the frequent battery updates.
  **/
 public class msg_smart_battery_info extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_SMART_BATTERY_INFO = 370;

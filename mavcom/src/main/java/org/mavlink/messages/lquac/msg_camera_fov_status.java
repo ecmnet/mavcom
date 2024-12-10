@@ -24,7 +24,7 @@ public class msg_camera_fov_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_CAMERA_FOV_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 52;
+    payload_length = 53;
 }
 
   /**
@@ -67,6 +67,10 @@ public class msg_camera_fov_status extends MAVLinkMessage {
    * Vertical field of view (NaN if unknown).
    */
   public float vfov;
+  /**
+   * Camera id of a non-MAVLink camera attached to an autopilot (1-6).  0 if the component is a MAVLink camera (with its own component id).
+   */
+  public int camera_device_id;
 /**
  * Decode message with raw data
  */
@@ -83,12 +87,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   }
   hfov = (float)dis.readFloat();
   vfov = (float)dis.readFloat();
+  camera_device_id = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+52];
+  byte[] buffer = new byte[12+53];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -112,15 +117,16 @@ public byte[] encode() throws IOException {
   }
   dos.writeFloat(hfov);
   dos.writeFloat(vfov);
+  dos.writeByte(camera_device_id&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 52);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 53);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[62] = crcl;
-  buffer[63] = crch;
+  buffer[63] = crcl;
+  buffer[64] = crch;
   dos.close();
   return buffer;
 }
@@ -138,6 +144,7 @@ return "MAVLINK_MSG_ID_CAMERA_FOV_STATUS : " +   "  time_boot_ms="+time_boot_ms
 +  "  q[3]="+format((float)q[3])
 +  "  hfov="+format((float)hfov)
 +  "  vfov="+format((float)vfov)
++  "  camera_device_id="+camera_device_id
 ;}
 
 }

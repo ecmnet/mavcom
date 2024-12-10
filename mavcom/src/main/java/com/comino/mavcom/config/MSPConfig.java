@@ -71,7 +71,7 @@ public class MSPConfig {
 		System.out.println("\nInitializing (" + filename + ", Java " + System.getProperty("java.version") + " "
 				+ System.getProperty("java.vm.vendor") + " build on BoofCV " + BoofVersion.VERSION);
 		refreshProperties();
-		this.version = prop.getProperty("build", "tmp");
+		this.version = prop.getProperty("build", "0.1");
 		this.version_date = prop.getProperty("build_date", "NA");
 	}
 

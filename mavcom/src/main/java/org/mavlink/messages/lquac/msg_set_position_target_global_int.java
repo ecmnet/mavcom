@@ -32,11 +32,11 @@ public class msg_set_position_target_global_int extends MAVLinkMessage {
    */
   public long time_boot_ms;
   /**
-   * X Position in WGS84 frame
+   * Latitude in WGS84 frame
    */
   public long lat_int;
   /**
-   * Y Position in WGS84 frame
+   * Longitude in WGS84 frame
    */
   public long lon_int;
   /**
@@ -88,7 +88,7 @@ public class msg_set_position_target_global_int extends MAVLinkMessage {
    */
   public int target_component;
   /**
-   * Valid options are: MAV_FRAME_GLOBAL_INT = 5, MAV_FRAME_GLOBAL_RELATIVE_ALT_INT = 6, MAV_FRAME_GLOBAL_TERRAIN_ALT_INT = 11
+   * Valid options are: MAV_FRAME_GLOBAL = 0, MAV_FRAME_GLOBAL_RELATIVE_ALT = 3, MAV_FRAME_GLOBAL_TERRAIN_ALT = 10 (MAV_FRAME_GLOBAL_INT, MAV_FRAME_GLOBAL_RELATIVE_ALT_INT, MAV_FRAME_GLOBAL_TERRAIN_ALT_INT are allowed synonyms, but have been deprecated)
    */
   public int coordinate_frame;
 /**

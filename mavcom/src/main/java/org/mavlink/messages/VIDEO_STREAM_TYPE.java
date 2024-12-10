@@ -21,7 +21,7 @@ public interface VIDEO_STREAM_TYPE {
      */
     public final static int VIDEO_STREAM_TYPE_TCP_MPEG = 2;
     /**
-     * Stream is h.264 on MPEG TS (URI gives the port number)
+     * Stream is MPEG TS (URI gives the port number)
      */
-    public final static int VIDEO_STREAM_TYPE_MPEG_TS_H264 = 3;
+    public final static int VIDEO_STREAM_TYPE_MPEG_TS = 3;
 }

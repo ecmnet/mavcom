@@ -24,7 +24,7 @@ public class msg_camera_tracking_geo_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_CAMERA_TRACKING_GEO_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 49;
+    payload_length = 50;
 }
 
   /**
@@ -79,6 +79,10 @@ public class msg_camera_tracking_geo_status extends MAVLinkMessage {
    * Current tracking status
    */
   public int tracking_status;
+  /**
+   * Camera id of a non-MAVLink camera attached to an autopilot (1-6).  0 if the component is a MAVLink camera (with its own component id).
+   */
+  public int camera_device_id;
 /**
  * Decode message with raw data
  */
@@ -96,12 +100,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   hdg = (float)dis.readFloat();
   hdg_acc = (float)dis.readFloat();
   tracking_status = (int)dis.readUnsignedByte()&0x00FF;
+  camera_device_id = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+49];
+  byte[] buffer = new byte[12+50];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -126,15 +131,16 @@ public byte[] encode() throws IOException {
   dos.writeFloat(hdg);
   dos.writeFloat(hdg_acc);
   dos.writeByte(tracking_status&0x00FF);
+  dos.writeByte(camera_device_id&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 49);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 50);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[59] = crcl;
-  buffer[60] = crch;
+  buffer[60] = crcl;
+  buffer[61] = crch;
   dos.close();
   return buffer;
 }
@@ -152,6 +158,7 @@ return "MAVLINK_MSG_ID_CAMERA_TRACKING_GEO_STATUS : " +   "  lat="+lat
 +  "  hdg="+format((float)hdg)
 +  "  hdg_acc="+format((float)hdg_acc)
 +  "  tracking_status="+tracking_status
++  "  camera_device_id="+camera_device_id
 ;}
 
 }

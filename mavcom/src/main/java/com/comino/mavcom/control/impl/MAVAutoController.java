@@ -122,7 +122,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		    	   if(comms[i] != null && comms[i].getHost().equals(host)) {
 		    			if (comms[i].open()) {
 		    				comm = comms[i];
-		    				this.isSITL = host.startsWith("10") || host.startsWith("127");
+		    				this.isSITL = host.startsWith("192") || host.startsWith("127");
 		    				if(isSITL)
 		    				   this.mode = MODE_SITL;
 		    				else
@@ -135,6 +135,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 				
 			return true;
 		} catch (IOException e) {
+			
 		}
 
 		return true;
@@ -198,11 +199,14 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		}
 		
 		try {
+			comm.write(beat);
+			System.out.println(beat);
+			
 			if (!comm.isConnected() ) {
 				close(); connect();
 			}
 			this.connected = true;
-			comm.write(beat);
+			
 			
 		
 		} catch (Exception e) {

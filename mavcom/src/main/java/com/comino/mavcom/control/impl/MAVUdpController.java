@@ -33,6 +33,8 @@
 
 package com.comino.mavcom.control.impl;
 
+import java.io.IOException;
+
 import org.mavlink.messages.MAV_COMPONENT;
 import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.MAV_TYPE;
@@ -77,6 +79,11 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 	
 		}
         model.sys.resetStatus();
+        try {
+			comm.write(beat);
+		} catch (IOException e) { }
+		
+			
 		return true;
 	}
 
@@ -96,6 +103,12 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 	@Override
 	public void run() {
 		super.run();
+		try {
+			comm.write(beat);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 //		try {
 //			if (!comm.isConnected()) {
 //				this.connected = false;

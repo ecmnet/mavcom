@@ -190,6 +190,7 @@ public class StatusManager implements Runnable {
 		// System.out.println(status_old.nav_state+" -> "+status_current.nav_state)
 
 		try {
+			
 
 			for (StatusListenerEntry entry : list) {
 
@@ -318,9 +319,7 @@ public class StatusManager implements Runnable {
 					break;
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) { }
 
 		run_callbacks();
 

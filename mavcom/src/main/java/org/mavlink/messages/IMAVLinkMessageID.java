@@ -72,6 +72,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_MESSAGE_PACK = 12915;
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_BASIC_ID = 12900;
   public static int MAVLINK_MSG_ID_LOG_REQUEST_END = 122;
+  public static int MAVLINK_MSG_ID_FUEL_STATUS = 371;
   public static int MAVLINK_MSG_ID_RADIO_STATUS = 109;
   public static int MAVLINK_MSG_ID_GPS_RAW_INT = 24;
   public static int MAVLINK_MSG_ID_SYS_STATUS = 1;
@@ -96,9 +97,11 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_MISSION_REQUEST_LIST = 43;
   public static int MAVLINK_MSG_ID_GPS_STATUS = 25;
   public static int MAVLINK_MSG_ID_WINCH_STATUS = 9005;
+  public static int MAVLINK_MSG_ID_BATTERY_INFO = 372;
   public static int MAVLINK_MSG_ID_SCALED_PRESSURE = 29;
   public static int MAVLINK_MSG_ID_MSP_OBSTACLE = 187;
   public static int MAVLINK_MSG_ID_HIL_OPTICAL_FLOW = 114;
+  public static int MAVLINK_MSG_ID_COMPONENT_INFORMATION_BASIC = 396;
   public static int MAVLINK_MSG_ID_OPEN_DRONE_ID_LOCATION = 12901;
   public static int MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS = 375;
   public static int MAVLINK_MSG_ID_SET_ACTUATOR_CONTROL_TARGET = 139;
@@ -144,6 +147,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_MISSION_COUNT = 44;
   public static int MAVLINK_MSG_ID_SET_MODE = 11;
   public static int MAVLINK_MSG_ID_VIBRATION = 241;
+  public static int MAVLINK_MSG_ID_CAMERA_THERMAL_RANGE = 277;
   public static int MAVLINK_MSG_ID_STORAGE_INFORMATION = 261;
   public static int MAVLINK_MSG_ID_WIFI_CONFIG_AP = 299;
   public static int MAVLINK_MSG_ID_ESC_INFO = 290;
@@ -227,6 +231,7 @@ public interface IMAVLinkMessageID {
   public static int MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS = 285;
   public static int MAVLINK_MSG_ID_POWER_STATUS = 125;
   public static int MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV = 61;
+  public static int MAVLINK_MSG_ID_ILLUMINATOR_STATUS = 440;
   public static int MAVLINK_MSG_ID_SERVO_OUTPUT_RAW = 36;
   public static int MAVLINK_MSG_ID_DEBUG = 254;
   public static int MAVLINK_MSG_ID_SUPPORTED_TUNES = 401;

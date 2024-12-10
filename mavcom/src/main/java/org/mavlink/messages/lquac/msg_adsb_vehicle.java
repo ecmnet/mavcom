@@ -60,7 +60,7 @@ public class msg_adsb_vehicle extends MAVLinkMessage {
    */
   public int flags;
   /**
-   * Squawk code
+   * Squawk code. Note that the code is in decimal: e.g. 7700 (general emergency) is encoded as binary 0b0001_1110_0001_0100, not(!) as 0b0000_111_111_000_000
    */
   public int squawk;
   /**

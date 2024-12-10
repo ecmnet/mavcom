@@ -45,7 +45,7 @@ public class msg_global_position_int extends MAVLinkMessage {
    */
   public long alt;
   /**
-   * Altitude above ground
+   * Altitude above home
    */
   public long relative_alt;
   /**

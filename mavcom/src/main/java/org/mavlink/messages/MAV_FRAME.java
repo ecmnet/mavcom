@@ -23,7 +23,7 @@ package org.mavlink.messages;
  **/
 public interface MAV_FRAME {
     /**
-     * Global (WGS84) coordinate frame + MSL altitude. First value / x: latitude, second value / y: longitude, third value / z: positive altitude over mean sea level (MSL).
+     * Global (WGS84) coordinate frame + altitude relative to mean sea level (MSL).
      */
     public final static int MAV_FRAME_GLOBAL = 0;
     /**
@@ -36,7 +36,6 @@ public interface MAV_FRAME {
     public final static int MAV_FRAME_MISSION = 2;
     /**
      * Global (WGS84) coordinate frame + altitude relative to the home position.
-          First value / x: latitude, second value / y: longitude, third value / z: positive altitude with 0 being at the altitude of the home position.
      */
     public final static int MAV_FRAME_GLOBAL_RELATIVE_ALT = 3;
     /**
@@ -44,12 +43,11 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_LOCAL_ENU = 4;
     /**
-     * Global (WGS84) coordinate frame (scaled) + MSL altitude. First value / x: latitude in degrees*1E7, second value / y: longitude in degrees*1E7, third value / z: positive altitude over mean sea level (MSL).
+     * Global (WGS84) coordinate frame (scaled) + altitude relative to mean sea level (MSL).
      */
     public final static int MAV_FRAME_GLOBAL_INT = 5;
     /**
      * Global (WGS84) coordinate frame (scaled) + altitude relative to the home position.
-          First value / x: latitude in degrees*1E7, second value / y: longitude in degrees*1E7, third value / z: positive altitude with 0 being at the altitude of the home position.
      */
     public final static int MAV_FRAME_GLOBAL_RELATIVE_ALT_INT = 6;
     /**
@@ -65,11 +63,11 @@ public interface MAV_FRAME {
      */
     public final static int MAV_FRAME_BODY_OFFSET_NED = 9;
     /**
-     * Global (WGS84) coordinate frame with AGL altitude (at the waypoint coordinate). First value / x: latitude in degrees, second value / y: longitude in degrees, third value / z: positive altitude in meters with 0 being at ground level in terrain model.
+     * Global (WGS84) coordinate frame with AGL altitude (altitude at ground level).
      */
     public final static int MAV_FRAME_GLOBAL_TERRAIN_ALT = 10;
     /**
-     * Global (WGS84) coordinate frame (scaled) with AGL altitude (at the waypoint coordinate). First value / x: latitude in degrees*1E7, second value / y: longitude in degrees*1E7, third value / z: positive altitude in meters with 0 being at ground level in terrain model.
+     * Global (WGS84) coordinate frame (scaled) with AGL altitude (altitude at ground level).
      */
     public final static int MAV_FRAME_GLOBAL_TERRAIN_ALT_INT = 11;
     /**

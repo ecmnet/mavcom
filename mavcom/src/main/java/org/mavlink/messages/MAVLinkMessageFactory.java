@@ -68,6 +68,7 @@ import org.mavlink.messages.lquac.msg_param_value;
 import org.mavlink.messages.lquac.msg_mount_orientation;
 import org.mavlink.messages.lquac.msg_set_attitude_target;
 import org.mavlink.messages.lquac.msg_log_request_end;
+import org.mavlink.messages.lquac.msg_fuel_status;
 import org.mavlink.messages.lquac.msg_radio_status;
 import org.mavlink.messages.lquac.msg_gps_raw_int;
 import org.mavlink.messages.lquac.msg_sys_status;
@@ -91,8 +92,10 @@ import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_mission_request_list;
 import org.mavlink.messages.lquac.msg_gps_status;
 import org.mavlink.messages.lquac.msg_winch_status;
+import org.mavlink.messages.lquac.msg_battery_info;
 import org.mavlink.messages.lquac.msg_scaled_pressure;
 import org.mavlink.messages.lquac.msg_hil_optical_flow;
+import org.mavlink.messages.lquac.msg_component_information_basic;
 import org.mavlink.messages.lquac.msg_actuator_output_status;
 import org.mavlink.messages.lquac.msg_set_actuator_control_target;
 import org.mavlink.messages.lquac.msg_odometry;
@@ -135,6 +138,7 @@ import org.mavlink.messages.lquac.msg_file_transfer_protocol;
 import org.mavlink.messages.lquac.msg_mission_count;
 import org.mavlink.messages.lquac.msg_set_mode;
 import org.mavlink.messages.lquac.msg_vibration;
+import org.mavlink.messages.lquac.msg_camera_thermal_range;
 import org.mavlink.messages.lquac.msg_storage_information;
 import org.mavlink.messages.lquac.msg_wifi_config_ap;
 import org.mavlink.messages.lquac.msg_esc_info;
@@ -212,6 +216,7 @@ import org.mavlink.messages.lquac.msg_fence_status;
 import org.mavlink.messages.lquac.msg_gimbal_device_attitude_status;
 import org.mavlink.messages.lquac.msg_power_status;
 import org.mavlink.messages.lquac.msg_attitude_quaternion_cov;
+import org.mavlink.messages.lquac.msg_illuminator_status;
 import org.mavlink.messages.lquac.msg_servo_output_raw;
 import org.mavlink.messages.lquac.msg_debug;
 import org.mavlink.messages.lquac.msg_supported_tunes;
@@ -280,6 +285,7 @@ import org.mavlink.messages.lquac.msg_param_value;
 import org.mavlink.messages.lquac.msg_mount_orientation;
 import org.mavlink.messages.lquac.msg_set_attitude_target;
 import org.mavlink.messages.lquac.msg_log_request_end;
+import org.mavlink.messages.lquac.msg_fuel_status;
 import org.mavlink.messages.lquac.msg_radio_status;
 import org.mavlink.messages.lquac.msg_gps_raw_int;
 import org.mavlink.messages.lquac.msg_sys_status;
@@ -304,9 +310,11 @@ import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_mission_request_list;
 import org.mavlink.messages.lquac.msg_gps_status;
 import org.mavlink.messages.lquac.msg_winch_status;
+import org.mavlink.messages.lquac.msg_battery_info;
 import org.mavlink.messages.lquac.msg_scaled_pressure;
 import org.mavlink.messages.lquac.msg_msp_obstacle;
 import org.mavlink.messages.lquac.msg_hil_optical_flow;
+import org.mavlink.messages.lquac.msg_component_information_basic;
 import org.mavlink.messages.lquac.msg_actuator_output_status;
 import org.mavlink.messages.lquac.msg_set_actuator_control_target;
 import org.mavlink.messages.lquac.msg_odometry;
@@ -350,6 +358,7 @@ import org.mavlink.messages.lquac.msg_file_transfer_protocol;
 import org.mavlink.messages.lquac.msg_mission_count;
 import org.mavlink.messages.lquac.msg_set_mode;
 import org.mavlink.messages.lquac.msg_vibration;
+import org.mavlink.messages.lquac.msg_camera_thermal_range;
 import org.mavlink.messages.lquac.msg_storage_information;
 import org.mavlink.messages.lquac.msg_wifi_config_ap;
 import org.mavlink.messages.lquac.msg_esc_info;
@@ -430,6 +439,7 @@ import org.mavlink.messages.lquac.msg_fence_status;
 import org.mavlink.messages.lquac.msg_gimbal_device_attitude_status;
 import org.mavlink.messages.lquac.msg_power_status;
 import org.mavlink.messages.lquac.msg_attitude_quaternion_cov;
+import org.mavlink.messages.lquac.msg_illuminator_status;
 import org.mavlink.messages.lquac.msg_servo_output_raw;
 import org.mavlink.messages.lquac.msg_debug;
 import org.mavlink.messages.lquac.msg_supported_tunes;
@@ -685,6 +695,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_log_request_end(sysId, componentId);
       msg.decode(dis);
       break;
+  case MAVLINK_MSG_ID_FUEL_STATUS:
+      msg = new msg_fuel_status(sysId, componentId);
+      msg.decode(dis);
+      break;
   case MAVLINK_MSG_ID_RADIO_STATUS:
       msg = new msg_radio_status(sysId, componentId);
       msg.decode(dis);
@@ -781,6 +795,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       msg = new msg_winch_status(sysId, componentId);
       msg.decode(dis);
       break;
+  case MAVLINK_MSG_ID_BATTERY_INFO:
+      msg = new msg_battery_info(sysId, componentId);
+      msg.decode(dis);
+      break;
   case MAVLINK_MSG_ID_SCALED_PRESSURE:
       msg = new msg_scaled_pressure(sysId, componentId);
       msg.decode(dis);
@@ -791,6 +809,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_HIL_OPTICAL_FLOW:
       msg = new msg_hil_optical_flow(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_COMPONENT_INFORMATION_BASIC:
+      msg = new msg_component_information_basic(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_ACTUATOR_OUTPUT_STATUS:
@@ -963,6 +985,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_VIBRATION:
       msg = new msg_vibration(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_CAMERA_THERMAL_RANGE:
+      msg = new msg_camera_thermal_range(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_STORAGE_INFORMATION:
@@ -1283,6 +1309,10 @@ public static MAVLinkMessage getMessage(int msgid, int sysId, int componentId, b
       break;
   case MAVLINK_MSG_ID_ATTITUDE_QUATERNION_COV:
       msg = new msg_attitude_quaternion_cov(sysId, componentId);
+      msg.decode(dis);
+      break;
+  case MAVLINK_MSG_ID_ILLUMINATOR_STATUS:
+      msg = new msg_illuminator_status(sysId, componentId);
       msg.decode(dis);
       break;
   case MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:

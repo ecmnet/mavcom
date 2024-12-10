@@ -84,4 +84,12 @@ public interface MAV_PROTOCOL_CAPABILITY {
           Note that either this flag or MAV_PROTOCOL_CAPABILITY_PARAM_ENCODE_BYTEWISE should be set if the parameter protocol is supported.
      */
     public final static int MAV_PROTOCOL_CAPABILITY_PARAM_ENCODE_C_CAST = 131072;
+    /**
+     * This component implements/is a gimbal manager. This means the GIMBAL_MANAGER_INFORMATION, and other messages can be requested.
+     */
+    public final static int MAV_PROTOCOL_CAPABILITY_COMPONENT_IMPLEMENTS_GIMBAL_MANAGER = 262144;
+    /**
+     * Component supports locking control to a particular GCS independent of its system (via MAV_CMD_REQUEST_OPERATOR_CONTROL).
+     */
+    public final static int MAV_PROTOCOL_CAPABILITY_COMPONENT_ACCEPTS_GCS_CONTROL = 524288;
 }

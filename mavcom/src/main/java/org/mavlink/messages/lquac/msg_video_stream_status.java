@@ -24,7 +24,7 @@ public class msg_video_stream_status extends MAVLinkMessage {
     messageType = MAVLINK_MSG_ID_VIDEO_STREAM_STATUS;
     this.sysId = sysId;
     this.componentId = componentId;
-    payload_length = 19;
+    payload_length = 20;
 }
 
   /**
@@ -59,6 +59,10 @@ public class msg_video_stream_status extends MAVLinkMessage {
    * Video Stream ID (1 for first, 2 for second, etc.)
    */
   public int stream_id;
+  /**
+   * Camera id of a non-MAVLink camera attached to an autopilot (1-6).  0 if the component is a MAVLink camera (with its own component id).
+   */
+  public int camera_device_id;
 /**
  * Decode message with raw data
  */
@@ -71,12 +75,13 @@ public void decode(LittleEndianDataInputStream dis) throws IOException {
   rotation = (int)dis.readUnsignedShort()&0x00FFFF;
   hfov = (int)dis.readUnsignedShort()&0x00FFFF;
   stream_id = (int)dis.readUnsignedByte()&0x00FF;
+  camera_device_id = (int)dis.readUnsignedByte()&0x00FF;
 }
 /**
  * Encode message with raw data and other informations
  */
 public byte[] encode() throws IOException {
-  byte[] buffer = new byte[12+19];
+  byte[] buffer = new byte[12+20];
    LittleEndianDataOutputStream dos = new LittleEndianDataOutputStream(new ByteArrayOutputStream());
   dos.writeByte((byte)0xFD);
   dos.writeByte(payload_length & 0x00FF);
@@ -96,15 +101,16 @@ public byte[] encode() throws IOException {
   dos.writeShort(rotation&0x00FFFF);
   dos.writeShort(hfov&0x00FFFF);
   dos.writeByte(stream_id&0x00FF);
+  dos.writeByte(camera_device_id&0x00FF);
   dos.flush();
   byte[] tmp = dos.toByteArray();
   for (int b=0; b<tmp.length; b++) buffer[b]=tmp[b];
-  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 19);
+  int crc = MAVLinkCRC.crc_calculate_encode(buffer, 20);
   crc = MAVLinkCRC.crc_accumulate((byte) IMAVLinkCRC.MAVLINK_MESSAGE_CRCS[messageType], crc);
   byte crcl = (byte) (crc & 0x00FF);
   byte crch = (byte) ((crc >> 8) & 0x00FF);
-  buffer[29] = crcl;
-  buffer[30] = crch;
+  buffer[30] = crcl;
+  buffer[31] = crch;
   dos.close();
   return buffer;
 }
@@ -117,6 +123,7 @@ return "MAVLINK_MSG_ID_VIDEO_STREAM_STATUS : " +   "  framerate="+format((float)
 +  "  rotation="+rotation
 +  "  hfov="+hfov
 +  "  stream_id="+stream_id
++  "  camera_device_id="+camera_device_id
 ;}
 
 }
