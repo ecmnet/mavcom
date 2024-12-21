@@ -360,7 +360,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 						Enumeration<?> ee = n.getInetAddresses();
 						while (ee.hasMoreElements()) {
 							localAddress = (InetAddress) ee.nextElement();
-							if (localAddress.getHostAddress().startsWith(peer.substring(0, 7))) {
+							if (localAddress.getHostAddress().startsWith(peer.substring(0, 9))) {
 								found = true;
 								break;
 							}

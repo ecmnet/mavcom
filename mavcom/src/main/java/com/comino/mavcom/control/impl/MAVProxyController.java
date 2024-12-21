@@ -189,18 +189,18 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
 
-			comm = MAVSerialComm.getInstance(reader,"ttyTHS0@921600",SerialPort.FLOW_CONTROL_DISABLED );
-			comm.open();
-			sendMAVLinkMessage(beat_px4);
+//			comm = MAVSerialComm.getInstance(reader,"ttyTHS0@921600",SerialPort.FLOW_CONTROL_DISABLED );
+//			comm.open();
+//			sendMAVLinkMessage(beat_px4);
+//
+//			try {
+//				Thread.sleep(100);
+//			} catch (InterruptedException e) {
+//			}
 
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-			}
-
-			//			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14541, 14587,false);
-			proxy1 = new MAVUdpProxyNIO2(model, "192.168.178.156", 14650, null, 14656, comm);
-			peerAddress = "192.168.178.46";
+			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
+			proxy1 = new MAVUdpProxyNIO2(model, "192.168.178.133", 14650, "0.0.0.0", 14656, comm);
+			peerAddress = "192.168.178.133";
 
 			System.out.println("Proxy Controller loaded (ORIN): " + peerAddress);
 			model.sys.setStatus(Status.MSP_SITL, false);
@@ -229,7 +229,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		case MAVController.MODE_SITL_PROXY:
 
-			comm = new MAVUdpCommNIO2(reader, "192.168.224.137", 14580, 14540,false);
+			comm = new MAVUdpCommNIO2(reader, "192.168.178.187", 14580, 14540,false);
 			proxy1 = new MAVUdpProxyNIO2(model, "127.0.0.1", 14650, "127.0.0.1", 14656, comm);
 		//	proxy2 = new MAVUdpProxyNIO2(model, "10.211.55.2", 14750, "0.0.0.0", 14657, comm);
 			model.sys.setStatus(Status.MSP_SITL, true);

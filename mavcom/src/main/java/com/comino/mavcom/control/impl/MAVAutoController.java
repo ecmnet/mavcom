@@ -75,9 +75,9 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 		comms[0] = MAVSerialComm.getInstance(reader, "57800",SerialPort.FLOW_CONTROL_DISABLED);
 		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort,true);
-		comms[2] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650,false);
+		comms[2] = new MAVUdpCommNIO2(reader, "192.168.178.187", 14656, 14650,false);
 		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
-	    comms[4] = new MAVUdpCommNIO2(reader, "10.211.55.8", 14656, 14650, true);
+	    comms[4] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650, true);
 	    comms[5] = new MAVUdpCommNIO2(reader, "192.168.178.46", 14656, 14650, true);
 	  
 	   
@@ -200,7 +200,6 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		
 		try {
 			comm.write(beat);
-			System.out.println(beat);
 			
 			if (!comm.isConnected() ) {
 				close(); connect();
