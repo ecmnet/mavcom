@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.SubmissionPublisher;
 
+import us.ihmc.log.LogTools;
+
 public class MessageBus {
 
 	private static MessageBus instance = null;
@@ -15,7 +17,7 @@ public class MessageBus {
 	public static MessageBus getInstance() {
 		if (instance == null) {
 			instance = new MessageBus();
-			System.out.println("MessageBus instance created");
+			LogTools.info("MessageBus instance created");
 		}
 		return instance;
 	}

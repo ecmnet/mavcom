@@ -64,6 +64,8 @@ import com.comino.mavcom.status.StatusManager;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.workqueue.WorkQueue;
 
+import us.ihmc.log.LogTools;
+
 public class MAVController implements IMAVController, Runnable {
 
 	public static final int MODE_NORMAL = 0;
@@ -124,23 +126,23 @@ public class MAVController implements IMAVController, Runnable {
 			if (!file.exists() || !file.isDirectory()) {
 				boolean wasDirectoryMade = file.mkdirs();
 				if (wasDirectoryMade)
-					System.out.println("Directory " + directory_name + " created");
+					LogTools.info("Directory " + directory_name + " created");
 				else {
 					file_log_enabled = false;
-					System.out.println("No logging to file: Could not create directory " + directory_name);
+					LogTools.info("No logging to file: Could not create directory " + directory_name);
 					return null;
 				}
 			}
 			// create file, if it does not exist
 			SimpleDateFormat sdfFile = new SimpleDateFormat("yyyy-MM-dd_HHmmss");
 			this.filename = directory_name + "/msplog_" + sdfFile.format(new Date()) + ".log";
-			System.out.println("Logging to: " + filename);
+			LogTools.info("Logging to: " + filename);
 
 			try {
 				FileOutputStream fos_log = new FileOutputStream(filename);
 				ps_log = new PrintStream(fos_log);
 			} catch (FileNotFoundException e) {
-				System.out.println("No logging to file: Error creating log file.");
+				LogTools.error("No logging to file: Error creating log file.");
 				file_log_enabled = false;
 				return null;
 			}
@@ -170,7 +172,7 @@ public class MAVController implements IMAVController, Runnable {
 			return true;
 		} catch (Exception e1) {
 			commError++;
-			System.out.println("MAVLinkMessage " + msg + " not sent. " + e1.getMessage());
+			LogTools.error("MAVLinkMessage " + msg + " not sent. " + e1.getMessage());
 			return false;
 		}
 
@@ -223,7 +225,7 @@ public class MAVController implements IMAVController, Runnable {
 	public boolean sendMSPLinkCmd(int command, float... params) {
 
 		if (!controller.getCurrentModel().sys.isStatus(Status.MSP_CONNECTED)) {
-			System.out.println("Command rejected. No connection.");
+			LogTools.error("Command rejected. No connection.");
 			return false;
 		}
 
@@ -264,7 +266,7 @@ public class MAVController implements IMAVController, Runnable {
 				return true;
 			} catch (IOException e1) {
 				commError++;
-				System.out.println("Command rejected: " + e1.getMessage());
+				LogTools.error("Command rejected: " + e1.getMessage());
 				return false;
 			}
 

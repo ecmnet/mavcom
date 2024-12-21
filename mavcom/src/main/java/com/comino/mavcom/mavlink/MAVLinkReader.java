@@ -42,6 +42,8 @@ import org.mavlink.MAVLinkCRC;
 import org.mavlink.messages.MAVLinkMessage;
 import org.mavlink.messages.MAVLinkMessageFactory;
 
+import us.ihmc.log.LogTools;
+
 
 public class MAVLinkReader {
 
@@ -90,9 +92,9 @@ public class MAVLinkReader {
 			lastPacket[i] = -1;
 		}
 		if (noCRCCheck)
-			System.out.println("MAVLinkReader2 " + id + " started without CRC");
+			LogTools.info("MAVLinkReader2 " + id + " started without CRC");
 		else
-			System.out.println("MAVLinkReader2 " + id + " started");
+			LogTools.info("MAVLinkReader2 " + id + " started");
 	}
 
 	/**

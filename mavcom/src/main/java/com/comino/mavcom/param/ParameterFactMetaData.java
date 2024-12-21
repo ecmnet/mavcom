@@ -44,6 +44,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import us.ihmc.log.LogTools;
+
 public class ParameterFactMetaData {
 
 	private Map<String, ParameterAttributes> parameterList = null;
@@ -59,7 +61,7 @@ public class ParameterFactMetaData {
 			if (doc.hasChildNodes()) {
 				String v_major = doc.getElementsByTagName("parameter_version_major").item(0).getTextContent();
 				String v_minor = doc.getElementsByTagName("parameter_version_minor").item(0).getTextContent();
-				System.out.println("ParameterFactMetaData Version: " + v_major + "." + v_minor+" ("+filename+")");
+				LogTools.info("ParameterFactMetaData Version: " + v_major + "." + v_minor+" ("+filename+")");
 				buildParameterList(doc.getElementsByTagName("group"));
 			}
 		} catch (Exception e) {

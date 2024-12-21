@@ -43,6 +43,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import boofcv.BoofVersion;
+import us.ihmc.log.LogTools;
 
 public class MSPConfig {
 
@@ -68,7 +69,7 @@ public class MSPConfig {
 		this.path = path;
 		this.fileName = filename;
 		this.prop = new Properties();
-		System.out.println("\nInitializing (" + filename + ", Java " + System.getProperty("java.version") + " "
+		LogTools.info("Initializing (" + filename + ", Java " + System.getProperty("java.version") + " "
 				+ System.getProperty("java.vm.vendor") + " build on BoofCV " + BoofVersion.VERSION);
 		refreshProperties();
 		this.version = prop.getProperty("build", "0.1");
@@ -99,7 +100,7 @@ public class MSPConfig {
 				propStream.close();
 			}
 		} catch (IOException io) {
-			System.err.println("Configuration file'" + fileName + "' not found.");
+			LogTools.warn("Configuration file'" + fileName + "' not found.");
 		}
 		return this;
 	}

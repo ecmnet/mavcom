@@ -66,6 +66,8 @@ import com.comino.mavcom.mavlink.MAVLinkReader;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 
+import us.ihmc.log.LogTools;
+
 public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 
 	private static final int BROADCAST_PORT = 4445;
@@ -115,7 +117,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 
 		listeners = new HashMap<Class<?>, List<IMAVLinkListener>>();
 
-		System.out.println(
+		LogTools.info(
 				"Proxy (NIO2): BindPort=" + bPort + " PeerPort=" + pPort + " BufferSize: " + rxBuffer.capacity());
 
 		new Thread(new Worker()).start();
@@ -145,7 +147,7 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 
 	public void shutdown() {
 		try {
-			System.out.println("[mgc] Closing channel...");
+			LogTools.info("[mgc] Closing channel...");
 			state = WAITING;
 			try {
 				channel.disconnect();
@@ -192,15 +194,15 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 			list = listeners.get(clazz);
 			if (!list.contains(listener)) {
 				list.add(listener);
-				System.out.println(
-						"Register MavLink listener: " + clazz.getSimpleName() + " : " + listener.getClass().getName());
+				LogTools.info(
+						"Register MavLink listener: " + clazz.getSimpleName());
 			}
 		} else {
 			list = new ArrayList<IMAVLinkListener>();
 			list.add(listener);
 			listeners.put(clazz, list);
-			System.out.println(
-					"Register MavLink listener: " + clazz.getSimpleName() + " : " + listener.getClass().getName());
+			LogTools.info(
+					"Register MavLink listener: " + clazz.getSimpleName());
 		}
 	}
 
@@ -277,10 +279,10 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 		}
 
 		if (found) {
-			System.out.println("LocalAdress identified: " + localAddress.getHostAddress());
+			LogTools.info("LocalAdress identified: " + localAddress.getHostAddress());
 			return localAddress.getHostAddress();
 		}
-		System.out.println("No adapter found");
+		LogTools.error("No adapter found");
 		return null;
 	}
 
@@ -291,12 +293,12 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 		socket = new DatagramSocket(port);
 		DatagramPacket packet = new DatagramPacket(buf, buf.length);
 		socket.receive(packet);
-		System.out.println("Remote broadcast received. Binding..");
+		LogTools.info("Remote broadcast received. Binding..");
 		InetAddress address = packet.getAddress();
 		socket.close();
 		String received = new String(packet.getData(), 0, packet.getLength());
 		if (received.equals("LQUAC")) {
-			System.out.println("Address: " + address.getHostAddress());
+			LogTools.info("Address: " + address.getHostAddress());
 			return address.getHostAddress();
 		}
 		return null;

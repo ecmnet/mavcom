@@ -80,6 +80,8 @@ import com.comino.mavutils.hw.HardwareAbstraction;
 import com.comino.mavutils.workqueue.WorkQueue;
 import com.fazecast.jSerialComm.SerialPort;
 
+import us.ihmc.log.LogTools;
+
 public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	protected String peerAddress = null;
@@ -140,26 +142,26 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		status_manager.addListener(StatusManager.TYPE_MSP_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_RISING,
 				(a) -> {
-					System.out.println("Connection to device established...");
+					LogTools.info("Connection to device established...");
 					model.sys.setStatus(Status.MSP_SITL, !comm.isSerial());
 				});
 
 		status_manager.addListener(StatusManager.TYPE_MSP_STATUS, Status.MSP_CONNECTED, StatusManager.EDGE_FALLING,
 				(a) -> {
 					model.sys.setStatus(Status.MSP_ACTIVE, false);
-					System.out.println("Connection to device lost...");
+					LogTools.warn("Connection to device lost...");
 				});
 
 		status_manager.addListener(StatusManager.TYPE_MSP_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_RISING,
 				(a) -> {
-					System.out.println("Connection to GCS established...");
+					LogTools.info("Connection to GCS established...");
 					proxy1.enableProxy(true);
 				});
 
 		status_manager.addListener(StatusManager.TYPE_MSP_STATUS, Status.MSP_GCL_CONNECTED, StatusManager.EDGE_FALLING,
 				(a) -> {
 					proxy1.enableProxy(false);
-					System.out.println("Connection to GCS lost...");
+					LogTools.warn("Connection to GCS lost...");
 				});
 
 		switch (mode) {
@@ -181,7 +183,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 				proxy1 = new MAVUdpProxyNIO2(model, "172.168.178.2", 14550, null, 14555, comm);
 				peerAddress = "172.168.178.1";
 			}
-			System.out.println("Proxy Controller loaded: " + peerAddress);
+			LogTools.info("Proxy Controller loaded: " + peerAddress);
 			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
 
@@ -202,7 +204,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			proxy1 = new MAVUdpProxyNIO2(model, "192.168.178.133", 14650, "0.0.0.0", 14656, comm);
 			peerAddress = "192.168.178.133";
 
-			System.out.println("Proxy Controller loaded (ORIN): " + peerAddress);
+			LogTools.info("Proxy Controller loaded (ORIN): " + peerAddress);
 			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
 
@@ -211,7 +213,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
 			proxy1 = new MAVUdpProxyNIO2(model, "127.0.0.1", 14650, "0.0.0.0", 14656, comm);
 			peerAddress = "127.0.0.1";
-			System.out.println("Proxy Controller (SITL mode) loaded");
+			LogTools.info("Proxy Controller (SITL mode) loaded");
 			break;
 		case MAVController.MODE_USB:
 			// comm = MAVSerialComm.getInstancqe(model, BAUDRATE_15, false);
@@ -224,7 +226,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			}
 			proxy1 = new MAVUdpProxyNIO2(model, "127.0.0.1", 14650, "0.0.0.0", 14656, comm);
 			peerAddress = "127.0.0.1";
-			System.out.println("Proxy Controller (serial mode) loaded: " + peerAddress);
+			LogTools.info("Proxy Controller (serial mode) loaded: " + peerAddress);
 			model.sys.setStatus(Status.MSP_SITL, false);
 			break;
 		case MAVController.MODE_SITL_PROXY:
@@ -323,13 +325,13 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			e.printStackTrace();
 		}
 		sendMAVLinkMessage(msg);
-		System.out.println("ShellCommand executed: " + s);
+		LogTools.info("ShellCommand executed: " + s);
 		return true;
 	}
 
 	@Override
 	public boolean sendMSPLinkCmd(int command, float... params) {
-		MSPLogger.getInstance().writeLocalMsg("Command rejected: Proxy cannot send command to itself...");
+		LogTools.warn("Command rejected: Proxy cannot send command to itself...");
 		return false;
 	}
 
@@ -492,7 +494,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 
 		if (isSimulation()) {
-			System.out.println("Setup MAVLink streams for simulation mode");
+			LogTools.info("Setup MAVLink streams for simulation mode");
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_SET_MESSAGE_INTERVAL, IMAVLinkMessageID.MAVLINK_MSG_ID_HIGHRES_IMU, 50000);
 			sendMAVLinkCmd(MAV_CMD.MAV_CMD_SET_MESSAGE_INTERVAL,
 					IMAVLinkMessageID.MAVLINK_MSG_ID_VISION_POSITION_ESTIMATE, 50000);
@@ -557,7 +559,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		if(!comm.isConnected() || !comm.isSerial())
 			return;
 
-		System.out.println("Restart wlan0 interface..");
+		LogTools.info("Restart wlan0 interface..");
 		executeConsoleCommand("ifdown wlan0");
 		executeConsoleCommand("ifup wlan0");
 	}
@@ -566,7 +568,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		try {
 			Runtime.getRuntime().exec(command);
 		} catch (IOException e) {
-			MSPLogger.getInstance().writeLocalMsg("LINUX command '"+command+"' failed: "+e.getMessage(),
+			LogTools.warn("LINUX command '"+command+"' failed: "+e.getMessage(),
 					MAV_SEVERITY.MAV_SEVERITY_CRITICAL);
 		}
 	}

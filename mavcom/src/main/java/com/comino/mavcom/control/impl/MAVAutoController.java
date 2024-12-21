@@ -56,6 +56,8 @@ import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.Status;
 import com.fazecast.jSerialComm.SerialPort;
 
+import us.ihmc.log.LogTools;
+
 public class MAVAutoController extends MAVController implements IMAVController, Runnable {
 	
 	private static final int BROADCAST_PORT = 4445;
@@ -90,7 +92,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 		beat.type = MAV_TYPE.MAV_TYPE_GCS;
 		beat.system_status = MAV_STATE.MAV_STATE_ACTIVE;
-		System.out.println("Auto Controller loaded (" + peerAddress + ":" + peerPort + ")");
+		LogTools.info("Auto Controller loaded (" + peerAddress + ":" + peerPort + ")");
 	}
 
 	@Override
@@ -148,12 +150,12 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		socket.setSoTimeout(200);
 		DatagramPacket packet = new DatagramPacket(buf, buf.length);
 		socket.receive(packet);
-		System.out.println("Remote broadcast received. Binding..");
+		LogTools.info("Remote broadcast received. Binding..");
 		InetAddress address = packet.getAddress();
 		socket.close();
 		String received = new String(packet.getData(), 0, packet.getLength());
 		if (received.equals("LQUAC")) {
-			System.out.println("Address: " + address.getHostAddress());
+			LogTools.info("Address: " + address.getHostAddress());
 			return address.getHostAddress();
 		}
 		return null;

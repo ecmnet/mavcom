@@ -13,6 +13,8 @@ import com.comino.mavcom.log.MSPLogger;
 import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.model.segment.Status;
 
+import us.ihmc.log.LogTools;
+
 public class PX4Parameters implements IMAVLinkListener {
 
 	private static PX4Parameters parameters = null;
@@ -39,7 +41,7 @@ public class PX4Parameters implements IMAVLinkListener {
 		this.control = control;
 		this.control.addMAVLinkListener(this);
 		if(control.isSimulation()) {
-		  MSPLogger.getInstance().writeLocalMsg("Use _sitl parameter meta data", MAV_SEVERITY.MAV_SEVERITY_INFO);
+			LogTools.info("Use _sitl parameter meta data", MAV_SEVERITY.MAV_SEVERITY_INFO);
 		  this.metadata = new ParameterFactMetaData("PX4ParameterFactMetaData.xml");
 		}
 		else
@@ -71,7 +73,7 @@ public class PX4Parameters implements IMAVLinkListener {
 		if (msg.param_index >= msg.param_count - 1 && !isLoaded) {
 			isLoaded = true;
 			control.getCurrentModel().sys.setStatus(Status.MSP_PARAMS_LOADED, true);
-			System.out.println("PX4 Parameters loaded succesfully: " + parameterList.size());
+			LogTools.info("PX4 Parameters loaded succesfully: " + parameterList.size());
 		}
 	}
 
@@ -79,7 +81,7 @@ public class PX4Parameters implements IMAVLinkListener {
 		if (!reload && isLoaded)
 			return;
 		
-		System.out.println("Parameter requested..");
+		LogTools.info("Parameter requested..");
 		isLoaded = false;
 		control.getCurrentModel().sys.setStatus(Status.MSP_PARAMS_LOADED, false);
 		parameterList.clear();
@@ -115,12 +117,12 @@ public class PX4Parameters implements IMAVLinkListener {
 		ParameterAttributes att = parameterList.get(name.toUpperCase());
 
 		if (att == null) {
-			System.err.println(name + " could not be set to " + val + "(" + parameterList.size() + ")");
-			MSPLogger.getInstance().writeLocalMsg(name + " unknown. Not set.", MAV_SEVERITY.MAV_SEVERITY_DEBUG);
+			LogTools.warn(name + " could not be set to " + val + "(" + parameterList.size() + ")");
+			//MSPLogger.getInstance().writeLocalMsg(name + " unknown. Not set.", MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 			return false;
 		}
 
-		System.out.println("Parameter " + name + " set to " + val);
+		LogTools.info("Parameter " + name + " set to " + val);
 
 		att.value = val;
 

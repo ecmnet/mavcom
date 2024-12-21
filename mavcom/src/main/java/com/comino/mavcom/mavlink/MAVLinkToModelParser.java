@@ -59,6 +59,8 @@ import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.utils.MSPPluginHelper;
 import com.comino.mavutils.workqueue.WorkQueue;
 
+import us.ihmc.log.LogTools;
+
 public class MAVLinkToModelParser {
 
 	private static double OFFSET_AVG_ALPHA = 0.6d;
@@ -198,14 +200,14 @@ public class MAVLinkToModelParser {
 		//			}
 		//		});
 
-		System.out.println("MAVMSP parser: " + msglisteners.size() + " MAVLink messagetypes registered");
+		LogTools.info("MAVMSP parser: " + msglisteners.size() + " MAVLink messagetypes registered");
 
 		model.sys.tms = System.currentTimeMillis() * 1000L;
 
 	}
 
 	private void registerPlugins() {
-		System.out.println("Loading MAVLinkMessage plugins...");
+		LogTools.info("Loading MAVLinkMessage plugins...");
 		try {
 			ArrayList<Class<?>> classes = MSPPluginHelper
 					.getClassesForPackage(this.getClass().getPackage().getName() + ".plugins");
@@ -235,7 +237,7 @@ public class MAVLinkToModelParser {
 	}
 
 	public void start(ByteChannel channel) {
-		System.err.println("Error: Deprecated ParserWorker");
+		LogTools.warn("Error: Deprecated ParserWorker");
 	}
 
 	public boolean isConnected() {
