@@ -71,6 +71,9 @@ public interface IMAVController {
 	public void writeLogMessage(LogMessage m);
 
 	public boolean sendMAVLinkCmd(int command, float... params);
+	
+	public boolean sendMAVLinkCmdInt(int command, int frame, float... params);
+
 
 	public boolean sendMAVLinkCmd(int command, IMAVCmdAcknowledge ack, float... params);
 

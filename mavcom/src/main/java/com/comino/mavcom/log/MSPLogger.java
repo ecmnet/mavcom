@@ -39,6 +39,8 @@ import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 
+import us.ihmc.log.LogTools;
+
 public class MSPLogger {
 
 	// TOOD: register proxy, and send messages if proxy is registered
@@ -88,7 +90,7 @@ public class MSPLogger {
 	}
 
 	public void writeLocalMsg(String msg, int severity) {
-		System.out.println("[" + LogMessage.severity_texts[severity] + "] " + msg);
+		LogTools.info("[" + LogMessage.severity_texts[severity] + "] " + msg);
 		if (severity == MAV_SEVERITY.MAV_SEVERITY_DEBUG && !debug_msg_enabled)
 			return;
 		LogMessage m = new LogMessage();

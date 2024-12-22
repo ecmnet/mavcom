@@ -48,6 +48,7 @@ import org.mavlink.messages.MAV_STATE;
 import org.mavlink.messages.MAV_TYPE;
 import org.mavlink.messages.SERIAL_CONTROL_DEV;
 import org.mavlink.messages.SERIAL_CONTROL_FLAG;
+import org.mavlink.messages.lquac.msg_command_int;
 import org.mavlink.messages.lquac.msg_command_long;
 import org.mavlink.messages.lquac.msg_event;
 import org.mavlink.messages.lquac.msg_heartbeat;
@@ -259,6 +260,44 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			return false;
 		}
 
+	}
+	
+	@Override
+	public boolean sendMAVLinkCmdInt(int command, int frame, float... params) {
+
+		msg_command_int cmd = new msg_command_int(255, 1);
+		cmd.target_system = 1;
+		cmd.target_component = 0;
+		cmd.command = command;
+		cmd.frame = frame;
+
+		for (int i = 0; i < params.length; i++) {
+			switch (i) {
+			case 0:
+				cmd.param1 = params[0];
+				break;
+			case 1:
+				cmd.param2 = params[1];
+				break;
+			case 2:
+				cmd.param3 = params[2];
+				break;
+			case 3:
+				cmd.param4 = params[3];
+				break;
+			case 4:
+				cmd.x = (long)params[4];
+				break;
+			case 5:
+				cmd.y = (long)params[5];
+				break;
+			case 6:
+				cmd.z = params[6];
+				break;
+			}
+		}
+	
+		return sendMAVLinkMessage(cmd);
 	}
 
 	@Override
