@@ -26,13 +26,9 @@ public class MspStatusPlugin extends MAVLinkPluginBase {
 		model.sys.msp_tms = System.currentTimeMillis() * 1000;
 		
 		model.sys.sensors = (int)status.sensors;
-
-	//	model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, ((status.sensors >> Status.MSP_ROS_AVAILABILITY) & 0x1) == 0x1);
-		model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, true);
-		model.sys.setStatus(Status.MSP_ACTIVE, true);
-		model.sys.setStatus(Status.MSP_CONNECTED, true);
-		
+	
 		Status.build = status.getVersion();
+		
 		
 	}
 }

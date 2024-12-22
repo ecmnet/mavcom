@@ -53,6 +53,8 @@ import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.param.PX4Parameters;
 
+import us.ihmc.log.LogTools;
+
 public class StartUp implements Runnable {
 
 	private IMAVMSPController control = null;
@@ -111,7 +113,7 @@ public class StartUp implements Runnable {
 		params = PX4Parameters.getInstance(control);
 
 		control.getStatusManager().addListener(Status.MSP_CONNECTED, (n) -> {
-			System.err.println("Connected");
+			LogTools.info("Connected");
 			if (n.isStatus(Status.MSP_CONNECTED))
 				params.requestRefresh(false);
 		});

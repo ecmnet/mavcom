@@ -206,7 +206,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			peerAddress = "192.168.178.133";
 
 			LogTools.info("Proxy Controller loaded (ORIN): " + peerAddress);
-			model.sys.setStatus(Status.MSP_SITL, false);
+			model.sys.setStatus(Status.MSP_SITL, true);
 			break;
 
 		case MAVController.MODE_SITL:
@@ -434,7 +434,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 	@Override
 	public boolean isSimulation() {
-		return !comm.isSerial() && mode != MAVController.MODE_ORIN;
+		return !comm.isSerial();
 	}
 
 	@Override
@@ -582,7 +582,6 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		if (!comm.isConnected()) {
 			comm.open();
-			model.sys.setStatus(Status.MSP_ACTIVE, true);
 		}
 
 	}

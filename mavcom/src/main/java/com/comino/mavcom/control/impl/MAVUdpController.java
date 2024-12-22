@@ -44,6 +44,8 @@ import com.comino.mavcom.comm.udp.MAVUdpCommNIO2;
 import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.model.segment.Status;
 
+import us.ihmc.log.LogTools;
+
 public class MAVUdpController extends MAVController implements IMAVController, Runnable {
 
 	private boolean connected;
@@ -57,7 +59,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 		this.peerPort = peerPort;
 		this.bindPort = bindPort;
 
-		System.out.println("UDP Controller loaded (" + peerAddress + ":" + peerPort + ")");
+		LogTools.info("UDP Controller loaded (" + peerAddress + ":" + peerPort + ")");
 		comm = MAVUdpCommNIO2.getInstance(reader, peerAddress, peerPort, bindPort);
 		model.sys.setStatus(Status.MSP_PROXY, false);
 
@@ -69,7 +71,6 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 	@Override
 	public boolean connect() {
 
-		System.out.print("Try to start..");
 		if (this.connected)
 			return true;
 

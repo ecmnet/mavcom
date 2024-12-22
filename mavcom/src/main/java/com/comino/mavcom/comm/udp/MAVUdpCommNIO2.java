@@ -36,6 +36,8 @@ import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 
+import us.ihmc.log.LogTools;
+
 public class MAVUdpCommNIO2 implements IMAVComm {
 
 	private static final int BROADCAST_PORT = 4445;
@@ -353,7 +355,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			try {
 				while(!found && ++count < 50) {
 					String peer = listenToBroadcast(port);
-					System.err.println(peer);
 					e = NetworkInterface.getNetworkInterfaces();
 					while (e.hasMoreElements() && !found) {
 						NetworkInterface n = (NetworkInterface) e.nextElement();
@@ -373,7 +374,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			}
 
 			if (found) {
-				System.out.println("LocalAdress: " + localAddress.getHostAddress());
+				LogTools.info("LocalAdress: " + localAddress.getHostAddress());
 				return localAddress.getHostAddress();
 			}
 			System.out.println("No adapter found");
@@ -388,12 +389,12 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			socket.setSoTimeout(500);
 			DatagramPacket packet = new DatagramPacket(buf, buf.length);
 			socket.receive(packet);
-			System.out.println("Remote broadcast received. Binding..");
+			LogTools.info("Remote broadcast received. Binding..");
 			InetAddress address = packet.getAddress();
 			socket.close();
 			String received = new String(packet.getData(), 0, packet.getLength());
 			if (received.equals("LQUAC")) {
-				System.out.println("Address: " + address.getHostAddress());
+				LogTools.info("Lquac Address: " + address.getHostAddress());
 				return address.getHostAddress();
 			}
 			return null;

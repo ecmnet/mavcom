@@ -65,7 +65,7 @@ public class ParameterFactMetaData {
 				buildParameterList(doc.getElementsByTagName("group"));
 			}
 		} catch (Exception e) {
-			System.err.println(filename+" not found");
+			LogTools.error(filename+" not found");
 			e.printStackTrace();
 		}
 	}

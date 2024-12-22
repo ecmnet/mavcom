@@ -337,8 +337,8 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				System.err.println("Already running: " + b.getMessage());
-				System.err.println("Exiting now...");
+				LogTools.error("Already running: " + b.getMessage());
+				LogTools.error("Exiting now...");
 				System.exit(-1);
 
 			} catch (IOException e) {

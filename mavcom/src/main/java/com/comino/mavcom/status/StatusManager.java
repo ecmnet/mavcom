@@ -187,6 +187,7 @@ public class StatusManager implements Runnable {
 
 		if (status_old.isEqual(status_current))
 			return;
+		
 
 		// if(status_old.nav_state!=status_current.nav_state)
 		// System.out.println(status_old.nav_state+" -> "+status_current.nav_state)

@@ -111,7 +111,7 @@ public class MAVLinkToModelParser {
 							logger.writeLocalMsg("Command " + ack.command + " not accepted. Retry.",
 									MAV_SEVERITY.MAV_SEVERITY_DEBUG);
 						} catch (Exception e) {
-							System.err.println(e.getMessage());
+							LogTools.error(e.getMessage());
 						}
 						return;
 					}

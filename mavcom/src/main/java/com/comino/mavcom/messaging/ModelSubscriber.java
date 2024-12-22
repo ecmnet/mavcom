@@ -3,6 +3,8 @@ package com.comino.mavcom.messaging;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 
+import us.ihmc.log.LogTools;
+
 public class ModelSubscriber<ModelType> {
 
 	private MSubscriber subscriber;
@@ -72,7 +74,7 @@ public class ModelSubscriber<ModelType> {
 
 		@Override
 		public void onError(Throwable throwable) {
-			System.err.println("Flow " + throwable.getMessage());
+			LogTools.error("Flow " + throwable.getMessage());
 		}
 
 		@Override
