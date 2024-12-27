@@ -3,12 +3,13 @@ package com.comino.mavcom.mavlink;
 import java.time.Instant;
 
 import org.mavlink.messages.lquac.msg_log_data;
-import org.mavlink.messages.lquac.msg_logging_data;
 import org.mavlink.messages.lquac.msg_timesync;
 
 import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavutils.workqueue.WorkQueue;
+
+import us.ihmc.log.LogTools;
 
 // TODO: Better implementation
 // http://docs.ros.org/en/lunar/api/mavros/html/sys__time_8cpp_source.html
@@ -29,16 +30,15 @@ public class MAVTimeSync implements Runnable {
 	public MAVTimeSync(IMAVComm comm) {
 		this.comm = comm;
 
-		if (comm.isConnected() && comm.isSerial()) {
+		if (comm.isConnected()) {
 			comm.getReader().getParser().registerListener(msg_timesync.class,
 					(o) -> handle_time_sync((msg_timesync) o));
 			
 			comm.getReader().getParser().registerListener(msg_log_data.class,
 					(o) -> check_logging((msg_log_data) o));
-			
-			System.out.println("Time synchronization started..."+comm.isConnected());
-
-			wq.addCyclicTask("HP", 100, this);
+		
+			wq.addCyclicTask("HP", 1000, this);
+			LogTools.info("Time synchronization started");
 
 		}
 		
@@ -88,14 +88,14 @@ public class MAVTimeSync implements Runnable {
 				long offset_ns = (sync.ts1 + now_ns - sync.tc1 * 2L) / 2L;
 				long dt = time_offset_ns - offset_ns;
 				if (dt > 100000000L || dt < -100000000L) {
-					time_offset_ns = offset_ns;
-					System.out.println("[sys]  Clock skew detected: " + (dt / 1000) + "us");
+					time_offset_ns =  offset_ns;
+					//LogTools.info("Clock skew detected");
 				} else {
 					time_offset_ns = (long) (OFFSET_AVG_ALPHA * (double) offset_ns
 							+ (1.0d - OFFSET_AVG_ALPHA) * (double) time_offset_ns);
 				}
-				DataModel.t_offset_ns = time_offset_ns;
-			//	System.out.println("PX4 "+DataModel.getSynchronizedPX4Time_us());
+				DataModel.t_offset_us =  time_offset_ns / 1000L;
+		//		System.out.println("PX4 "+(DataModel.getSynchronizedPX4Time_us()));
 
 			}
 		} catch (Exception e) {

@@ -71,6 +71,7 @@ import com.comino.mavcom.mavlink.IMAVLinkListener;
 import com.comino.mavcom.mavlink.MAVAcknowledge;
 import com.comino.mavcom.mavlink.MAVLinkBlockingReader;
 import com.comino.mavcom.mavlink.MAVTimeSync;
+import com.comino.mavcom.mavlink.MAVTimeSync2;
 import com.comino.mavcom.messaging.MessageBus;
 import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.LogMessage;
@@ -124,7 +125,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		status_manager = new StatusManager(model,false);
 		mavlinkListener = new ArrayList<IMAVMessageListener>();
 
-		MessageBus.getInstance();
+	//	MessageBus.getInstance();
 
 		String baudrate = config.getProperty(MSPParams.BAUDRATE, DEFAULT_BAUDRATE);
 
@@ -379,6 +380,13 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		if(proxy2!=null)
 			proxy2.registerListener(clazz, listener);
 	}
+	
+	public void unregisterListener(Class<?> clazz) {
+		proxy1.unregisterListener(clazz);
+		if(proxy2!=null)
+			proxy2.unregisterListener(clazz);
+		
+	}
 
 	public boolean isConnected() {
 		// model.sys.setStatus(Status.MSP_ACTIVE, comm.isConnected());
@@ -505,8 +513,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		status_manager.start();	
 		wq.addCyclicTask("NP", 250, this);	
-		wq.addSingleTask("LP", 5000, () -> new MAVTimeSync(comm));
-
+		wq.addSingleTask("LP", 5000, () -> new MAVTimeSync2(comm));
 
 		// Register processing of PING sent by GCL
 		proxy1.registerListener(msg_heartbeat.class, (o) -> {
