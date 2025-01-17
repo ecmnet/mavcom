@@ -146,6 +146,7 @@ public class MAVUdpCommNIO implements IMAVComm, Runnable {
 					}
 				} catch (IOException e1) {
 				}
+				e.printStackTrace();
 				model.sys.setStatus(Status.MSP_CONNECTED, false);
 				isConnected = false;
 				continue;

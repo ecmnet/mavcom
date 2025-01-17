@@ -66,7 +66,7 @@ public class msg_camera_image_captured extends MAVLinkMessage {
    */
   public long image_index;
   /**
-   * Deprecated/unused. Component IDs are used to differentiate multiple cameras.
+   * Camera id of a non-MAVLink camera attached to an autopilot (1-6).  0 if the component is a MAVLink camera (with its own component id). Field name is usually camera_device_id.
    */
   public int camera_id;
   /**

@@ -50,7 +50,7 @@ public class MAVUdpController extends MAVController implements IMAVController, R
 
 	private boolean connected;
 
-	private final msg_heartbeat beat = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_OSD);
+	private final msg_heartbeat beat = new msg_heartbeat(255, 1);
 
 	public MAVUdpController(String peerAddress, int peerPort, int bindPort, boolean isSITL) {
 		super(2);

@@ -24,7 +24,12 @@ import java.util.Set;
 import java.util.concurrent.locks.LockSupport;
 
 import org.mavlink.messages.MAVLinkMessage;
+import org.mavlink.messages.MAV_STATE;
+import org.mavlink.messages.MAV_TYPE;
+import org.mavlink.messages.MSP_CMD;
+import org.mavlink.messages.lquac.msg_command_int;
 import org.mavlink.messages.lquac.msg_heartbeat;
+import org.mavlink.messages.lquac.msg_msp_command;
 
 import com.comino.mavcom.comm.IMAVComm;
 import com.comino.mavcom.comm.IMAVProxy;
@@ -73,25 +78,42 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 	private boolean search_local_address = true;
 
-	private final static msg_heartbeat hb = new msg_heartbeat(255, 1);
+	private final static msg_heartbeat hb = new msg_heartbeat(255,1);
+	
+	public static MAVUdpCommNIO2 getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort,
+			String localAddress, int bindPort) {
+		if (com == null)
+			com = new MAVUdpCommNIO2(reader, peerAddress, peerPort, localAddress, bindPort,false);
+		return com;
+	}
 
 	public static MAVUdpCommNIO2 getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort,
 			int bindPort) {
 		if (com == null)
-			com = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort,true);
+			com = new MAVUdpCommNIO2(reader, peerAddress, peerPort,null, bindPort,true);
+		return com;
+	}
+	
+	public static MAVUdpCommNIO2 getInstance(MAVLinkBlockingReader reader, String peerAddress, int peerPort,
+			int bindPort, boolean autoAdress) {
+		if (com == null)
+			com = new MAVUdpCommNIO2(reader, peerAddress, peerPort,null, bindPort,autoAdress);
 		return com;
 	}
 
-	public MAVUdpCommNIO2(MAVLinkBlockingReader reader, String peerAddress, int pPort, int bPort, boolean search_local_address) {
+	public MAVUdpCommNIO2(MAVLinkBlockingReader reader, String peerAddress, int pPort, String localAddress, int bPort, boolean search_local_address) {
 		this.search_local_address = search_local_address;
 		this.model = reader.getModel();
 		this.peerPort = new InetSocketAddress(peerAddress, pPort);
 		this.reader = reader;
 		this.bindPort = bPort;
-		this.peerAddress = peerAddress;
 
+		
+		this.peerAddress = peerAddress;
+		hb.type = MAV_TYPE.MAV_TYPE_GCS;
+		hb.system_status = MAV_STATE.MAV_STATE_ACTIVE;
 		hb.isValid = true;
-		this.worker = new Worker();
+		this.worker = new Worker(localAddress);
 		wt = new Thread(worker);
 		wt.start();
 	}
@@ -117,6 +139,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	
 		return channel.isConnected();
 	}
 
@@ -147,7 +170,7 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 	@Override
 	public void write(MAVLinkMessage msg) {
 		try {
-			if (state == RUNNING && channel.isConnected())
+		if (state == RUNNING && channel.isConnected())
 				channel.write(ByteBuffer.wrap(msg.encode()));
 		} catch (IOException e) {
 		}
@@ -202,6 +225,12 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		private long start;
 		private String localAddress;
 
+		public Worker(String localAddress2) {
+			if(localAddress2!=null)
+				this.localAddress = localAddress2;
+		}
+
+
 		public void waitFor() {
 			synchronized (this) {
 				try {
@@ -218,9 +247,6 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			try {
 				channel = DatagramChannel.open();
 				final Set<SocketOption<?>> options = channel.supportedOptions();
-				if (options.contains(StandardSocketOptions.TCP_NODELAY)) {
-					channel.setOption(StandardSocketOptions.TCP_NODELAY, true);
-				}
 				channel.socket().setReuseAddress(true);
 				channel.socket().setReceiveBufferSize(BUFFER_SIZE * 1024);
 				channel.socket().setSendBufferSize(BUFFER_SIZE * 1024);
@@ -235,7 +261,8 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			while (true) {
 
 				while (state == WAITING) {
-
+					
+					
 					try {
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
@@ -255,7 +282,13 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 						if (!channel.socket().isBound()) {
 							if (peerPort.getAddress().isLoopbackAddress() || !search_local_address) {
-								channel.socket().bind(new InetSocketAddress(bindPort));
+								if (localAddress != null) {
+									channel.socket().bind(new InetSocketAddress(localAddress, bindPort));
+									LogTools.info(localAddress+":"+bindPort);
+								}
+								else
+									channel.socket().bind(new InetSocketAddress(bindPort));
+						
 							} else {
 								localAddress = getLocalAdress(BROADCAST_PORT);
 								if (localAddress != null)
@@ -268,28 +301,37 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 
 						if(!channel.isConnected())
 							channel.connect(peerPort);
+						
 
 						if (selector.isOpen())
 							selector.close();
 						selector = Selector.open();
 						channel.register(selector, SelectionKey.OP_READ);
+						
 
 						if (channel.isConnected())
 							state = RUNNING;
 
 					} catch (ClosedSelectorException | IOException e) {
+		
 						state = WAITING;
 					}
+					
+					
 
 				}
 				synchronized (this) {
 					notify();
 				}
-
+				
+				
 				write(hb);
+			
 
 				start = System.currentTimeMillis();
 				while (state == RUNNING) {
+					
+					
 
 					try {
 						if (selector.select() == 0) {
@@ -318,9 +360,10 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 										proxyBuffer[msg_length++] = rxBuffer.get();
 									}
 									rxBuffer.compact();
+								
 
 									byteListener.forEach( (proxy) -> proxy.write(proxyBuffer, msg_length));
-										
+								
 									reader.put(proxyBuffer, msg_length);
 									bcount = bcount + msg_length;
 								}
@@ -332,12 +375,12 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 							}
 						}
 					} catch (Exception e) {
-						try {
-							selector.close();
-						} catch (Exception e1) {
-						}
-
-						state = WAITING;
+//						try {
+//							selector.close();
+//						} catch (Exception e1) {
+//						}
+//
+//						state = WAITING;
 					}
 				}
 			}
@@ -396,6 +439,9 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 			if (received.equals("LQUAC")) {
 				LogTools.info("Lquac Address: " + address.getHostAddress());
 				return address.getHostAddress();
+					
+			} else {
+				System.out.println(received);
 			}
 			return null;
 		}
@@ -406,25 +452,50 @@ public class MAVUdpCommNIO2 implements IMAVComm {
 		//				14550);
 
 		//	MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "127.0.0.1", 14580,14540);
+		final var model = new DataModel();
+		var reader = new MAVLinkBlockingReader(2, model);
 
-		MAVUdpCommNIO2 comm = new MAVUdpCommNIO2(new MAVLinkBlockingReader(2, new DataModel()), "127.0.0.1", 14656,14650,true);
+		MAVUdpCommNIO2 comm =  MAVUdpCommNIO2.getInstance(reader, "192.168.178.187",14656, "192.168.178.133",14650);
 
+		reader.getParser().addMAVLinkListener((o) -> {
+			System.err.println(o);
+//			msg_heartbeat hb = (msg_heartbeat)(o);
+//			System.out.println(hb.componentId+":"+hb+"  "+model.sys.isStatus(Status.MSP_ACTIVE)+"  "+model.sys.isStatus(Status.MSP_CONNECTED));
+		});
+		
+		msg_msp_command msp = new msg_msp_command(255,1);
+		msp.command = MSP_CMD.MSP_CMD_OFFBOARD_SETLOCALPOS;
+		msp.param1 =  1;
+		msp.param2 =  1;
+		msp.param3 =  Float.NaN;
+		msp.param4 =  Float.NaN;
+		
+		msg_command_int cmd = new msg_command_int(255, 1);
+		cmd.target_system    = 1;
+		cmd.target_component = 191;
+		cmd.command = MSP_CMD.MSP_CMD_OFFBOARD_SETLOCALPOS;
+		msp.param1 =  1;
+		msp.param2 =  1;
+		msp.param3 =  Float.NaN;
+		msp.param4 =  Float.NaN;
 
-
+		comm.open();
 		try {
 			while (true) {
-				comm.open();
-				System.out.println("Started");
+	
+			//	System.out.println("Started");
 				long time = System.currentTimeMillis();
-				while (System.currentTimeMillis() < (time + 3000)) {
+			//	while (System.currentTimeMillis() < (time + 1000)) {
 					if (comm.isConnected())
-						System.out.println(comm.isConnected() + " => " + comm + " => ANGLEX=" + comm.model.hud.aX
-								+ " ANGLEY=" + comm.model.hud.aY);
-					Thread.sleep(200);
-					//comm.write(hb);
-				}
-				comm.close();
-				Thread.sleep(5000);
+//						System.out.println(comm.isConnected() + " => " + comm + " => ANGLEX=" + comm.model.hud.aX
+//								+ " ANGLEY=" + comm.model.hud.aY);
+					Thread.sleep(500);
+				//	comm.write(hb);
+					Thread.sleep(500);
+					comm.write(msp);;
+//				}
+//				comm.close();
+//				Thread.sleep(2000);
 			}
 
 		} catch (Exception e) {

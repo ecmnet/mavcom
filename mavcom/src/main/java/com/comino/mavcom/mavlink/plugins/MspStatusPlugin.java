@@ -26,6 +26,8 @@ public class MspStatusPlugin extends MAVLinkPluginBase {
 		model.sys.msp_tms = System.currentTimeMillis() * 1000;
 		
 		model.sys.sensors = (int)status.sensors;
+		
+		model.sys.setStatus(Status.MSP_CONNECTED, true);
 	
 		Status.build = status.getVersion();
 		

@@ -48,6 +48,7 @@ import org.mavlink.messages.SERIAL_CONTROL_DEV;
 import org.mavlink.messages.SERIAL_CONTROL_FLAG;
 import org.mavlink.messages.lquac.msg_command_int;
 import org.mavlink.messages.lquac.msg_command_long;
+import org.mavlink.messages.lquac.msg_heartbeat;
 import org.mavlink.messages.lquac.msg_msp_command;
 import org.mavlink.messages.lquac.msg_serial_control;
 
@@ -114,6 +115,17 @@ public class MAVController implements IMAVController, Runnable {
 		model = new DataModel();
 		reader = new MAVLinkBlockingReader(i, model);
 		status_manager = new StatusManager(model, true);
+		
+//		this.addMAVLinkListener(msg_heartbeat.class, (o) -> {
+//			msg_heartbeat hb =(msg_heartbeat)o;
+//			if(hb.componentId == 191) {
+//				model.sys.setStatus(Status.MSP_ACTIVE,true);
+//				model.sys.setStatus(Status.MSP_READY_FOR_FLIGHT,(hb.system_status == 4 ));
+//				model.sys.setSensor(Status.MSP_ROS_AVAILABILITY, true);
+//				model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, true);
+//				//	model.sys.tms = DataModel.getSynchronizedPX4Time_us();
+//			}
+//		});
 		
 		wq.addCyclicTask("LP", 500, this);
 	}

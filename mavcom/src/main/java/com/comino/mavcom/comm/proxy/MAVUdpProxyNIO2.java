@@ -207,7 +207,8 @@ public class MAVUdpProxyNIO2 implements IMAVLinkListener, IMAVProxy {
 	}
 
 	public void unregisterListener(Class<?> clazz) {
-		listeners.remove(clazz);
+		if(listeners.remove(clazz)==null)
+			LogTools.warn("Listener "+clazz.getName()+"could not be removed");
 	}
 
 	public int getBadCRC() {

@@ -125,7 +125,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		status_manager = new StatusManager(model,false);
 		mavlinkListener = new ArrayList<IMAVMessageListener>();
 
-	//	MessageBus.getInstance();
+		//	MessageBus.getInstance();
 
 		String baudrate = config.getProperty(MSPParams.BAUDRATE, DEFAULT_BAUDRATE);
 
@@ -193,16 +193,16 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_15, false);
 			// comm = MAVSerialComm.getInstance(model, BAUDRATE_20, false);
 
-//			comm = MAVSerialComm.getInstance(reader,"ttyTHS0@921600",SerialPort.FLOW_CONTROL_DISABLED );
-//			comm.open();
-//			sendMAVLinkMessage(beat_px4);
-//
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//			}
+			//			comm = MAVSerialComm.getInstance(reader,"ttyTHS0@921600",SerialPort.FLOW_CONTROL_DISABLED );
+			//			comm.open();
+			//			sendMAVLinkMessage(beat_px4);
+			//
+			//			try {
+			//				Thread.sleep(100);
+			//			} catch (InterruptedException e) {
+			//			}
 
-			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
+			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, null,14540,false);
 			proxy1 = new MAVUdpProxyNIO2(model, "192.168.178.133", 14650, "0.0.0.0", 14656, comm);
 			peerAddress = "192.168.178.133";
 
@@ -212,7 +212,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		case MAVController.MODE_SITL:
 			model.sys.setStatus(Status.MSP_SITL, true);
-			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
+			comm = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, null, 14540,false);
 			proxy1 = new MAVUdpProxyNIO2(model, "127.0.0.1", 14650, "0.0.0.0", 14656, comm);
 			peerAddress = "127.0.0.1";
 			LogTools.info("Proxy Controller (SITL mode) loaded");
@@ -233,9 +233,9 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 			break;
 		case MAVController.MODE_SITL_PROXY:
 
-			comm = new MAVUdpCommNIO2(reader, "192.168.178.187", 14580, 14540,false);
+			comm = new MAVUdpCommNIO2(reader, "192.168.178.187", 14580,null, 14540,false);
 			proxy1 = new MAVUdpProxyNIO2(model, "127.0.0.1", 14650, "127.0.0.1", 14656, comm);
-		//	proxy2 = new MAVUdpProxyNIO2(model, "10.211.55.2", 14750, "0.0.0.0", 14657, comm);
+			//	proxy2 = new MAVUdpProxyNIO2(model, "10.211.55.2", 14750, "0.0.0.0", 14657, comm);
 			model.sys.setStatus(Status.MSP_SITL, true);
 			break;
 		}
@@ -262,7 +262,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		}
 
 	}
-	
+
 	@Override
 	public boolean sendMAVLinkCmdInt(int command, int frame, float... params) {
 
@@ -297,7 +297,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 				break;
 			}
 		}
-	
+
 		return sendMAVLinkMessage(cmd);
 	}
 
@@ -380,12 +380,12 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 		if(proxy2!=null)
 			proxy2.registerListener(clazz, listener);
 	}
-	
+
 	public void unregisterListener(Class<?> clazz) {
 		proxy1.unregisterListener(clazz);
 		if(proxy2!=null)
 			proxy2.unregisterListener(clazz);
-		
+
 	}
 
 	public boolean isConnected() {
@@ -513,7 +513,7 @@ public class MAVProxyController implements IMAVMSPController, Runnable {
 
 		status_manager.start();	
 		wq.addCyclicTask("NP", 250, this);	
-		wq.addSingleTask("LP", 5000, () -> new MAVTimeSync2(comm));
+		wq.addSingleTask("LP", 2000, () -> new MAVTimeSync2(comm));
 
 		// Register processing of PING sent by GCL
 		proxy1.registerListener(msg_heartbeat.class, (o) -> {

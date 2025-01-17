@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- *   Copyright (c) 2017,2019 Eike Mansfeld ecm@gmx.de. All rights reserved.
+ *   Copyright (c) 2017,2025 Eike Mansfeld ecm@gmx.de. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,18 +37,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.mavlink.messages.MAV_SEVERITY;
-import org.mavlink.messages.MSP_AUTOCONTROL_MODE;
-
-import com.comino.mavcom.control.IMAVController;
 import com.comino.mavcom.model.DataModel;
-import com.comino.mavcom.model.segment.LogMessage;
 import com.comino.mavcom.model.segment.Status;
 import com.comino.mavcom.model.segment.Vision;
 import com.comino.mavcom.status.listener.IMSPStatusChangedListener;
 import com.comino.mavutils.workqueue.WorkQueue;
-
-import us.ihmc.log.LogTools;
 
 public class StatusManager implements Runnable {
 
@@ -60,11 +53,9 @@ public class StatusManager implements Runnable {
 	private static final long TIMEOUT_JOY_ATTACHED = 2000000;
 	private static final long TIMEOUT_GPOS = 2000000;
 	private static final long TIMEOUT_LPOS = 2000000;
-	private static final long TIMEOUT_GPS = 2000000;
-	private static final long TIMEOUT_SLAM = 5000000;
-	private static final long TIMEOUT_GRID = 5000000;
-	private static final long TIMEOUT_LIDAR = 2000000;
-	private static final long TIMEOUT_FLOW = 2000000;
+
+	
+	private static final long TIMEOUT_SENSORS = 2000000;
 
 	public static final byte TYPE_ALL = 0;
 	public static final byte TYPE_MSP_STATUS = 1;
@@ -342,7 +333,7 @@ public class StatusManager implements Runnable {
 	private void checkTimeouts() {
 
 		if (checkTimeOut(model.attitude.tms, TIMEOUT_IMU) && model.sys.isSensorAvailable(Status.MSP_IMU_AVAILABILITY)) {
-			model.sys.setSensor(Status.MSP_IMU_AVAILABILITY, false);
+			model.sys.setStatus(Status.MSP_READY_FOR_FLIGHT, false);
 		}
 
 		if (checkTimeOut(model.state.tms, TIMEOUT_LPOS) && model.sys.isStatus(Status.MSP_LPOS_VALID)) {
@@ -353,40 +344,15 @@ public class StatusManager implements Runnable {
 			model.sys.setStatus(Status.MSP_GPOS_VALID, false);
 		}
 
-		if (checkTimeOut(model.distance.tms, TIMEOUT_LIDAR)
-				&& model.sys.isSensorAvailable(Status.MSP_LIDAR_AVAILABILITY)) {
-			// System.out.println("LIDAR timeout");
-			model.sys.setSensor(Status.MSP_LIDAR_AVAILABILITY, false);
-		}
-
-		if (checkTimeOut(model.flow.tms, TIMEOUT_FLOW)
-				&& model.sys.isSensorAvailable(Status.MSP_PIX4FLOW_AVAILABILITY)) {
-			// System.out.println("LIDAR timeout");
-			model.sys.setSensor(Status.MSP_PIX4FLOW_AVAILABILITY, false);
-		}
-
 		if (checkTimeOut(model.vision.tms, TIMEOUT_VISION)
 				&& model.sys.isSensorAvailable(Status.MSP_OPCV_AVAILABILITY)) {
-			model.sys.setSensor(Status.MSP_OPCV_AVAILABILITY, false);
+			
 			model.vision.setStatus(Vision.AVAILABLE, false);
 			model.vision.setStatus(Vision.FIDUCIAL_LOCKED, false);
 			model.vision.setStatus(Vision.POS_VALID, false);
 			model.vision.setStatus(Vision.PUBLISHED, false);
 		}
 
-		if (checkTimeOut(model.gps.tms, TIMEOUT_GPS) && model.sys.isSensorAvailable(Status.MSP_GPS_AVAILABILITY)) {
-			model.sys.setSensor(Status.MSP_GPS_AVAILABILITY, false);
-			model.gps.clear();
-		}
-
-		if (checkTimeOut(model.slam.tms, TIMEOUT_SLAM) && model.sys.isSensorAvailable(Status.MSP_SLAM_AVAILABILITY)) {
-			model.sys.setSensor(Status.MSP_SLAM_AVAILABILITY, false);
-			model.slam.clear();
-		}
-
-		if (checkTimeOut(model.slam.tms, TIMEOUT_GRID) && model.sys.isSensorAvailable(Status.MSP_GRID_AVAILABILITY)) {
-			model.sys.setSensor(Status.MSP_GRID_AVAILABILITY, false);
-		}
 
 		if (checkTimeOutSystem(model.sys.gcl_tms, TIMEOUT_GCL_CONNECTED)
 				&& model.sys.isStatus(Status.MSP_GCL_CONNECTED)) {
@@ -398,8 +364,6 @@ public class StatusManager implements Runnable {
 
 		if (checkTimeOutSystem(model.sys.msp_tms, TIMEOUT_GCL_CONNECTED)
 				&& model.sys.isSensorAvailable(Status.MSP_MSP_AVAILABILITY)) {
-			model.sys.setSensor(Status.MSP_MSP_AVAILABILITY, (false));
-			model.sys.setSensor(Status.MSP_ROS_AVAILABILITY, (false));
 			model.sys.setStatus(Status.MSP_ACTIVE, false);
 		}
 
@@ -423,6 +387,13 @@ public class StatusManager implements Runnable {
 			model.sys.wifi_quality = 0;
 			model.sys.tms = DataModel.getSynchronizedPX4Time_us();
 		}
+		
+		// Sensor timeouts
+		model.sys.getSensorTimestamps().forEach((box,tms) -> {
+			if(checkTimeOut(tms,TIMEOUT_SENSORS))
+				model.sys.setSensor(box, false);
+			
+		});
 	}
 
 	private boolean checkTimeOut(long tms, long timeout) {

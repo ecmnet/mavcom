@@ -20,6 +20,7 @@ import org.mavlink.io.LittleEndianDataOutputStream;
         If the response has `target_system==target_component==0` the remote system has not been updated to use the component IDs and cannot reliably timesync; the requestor may report an error.
         Timestamps are UNIX Epoch time or time since system boot in nanoseconds (the timestamp format can be inferred by checking for the magnitude of the number; generally it doesn't matter as only the offset is used).
         The message sequence is repeated numerous times with results being filtered/averaged to estimate the offset.
+        See also: https://mavlink.io/en/services/timesync.html.
  **/
 public class msg_timesync extends MAVLinkMessage {
   public static final int MAVLINK_MSG_ID_TIMESYNC = 111;

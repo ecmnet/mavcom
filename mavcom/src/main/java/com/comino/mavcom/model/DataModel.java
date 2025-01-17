@@ -76,7 +76,7 @@ public class DataModel extends Segment implements Serializable {
 	 */
 	private static final long serialVersionUID = 3439530621929819600L;
 
-	public static long t_offset_ns = 0;
+	public static long t_offset_us = 0;
 	public static long tms_boot = getSynchronizedPX4Time_us();
 	
 	public final BodyToNedBuffer<Se3_F64> toNEDBuffer;
@@ -265,13 +265,13 @@ public class DataModel extends Segment implements Serializable {
 //		return (now_ns - t_offset_ns) / 1000L;
 		
 		long now = ins.getEpochSecond() * 1000000L;
-		now = now + (ins.getNano() - t_offset_ns) / 1000;
+		now = now + (ins.getNano() / 1000L - t_offset_us);
 		return now;
 		
 	}
 
 	public static long getSynchronizedPX4Time_us(long tms_ms) {
-		return tms_ms * 1000L - t_offset_ns / 1000L;
+		return tms_ms * 1000L - t_offset_us;
 	}
 
 	

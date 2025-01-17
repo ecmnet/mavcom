@@ -68,6 +68,10 @@ public class MAVTimeSync2 implements Runnable {
 
 	@Override
 	public void run() {
+		if (!comm.isConnected()) {
+			this.reset_filter();
+			return;
+		}
 		sync_s.tc1 = 0;
 		sync_s.ts1 = this.getNowNS();
 		try {
@@ -103,7 +107,7 @@ public class MAVTimeSync2 implements Runnable {
 			if((sequence >= CONVERGENCE_WINDOW) && (deviation > MAX_DEVIATION_SAMPLE * 1000000L)) {
 				high_deviation_count++;
 				if (high_deviation_count > MAX_CONS_HIGH_DEVIATION) {
-					LogTools.error("Time jump detected. Resetting the time synchronizer");
+					LogTools.warn("Time jump detected. Resetting the time synchronizer");
 					reset_filter();
 				}
 			} else {

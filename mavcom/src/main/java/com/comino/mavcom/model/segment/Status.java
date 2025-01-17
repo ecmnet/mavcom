@@ -33,6 +33,10 @@
 
 package com.comino.mavcom.model.segment;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.comino.mavcom.model.DataModel;
 import com.comino.mavcom.model.segment.generic.Segment;
 
 public class Status extends Segment {
@@ -72,6 +76,8 @@ public class Status extends Segment {
 			"STABILIZED", "RATTITUDE", "TAKEOFF", "LAND", "FOLLOW", "PRECLAND" };
 
 	private static final String[] MSP_BATTYPE_TEXTS = { "UNKNOWN", "BATTERY", "TETHERED" };
+	
+	private static final Map<Integer,Long> sensor_timestamps = new HashMap<Integer,Long>();
 
 	// Low level sensors
 
@@ -130,7 +136,7 @@ public class Status extends Segment {
 	public int est_state = 0;
 	public int bat_state = 0;
 
-	public int sensors = 0;
+	public long sensors = 0;
 	public int status = 0;
 
 	public int error1 = 0;
@@ -192,8 +198,10 @@ public class Status extends Segment {
 	}
 
 	public void setSensor(int box, boolean val) {
-		if (val)
+		if (val) {
 			sensors = (int) (sensors | (1 << box));
+			sensor_timestamps.put(box, DataModel.getSynchronizedPX4Time_us());
+		   }
 		else
 			sensors = (int) (sensors & ~(1 << box));
 	}
@@ -203,6 +211,10 @@ public class Status extends Segment {
 			if ((sensors & (1 << b)) == 0)
 				return false;
 		return true;
+	}
+	
+	public Map<Integer,Long> getSensorTimestamps() {
+		return sensor_timestamps;
 	}
 
 	//	public boolean isSensorChanged(Status old, int ...box) {
@@ -323,7 +335,7 @@ public class Status extends Segment {
 		return status;
 	}
 	
-	public int getSensors() {
+	public long getSensors() {
 		return sensors;
 	}
 

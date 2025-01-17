@@ -64,7 +64,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 
 	private boolean connected;
 
-	private final msg_heartbeat beat = new msg_heartbeat(2, MAV_COMPONENT.MAV_COMP_ID_OSD);
+	private final msg_heartbeat beat = new msg_heartbeat(255, MAV_COMPONENT.MAV_COMP_ID_OSD);
 	private final IMAVComm[] comms = new IMAVComm[7];
 	private String host;
 	private DatagramSocket socket;
@@ -76,11 +76,11 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		this.bindPort = bindPort;
 
 		comms[0] = MAVSerialComm.getInstance(reader, "57800",SerialPort.FLOW_CONTROL_DISABLED);
-		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort, bindPort,true);
-		comms[2] = new MAVUdpCommNIO2(reader, "192.168.178.187", 14656, 14650,false);
-		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580, 14540,false);
-	    comms[4] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656, 14650, true);
-	    comms[5] = new MAVUdpCommNIO2(reader, "192.168.178.46", 14656, 14650, true);
+		comms[1] = new MAVUdpCommNIO2(reader, peerAddress, peerPort,null, bindPort,true);
+		comms[2] = new MAVUdpCommNIO2(reader, "192.168.178.187", 14656, null, 14650,true);
+		comms[3] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14580,null, 14540,false);
+	    comms[4] = new MAVUdpCommNIO2(reader, "127.0.0.1", 14656,null, 14650, true);
+	    comms[5] = new MAVUdpCommNIO2(reader, "192.168.178.46", 14656,null, 14650, true);
 	  
 	   
 	    try {
@@ -88,7 +88,7 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		} catch (SocketException e) {
 		}
 	   
-		model.sys.setStatus(Status.MSP_PROXY, false);
+		model.sys.setStatus(Status.MSP_PROXY, true);
 
 		beat.type = MAV_TYPE.MAV_TYPE_GCS;
 		beat.system_status = MAV_STATE.MAV_STATE_ACTIVE;
@@ -105,6 +105,8 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 		if (comm != null && comm.isConnected())
 			return true;
 		
+		LogTools.info("Try to connect");
+		
 
 		if (comms[0].open()) {
 			comm = comms[0];
@@ -115,32 +117,37 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 			return true;
 		} 
 		
-		try {
+//		try {
 			
-			if(host==null)
-				host = listenToBroadcast();
+//			if(host==null)
+//				host = listenToBroadcast();
 			
 			 for(int i=1;i<comms.length;i++) {
-		    	   if(comms[i] != null && comms[i].getHost().equals(host)) {
-		    			if (comms[i].open()) {
+		    	   if(comms[i] != null) {
+		    			if (comms[i].open() && comms[i].isConnected()) {
 		    				comm = comms[i];
-		    				this.isSITL = host.startsWith("192") || host.startsWith("127");
+		    				this.isSITL = comms[i].getHost().startsWith("192") || comms[i].getHost().startsWith("127");
 		    				if(isSITL)
-		    				   this.mode = MODE_SITL;
+		    				   this.mode = MODE_SITL_PROXY;
 		    				else
 		    				   this.mode = MODE_NORMAL;
 		    				model.sys.setStatus(Status.MSP_SITL, isSITL);
+		    				LogTools.info("Connected to peer "+i);
+		    				model.sys.setStatus(Status.MSP_CONNECTED, true);
 		    				this.connected = true;
+		    				break;
 		    		 } 
 		    	   } 
 		       }
+			 
+			 
 				
 			return true;
-		} catch (IOException e) {
-			
-		}
+//		} catch (IOException e) {
+//			
+//		}
 
-		return true;
+//		return true;
 	}
 	
 	private String listenToBroadcast() throws IOException {
@@ -172,13 +179,14 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	@Override
 	public boolean close() {
 		super.close();
+		model.sys.setStatus(Status.MSP_CONNECTED, false);
 		this.connected = false;
 		return true;
 	}
 
 	@Override
 	public boolean isConnected() {
-		return model.sys.isStatus(Status.MSP_CONNECTED) && comm!=null;
+		return model.sys.isStatus(Status.MSP_CONNECTED);
 	}
 	
 	@Override
@@ -195,23 +203,23 @@ public class MAVAutoController extends MAVController implements IMAVController, 
 	public void run() {
 		super.run();
 		
-		if (comm == null) {
-			 connect();
-			return;
-		}
-		
+//		if (comm == null) {
+//			 connect();
+//			return;
+//		}
+//		
 		try {
 			comm.write(beat);
 			
-			if (!comm.isConnected() ) {
-				close(); connect();
-			}
-			this.connected = true;
-			
+//			if (!comm.isConnected() ) {
+//				close(); connect();
+//			}
+//			this.connected = true;
+//			
 			
 		
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}
 	}
 	

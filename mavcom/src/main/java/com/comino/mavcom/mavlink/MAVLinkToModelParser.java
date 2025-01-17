@@ -74,7 +74,6 @@ public class MAVLinkToModelParser {
 	private List<IMAVLinkListener> mavListener = null;
 	private List<IMAVMessageListener> messageListener = null;
 
-	private long time_offset_ns = 0;
 
 	private Map<Integer, MAVAcknowledge> cmd_ack = new HashMap<Integer, MAVAcknowledge>();
 
@@ -89,7 +88,7 @@ public class MAVLinkToModelParser {
 		this.messageListener = new ArrayList<IMAVMessageListener>();
 		this.msglisteners = new HashMap<Class<?>, List<IMAVLinkListener>>();
 
-		registerPlugins();
+		registerPlugins("plugins");
 
 		registerListener(msg_command_ack.class, new IMAVLinkListener() {
 
@@ -205,12 +204,12 @@ public class MAVLinkToModelParser {
 		model.sys.tms = System.currentTimeMillis() * 1000L;
 
 	}
-
-	private void registerPlugins() {
+	
+	private void registerPlugins(String directory) {
 		LogTools.info("Loading MAVLinkMessage plugins...");
 		try {
 			ArrayList<Class<?>> classes = MSPPluginHelper
-					.getClassesForPackage(this.getClass().getPackage().getName() + ".plugins");
+					.getClassesForPackage(this.getClass().getPackage().getName() + "."+directory);
 			classes.forEach((c) -> {
 				if (c.getName().endsWith("Plugin")) {
 					try {
